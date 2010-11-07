@@ -61,5 +61,13 @@ public abstract class PDFMojo extends AbstractPdfMojo {
 
         transformer.setParameter ("admon.graphics.path", imageDirectory.getAbsolutePath()+File.separator);
         transformer.setParameter ("callout.graphics.path", calloutDirectory.getAbsolutePath()+File.separator);
+
+        //
+        //  Background image file
+        //
+        File cloudSub = new File (imageDirectory, "cloud");
+        File coverImg = new File (cloudSub, "cover.svg");
+
+        transformer.setParameter ("cloud.api.background.image", coverImg.getAbsolutePath());
     }
 }

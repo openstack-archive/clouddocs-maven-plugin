@@ -7,8 +7,10 @@
 
   <xsl:import href="urn:docbkx:stylesheet-orig" />
   <xsl:import href="urn:docbkx:stylesheet-orig/highlight.xsl" />
-
   <!-- <xsl:import href="titlefo.xsl"/> -->
+
+  <!-- Front-Cover Background Image, should be set by the plugin -->
+  <xsl:param name="cloud.api.background.image" select="'images/cover.svg'"/>
 
   <!--
       XSL-FO Extensions:
@@ -177,12 +179,18 @@
                       margin-top="1.25in"
                       column-gap="0pt"
                       column-count="1"/>
-      <fo:region-before  extent="11.0in"
-                        display-align="before"
-                        background-image="url(img/cover2.svg)"
-                        background-repeat="no-repeat"
-                        background-position-horizontal="0%"
-                        background-position-vertical="0%"/>
+      <xsl:element name="fo:region-before">
+          <xsl:attribute name="extent">11.0in</xsl:attribute>
+          <xsl:attribute name="display-align">before</xsl:attribute>
+          <xsl:attribute name="background-image">
+              <xsl:text>url(</xsl:text>
+              <xsl:value-of select="$cloud.api.background.image"/>
+              <xsl:text>)</xsl:text>
+          </xsl:attribute>
+          <xsl:attribute name="background-repeat">no-repeat</xsl:attribute>
+          <xsl:attribute name="background-position-horizontal">0%</xsl:attribute>
+          <xsl:attribute name="background-position-vertical">0%</xsl:attribute>
+      </xsl:element>
       <fo:region-after 
                        extent="0.5in" 
                        display-align="after"
