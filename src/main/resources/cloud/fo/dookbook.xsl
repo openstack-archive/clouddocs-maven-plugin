@@ -56,7 +56,7 @@
     <xsl:attribute name="font-style">italic</xsl:attribute>
   </xsl:attribute-set>
 
-  <!-- <xsl:param name="local.l10n.xml" select="document('gentex_mods.xml')"/> -->
+  <xsl:param name="local.l10n.xml" select="document('gentex_mods.xml')"/>
 
   <!-- Headers -->
   <xsl:param name="header.column.widths">2 1 2</xsl:param>
