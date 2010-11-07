@@ -7,7 +7,7 @@
 
   <xsl:import href="urn:docbkx:stylesheet-orig" />
   <xsl:import href="urn:docbkx:stylesheet-orig/highlight.xsl" />
-  <!-- <xsl:import href="titlefo.xsl"/> -->
+  <xsl:import href="titlepage.templates.xsl"/>
 
   <!-- Front-Cover Background Image, should be set by the plugin -->
   <xsl:param name="cloud.api.background.image" select="'images/cover.svg'"/>
