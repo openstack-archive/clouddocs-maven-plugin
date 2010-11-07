@@ -3,10 +3,15 @@ package com.rackspace.cloud.api.docs;
 import java.io.File;
 
 import javax.xml.transform.Transformer;
+import javax.xml.transform.URIResolver;
 
 import org.apache.maven.plugin.MojoExecutionException;
+
+import com.agilejava.docbkx.maven.TransformerBuilder;
 import com.agilejava.docbkx.maven.AbstractPdfMojo;
+
 import com.rackspace.cloud.api.docs.FileUtils;
+import com.rackspace.cloud.api.docs.DocBookResolver;
 
 public abstract class PDFMojo extends AbstractPdfMojo {
     private File imageDirectory;
@@ -19,9 +24,11 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         return this.imageDirectory;
     }
 
-    /*
-       Setup..
-    */
+    protected String getNonDefaultStylesheetLocation() {
+        return "cloud/fo/dookbook.xsl";
+    }
+
+
     public void preProcess() throws MojoExecutionException {
         super.preProcess();
 
@@ -37,6 +44,10 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         //
         FileUtils.extractJaredDirectory("images",PDFMojo.class,imageParentDirectory);
         setImageDirectory (new File (imageParentDirectory, "images"));
+    }
+
+    protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
+        return super.createTransformerBuilder (new DocBookResolver (resolver, getType()));
     }
 
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
