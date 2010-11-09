@@ -34,6 +34,8 @@
   <xsl:param name="callouts.extension" select="1"/>
   <xsl:param name="textinsert.extension" select="1"/>
 
+  <!-- Don't show links -->
+  <xsl:param name="ulink.show" select="0"/>
 
   <!-- Define hard pagebreak -->
   <xsl:template match="processing-instruction('hard-pagebreak')">
