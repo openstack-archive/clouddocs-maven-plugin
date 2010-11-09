@@ -25,7 +25,7 @@ public abstract class PDFMojo extends AbstractPdfMojo {
     }
 
     protected String getNonDefaultStylesheetLocation() {
-        return "cloud/fo/dookbook.xsl";
+        return "cloud/fo/docbook.xsl";
     }
 
 
