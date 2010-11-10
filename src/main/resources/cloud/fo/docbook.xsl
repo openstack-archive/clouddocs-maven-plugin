@@ -139,6 +139,16 @@
   <xsl:param name="shade.verbatim" select="1"/>
   <xsl:param name="highlight.source" select="1"/>
 
+  <xsl:attribute-set name="monospace.verbatim.properties">
+      <xsl:attribute name="font-size">
+          <xsl:choose>
+              <xsl:when test="processing-instruction('db-font-size')"><xsl:value-of
+              select="processing-instruction('db-font-size')"/></xsl:when>
+              <xsl:otherwise>inherit</xsl:otherwise>
+          </xsl:choose>
+      </xsl:attribute>
+  </xsl:attribute-set>
+
   <!-- Wrap long examples -->
   <xsl:attribute-set name="monospace.verbatim.properties">
       <xsl:attribute name="wrap-option">wrap</xsl:attribute>
