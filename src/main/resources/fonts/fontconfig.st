@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <fop version="1.0">
     <!-- Base URL for resolving relative URLs -->
     <base>.</base>
@@ -29,23 +28,7 @@
                 <!-- <value>ascii-hex</value> -->
             </filterList>
             <fonts>
-                <!-- register all the fonts found in a directory and all of its sub directories (use with care) -->
-                <font kerning="yes" embed-url="file://$fontPath$/CartoGothic-Std/CartoGothicStd-Book.ttf">
-                    <font-triplet name="CartoGothic Std" style="normal" weight="normal"/>
-                    <font-triplet name="CartoGothic" style="normal" weight="normal"/>
-                </font>
-                <font kerning="yes" embed-url="file://$fontPath$/CartoGothic-Std/CartoGothicStd-Bold.ttf">
-                    <font-triplet name="CartoGothic Std" style="normal" weight="bold"/>
-                    <font-triplet name="CartoGothic" style="normal" weight="bold"/>
-                </font>
-                <font kerning="yes" embed-url="file://$fontPath$/CartoGothic-Std/CartoGothicStd-Italic.ttf">
-                    <font-triplet name="CartoGothic Std" style="italic" weight="normal"/>
-                    <font-triplet name="CartoGothic" style="italic" weight="normal"/>
-                </font>
-                <font kerning="yes" embed-url="file://$fontPath$/CartoGothic-Std/CartoGothicStd-BoldItalic.ttf">
-                    <font-triplet name="CartoGothic Std" style="italic" weight="bold"/>
-                    <font-triplet name="CartoGothic" style="italic" weight="bold"/>
-                </font>
+                <directory recursive="true">$fontPath$</directory>
             </fonts>
         </renderer>
     </renderers>
