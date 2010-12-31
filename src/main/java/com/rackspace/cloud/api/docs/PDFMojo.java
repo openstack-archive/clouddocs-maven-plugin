@@ -44,6 +44,11 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         //
         FileUtils.extractJaredDirectory("images",PDFMojo.class,imageParentDirectory);
         setImageDirectory (new File (imageParentDirectory, "images"));
+
+        //
+        // Extract all fonts into fonts directory
+        //
+        FileUtils.extractJaredDirectory("fonts",PDFMojo.class,imageParentDirectory);
     }
 
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
