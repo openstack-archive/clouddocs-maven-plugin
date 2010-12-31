@@ -33,6 +33,7 @@
   <xsl:param name="use.extensions" select="1"/>
   <xsl:param name="callouts.extension" select="1"/>
   <xsl:param name="textinsert.extension" select="1"/>
+  <xsl:param name="title.fontset" select="'CartoGothic Std'"/>
 
   <!-- Don't show links -->
   <xsl:param name="ulink.show" select="0"/>
@@ -44,18 +45,28 @@
 
   <!-- Root Text Properties  -->
   <xsl:attribute-set name="root.properties">
-    <xsl:attribute name="font-family">sans-serif</xsl:attribute>
+    <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
     <xsl:attribute name="font-size">10.5pt</xsl:attribute>
   </xsl:attribute-set>
 
   <!-- Title Properties (Sections/Components) -->
   <xsl:attribute-set name="component.title.properties">
+    <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
     <xsl:attribute name="color">rgb(84,141,212)</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.title.properties">
     <xsl:attribute name="color">rgb(84,141,212)</xsl:attribute>
     <xsl:attribute name="font-style">italic</xsl:attribute>
+    <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="header.content.properties">
+      <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="footer.content.properties">
+      <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:param name="local.l10n.xml" select="document('gentex_mods.xml')"/>
