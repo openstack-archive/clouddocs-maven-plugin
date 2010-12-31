@@ -1140,8 +1140,9 @@
 	     space-after="0.5em"
 	     margin-left="{$title.margin.left}"
 	     start-indent="0pt"
-	     font-size="&hsize3;"
+	     font-size="&hsize4;"
 	     font-weight="bold"
+         color="rgb(196,0,34)"
 	     font-family="{$title.fontset}"/>
     </t:titlepage-content>
 
@@ -1170,8 +1171,9 @@
 	     space-after="0.5em"
 	     margin-left="{$title.margin.left}"
 	     start-indent="0pt"
-	     font-size="&hsize3;"
+	     font-size="&hsize4;"
 	     font-weight="bold"
+         color="rgb(196,0,34)"
 	     font-family="{$title.fontset}"/>
     </t:titlepage-content>
 
@@ -1200,8 +1202,9 @@
 	     space-after="0.5em"
 	     margin-left="{$title.margin.left}"
 	     start-indent="0pt"
-	     font-size="&hsize3;"
+	     font-size="&hsize4;"
 	     font-weight="bold"
+         color="rgb(196,0,34)"
 	     font-family="{$title.fontset}"/>
     </t:titlepage-content>
 
@@ -1230,8 +1233,9 @@
 	     space-after="0.5em"
 	     margin-left="{$title.margin.left}"
 	     start-indent="0pt"
-	     font-size="&hsize3;"
+	     font-size="&hsize4;"
 	     font-weight="bold"
+         color="rgb(196,0,34)"
 	     font-family="{$title.fontset}"/>
     </t:titlepage-content>
 
@@ -1260,8 +1264,9 @@
 	     space-after="0.5em"
 	     margin-left="{$title.margin.left}"
 	     start-indent="0pt"
-	     font-size="&hsize3;"
+	     font-size="&hsize4;"
 	     font-weight="bold"
+         color="rgb(196,0,34)"
 	     font-family="{$title.fontset}"/>
     </t:titlepage-content>
 
@@ -1290,8 +1295,9 @@
 	     space-after="0.5em"
 	     margin-left="{$title.margin.left}"
 	     start-indent="0pt"
-	     font-size="&hsize3;"
+	     font-size="&hsize4;"
 	     font-weight="bold"
+         color="rgb(196,0,34)"
 	     font-family="{$title.fontset}"/>
     </t:titlepage-content>
 
@@ -1320,8 +1326,9 @@
 	     space-after="0.5em"
 	     margin-left="{$title.margin.left}"
 	     start-indent="0pt"
-	     font-size="&hsize3;"
+	     font-size="&hsize4;"
 	     font-weight="bold"
+         color="rgb(196,0,34)"
 	     font-family="{$title.fontset}"/>
     </t:titlepage-content>
 

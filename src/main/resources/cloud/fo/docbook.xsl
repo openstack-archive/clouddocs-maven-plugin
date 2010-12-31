@@ -52,12 +52,11 @@
   <!-- Title Properties (Sections/Components) -->
   <xsl:attribute-set name="component.title.properties">
     <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
-    <xsl:attribute name="color">rgb(84,141,212)</xsl:attribute>
+    <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.title.properties">
-    <xsl:attribute name="color">rgb(84,141,212)</xsl:attribute>
-    <xsl:attribute name="font-style">italic</xsl:attribute>
+    <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
     <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
   </xsl:attribute-set>
 
@@ -66,6 +65,16 @@
   </xsl:attribute-set>
 
   <xsl:attribute-set name="footer.content.properties">
+      <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="formal.title.properties">
+      <xsl:attribute name="color">rgb(176,0,14)</xsl:attribute>
+      <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="admonition.title.properties">
+      <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
       <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
   </xsl:attribute-set>
 
@@ -217,7 +226,7 @@
       <fo:region-after 
                        extent="0.5in" 
                        display-align="after"
-                       background-color="rgb(67,173,213)"
+                       background-color="rgb(176,0,14)"
                        />
     </fo:simple-page-master>
 
