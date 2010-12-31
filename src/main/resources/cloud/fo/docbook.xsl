@@ -208,7 +208,7 @@
         </xsl:call-template>
       </xsl:if>
       <fo:region-body margin-bottom="0.0in"
-                      margin-top="1.25in"
+                      margin-top="0.0in"
                       column-gap="0pt"
                       column-count="1"/>
       <xsl:element name="fo:region-before">
@@ -223,11 +223,6 @@
           <xsl:attribute name="background-position-horizontal">0%</xsl:attribute>
           <xsl:attribute name="background-position-vertical">0%</xsl:attribute>
       </xsl:element>
-      <fo:region-after 
-                       extent="0.5in" 
-                       display-align="after"
-                       background-color="rgb(176,0,14)"
-                       />
     </fo:simple-page-master>
 
     <!-- setup for title page(s) -->
