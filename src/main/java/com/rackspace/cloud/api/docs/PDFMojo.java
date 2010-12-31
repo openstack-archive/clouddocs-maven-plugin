@@ -9,6 +9,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import java.net.MalformedURLException;
+
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -43,6 +45,7 @@ import com.rackspace.cloud.api.docs.DocBookResolver;
 
 public abstract class PDFMojo extends AbstractPdfMojo {
     private File imageDirectory;
+    private File sourceDirectory;
 
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
@@ -89,7 +92,6 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         final FopFactory fopFactory = FopFactory.newInstance();
         final FOUserAgent userAgent = fopFactory.newFOUserAgent();
 
-        userAgent.setBaseURL("file://"+getTargetDirectory().getAbsolutePath());
         // FOUserAgent can be used to set PDF metadata
 
         Configuration configuration = loadFOPConfig();
@@ -98,6 +100,12 @@ public abstract class PDFMojo extends AbstractPdfMojo {
 
         try
             {
+                String baseURL = sourceDirectory.toURL().toExternalForm();
+                baseURL = baseURL.replace("file:/", "file:///");
+
+                userAgent.setBaseURL(baseURL);
+                System.err.println ("Absolute path is "+baseURL);
+
                 in = openFileForInput(result);
                 out = openFileForOutput(getOutputFile(result));
                 fopFactory.setUserConfig(configuration);
@@ -127,6 +135,10 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         catch (TransformerException e)
             {
                 throw new MojoExecutionException("Failed to transform to PDF", e);
+            }
+        catch (MalformedURLException e)
+            {
+                throw new MojoExecutionException("Failed to get FO basedir", e);
             }
         finally
             {
@@ -193,6 +205,7 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         //
         //  Setup graphics paths
         //
+        sourceDirectory = (new File (sourceFilename)).getParentFile();
         File imageDirectory = getImageDirectory();
         File calloutDirectory = new File (imageDirectory, "callouts");
 
