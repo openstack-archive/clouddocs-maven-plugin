@@ -18,7 +18,28 @@
                 <xsl:with-param name="in" select="."/>
             </xsl:call-template>
         </xsl:param>
-        <xsl:copy-of select="$textWithTitle"/>
+        <xsl:param name="textWithSubTitle">
+            <xsl:call-template name="replaceSubTitle">
+                <xsl:with-param name="in" select="$textWithTitle"/>
+            </xsl:call-template>
+        </xsl:param>
+        <xsl:copy-of select="$textWithSubTitle"/>
+    </xsl:template>
+
+    <xsl:template name="replaceSubTitle">
+        <xsl:param name="in"/>
+        <xsl:choose>
+            <xsl:when test="contains($in,'$subtitle$')">
+                <xsl:call-template name="replaceText">
+                    <xsl:with-param name="text" select="$in" />
+                    <xsl:with-param name="replace" select="'$subtitle$'"/>
+                    <xsl:with-param name="with" select="'My SubTitle'"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$in"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="replaceTitle">
@@ -32,7 +53,7 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:copy-of select="."/>
+                <xsl:copy-of select="$in"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
