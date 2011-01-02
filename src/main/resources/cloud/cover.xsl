@@ -131,7 +131,7 @@
         <xsl:choose>
             <xsl:when test="contains($text,$replace)">
                 <xsl:value-of select="substring-before($text,$replace)"/>
-                <xsl:value-of select="$with"/>
+                <xsl:value-of select="normalize-space($with)"/>
                 <xsl:value-of select="substring-after($text,$replace)"/>
             </xsl:when>
             <xsl:otherwise>
