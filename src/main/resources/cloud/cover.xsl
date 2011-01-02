@@ -4,11 +4,32 @@
                 xmlns:d="http://docbook.org/ns/docbook"
                 xmlns:svg="http://www.w3.org/2000/svg"
                 version="1.0">
-    <xsl:param name="docbook.in" select="'doc.xml'"/>
+    <xsl:param name="docbook.infile" select="'/Users/jorgew/projects/cloud-files-api-docs/src/docbkx/cfdevguide_d5.xml'"/>
+    <xsl:param name="docbook" select="document(concat('file://',$docbook.infile))"/>
     <xsl:param name="title" select="'My Title'"/>
     <xsl:param name="subtitle" select="'My SubTitle'"/>
-    <xsl:param name="releaseinfo" select="'V1.0'"/>
-    <xsl:param name="pubdate" select="'1/1/2010'"/>
+    <xsl:param name="releaseinfo">
+        <xsl:choose>
+            <xsl:when test="$docbook//d:info[1]/d:releaseinfo">
+                <xsl:value-of select="$docbook//d:info[1]/d:releaseinfo"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message terminate="yes">
+                    <xsl:text>This template requires the &lt;releaseinfo/&gt; docbook tag!</xsl:text>
+                </xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
+    <xsl:param name="pubdate">
+        <xsl:choose>
+            <xsl:when test="$docbook//d:info[1]/d:pubdate">
+                <xsl:value-of select="$docbook//d:info[1]/d:pubdate"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>This template requires the &lt;pubdate/&gt; docbook tag!</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
 
     <xsl:template match="node() | @*">
         <xsl:copy>
