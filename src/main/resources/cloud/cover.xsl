@@ -5,8 +5,8 @@
                 xmlns:svg="http://www.w3.org/2000/svg"
                 version="1.0">
     <xsl:param name="docbook.infile" select="'/Users/jorgew/projects/cloud-files-api-docs/src/docbkx/cfdevguide_d5.xml'"/>
-    <xsl:param name="docbook" select="document(concat('file://',$docbook.infile))"/>
-    <xsl:param name="plaintitle">
+    <xsl:variable name="docbook" select="document(concat('file://',$docbook.infile))"/>
+    <xsl:variable name="plaintitle">
         <xsl:choose>
             <xsl:when test="$docbook/d:book/d:title">
                 <xsl:copy-of select="$docbook/d:book/d:title"/>
@@ -20,8 +20,8 @@
                 </xsl:message>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:param>
-    <xsl:param name="plainsubtitle">
+    </xsl:variable>
+    <xsl:variable name="plainsubtitle">
         <xsl:choose>
             <xsl:when test="$docbook/d:book/d:subtitle">
                 <xsl:copy-of select="$docbook/d:book/d:subtitle"/>
@@ -30,11 +30,11 @@
                 <xsl:copy-of select="$docbook/d:book/d:info/d:subtitle"/>
             </xsl:when>
         </xsl:choose>
-    </xsl:param>
-    <xsl:param name="productname">
+    </xsl:variable>
+    <xsl:variable name="productname">
         <xsl:copy-of select="$docbook/d:book/d:info/d:productname"/>
-    </xsl:param>
-    <xsl:param name="title">
+    </xsl:variable>
+    <xsl:variable name="title">
         <xsl:choose>
             <!--
                 If there's a product name, and the product name is in the
@@ -47,8 +47,8 @@
                 <xsl:copy-of select="$plaintitle"/>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:param>
-    <xsl:param name="subtitle">
+    </xsl:variable>
+    <xsl:variable name="subtitle">
         <xsl:choose>
             <xsl:when test="$productname and contains($plaintitle,$productname)">
                 <xsl:value-of select="substring-before($plaintitle,$productname)"/>
@@ -61,8 +61,8 @@
                 <xsl:message terminate="yes">Missing &lt;subtitle/&gt; docbook tag!</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:param>
-    <xsl:param name="releaseinfo">
+    </xsl:variable>
+    <xsl:variable name="releaseinfo">
         <xsl:choose>
             <xsl:when test="$docbook//d:info[1]/d:releaseinfo">
                 <xsl:value-of select="$docbook//d:info[1]/d:releaseinfo"/>
@@ -73,8 +73,8 @@
                 </xsl:message>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:param>
-    <xsl:param name="pubdate">
+    </xsl:variable>
+    <xsl:variable name="pubdate">
         <xsl:choose>
             <xsl:when test="$docbook//d:info[1]/d:pubdate">
                 <xsl:value-of select="$docbook//d:info[1]/d:pubdate"/>
@@ -83,7 +83,7 @@
                 <xsl:text>This template requires the &lt;pubdate/&gt; docbook tag!</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:param>
+    </xsl:variable>
 
     <xsl:template match="node() | @*">
         <xsl:copy>
@@ -92,34 +92,34 @@
     </xsl:template>
 
     <xsl:template match="text()">
-        <xsl:param name="textWithTitle">
+        <xsl:variable name="textWithTitle">
             <xsl:call-template name="replaceText">
                 <xsl:with-param name="text" select="."/>
                 <xsl:with-param name="replace" select="'$title$'"/>
                 <xsl:with-param name="with" select="$title"/>
             </xsl:call-template>
-        </xsl:param>
-        <xsl:param name="textWithSubTitle">
+        </xsl:variable>
+        <xsl:variable name="textWithSubTitle">
             <xsl:call-template name="replaceText">
                 <xsl:with-param name="text" select="$textWithTitle"/>
                 <xsl:with-param name="replace" select="'$subtitle$'"/>
                 <xsl:with-param name="with" select="$subtitle"/>
             </xsl:call-template>
-        </xsl:param>
-        <xsl:param name="textWithReleaseInfo">
+        </xsl:variable>
+        <xsl:variable name="textWithReleaseInfo">
             <xsl:call-template name="replaceText">
                 <xsl:with-param name="text" select="$textWithSubTitle"/>
                 <xsl:with-param name="replace" select="'$releaseinfo$'"/>
                 <xsl:with-param name="with" select="$releaseinfo"/>
             </xsl:call-template>
-        </xsl:param>
-        <xsl:param name="textWithPubDate">
+        </xsl:variable>
+        <xsl:variable name="textWithPubDate">
             <xsl:call-template name="replaceText">
                 <xsl:with-param name="text" select="$textWithReleaseInfo"/>
                 <xsl:with-param name="replace" select="'$pubdate$'"/>
                 <xsl:with-param name="with" select="$pubdate"/>
             </xsl:call-template>
-        </xsl:param>
+        </xsl:variable>
         <xsl:copy-of select="$textWithPubDate"/>
     </xsl:template>
 
