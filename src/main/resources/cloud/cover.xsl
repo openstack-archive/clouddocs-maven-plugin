@@ -21,6 +21,16 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:param>
+    <xsl:param name="plainsubtitle">
+        <xsl:choose>
+            <xsl:when test="$docbook/d:book/d:subtitle">
+                <xsl:copy-of select="$docbook/d:book/d:subtitle"/>
+            </xsl:when>
+            <xsl:when test="$docbook/d:book/d:info/d:subtitle">
+                <xsl:copy-of select="$docbook/d:book/d:info/d:subtitle"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:param>
     <xsl:param name="productname">
         <xsl:copy-of select="$docbook/d:book/d:info/d:productname"/>
     </xsl:param>
@@ -38,7 +48,20 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:param>
-    <xsl:param name="subtitle" select="'My SubTitle'"/>
+    <xsl:param name="subtitle">
+        <xsl:choose>
+            <xsl:when test="$productname and contains($plaintitle,$productname)">
+                <xsl:value-of select="substring-before($plaintitle,$productname)"/>
+                <xsl:value-of select="substring-after($plaintitle,$productname)"/>
+            </xsl:when>
+            <xsl:when test="$plainsubtitle">
+                <xsl:value-of select="$plainsubtitle"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message terminate="yes">Missing &lt;subtitle/&gt; docbook tag!</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
     <xsl:param name="releaseinfo">
         <xsl:choose>
             <xsl:when test="$docbook//d:info[1]/d:releaseinfo">
