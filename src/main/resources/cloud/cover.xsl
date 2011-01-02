@@ -4,6 +4,7 @@
                 xmlns:d="http://docbook.org/ns/docbook"
                 xmlns:svg="http://www.w3.org/2000/svg"
                 version="1.0">
+    <xsl:output method="xml" encoding="UTF-8" media-type="image/svg+xml" standalone="no"/>
     <xsl:param name="docbook.infile" select="'/Users/jorgew/projects/cloud-files-api-docs/src/docbkx/cfdevguide_d5.xml'"/>
     <xsl:variable name="docbook" select="document(concat('file://',$docbook.infile))"/>
     <xsl:variable name="plaintitle">
