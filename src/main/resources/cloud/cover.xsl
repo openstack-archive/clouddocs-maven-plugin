@@ -6,7 +6,38 @@
                 version="1.0">
     <xsl:param name="docbook.infile" select="'/Users/jorgew/projects/cloud-files-api-docs/src/docbkx/cfdevguide_d5.xml'"/>
     <xsl:param name="docbook" select="document(concat('file://',$docbook.infile))"/>
-    <xsl:param name="title" select="'My Title'"/>
+    <xsl:param name="plaintitle">
+        <xsl:choose>
+            <xsl:when test="$docbook/d:book/d:title">
+                <xsl:copy-of select="$docbook/d:book/d:title"/>
+            </xsl:when>
+            <xsl:when test="$docbook/d:book/d:info/d:title">
+                <xsl:copy-of select="$docbook/d:book/d:info/d:title"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message terminate="yes">
+                    <xsl:text>This template requires a docbook title!</xsl:text>
+                </xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
+    <xsl:param name="productname">
+        <xsl:copy-of select="$docbook/d:book/d:info/d:productname"/>
+    </xsl:param>
+    <xsl:param name="title">
+        <xsl:choose>
+            <!--
+                If there's a product name, and the product name is in the
+                subtitle then use the product name for the title.
+            -->
+            <xsl:when test="$productname and contains($plaintitle,$productname)">
+                <xsl:copy-of select="$productname"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$plaintitle"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
     <xsl:param name="subtitle" select="'My SubTitle'"/>
     <xsl:param name="releaseinfo">
         <xsl:choose>
