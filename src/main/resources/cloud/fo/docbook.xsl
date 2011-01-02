@@ -34,6 +34,11 @@
   <xsl:param name="callouts.extension" select="1"/>
   <xsl:param name="textinsert.extension" select="1"/>
   <xsl:param name="title.fontset" select="'CartoGothic Std'"/>
+  <!--
+      Don't use dingbats for things like the copyright symbol.  Assume
+      our font already has it.
+  -->
+  <xsl:param name="dingbat.font.family" select="''"/>
 
   <!-- Don't show links -->
   <xsl:param name="ulink.show" select="0"/>
@@ -261,12 +266,4 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
-  <!-- Don't output a verso title page -->
-  <xsl:template name="book.titlepage.verso">
-  </xsl:template>
-
-  <xsl:template name="book.titlepage.before.verso">
-  </xsl:template>
-
 </xsl:stylesheet>

@@ -133,11 +133,36 @@
         <!-- title page content comes from cover.svg -->
     </t:titlepage-content>
 
+    <t:titlepage-content t:side="verso">
+      <title
+          t:named-template="book.verso.title"
+          font-size="&hsize2;"
+          font-weight="bold"
+          font-family="{$title.fontset}"/>
+      <corpauthor/>
+      <authorgroup t:named-template="verso.authorgroup"/>
+      <author/>
+      <!-- If you add editor, include this t:predicate attribute
+           because only the first editor generates the list of editors.
+           <editor t:predicate="[position() = 1]"/>
+      -->
+      <othercredit/>
+      <releaseinfo space-before="0.5em"/>
+      <copyright/>
+      <abstract/>
+      <legalnotice font-size="8pt"/>
+      <pubdate space-before="5em"/>
+    </t:titlepage-content>
+
   <t:titlepage-separator>
       <fo:block break-after="page"/>
   </t:titlepage-separator>
 
   <t:titlepage-before t:side="recto">
+  </t:titlepage-before>
+
+  <t:titlepage-before t:side="verso">
+      <fo:block break-after="page"/>
   </t:titlepage-before>
 
 </t:titlepage>
