@@ -8,11 +8,11 @@
     <xsl:variable name="docbook" select="document(concat('file://',$docbook.infile))"/>
     <xsl:variable name="plaintitle">
         <xsl:choose>
-            <xsl:when test="$docbook/d:book/d:title">
-                <xsl:copy-of select="$docbook/d:book/d:title"/>
+            <xsl:when test="$docbook/*/d:title">
+                <xsl:copy-of select="$docbook/*/d:title"/>
             </xsl:when>
-            <xsl:when test="$docbook/d:book/d:info/d:title">
-                <xsl:copy-of select="$docbook/d:book/d:info/d:title"/>
+            <xsl:when test="$docbook/*/d:info/d:title">
+                <xsl:copy-of select="$docbook/*/d:info/d:title"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message terminate="yes">
@@ -23,16 +23,16 @@
     </xsl:variable>
     <xsl:variable name="plainsubtitle">
         <xsl:choose>
-            <xsl:when test="$docbook/d:book/d:subtitle">
-                <xsl:copy-of select="$docbook/d:book/d:subtitle"/>
+            <xsl:when test="$docbook/*/d:subtitle">
+                <xsl:copy-of select="$docbook/*/d:subtitle"/>
             </xsl:when>
-            <xsl:when test="$docbook/d:book/d:info/d:subtitle">
-                <xsl:copy-of select="$docbook/d:book/d:info/d:subtitle"/>
+            <xsl:when test="$docbook/*/d:info/d:subtitle">
+                <xsl:copy-of select="$docbook/*/d:info/d:subtitle"/>
             </xsl:when>
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="productname">
-        <xsl:copy-of select="$docbook/d:book/d:info/d:productname"/>
+        <xsl:copy-of select="$docbook/*/d:info/d:productname"/>
     </xsl:variable>
     <xsl:variable name="title">
         <xsl:choose>
