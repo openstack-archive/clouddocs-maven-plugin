@@ -20,6 +20,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -46,6 +47,15 @@ import com.rackspace.cloud.api.docs.DocBookResolver;
 public abstract class PDFMojo extends AbstractPdfMojo {
     private File imageDirectory;
     private File sourceDirectory;
+    private File sourceDocBook;
+
+    private File coverImageTemplate;
+    private File coverImage;
+
+    private static final String COVER_IMAGE_TEMPLATE_NAME = "cover.st";
+    private static final String COVER_IMAGE_NAME = "cover.svg";
+
+    private static final String COVER_XSL = "cloud/cover.xsl";
 
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
@@ -92,8 +102,10 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         final FopFactory fopFactory = FopFactory.newInstance();
         final FOUserAgent userAgent = fopFactory.newFOUserAgent();
 
-        // FOUserAgent can be used to set PDF metadata
+        // First transform the cover page
+        transformCover();
 
+        // FOUserAgent can be used to set PDF metadata
         Configuration configuration = loadFOPConfig();
         InputStream in = null;
         OutputStream out = null;
@@ -205,7 +217,8 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         //
         //  Setup graphics paths
         //
-        sourceDirectory = (new File (sourceFilename)).getParentFile();
+        sourceDocBook = new File(sourceFilename);
+        sourceDirectory = sourceDocBook.getParentFile();
         File imageDirectory = getImageDirectory();
         File calloutDirectory = new File (imageDirectory, "callouts");
 
@@ -213,11 +226,33 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         transformer.setParameter ("callout.graphics.path", calloutDirectory.getAbsolutePath()+File.separator);
 
         //
-        //  Background image file
+        //  Setup the background image file
         //
         File cloudSub = new File (imageDirectory, "cloud");
-        File coverImg = new File (cloudSub, "cover.svg");
+        coverImage = new File (cloudSub, COVER_IMAGE_NAME);
+        coverImageTemplate = new File (cloudSub, COVER_IMAGE_TEMPLATE_NAME);
 
-        transformer.setParameter ("cloud.api.background.image", coverImg.getAbsolutePath());
+        transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
+    }
+
+    protected void transformCover() throws MojoExecutionException {
+        try {
+            ClassLoader classLoader = Thread.currentThread()
+                .getContextClassLoader();
+
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer = factory.newTransformer(new StreamSource(classLoader.getResourceAsStream(COVER_XSL)));
+
+            transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
+            transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
+        }
+        catch (TransformerConfigurationException e)
+            {
+                throw new MojoExecutionException("Failed to load JAXP configuration", e);
+            }
+        catch (TransformerException e)
+            {
+                throw new MojoExecutionException("Failed to transform to cover", e);
+            }
     }
 }
