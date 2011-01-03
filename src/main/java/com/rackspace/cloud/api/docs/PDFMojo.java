@@ -229,10 +229,12 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         //  Setup the background image file
         //
         File cloudSub = new File (imageDirectory, "cloud");
+        File ccSub    = new File (imageDirectory, "cc");
         coverImage = new File (cloudSub, COVER_IMAGE_NAME);
         coverImageTemplate = new File (cloudSub, COVER_IMAGE_TEMPLATE_NAME);
 
         transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
+        transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
     }
 
     protected void transformCover() throws MojoExecutionException {
