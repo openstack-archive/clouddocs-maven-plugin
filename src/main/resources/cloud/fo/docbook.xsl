@@ -366,4 +366,23 @@
           </xsl:choose>
       </fo:block>
   </xsl:template>
+
+  <xsl:template match="d:holder" mode="titlepage.mode">
+      <xsl:apply-templates/>
+      <xsl:choose>
+          <xsl:when test="position() &lt; last()">
+              <xsl:text>, </xsl:text>
+          </xsl:when>
+          <xsl:when test="position() = last()">
+              <xsl:choose>
+                  <xsl:when test="starts-with(string(/*/d:info/d:legalnotice/@role),'cc-')">
+                      <xsl:text> Some rights reserved.</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                      <xsl:text> All rights reserved.</xsl:text>
+                  </xsl:otherwise>
+              </xsl:choose>
+          </xsl:when>
+      </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>
