@@ -91,7 +91,7 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:ssh://git@174.143.172.79:rc-maven-cloud-docs.git</connection>
+        <connection>scm:git:ssh://git@174.143.172.79/rc-maven-cloud-docs.git</connection>
     </scm>
 
     <distributionManagement>
