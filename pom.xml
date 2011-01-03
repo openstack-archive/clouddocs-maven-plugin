@@ -90,6 +90,10 @@
         </dependency>
     </dependencies>
 
+    <scm>
+        <connection>scm:git://174.143.172.79:rc-maven-cloud-docs.git</connection>
+    </scm>
+
     <distributionManagement>
         <repository>
             <id>repos.research.rackspace.cloud.releases</id>
