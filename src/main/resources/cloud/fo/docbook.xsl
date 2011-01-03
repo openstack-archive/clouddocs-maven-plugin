@@ -114,7 +114,7 @@
   </xsl:template>
 
   <!-- Footers -->
-  <xsl:param name="footer.column.widths">4 1 1</xsl:param>
+  <xsl:param name="footer.column.widths">1 1 1</xsl:param>
   <xsl:template name="footer.content">
     <xsl:param name="pageclass" select="''"/>
     <xsl:param name="sequence" select="''"/>
@@ -128,14 +128,7 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:choose>
-            <xsl:when test="$position = 'left'">
-              Copyright &#xA9;
-              <xsl:value-of select="' '"/>
-              <xsl:value-of select="//d:info[1]/d:copyright/d:year"/>
-              <xsl:value-of select="' '"/>
-              <xsl:value-of select="//d:info[1]/d:copyright/d:holder"/>, All rights reserved.
-            </xsl:when>
-            <xsl:when test="$position = 'right'">
+            <xsl:when test="$position = 'center'">
               <fo:page-number/>
             </xsl:when>
           </xsl:choose>
