@@ -293,92 +293,7 @@
       <fo:block id="{$id}">
           <xsl:choose>
               <xsl:when test="starts-with(string(@role),'cc-')">
-                  <xsl:variable name="ccid">
-                      <xsl:value-of select="substring-after(string(@role),'cc-')"/>
-                  </xsl:variable>
-                  <xsl:variable name="ccidURL">
-                      <xsl:text>http://creativecommons.org/licenses/</xsl:text>
-                      <xsl:value-of select="$ccid"/>
-                      <xsl:text>/3.0/legalcode</xsl:text>
-                  </xsl:variable>
-                  <xsl:variable name="ccidLink">
-                      <xsl:text>url(</xsl:text>
-                      <xsl:value-of select="$ccidURL"/>
-                      <xsl:text>)</xsl:text>
-                  </xsl:variable>
-                  <fo:list-block xsl:use-attribute-sets="normal.para.spacing">
-                      <fo:list-item>
-                          <fo:list-item-label end-indent="label-end()">
-                              <fo:block>
-                                  <xsl:element name="fo:basic-link">
-                                      <xsl:attribute name="external-destination">
-                                          <xsl:value-of select="$ccidLink"/>
-                                      </xsl:attribute>
-                                      <xsl:element name="fo:external-graphic">
-                                          <xsl:attribute name="src">
-                                              <xsl:text>url(</xsl:text>
-                                              <xsl:value-of select="$cloud.api.cc.image.dir"/>
-                                              <xsl:text>/</xsl:text>
-                                              <xsl:value-of select="$ccid"/>
-                                              <xsl:text>.svg)</xsl:text>
-                                          </xsl:attribute>
-                                          <xsl:attribute name="width">auto</xsl:attribute>
-                                          <xsl:attribute name="height">auto</xsl:attribute>
-                                          <xsl:attribute name="content-width">75%</xsl:attribute>
-                                          <xsl:attribute name="content-height">75%</xsl:attribute>
-                                      </xsl:element>
-                                  </xsl:element>
-                              </fo:block>
-                          </fo:list-item-label>
-                          <fo:list-item-body start-indent="1.125in">
-                              <fo:block xsl:use-attribute-sets="normal.para.spacing">
-                                  <xsl:text>Except where otherwise noted, this document is licensed under </xsl:text>
-                                  <fo:block/>
-                                  <xsl:element name="fo:basic-link">
-                                      <xsl:attribute name="external-destination">
-                                          <xsl:value-of select="$ccidLink"/>
-                                      </xsl:attribute>
-                                      <fo:inline font-weight="bold">
-                                          <xsl:text>Creative Commons Attribution </xsl:text>
-                                          <xsl:choose>
-                                              <xsl:when test="$ccid = 'by'" />
-                                              <xsl:when test="$ccid = 'by-sa'">
-                                                  <xsl:text>ShareAlike</xsl:text>
-                                              </xsl:when>
-                                              <xsl:when test="$ccid = 'by-nd'">
-                                                  <xsl:text>NoDerivatives</xsl:text>
-                                              </xsl:when>
-                                              <xsl:when test="$ccid = 'by-nc'">
-                                                  <xsl:text>NonCommercial</xsl:text>
-                                              </xsl:when>
-                                              <xsl:when test="$ccid = 'by-nc-sa'">
-                                                  <xsl:text>NonCommercial ShareAlike</xsl:text>
-                                              </xsl:when>
-                                              <xsl:when test="$ccid = 'by-nc-nd'">
-                                                  <xsl:text>NonCommercial NoDerivatives</xsl:text>
-                                              </xsl:when>
-                                              <xsl:otherwise>
-                                                  <xsl:message terminate="yes">I don't understand licence <xsl:value-of select="$ccid"/></xsl:message>
-                                              </xsl:otherwise>
-                                          </xsl:choose>
-                                          <xsl:text> 3.0 License</xsl:text>
-                                      </fo:inline>
-                                  </xsl:element>
-                                  <xsl:text>.</xsl:text>
-                                  <fo:block/>
-                                  <xsl:element name="fo:basic-link">
-                                      <xsl:attribute name="external-destination">
-                                          <xsl:value-of select="$ccidLink"/>
-                                      </xsl:attribute>
-                                      <fo:inline>
-                                          <xsl:value-of select="$ccidURL"/>
-                                      </fo:inline>
-                                  </xsl:element>
-                              </fo:block>
-                          </fo:list-item-body>
-                      </fo:list-item>
-                  </fo:list-block>
-                  <xsl:apply-templates mode="titlepage.mode"/>
+                  <xsl:call-template name="CCLegalNotice" />
               </xsl:when>
               <xsl:otherwise>
                   <xsl:if test="d:title"> <!-- FIXME: add param for using default title? -->
@@ -390,7 +305,105 @@
       </fo:block>
   </xsl:template>
 
+  <xsl:template name="CCLegalNotice">
+      <xsl:if test="starts-with(string(@role),'cc-')">
+          <xsl:variable name="ccid">
+              <xsl:value-of select="substring-after(string(@role),'cc-')"/>
+          </xsl:variable>
+          <xsl:variable name="ccidURL">
+              <xsl:text>http://creativecommons.org/licenses/</xsl:text>
+              <xsl:value-of select="$ccid"/>
+              <xsl:text>/3.0/legalcode</xsl:text>
+          </xsl:variable>
+          <xsl:variable name="ccidLink">
+              <xsl:text>url(</xsl:text>
+              <xsl:value-of select="$ccidURL"/>
+              <xsl:text>)</xsl:text>
+          </xsl:variable>
+          <fo:list-block xsl:use-attribute-sets="normal.para.spacing">
+              <fo:list-item>
+                  <fo:list-item-label end-indent="label-end()">
+                      <fo:block>
+                          <xsl:element name="fo:basic-link">
+                              <xsl:attribute name="external-destination">
+                                  <xsl:value-of select="$ccidLink"/>
+                              </xsl:attribute>
+                              <xsl:element name="fo:external-graphic">
+                                  <xsl:attribute name="src">
+                                      <xsl:text>url(</xsl:text>
+                                      <xsl:value-of select="$cloud.api.cc.image.dir"/>
+                                      <xsl:text>/</xsl:text>
+                                      <xsl:value-of select="$ccid"/>
+                                      <xsl:text>.svg)</xsl:text>
+                                  </xsl:attribute>
+                                  <xsl:attribute name="width">auto</xsl:attribute>
+                                  <xsl:attribute name="height">auto</xsl:attribute>
+                                  <xsl:attribute name="content-width">75%</xsl:attribute>
+                                  <xsl:attribute name="content-height">75%</xsl:attribute>
+                              </xsl:element>
+                          </xsl:element>
+                      </fo:block>
+                  </fo:list-item-label>
+                  <fo:list-item-body start-indent="1.125in">
+                      <fo:block xsl:use-attribute-sets="normal.para.spacing">
+                          <xsl:text>Except where otherwise noted, this document is licensed under </xsl:text>
+                          <fo:block/>
+                          <xsl:element name="fo:basic-link">
+                              <xsl:attribute name="external-destination">
+                                  <xsl:value-of select="$ccidLink"/>
+                              </xsl:attribute>
+                              <fo:inline font-weight="bold">
+                                  <xsl:text>Creative Commons Attribution </xsl:text>
+                                  <xsl:choose>
+                                      <xsl:when test="$ccid = 'by'" />
+                                      <xsl:when test="$ccid = 'by-sa'">
+                                          <xsl:text>ShareAlike</xsl:text>
+                                      </xsl:when>
+                                      <xsl:when test="$ccid = 'by-nd'">
+                                          <xsl:text>NoDerivatives</xsl:text>
+                                      </xsl:when>
+                                      <xsl:when test="$ccid = 'by-nc'">
+                                          <xsl:text>NonCommercial</xsl:text>
+                                      </xsl:when>
+                                      <xsl:when test="$ccid = 'by-nc-sa'">
+                                          <xsl:text>NonCommercial ShareAlike</xsl:text>
+                                      </xsl:when>
+                                      <xsl:when test="$ccid = 'by-nc-nd'">
+                                          <xsl:text>NonCommercial NoDerivatives</xsl:text>
+                                      </xsl:when>
+                                      <xsl:otherwise>
+                                          <xsl:message terminate="yes">I don't understand licence <xsl:value-of select="$ccid"/></xsl:message>
+                                      </xsl:otherwise>
+                                  </xsl:choose>
+                                  <xsl:text> 3.0 License</xsl:text>
+                              </fo:inline>
+                          </xsl:element>
+                          <xsl:text>.</xsl:text>
+                          <fo:block/>
+                          <xsl:element name="fo:basic-link">
+                              <xsl:attribute name="external-destination">
+                                  <xsl:value-of select="$ccidLink"/>
+                              </xsl:attribute>
+                              <fo:inline>
+                                  <xsl:value-of select="$ccidURL"/>
+                              </fo:inline>
+                          </xsl:element>
+                      </fo:block>
+                  </fo:list-item-body>
+              </fo:list-item>
+          </fo:list-block>
+          <xsl:apply-templates mode="titlepage.mode"/>
+      </xsl:if>
+  </xsl:template>
+
   <xsl:template match="d:holder" mode="titlepage.mode">
+      <xsl:variable name="useCCLicense">
+          <xsl:for-each select="/*//d:legalnotice">
+              <xsl:if test="starts-with(string(@role),'cc-')">
+                  <xsl:text>yes</xsl:text>
+              </xsl:if>
+          </xsl:for-each>
+      </xsl:variable>
       <xsl:apply-templates/>
       <xsl:choose>
           <xsl:when test="position() &lt; last()">
@@ -398,7 +411,7 @@
           </xsl:when>
           <xsl:when test="position() = last()">
               <xsl:choose>
-                  <xsl:when test="starts-with(string(/*/d:info/d:legalnotice/@role),'cc-')">
+                  <xsl:when test="$useCCLicense = 'yes'">
                       <xsl:text> Some rights reserved.</xsl:text>
                   </xsl:when>
                   <xsl:otherwise>
