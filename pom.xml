@@ -1,3 +1,4 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -22,7 +23,6 @@
             <artifactId>docbkx-maven-plugin</artifactId>
             <version>2.0.11</version>
         </dependency>
-
 
         <dependency>
             <groupId>net.sf.docbook</groupId>
@@ -89,6 +89,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>repos.research.rackspace.cloud.releases</id>
+            
+            <name>Rackspace Cloud Research Releases</name>
+            <url>http://maven.research.rackspacecloud.com/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <resources>
