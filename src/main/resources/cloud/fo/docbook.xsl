@@ -58,7 +58,7 @@
       our font already has it.
   -->
   <xsl:param name="dingbat.font.family" select="''"/>
-
+  <xsl:param name="make.year.ranges" select="1"/>
   <!-- Don't show links -->
   <xsl:param name="ulink.show" select="0"/>
 
@@ -295,6 +295,9 @@
               <xsl:when test="starts-with(string(@role),'cc-')">
                   <xsl:call-template name="CCLegalNotice" />
               </xsl:when>
+              <xsl:when test="@role = 'rs-api'">
+                  <xsl:call-template name="RSAPILegalNotice"/>
+              </xsl:when>
               <xsl:otherwise>
                   <xsl:if test="d:title"> <!-- FIXME: add param for using default title? -->
                       <xsl:call-template name="formal.object.heading"/>
@@ -303,6 +306,47 @@
               </xsl:otherwise>
           </xsl:choose>
       </fo:block>
+  </xsl:template>
+
+  <xsl:template name="RSAPILegalNotice">
+      <xsl:if test="@role = 'rs-api'">
+          <fo:block xsl:use-attribute-sets="normal.para.spacing">
+              <xsl:value-of select="/*/d:info/d:abstract"/>
+              The document is for informational purposes only and is
+              provided “AS IS.”
+          </fo:block>
+          <fo:block xsl:use-attribute-sets="normal.para.spacing">
+              RACKSPACE MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY
+              KIND, EXPRESS OR IMPLIED, AS TO THE ACCURACY OR
+              COMPLETENESS OF THE CONTENTS OF THIS DOCUMENT AND
+              RESERVES THE RIGHT TO MAKE CHANGES TO SPECIFICATIONS AND
+              PRODUCT/SERVICES DESCRIPTION AT ANY TIME WITHOUT NOTICE.
+              RACKSPACE SERVICES OFFERINGS ARE SUBJECT TO CHANGE
+              WITHOUT NOTICE.  USERS MUST TAKE FULL RESPONSIBILITY FOR
+              APPLICATION OF ANY SERVICES MENTIONED HEREIN.  EXCEPT AS
+              SET FORTH IN RACKSPACE GENERAL TERMS AND CONDITIONS
+              AND/OR CLOUD TERMS OF SERVICE, RACKSPACE ASSUMES NO
+              LIABILITY WHATSOEVER, AND DISCLAIMS ANY EXPRESS OR
+              IMPLIED WARRANTY, RELATING TO ITS SERVICES INCLUDING,
+              BUT NOT LIMITED TO, THE IMPLIED WARRANTY OF
+              MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+              NONINFRINGEMENT.
+          </fo:block>
+          <fo:block xsl:use-attribute-sets="normal.para.spacing">
+              Except as expressly provided in any written license
+              agreement from Rackspace, the furnishing of this
+              document does not give you any license to patents,
+              trademarks, copyrights, or other intellectual property.
+          </fo:block>
+          <fo:block xsl:use-attribute-sets="normal.para.spacing">
+              Rackspace®, Rackspace logo and Fanatical Support® are
+              registered service marks of Rackspace US,
+              Inc. All other product names and trademarks
+              used in this document are for identification purposes
+              only and are property of their respective owners.
+          </fo:block>
+          <xsl:apply-templates mode="titlepage.mode"/>
+      </xsl:if>
   </xsl:template>
 
   <xsl:template name="CCLegalNotice">
@@ -429,5 +473,39 @@
           <xsl:value-of select="/*/d:info/d:pubdate"/>
           <xsl:text>)</xsl:text>
       </xsl:if>
+  </xsl:template>
+
+  <!--
+      The abstract is supressed if the rs-api legal notice is used, as
+      it's incorporated into the document in this case.
+  -->
+  <xsl:template match="d:abstract" mode="titlepage.mode">
+      <xsl:variable name="useRSLicense">
+          <xsl:for-each select="/*//d:legalnotice">
+              <xsl:if test="@role = 'rs-api'">
+                  <xsl:text>yes</xsl:text>
+              </xsl:if>
+          </xsl:for-each>
+      </xsl:variable>
+      <xsl:choose>
+          <xsl:when test="$useRSLicense = 'yes'" />
+          <xsl:otherwise>
+              <fo:block xsl:use-attribute-sets="abstract.properties">
+                  <fo:block xsl:use-attribute-sets="abstract.title.properties">
+                      <xsl:choose>
+                          <xsl:when test="d:title|d:info/d:title">
+                              <xsl:apply-templates select="d:title|d:info/d:title"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                              <xsl:call-template name="gentext">
+                                  <xsl:with-param name="key" select="'Abstract'"/>
+                              </xsl:call-template>
+                          </xsl:otherwise>
+                      </xsl:choose>
+                  </fo:block>
+                  <xsl:apply-templates select="*[not(self::d:title)]" mode="titlepage.mode"/>
+              </fo:block>
+          </xsl:otherwise>
+      </xsl:choose>
   </xsl:template>
 </xsl:stylesheet>
