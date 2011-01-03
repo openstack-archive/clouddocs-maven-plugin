@@ -385,4 +385,13 @@
           </xsl:when>
       </xsl:choose>
   </xsl:template>
+
+  <xsl:template match="d:releaseinfo" mode="titlepage.mode">
+      <xsl:apply-templates mode="titlepage.mode"/>
+      <xsl:if test="/*/d:info/d:pubdate">
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="normalize-space(string(/*/d:info/d:pubdate))"/>
+          <xsl:text>)</xsl:text>
+      </xsl:if>
+  </xsl:template>
 </xsl:stylesheet>
