@@ -13,6 +13,22 @@
   <xsl:param name="cloud.api.background.image" select="'images/cover.svg'"/>
   <xsl:param name="cloud.api.cc.image.dir" select="'images/cc/'"/>
 
+  <xsl:variable name="plaintitle">
+      <xsl:choose>
+          <xsl:when test="/*/d:title">
+              <xsl:copy-of select="/*/d:title"/>
+          </xsl:when>
+          <xsl:when test="/*/d:info/d:title">
+              <xsl:copy-of select="/*/d:info/d:title"/>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:message terminate="yes">
+                  <xsl:text>This template requires a docbook title!</xsl:text>
+              </xsl:message>
+          </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+
   <!--
       XSL-FO Extensions:
 
@@ -87,7 +103,7 @@
   <xsl:param name="local.l10n.xml" select="document('gentex_mods.xml')"/>
 
   <!-- Headers -->
-  <xsl:param name="header.column.widths">2 1 2</xsl:param>
+  <xsl:param name="header.column.widths">1 1 1</xsl:param>
   <xsl:template name="header.content">
     <xsl:param name="pageclass" select="''"/>
     <xsl:param name="sequence" select="''"/>
@@ -100,14 +116,17 @@
           <!-- nothing -->
         </xsl:when>
         <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="$position = 'left'">
-              <xsl:value-of select="//d:title[1]"/>: <xsl:value-of select="//d:info[1]/d:pubdate"/>
-            </xsl:when>
-            <xsl:when test="$position = 'right'">
-              <xsl:value-of select="//d:info[1]/d:releaseinfo"/>
-            </xsl:when>
-          </xsl:choose>
+            <xsl:choose>
+                <xsl:when test="$position = 'left'">
+                    <xsl:value-of select="$plaintitle"/>
+                </xsl:when>
+                <xsl:when test="$position = 'right'">
+                    <xsl:value-of select="/*/d:info/d:releaseinfo"/>
+                </xsl:when>
+                <xsl:when test="$position = 'center'">
+                    <xsl:value-of select="/*/d:info/d:pubdate"/>
+                </xsl:when>
+            </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
     </fo:block>
