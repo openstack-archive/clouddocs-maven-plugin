@@ -9,6 +9,7 @@
   <xsl:import href="urn:docbkx:stylesheet-orig/highlight.xsl" />
   <xsl:import href="titlepage.templates.xsl"/>
   <xsl:import href="fop1.xsl"/>
+  <xsl:import href="../date.xsl"/>
 
   <!-- Front-Cover Background Image, should be set by the plugin -->
   <xsl:param name="cloud.api.background.image" select="'images/cover.svg'"/>
@@ -125,7 +126,9 @@
                     <xsl:value-of select="/*/d:info/d:releaseinfo"/>
                 </xsl:when>
                 <xsl:when test="$position = 'center'">
-                    <xsl:value-of select="/*/d:info/d:pubdate"/>
+                    <xsl:call-template name="shortDate">
+                        <xsl:with-param name="in" select="/*/d:info/d:pubdate"/>
+                    </xsl:call-template>
                 </xsl:when>
             </xsl:choose>
         </xsl:otherwise>
@@ -410,7 +413,7 @@
       <xsl:apply-templates mode="titlepage.mode"/>
       <xsl:if test="/*/d:info/d:pubdate">
           <xsl:text> (</xsl:text>
-          <xsl:value-of select="normalize-space(string(/*/d:info/d:pubdate))"/>
+          <xsl:value-of select="/*/d:info/d:pubdate"/>
           <xsl:text>)</xsl:text>
       </xsl:if>
   </xsl:template>
