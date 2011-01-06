@@ -31,6 +31,20 @@
       </xsl:choose>
   </xsl:variable>
 
+  <xsl:variable name="titleabbrev">
+      <xsl:choose>
+          <xsl:when test="/*/d:titleabbrev">
+              <xsl:copy-of select="/*/d:titleabbrev"/>
+          </xsl:when>
+          <xsl:when test="/*/d:info/d:titleabbrev">
+              <xsl:copy-of select="/*/d:info/d:titleabbrev"/>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:text/>
+          </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+
   <!--
       XSL-FO Extensions:
 
@@ -120,7 +134,14 @@
         <xsl:otherwise>
             <xsl:choose>
                 <xsl:when test="$position = 'left'">
-                    <xsl:value-of select="$plaintitle"/>
+                    <xsl:choose>
+                        <xsl:when test="$titleabbrev != ''">
+                            <xsl:value-of select="$titleabbrev"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$plaintitle"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$position = 'right'">
                     <xsl:value-of select="/*/d:info/d:releaseinfo"/>
