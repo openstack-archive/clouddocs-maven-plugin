@@ -76,6 +76,11 @@
   <!-- Don't show links -->
   <xsl:param name="ulink.show" select="0"/>
 
+  <!-- Numbering of sections and chapters -->
+  <xsl:param name="chapter.autolabel" select="1"/>
+  <xsl:param name="section.autolabel" select="1"/>
+  <xsl:param name="section.label.includes.component.label" select="1"/>
+
   <!-- Define hard pagebreak -->
   <xsl:template match="processing-instruction('hard-pagebreak')">
     <fo:block break-after='page'/>
@@ -194,9 +199,6 @@
       <xsl:otherwise>1</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
-  <!-- Chapter Numbering -->
-  <xsl:param name="chapter.autolabel" select="0"/>
 
   <!-- Source Code Properties -->
   <xsl:param name="shade.verbatim" select="1"/>

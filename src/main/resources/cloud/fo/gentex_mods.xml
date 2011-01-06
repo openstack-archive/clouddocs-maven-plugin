@@ -6,5 +6,9 @@
     <l:gentext key="pubdate" text=""/>
     <l:gentext key="Abstract" text=""/>
     <l:gentext key="abstract" text=""/>
+
+    <l:context name="title-numbered">
+        <l:template name="chapter" text="%n. %t"/>
+    </l:context>
   </l:l10n>
 </l:i18n>
