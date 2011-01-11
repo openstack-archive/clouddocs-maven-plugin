@@ -4976,7 +4976,7 @@
      y="0"
      font-size="28"
      id="tspan2853"
-     style="font-size:28px;font-family:CartoGothic Std">$subtitle</tspan></text>
+     style="font-size:28px;font-family:CartoGothic Std">$subtitle$</tspan></text>
 
 	<g
    id="g2871">
