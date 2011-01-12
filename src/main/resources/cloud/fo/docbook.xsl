@@ -149,12 +149,23 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$position = 'right'">
-                    <xsl:value-of select="/*/d:info/d:releaseinfo"/>
+                    <xsl:choose>
+                        <xsl:when test="/*/d:info/d:releaseinfo">
+                            <xsl:value-of select="/*/d:info/d:releaseinfo"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:call-template name="shortDate">
+                                <xsl:with-param name="in"  select="/*/d:info/d:pubdate"/>
+                            </xsl:call-template>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$position = 'center'">
-                    <xsl:call-template name="shortDate">
-                        <xsl:with-param name="in" select="/*/d:info/d:pubdate"/>
-                    </xsl:call-template>
+                    <xsl:if test="/*/d:info/d:releaseinfo">
+                        <xsl:call-template name="shortDate">
+                            <xsl:with-param name="in" select="/*/d:info/d:pubdate"/>
+                        </xsl:call-template>
+                    </xsl:if>
                 </xsl:when>
             </xsl:choose>
         </xsl:otherwise>
