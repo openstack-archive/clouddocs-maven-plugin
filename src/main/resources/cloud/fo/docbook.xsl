@@ -498,6 +498,12 @@
       </xsl:if>
   </xsl:template>
 
+  <xsl:template match="d:pubdate" mode="titlepage.mode">
+      <xsl:if test="not(/*/d:info/d:releaseinfo)">
+          <xsl:apply-templates mode="titlepage.mode"/>
+      </xsl:if>
+  </xsl:template>
+
   <!--
       The abstract is supressed if the rs-api legal notice is used, as
       it's incorporated into the document in this case.
