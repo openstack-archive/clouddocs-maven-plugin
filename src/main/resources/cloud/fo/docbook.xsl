@@ -332,6 +332,9 @@
               <xsl:when test="@role = 'rs-api'">
                   <xsl:call-template name="RSAPILegalNotice"/>
               </xsl:when>
+              <xsl:when test="@role = 'apache2'">
+                  <xsl:call-template name="Apache2LegalNotice"/>
+              </xsl:when>
               <xsl:otherwise>
                   <xsl:if test="d:title"> <!-- FIXME: add param for using default title? -->
                       <xsl:call-template name="formal.object.heading"/>
@@ -340,6 +343,34 @@
               </xsl:otherwise>
           </xsl:choose>
       </fo:block>
+  </xsl:template>
+
+  <xsl:template name="Apache2LegalNotice">
+      <xsl:variable name="a2Link" select="'http://www.apache.org/licenses/LICENSE-2.0'"/>
+      <xsl:if test="@role = 'apache2'">
+          <fo:block xsl:use-attribute-sets="normal.para.spacing">
+              Licensed under the Apache License, Version 2.0 (the "License");
+              you may not use this file except in compliance with the License.
+              You may obtain a copy of the License at
+          </fo:block>
+          <fo:block xsl:use-attribute-sets="normal.para.spacing">
+              <xsl:element name="fo:basic-link">
+                  <xsl:attribute name="external-destination">
+                      <xsl:value-of select="$a2Link"/>
+                  </xsl:attribute>
+                  <fo:inline>
+                      <xsl:value-of select="$a2Link"/>
+                  </fo:inline>
+              </xsl:element>
+          </fo:block>
+          <fo:block xsl:use-attribute-sets="normal.para.spacing">
+              Unless required by applicable law or agreed to in writing, software
+              distributed under the License is distributed on an "AS IS" BASIS,
+              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+              See the License for the specific language governing permissions and
+              limitations under the License.
+          </fo:block>
+      </xsl:if>
   </xsl:template>
 
   <xsl:template name="RSAPILegalNotice">
