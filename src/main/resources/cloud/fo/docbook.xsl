@@ -1,4 +1,8 @@
 <?xml version="1.0"?>
+<!DOCTYPE xsl:stylesheet [
+<!ENTITY lowercase "'abcdefghijklmnopqrstuvwxyz'">
+<!ENTITY uppercase "'ABCDEFGHIJKLMNOPQRSTUVWXYZ'">
+ ]>
 <xsl:stylesheet exclude-result-prefixes="d"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://docbook.org/ns/docbook"
@@ -596,4 +600,88 @@
           </xsl:otherwise>
       </xsl:choose>
   </xsl:template>
+
+  <!-- DWC: This writes out something like DRAFT - CONFIDENTIAL in the margin  -->
+  <xsl:template name="document.status.bar">
+    <fo:block-container reference-orientation="90" absolute-position="fixed" overflow="visible" height="3in" width="11in" z-index="1">
+      <fo:block padding-before=".45in" font-size="1.5em" color="gray" font-weight="bold">
+    	<fo:leader leader-pattern="use-content" leader-length="15in" letter-spacing=".1em"><xsl:text> </xsl:text><xsl:value-of select="$rackspace.status.text"/><xsl:text> </xsl:text></fo:leader>
+      </fo:block>
+    </fo:block-container>
+  </xsl:template>
+
+  <!-- DWC: This template comes from pagesetup.xsl -->
+  <!-- I've added <xsl:call-template name="document.status.bar"/> -->
+  <!-- in several places to get the running text in the margin -->
+<xsl:template match="*" mode="running.head.mode">
+  <xsl:param name="master-reference" select="'unknown'"/>
+  <xsl:param name="gentext-key" select="local-name(.)"/>
+
+  <!-- remove -draft from reference -->
+  <xsl:variable name="pageclass">
+    <xsl:choose>
+      <xsl:when test="contains($master-reference, '-draft')">
+        <xsl:value-of select="substring-before($master-reference, '-draft')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$master-reference"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <fo:static-content flow-name="xsl-region-before-first">
+    <xsl:call-template name="document.status.bar"/>
+
+    <fo:block xsl:use-attribute-sets="header.content.properties">
+      <xsl:call-template name="header.table">
+        <xsl:with-param name="pageclass" select="$pageclass"/>
+        <xsl:with-param name="sequence" select="'first'"/>
+        <xsl:with-param name="gentext-key" select="$gentext-key"/>
+      </xsl:call-template>
+    </fo:block>
+  </fo:static-content>
+
+  <fo:static-content flow-name="xsl-region-before-odd">
+    <xsl:call-template name="document.status.bar"/>
+
+    <fo:block xsl:use-attribute-sets="header.content.properties">
+      <xsl:call-template name="header.table">
+        <xsl:with-param name="pageclass" select="$pageclass"/>
+        <xsl:with-param name="sequence" select="'odd'"/>
+        <xsl:with-param name="gentext-key" select="$gentext-key"/>
+      </xsl:call-template>
+    </fo:block>
+  </fo:static-content>
+
+  <fo:static-content flow-name="xsl-region-before-even">
+			  <xsl:call-template name="document.status.bar"/>
+
+    <fo:block xsl:use-attribute-sets="header.content.properties">
+      <xsl:call-template name="header.table">
+        <xsl:with-param name="pageclass" select="$pageclass"/>
+        <xsl:with-param name="sequence" select="'even'"/>
+        <xsl:with-param name="gentext-key" select="$gentext-key"/>
+      </xsl:call-template>
+    </fo:block>
+  </fo:static-content>
+
+  <fo:static-content flow-name="xsl-region-before-blank">
+			  <xsl:call-template name="document.status.bar"/>
+
+    <fo:block xsl:use-attribute-sets="header.content.properties">
+      <xsl:call-template name="header.table">
+        <xsl:with-param name="pageclass" select="$pageclass"/>
+        <xsl:with-param name="sequence" select="'blank'"/>
+        <xsl:with-param name="gentext-key" select="$gentext-key"/>
+      </xsl:call-template>
+    </fo:block>
+  </fo:static-content>
+
+  <xsl:call-template name="footnote-separator"/>
+
+  <xsl:if test="$fop.extensions = 0 and $fop1.extensions = 0">
+    <xsl:call-template name="blank.page.content"/>
+  </xsl:if>
+</xsl:template>
+
 </xsl:stylesheet>

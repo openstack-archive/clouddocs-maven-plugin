@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE xsl:stylesheet [
+<!ENTITY lowercase "'abcdefghijklmnopqrstuvwxyz'">
+<!ENTITY uppercase "'ABCDEFGHIJKLMNOPQRSTUVWXYZ'">
+ ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://docbook.org/ns/docbook"
                 xmlns:svg="http://www.w3.org/2000/svg"
                 version="1.0">
     <xsl:output method="xml" encoding="UTF-8" media-type="image/svg+xml" standalone="no"/>
+    
     <xsl:param name="docbook.infile" select="'/Users/jorgew/projects/cloud-files-api-docs/src/docbkx/cfdevguide_d5.xml'"/>
     <xsl:variable name="docbook" select="document(concat('file://',$docbook.infile))"/>
+
+  <xsl:variable name="rackspace.status.pi">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="$docbook/*/processing-instruction('rax')"/>
+      <xsl:with-param name="attribute" select="'status.bar.text'"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:variable name="draft.text">
+      <xsl:if test="$docbook/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')]">DRAFT</xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="rackspace.status.text">
+      <xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/></xsl:if> 
+  </xsl:variable>
+
     <xsl:variable name="plaintitle">
         <xsl:choose>
             <xsl:when test="$docbook/*/d:title">
@@ -112,7 +132,21 @@
                 <xsl:with-param name="with" select="$pubdate"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:copy-of select="$textWithPubDate"/>
+        <xsl:variable name="textWithStatusText">
+            <xsl:call-template name="replaceText">
+                <xsl:with-param name="text" select="$textWithPubDate"/>
+                <xsl:with-param name="replace" select="'$status.text$'"/>
+                <xsl:with-param name="with" select="$rackspace.status.text"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="textWithDraftText">
+            <xsl:call-template name="replaceText">
+                <xsl:with-param name="text" select="$textWithStatusText"/>
+                <xsl:with-param name="replace" select="'$draft.text$'"/>
+                <xsl:with-param name="with" select="$draft.text"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:copy-of select="$textWithDraftText"/>
     </xsl:template>
 
     <xsl:template name="replaceText">
@@ -196,4 +230,41 @@
             <xsl:otherwise />
         </xsl:choose>
     </xsl:template>
+    
+    <!-- DWC: This template comes from the DocBook xsls (MIT-style license) -->
+    <xsl:template name="pi-attribute">
+        <xsl:param name="pis" select="processing-instruction('BOGUS_PI')"></xsl:param>
+        <xsl:param name="attribute">filename</xsl:param>
+        <xsl:param name="count">1</xsl:param>
+        
+        <xsl:choose>
+            <xsl:when test="$count>count($pis)">
+                <!-- not found -->
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="pi">
+                    <xsl:value-of select="$pis[$count]"></xsl:value-of>
+                </xsl:variable>
+                <xsl:variable name="pivalue">
+                    <xsl:value-of select="concat(' ', normalize-space($pi))"></xsl:value-of>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="contains($pivalue,concat(' ', $attribute, '='))">
+                        <xsl:variable name="rest" select="substring-after($pivalue,concat(' ', $attribute,'='))"></xsl:variable>
+                        <xsl:variable name="quote" select="substring($rest,1,1)"></xsl:variable>
+                        <xsl:value-of select="substring-before(substring($rest,2),$quote)"></xsl:value-of>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="pi-attribute">
+                            <xsl:with-param name="pis" select="$pis"></xsl:with-param>
+                            <xsl:with-param name="attribute" select="$attribute"></xsl:with-param>
+                            <xsl:with-param name="count" select="$count + 1"></xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    
 </xsl:stylesheet>

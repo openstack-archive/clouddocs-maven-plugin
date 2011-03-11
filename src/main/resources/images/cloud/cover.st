@@ -20,10 +20,10 @@
    xml:space="preserve"
    id="svg2"
    inkscape:version="0.48.0 r9654"
-   sodipodi:docname="Documentation Cover Rackspace.svg"><metadata
+   sodipodi:docname="cover.st"><metadata
    id="metadata2921"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
    id="defs2919" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
@@ -33,20 +33,20 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1200"
-   inkscape:window-height="981"
+   inkscape:window-width="1920"
+   inkscape:window-height="1003"
    id="namedview2917"
    showgrid="false"
    units="in"
    showguides="true"
    inkscape:guide-bbox="true"
-   inkscape:zoom="1"
-   inkscape:cx="357.77899"
-   inkscape:cy="682.7535"
-   inkscape:window-x="140"
-   inkscape:window-y="8"
-   inkscape:window-maximized="0"
-   inkscape:current-layer="Layer_1" />
+   inkscape:zoom="0.93442623"
+   inkscape:cx="383.63005"
+   inkscape:cy="461.58803"
+   inkscape:window-x="0"
+   inkscape:window-y="24"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="a5906" />
 	<font
    horiz-adv-x="1000"
    id="font708"
@@ -4950,25 +4950,37 @@
      id="tspan2735"
      style="font-size:39.61130142px;fill:#f2f2f2;font-family:CartoGothic Std;font-weight:bold;">$title$</tspan></text>
 
+
+
 	<text
-   transform="translate(410.6353,306.3164)"
-   id="text2749"><tspan
-     x="0"
-     y="0"
+   id="text2749"
+   style="font-size:12px;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end"
+   sodipodi:linespacing="125%"
+   x="532.0896"
+   y="306.31641"><tspan
+     x="532.0896"
+     y="306.31641"
      font-size="10.3668"
      id="tspan2751"
-     style="font-size:10.36680031px;fill:#333333;font-family:CartoGothic Std">$releaseinfo$ ($pubdate$)</tspan></text>
+     style="font-size:10.36680031px;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:#333333;font-family:CartoGothic Std">$releaseinfo$ ($pubdate$)</tspan></text>
+
+
 
 	<a
    id="a5906"
-   xlink:href="http://docs.rackspacecloud.com/api/"><text
-     id="text2797"
-     transform="translate(447.6157,739.9253)"><tspan
-       style="font-size:9.12390041px;font-family:CartoGothic Std"
-       id="tspan2799"
-       font-size="9.1239"
+   xlink:href="http://docs.rackspacecloud.com/api/"
+   transform="translate(-3.1961502,3.5469611e-8)"><a
+   id="a4185"
+   xlink:href="http://docs.rackspacecloud.com/api"><text
+     transform="translate(447.6157,739.9253)"
+     id="text2797"><tspan
+       x="0"
        y="0"
-       x="0">docs.rackspacecloud.com/api</tspan></text>
+       font-size="9.1239"
+       id="tspan2799"
+       style="font-size:9.12390041px;font-family:CartoGothic Std">docs.rackspacecloud.com/api</tspan></text>
+</a>
+
 </a>
 	<text
    transform="translate(163.5112,287.0342)"
@@ -4978,6 +4990,8 @@
      font-size="28"
      id="tspan2853"
      style="font-size:28px;font-family:CartoGothic Std">$subtitle$</tspan></text>
+
+
 
 	<g
    id="g2871">
@@ -5098,5 +5112,36 @@
    style="fill:#c42126" />
 		</g>
 	</g>
+<text
+   xml:space="preserve"
+   style="font-size:19.80106735px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial Unicode MS;-inkscape-font-specification:Arial Unicode MS"
+   x="87.927483"
+   y="527.18024"
+   id="text4075"
+   sodipodi:linespacing="125%"
+   transform="matrix(0.93130382,-0.33704626,0.39898689,0.92936692,0,0)"
+   inkscape:transform-center-x="6.4210526"
+   inkscape:transform-center-y="10.701754"><tspan
+     sodipodi:role="line"
+     id="tspan4077"
+     x="87.927483"
+     y="527.18024"
+     style="font-size:71.28382874px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Courier;-inkscape-font-specification:Courier">$draft.text$</tspan></text>
+
+<text
+   xml:space="preserve"
+   style="font-size:19.80106735px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial Unicode MS;-inkscape-font-specification:Arial Unicode MS"
+   x="80.607315"
+   y="594.90302"
+   id="text4075-9"
+   sodipodi:linespacing="125%"
+   transform="matrix(0.93130381,-0.33704625,0.39898688,0.92936694,0,0)"
+   inkscape:transform-center-x="5.1307272"
+   inkscape:transform-center-y="8.5511222"><tspan
+     sodipodi:role="line"
+     id="tspan4077-6"
+     x="80.607315"
+     y="594.90302"
+     style="font-size:71.28382874px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Courier;-inkscape-font-specification:Courier">$status.text$</tspan></text>
 </g>
 </svg>

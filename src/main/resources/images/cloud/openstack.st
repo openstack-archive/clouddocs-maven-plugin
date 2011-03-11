@@ -20,10 +20,10 @@
    xml:space="preserve"
    id="svg2"
    inkscape:version="0.48.0 r9654"
-   sodipodi:docname="Documentation Cover OpenStack.svg"><metadata
+   sodipodi:docname="openstack.st"><metadata
    id="metadata2976"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
    id="defs2974" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
@@ -34,7 +34,7 @@
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
    inkscape:window-width="1074"
-   inkscape:window-height="1054"
+   inkscape:window-height="1002"
    id="namedview2972"
    showgrid="false"
    units="in"
@@ -44,7 +44,7 @@
    inkscape:cx="357.77899"
    inkscape:cy="291.98385"
    inkscape:window-x="26"
-   inkscape:window-y="0"
+   inkscape:window-y="24"
    inkscape:window-maximized="0"
    inkscape:current-layer="Layer_1" />
 	<font
@@ -4949,26 +4949,21 @@
      id="tspan2735"
      style="font-size:39.61130142px;fill:#f2f2f2;font-family:CartoGothic Std;font-weight:bold;">$title$</tspan></text>
 
+
 	<text
-   transform="translate(410.6348,306.3159)"
-   id="text2749"><tspan
-     x="0"
-     y="0"
+   id="text2749"
+   style="text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end"
+   sodipodi:linespacing="125%"
+   x="528.53357"
+   y="306.31589"><tspan
+     x="528.53357"
+     y="306.31589"
      font-size="10.3668"
      id="tspan2751"
-     style="font-size:10.36680031px;fill:#333333;font-family:CartoGothic Std">$releaseinfo$ ($pubdate$)</tspan></text>
+     style="font-size:10.36680031px;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:#333333;font-family:CartoGothic Std">$releaseinfo$ ($pubdate$)</tspan></text>
 
-	<a
-   id="a5955"
-   xlink:href="http://docs.rackspacecloud.com/api/"><text
-     id="text2797"
-     transform="translate(447.6152,739.9248)"><tspan
-       style="font-size:9.12390041px;font-family:CartoGothic Std"
-       id="tspan2799"
-       font-size="9.1239"
-       y="0"
-       x="0">docs.rackspacecloud.com/api</tspan></text>
-</a>
+
+	
 	<text
    transform="translate(163.5107,287.0337)"
    id="text2851"><tspan
@@ -4977,6 +4972,7 @@
      font-size="28"
      id="tspan2853"
      style="font-size:28px;font-family:CartoGothic Std">$subtitle$</tspan></text>
+
 
 	<g
    id="g2871">
@@ -5219,5 +5215,48 @@
    style="fill:#c43827" />
 		</g>
 	</g>
-</g>
+<text
+   xml:space="preserve"
+   style="font-size:19.74104309px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial Unicode MS;-inkscape-font-specification:Arial Unicode MS"
+   x="83.472885"
+   y="549.409"
+   id="text4075"
+   sodipodi:linespacing="125%"
+   transform="matrix(0.93130381,-0.33704625,0.39898688,0.92936694,0,0)"
+   inkscape:transform-center-x="5.1151218"
+   inkscape:transform-center-y="8.5251907"><tspan
+     sodipodi:role="line"
+     id="tspan4077"
+     x="83.472893"
+     y="549.409"
+     style="font-size:71.06774902px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Courier;-inkscape-font-specification:Courier">$draft.text$</tspan></text>
+<text
+   xml:space="preserve"
+   style="font-size:19.74104309px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial Unicode MS;-inkscape-font-specification:Arial Unicode MS"
+   x="76.174896"
+   y="616.92645"
+   id="text4075-9"
+   sodipodi:linespacing="125%"
+   transform="matrix(0.93130381,-0.33704625,0.39898688,0.92936694,0,0)"
+   inkscape:transform-center-x="4.087227"
+   inkscape:transform-center-y="6.8119537"><tspan
+     sodipodi:role="line"
+     id="tspan4077-6"
+     x="76.174911"
+     y="616.92645"
+     style="font-size:71.06774139px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Courier;-inkscape-font-specification:Courier">$status.text$</tspan></text>
+<a
+   id="a5906"
+   xlink:href="http://docs.rackspacecloud.com/api/"
+   transform="matrix(0.99696867,0,0,0.99696867,5.0644381,11.119585)"><a
+     id="a4185"
+     xlink:href="http://docs.rackspacecloud.com/api"><text
+       transform="translate(447.6157,739.9253)"
+       id="text2797"><tspan
+         x="0"
+         y="0"
+         font-size="9.1239"
+         id="tspan2799"
+         style="font-size:9.12390041px;font-family:CartoGothic Std">docs.rackspacecloud.com/api</tspan></text>
+</a></a></g>
 </svg>
