@@ -14,6 +14,23 @@
   <!-- Front-Cover Background Image, should be set by the plugin -->
   <xsl:param name="cloud.api.background.image" select="'images/cover.svg'"/>
   <xsl:param name="cloud.api.cc.image.dir" select="'images/cc/'"/>
+  
+  <xsl:param name="draft.mode">no</xsl:param>
+    
+  <xsl:param name="rackspace.status.pi">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
+      <xsl:with-param name="attribute" select="'status.bar.text'"/>
+    </xsl:call-template>
+  </xsl:param>
+
+  <xsl:param name="rackspace.status.text">
+    <xsl:if test="/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')]">DRAFT<xsl:text> -&#160;</xsl:text></xsl:if><xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/><xsl:text> -&#160;</xsl:text></xsl:if> 
+  </xsl:param>
+
+  <xsl:attribute-set name="example.properties">
+    <xsl:attribute name="keep-together.within-column">auto</xsl:attribute>
+  </xsl:attribute-set>
 
   <xsl:variable name="plaintitle">
       <xsl:choose>
