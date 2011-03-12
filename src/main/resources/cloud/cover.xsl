@@ -26,6 +26,21 @@
   <xsl:variable name="rackspace.status.text">
       <xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/></xsl:if> 
   </xsl:variable>
+    
+    <xsl:variable name="title.font.size">
+        <xsl:call-template name="pi-attribute">
+            <xsl:with-param name="pis" select="$docbook/*/processing-instruction('rax')"/>
+            <xsl:with-param name="attribute" select="'title.font.size'"/>
+        </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:variable name="subtitle.font.size">
+        <xsl:call-template name="pi-attribute">
+            <xsl:with-param name="pis" select="$docbook/*/processing-instruction('rax')"/>
+            <xsl:with-param name="attribute" select="'subtitle.font.size'"/>
+        </xsl:call-template>
+    </xsl:variable>
+
 
     <xsl:variable name="plaintitle">
         <xsl:choose>
@@ -266,5 +281,14 @@
         </xsl:choose>
     </xsl:template>
     
+    <xsl:template match="@style[contains(parent::*,'$title$')]">
+      <xsl:attribute name="style"><xsl:value-of select="concat('font-size: ',$title.font.size,substring-after(.,'px'))"/>
+      </xsl:attribute>
+    </xsl:template>
+    
+    <xsl:template match="@style[contains(parent::*,'$subtitle$')]">
+      <xsl:attribute name="style"><xsl:value-of select="concat('font-size: ',$subtitle.font.size, substring-after(.,'px'))"/></xsl:attribute>
+    </xsl:template>
+
     
 </xsl:stylesheet>
