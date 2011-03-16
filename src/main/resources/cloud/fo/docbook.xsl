@@ -684,4 +684,8 @@
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="processing-instruction('sbr')">
+  <xsl:text>&#x200B;</xsl:text>
+</xsl:template>
+
 </xsl:stylesheet>
