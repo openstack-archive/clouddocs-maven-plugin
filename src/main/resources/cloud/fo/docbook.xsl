@@ -20,6 +20,8 @@
   <xsl:param name="cloud.api.cc.image.dir" select="'images/cc/'"/>
   
   <xsl:param name="draft.mode">no</xsl:param>
+
+  <xsl:param name="alignment">start</xsl:param>
     
   <xsl:param name="rackspace.status.pi">
     <xsl:call-template name="pi-attribute">
