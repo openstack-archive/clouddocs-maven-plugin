@@ -688,4 +688,9 @@
   <xsl:text>&#x200B;</xsl:text>
 </xsl:template>
 
+
+<xsl:attribute-set name="table.table.properties">
+  <xsl:attribute name="font-size">8pt</xsl:attribute>
+</xsl:attribute-set>
+
 </xsl:stylesheet>
