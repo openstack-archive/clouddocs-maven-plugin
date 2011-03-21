@@ -115,7 +115,7 @@
         </repository>
 
          <snapshotRepository>
-            <id>snapshot.maven.research.rackspacecloud.com</id>
+            <id>snapshots.maven.research.rackspacecloud.com</id>
 
             <name>Rackspace Cloud Research Snapshots</name>
             <url>http://maven.research.rackspacecloud.com/content/repositories/snapshots/</url>
@@ -137,6 +137,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.2</version>
 
                 <executions>
                     <execution>
@@ -168,6 +169,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>xml-maven-plugin</artifactId>
+                <version>1.0</version>
 
                 <executions>
                     <execution>
@@ -195,6 +197,7 @@
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-builder-maven-plugin</artifactId>
+                <version>2.0.11</version>
 
                 <executions>
                     <execution>
