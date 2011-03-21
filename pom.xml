@@ -103,15 +103,22 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:ssh://git@repo-n01.cloudarch/rc-maven-cloud-docs.git</connection>
+        <connection>scm:git:ssh://git@git-n01.rcloudtech.rackspacecloud.com:rc-maven-cloud-docs</connection>
     </scm>
 
     <distributionManagement>
         <repository>
-            <id>repos.research.rackspace.cloud.releases</id>
+            <id>releases.maven.research.rackspacecloud.comd</id>
             
             <name>Rackspace Cloud Research Releases</name>
             <url>http://maven.research.rackspacecloud.com/content/repositories/releases/</url>
+        </repository>
+
+         <repository>
+            <id>snapshot.maven.research.rackspacecloud.com</id>
+            
+            <name>Rackspace Cloud Research Snapshots</name>
+            <url>http://maven.research.rackspacecloud.com/content/repositories/snapshots/</url>
         </repository>
     </distributionManagement>
 
