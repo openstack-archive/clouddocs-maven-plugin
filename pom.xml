@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -103,16 +103,23 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:ssh://git@repo-n01.cloudarch/rc-maven-cloud-docs.git</connection>
+        <connection>scm:git:ssh://git@git-n01.rcloudtech.rackspacecloud.com:rc-maven-cloud-docs</connection>
     </scm>
 
     <distributionManagement>
         <repository>
-            <id>repos.research.rackspace.cloud.releases</id>
-            
+            <id>releases.maven.research.rackspacecloud.comd</id>
+
             <name>Rackspace Cloud Research Releases</name>
             <url>http://maven.research.rackspacecloud.com/content/repositories/releases/</url>
         </repository>
+
+        <snapshotRepository>
+            <id>snapshots.maven.research.rackspacecloud.com</id>
+
+            <name>Rackspace Cloud Research Snapshots</name>
+            <url>http://maven.research.rackspacecloud.com/content/repositories/snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <build>
@@ -130,6 +137,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.2</version>
 
                 <executions>
                     <execution>
@@ -161,6 +169,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>xml-maven-plugin</artifactId>
+                <version>1.0</version>
 
                 <executions>
                     <execution>
@@ -185,9 +194,11 @@
                     </transformationSets>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-builder-maven-plugin</artifactId>
+                <version>2.0.11</version>
 
                 <executions>
                     <execution>
@@ -229,7 +240,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                
+                <version>2.3.2</version>
+
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
