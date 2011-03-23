@@ -34,7 +34,7 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
 import com.agilejava.docbkx.maven.TransformerBuilder;
-import com.agilejava.docbkx.maven.AbstractPdfMojo;
+import com.agilejava.docbkx.maven.AbstractFoMojo;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
 import com.rackspace.cloud.api.docs.FileUtils;
 import com.rackspace.cloud.api.docs.DocBookResolver;
 
-public abstract class PDFMojo extends AbstractPdfMojo {
+public abstract class PDFMojo extends AbstractFoMojo {
     private File imageDirectory;
     private File sourceDirectory;
     private File sourceDocBook;
