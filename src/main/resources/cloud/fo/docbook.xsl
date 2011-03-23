@@ -690,6 +690,25 @@
   <xsl:text>&#x200B;</xsl:text>
 </xsl:template>
 
+<xsl:template match="*[processing-instruction('rax-fo') = 'keep-with-previous']">
+  <fo:block keep-together.within-column="always"
+	    keep-with-previous.within-column="always">
+    <xsl:apply-imports/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="*[processing-instruction('rax-fo') = 'keep-with-next']">
+  <fo:block keep-together.within-column="always"
+	    keep-with-next.within-column="always">
+    <xsl:apply-imports/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="*[processing-instruction('rax-fo') = 'keep-together']">
+  <fo:block keep-together.within-column="always">
+    <xsl:apply-imports/>
+  </fo:block>
+</xsl:template>
 
 <xsl:attribute-set name="table.table.properties">
   <xsl:attribute name="font-size">8pt</xsl:attribute>
