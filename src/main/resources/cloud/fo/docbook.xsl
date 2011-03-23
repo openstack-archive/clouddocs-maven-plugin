@@ -605,7 +605,7 @@
 
   <!-- DWC: This writes out something like DRAFT - CONFIDENTIAL in the margin  -->
   <xsl:template name="document.status.bar">
-    <fo:block-container reference-orientation="90" absolute-position="fixed" overflow="visible" height="3in" width="11in" z-index="1">
+    <fo:block-container reference-orientation="90" absolute-position="fixed" overflow="visible" height="2in" width="16in" z-index="1">
       <fo:block padding-before=".45in" font-size="1.5em" color="gray" font-weight="bold">
     	<fo:leader leader-pattern="use-content" leader-length="15in" letter-spacing=".1em"><xsl:text> </xsl:text><xsl:value-of select="$rackspace.status.text"/><xsl:text> </xsl:text></fo:leader>
       </fo:block>
