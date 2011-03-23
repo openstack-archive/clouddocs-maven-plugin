@@ -33,7 +33,7 @@
         <dependency>
             <groupId>net.sf.docbook</groupId>
             <artifactId>docbook-xsl</artifactId>
-            <version>1.75.2</version>
+            <version>1.76.1</version>
             <type>zip</type>
             <classifier>ns-resources</classifier>
         </dependency>
@@ -228,6 +228,22 @@
                             <className>DocbkxPdfMojo</className>
                             <pluginSuffix>pdf</pluginSuffix>
                             <excludedProperties>${excluded.properties}</excludedProperties>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-webhelp</id>
+
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+
+                        <configuration>
+                            <type>webhelp</type>
+                            <stylesheetPath>webhelp/xsl/webhelp.xsl</stylesheetPath>
+                            <superClassName>com.rackspace.cloud.api.docs.WebHelpMojo</superClassName>
+                            <excludedProperties>${excluded.properties},root.filename,base.dir,webhelp.base.dir,manifest.in.base.dir</excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
                         </configuration>
                     </execution>
                 </executions>
