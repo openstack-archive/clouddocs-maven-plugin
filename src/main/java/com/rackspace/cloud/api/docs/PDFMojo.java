@@ -44,6 +44,9 @@ import org.xml.sax.SAXException;
 import com.rackspace.cloud.api.docs.FileUtils;
 import com.rackspace.cloud.api.docs.DocBookResolver;
 
+import com.agilejava.docbkx.maven.Parameter;
+import java.util.Iterator;
+
 public abstract class PDFMojo extends AbstractFoMojo {
     private File imageDirectory;
     private File sourceDirectory;
@@ -232,6 +235,19 @@ public abstract class PDFMojo extends AbstractFoMojo {
         File ccSub    = new File (imageDirectory, "cc");
         coverImage = new File (cloudSub, COVER_IMAGE_NAME);
         coverImageTemplate = new File (cloudSub, COVER_IMAGE_TEMPLATE_NAME);
+
+	if (getCustomizationParameters() != null) {
+	    getLog().info("Listing customization parameters");
+	    final Iterator iterator = getCustomizationParameters()
+		.iterator();
+	    while (iterator.hasNext()) {
+		com.agilejava.docbkx.maven.Parameter param = (com.agilejava.docbkx.maven.Parameter) iterator.next();
+		if (param.getName().equals("branding")) 
+		    {			
+			coverImageTemplate = new File (cloudSub, param.getValue() + "-cover.st");
+		    }		
+	    }
+	}
 
         transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
         transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
