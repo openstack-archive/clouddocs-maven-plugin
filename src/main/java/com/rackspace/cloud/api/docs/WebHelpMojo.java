@@ -30,7 +30,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     //Note for this to work, you need to have the customization layer in place.
     protected String getNonDefaultStylesheetLocation() {
-      return "cloud/webhelp/docbook.xsl";
+      return "cloud/webhelp/profile-webhelp.xsl";
     }
     
     public void postProcessResult(File result) throws MojoExecutionException {

@@ -4,7 +4,8 @@
                 xmlns:d="http://docbook.org/ns/docbook"
                 version="1.0">
 
-  <xsl:import href="urn:docbkx:stylesheet-orig/xsl/webhelp.xsl" />
+  <!-- <xsl:import href="urn:docbkx:stylesheet-orig/xsl/webhelp.xsl" /> -->
+  <xsl:import href="webhelp.xsl" />
 
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="enable.disqus">0</xsl:param>
@@ -23,6 +24,7 @@
   </xsl:param>
 
     <xsl:template name="user.footer.content">
+
         <script type="text/javascript" src="../common/main.js">
             <xsl:comment></xsl:comment>
         </script>
