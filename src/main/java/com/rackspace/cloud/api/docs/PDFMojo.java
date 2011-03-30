@@ -60,6 +60,21 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
     private static final String COVER_XSL = "cloud/cover.xsl";
 
+    /**
+     * The greeting to display.
+     *
+     * @parameter expression="${generate-pdf.branding}" default-value="rackspace"
+     */
+    private String branding;
+    
+    /**
+     * The greeting to display.
+     *
+     * @parameter expression="${generate-pdf.variablelistAsBlocks}" 
+     */
+    private String variablelistAsBlocks;
+
+
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
     }
@@ -217,6 +232,8 @@ public abstract class PDFMojo extends AbstractFoMojo {
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
         super.adjustTransformer(transformer, sourceFilename, targetFile);
 
+	transformer.setParameter("branding", branding);
+
         //
         //  Setup graphics paths
         //
@@ -236,18 +253,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
         coverImage = new File (cloudSub, COVER_IMAGE_NAME);
         coverImageTemplate = new File (cloudSub, COVER_IMAGE_TEMPLATE_NAME);
 
-	if (getCustomizationParameters() != null) {
-	    getLog().info("Listing customization parameters");
-	    final Iterator iterator = getCustomizationParameters()
-		.iterator();
-	    while (iterator.hasNext()) {
-		com.agilejava.docbkx.maven.Parameter param = (com.agilejava.docbkx.maven.Parameter) iterator.next();
-		if (param.getName().equals("branding")) 
-		    {			
-			coverImageTemplate = new File (cloudSub, param.getValue() + "-cover.st");
-		    }		
-	    }
-	}
+	coverImageTemplate = new File (cloudSub, branding + "-cover.st");
 
         transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
         transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());

@@ -24,6 +24,42 @@ import com.agilejava.docbkx.maven.FileUtils;
 
 public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
+    /**
+     * The greeting to display.
+     *
+     * @parameter expression="${generate-webhelp.branding}" default-value="rackspace"
+     */
+    private String branding;
+
+    /**
+     * The greeting to display.
+     *
+     * @parameter expression="${generate-webhelp.enable.disqus}" default-value="0"
+     */
+    private String enableDisqus;
+
+    /**
+     * The greeting to display.
+     *
+     * @parameter expression="${generate-webhelp.disqus.shortname}" default-value="openstackdocs"
+     */
+    private String disqusShortname;
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param transformer DOCUMENT ME!
+   * @param sourceFilename DOCUMENT ME!
+   * @param targetFile DOCUMENT ME!
+   */
+  public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
+    super.adjustTransformer(transformer, sourceFilename, targetFile);
+
+    transformer.setParameter("branding", branding);
+    transformer.setParameter("enable.disqus", enableDisqus);
+    transformer.setParameter("disqus.shortname", disqusShortname);
+  }
+
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
         return super.createTransformerBuilder (new DocBookResolver (resolver, getType()));
     }
@@ -45,21 +81,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
 	com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("content",WebHelpMojo.class,targetDirectory);
 	com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("common",WebHelpMojo.class,targetDirectory);
-
-	if (getCustomizationParameters() != null) {
-	    getLog().info("Listing customization parameters");
-	    final Iterator iterator = getCustomizationParameters()
-		.iterator();
-	    while (iterator.hasNext()) {
-		com.agilejava.docbkx.maven.Parameter param = (com.agilejava.docbkx.maven.Parameter) iterator.next();
-		if (param.getName().equals("branding")) 
-		    {
-			getLog().info("Copying favicon.ico");
-			com.agilejava.docbkx.maven.FileUtils.copyFile(new File(targetDirectory,"common/images/favicon-" + param.getValue() + ".ico"), new File(targetDirectory,"favicon.ico"));
-
-		    }		
-	    }
-	}
+	com.agilejava.docbkx.maven.FileUtils.copyFile(new File(targetDirectory,"common/images/favicon-" + branding + ".ico"), new File(targetDirectory,"favicon.ico"));
 
     }
 
