@@ -41,91 +41,67 @@
   <xsl:include href="urn:docbkx:stylesheet-orig/../xhtml/profile-chunk-code.xsl" />
 
 
-  <xsl:template match="/">
-	<xsl:message>language: <xsl:value-of select="$webhelp.indexer.language"/> </xsl:message>
-	<!-- * Get a title for current doc so that we let the user -->
-	<!-- * know what document we are processing at this point. -->
-	<xsl:variable name="doc.title">
-	  <xsl:call-template name="get.doc.title"/>
-	</xsl:variable>
-	<xsl:choose>
-	  
-	  <!-- include extra test for Xalan quirk -->
-	  <xsl:when test="namespace-uri(*[1]) != 'http://docbook.org/ns/docbook'">
- <xsl:call-template name="log.message">
- <xsl:with-param name="level">Note</xsl:with-param>
- <xsl:with-param name="source" select="$doc.title"/>
- <xsl:with-param name="context-desc">
- <xsl:text>namesp. add</xsl:text>
- </xsl:with-param>
- <xsl:with-param name="message">
- <xsl:text>added namespace before processing</xsl:text>
- </xsl:with-param>
- </xsl:call-template>
- <xsl:variable name="addns">
-    <xsl:apply-templates mode="addNS"/>
+<xsl:template match="/" priority="1">
+  <!-- * Get a title for current doc so that we let the user -->
+  <!-- * know what document we are processing at this point. -->
+  <xsl:variable name="doc.title">
+    <xsl:call-template name="get.doc.title"/>
   </xsl:variable>
-  <xsl:apply-templates select="exsl:node-set($addns)"/>
-</xsl:when>
-	  <!-- Can't process unless namespace removed -->
-	  <xsl:when test="namespace-uri(*[1]) != 'http://docbook.org/ns/docbook'">
- <xsl:call-template name="log.message">
- <xsl:with-param name="level">Note</xsl:with-param>
- <xsl:with-param name="source" select="$doc.title"/>
- <xsl:with-param name="context-desc">
- <xsl:text>namesp. add</xsl:text>
- </xsl:with-param>
- <xsl:with-param name="message">
- <xsl:text>added namespace before processing</xsl:text>
- </xsl:with-param>
- </xsl:call-template>
- <xsl:variable name="addns">
-    <xsl:apply-templates mode="addNS"/>
-  </xsl:variable>
-  <xsl:apply-templates select="exsl:node-set($addns)"/>
-</xsl:when>
-	  <xsl:otherwise>
-		<xsl:choose>
-		  <xsl:when test="$rootid != ''">
-			<xsl:choose>
-			  <xsl:when test="count(key('id',$rootid)) = 0">
-				<xsl:message terminate="yes">
-				  <xsl:text>ID '</xsl:text>
-				  <xsl:value-of select="$rootid"/>
-				  <xsl:text>' not found in document.</xsl:text>
-				</xsl:message>
-			  </xsl:when>
-			  <xsl:otherwise>
-				<xsl:if test="$collect.xref.targets = 'yes' or                             $collect.xref.targets = 'only'">
-				  <xsl:apply-templates select="key('id', $rootid)" mode="collect.targets"/>
-				</xsl:if>
-				<xsl:if test="$collect.xref.targets != 'only'">
-				  <xsl:apply-templates select="key('id',$rootid)" mode="process.root"/>
-				  <xsl:if test="$tex.math.in.alt != ''">
-					<xsl:apply-templates select="key('id',$rootid)" mode="collect.tex.math"/>
+  <xsl:choose>
+    
+    <xsl:when test="false()"/>
+    <!-- Can't process unless namespace removed -->
+    <xsl:when test="false()"/>
+    <xsl:otherwise>
+      <xsl:choose>
+        <xsl:when test="$rootid != ''">
+          <xsl:choose>
+            <xsl:when test="count($profiled-nodes//*[@id=$rootid]) = 0">
+              <xsl:message terminate="yes">
+                <xsl:text>ID '</xsl:text>
+                <xsl:value-of select="$rootid"/>
+                <xsl:text>' not found in document.</xsl:text>
+              </xsl:message>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:if test="$collect.xref.targets = 'yes' or                             $collect.xref.targets = 'only'">
+                <xsl:apply-templates select="key('id', $rootid)" mode="collect.targets"/>
+              </xsl:if>
+              <xsl:if test="$collect.xref.targets != 'only'">
+                <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]" mode="process.root"/>
+                <xsl:if test="$tex.math.in.alt != ''">
+                  <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]" mode="collect.tex.math"/>
                 </xsl:if>
-				</xsl:if>
-			  </xsl:otherwise>
-			</xsl:choose>
-		  </xsl:when>
-		  <xsl:otherwise>
-			<xsl:if test="$collect.xref.targets = 'yes' or                         $collect.xref.targets = 'only'">
-			  <xsl:apply-templates select="/" mode="collect.targets"/>
-			</xsl:if>
-			<xsl:if test="$collect.xref.targets != 'only'">
-			  <xsl:apply-templates select="/" mode="process.root"/>
-			  <xsl:if test="$tex.math.in.alt != ''">
-              <xsl:apply-templates select="/" mode="collect.tex.math"/>
+                <xsl:if test="$generate.manifest != 0">
+                  <xsl:call-template name="generate.manifest">
+                    <xsl:with-param name="node" select="key('id',$rootid)"/>
+                  </xsl:call-template>
+                </xsl:if>
+              </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:if test="$collect.xref.targets = 'yes' or                         $collect.xref.targets = 'only'">
+            <xsl:apply-templates select="$profiled-nodes" mode="collect.targets"/>
+          </xsl:if>
+          <xsl:if test="$collect.xref.targets != 'only'">
+            <xsl:apply-templates select="$profiled-nodes" mode="process.root"/>
+            <xsl:if test="$tex.math.in.alt != ''">
+              <xsl:apply-templates select="$profiled-nodes" mode="collect.tex.math"/>
+            </xsl:if>
+            <xsl:if test="$generate.manifest != 0">
+              <xsl:call-template name="generate.manifest">
+                <xsl:with-param name="node" select="$profiled-nodes"/>
+              </xsl:call-template>
             </xsl:if>
           </xsl:if>
-		  </xsl:otherwise>
-		</xsl:choose>
-	  </xsl:otherwise>
-	</xsl:choose>
-	
-	<xsl:call-template name="index.html"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
-    </xsl:template>
 
 
   <!-- <xsl:variable name="preprocessed"> -->
