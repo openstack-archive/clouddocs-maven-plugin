@@ -25,21 +25,21 @@ import com.agilejava.docbkx.maven.FileUtils;
 public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     /**
-     * The greeting to display.
+     * Controls the branding of the output.
      *
      * @parameter expression="${generate-webhelp.branding}" default-value="rackspace"
      */
     private String branding;
 
     /**
-     * The greeting to display.
+     * Controls whether Disqus comments appear at the bottom of each page.
      *
      * @parameter expression="${generate-webhelp.enable.disqus}" default-value="0"
      */
     private String enableDisqus;
 
     /**
-     * The greeting to display.
+     * A parameter used by the Disqus comments. 
      *
      * @parameter expression="${generate-webhelp.disqus.shortname}" default-value="openstackdocs"
      */
