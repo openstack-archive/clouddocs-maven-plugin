@@ -246,6 +246,34 @@
                             <useStandardOutput>false</useStandardOutput>
                         </configuration>
                     </execution>
+
+          <execution>
+            <id>generate-eclipse</id>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <type>eclipse</type>
+              <stylesheetPath>eclipse/eclipse.xsl</stylesheetPath>
+              <superClassName>com.rackspace.cloud.api.docs.EclipseMojo</superClassName>
+              <excludedProperties>${excluded.properties},root.filename,base.dir,manifest.in.base.dir
+              </excludedProperties>
+            </configuration>
+          </execution>
+
+            <execution>
+              <id>generate-epub</id>
+              <goals>
+                <goal>build</goal>
+	      </goals>
+	      <configuration>
+                <type>epub</type>
+		<superClassName>com.rackspace.cloud.api.docs.EpubMojo</superClassName>
+		<excludedProperties>${excluded.properties},root.filename,base.dir,epub.oebps.dir,epub.metainf.dir,manifest.in.base.dir,epub.opf.filename</excludedProperties>
+		<useStandardOutput>false</useStandardOutput>
+	      </configuration>
+	    </execution>
+
                 </executions>
 
                 <configuration>
