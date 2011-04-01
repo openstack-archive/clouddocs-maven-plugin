@@ -24,18 +24,19 @@ import java.util.regex.Matcher;
 public class DocBookResolver implements URIResolver {
     private URIResolver originalResolver;
     private String type;
-    private static final Pattern urnPattern = Pattern.compile ("urn:docbkx:stylesheet\\-orig(/.*)?");
-
+    private static final Pattern urnPatternA = Pattern.compile ("urn:docbkx:stylesheet\\-orig(/.*)?");
+    private static final Pattern urnPatternB = Pattern.compile ("urn:docbkx:stylesheet\\-base(/.*)?");
     public DocBookResolver (URIResolver original, String type) {
         this.originalResolver = original;
         this.type = type;
     }
 
     public Source resolve (String href, String base) throws TransformerException {
-        Matcher m = urnPattern.matcher (href);
-        if (m.matches()) {
-            String grpMatch = m.group(1);
-            String file = (m.group(1) == null) ? "/docbook.xsl" : grpMatch;
+        Matcher mA = urnPatternA.matcher (href);
+        Matcher mB = urnPatternB.matcher (href);
+        if (mA.matches()) {
+            String grpMatch = mA.group(1);
+            String file = (mA.group(1) == null) ? "/docbook.xsl" : grpMatch;
             String filePath = "docbook/"+type+file;
 
             URL url = this.getClass().getClassLoader().getResource(filePath);
@@ -49,8 +50,24 @@ public class DocBookResolver implements URIResolver {
             } else {
                 throw new TransformerException ("Can't resolve docbook link: "+href+"->"+filePath+" Docbook missing in classpath?");
             }
-        }
+        }else if (mB.matches()) {
+            String grpMatch = mB.group(1);
+            String file = (mB.group(1) == null) ? "/docbook.xsl" : grpMatch;
+            String filePath = "docbook"+file;
 
+            URL url = this.getClass().getClassLoader().getResource(filePath);
+
+            if (url != null) {
+                try {
+                    return new StreamSource (url.openStream(), url.toExternalForm());
+                }catch (IOException ioe) {
+                    throw new TransformerException ("Can't get docbook refrence "+href+"->"+filePath, ioe);
+                }
+            } else {
+                throw new TransformerException ("Can't resolve docbook link: "+href+"->"+filePath+" Docbook missing in classpath?");
+            }
+        }
+	
         //
         //  We can't resolve, maybe the next resolver in the chain
         //  can.

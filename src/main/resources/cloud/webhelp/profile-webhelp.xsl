@@ -38,7 +38,7 @@
        customizations that use xsl:apply-imports to wrongly
        apply the chunking version instead of the original
        non-chunking version to format an element.  -->
-  <xsl:include href="urn:docbkx:stylesheet-orig/../xhtml/profile-chunk-code.xsl" />
+  <xsl:include href="urn:docbkx:stylesheet-base/xhtml/profile-chunk-code.xsl" />
 
 
 <xsl:template match="/" priority="1">

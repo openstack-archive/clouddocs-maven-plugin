@@ -8,7 +8,7 @@ xmlns:exsl="http://exslt.org/common"
         version="1.0" xmlns="http://www.w3.org/1999/xhtml">
 
     <!-- <xsl:import href="../../xhtml/chunk.xsl"/> -->
-    <xsl:import href="urn:docbkx:stylesheet-orig/../xhtml/docbook.xsl" />
+    <xsl:import href="urn:docbkx:stylesheet-base/xhtml/docbook.xsl" />
 
     <xsl:output
             method="html"

@@ -6,7 +6,7 @@
         xmlns:db="http://docbook.org/ns/docbook"
         version="1.0" xmlns="http://www.w3.org/1999/xhtml">
   
-  <xsl:import href="urn:docbkx:stylesheet-orig/../xhtml/chunk-common.xsl" />
+  <xsl:import href="urn:docbkx:stylesheet-base/xhtml/chunk-common.xsl" />
 
     <xsl:template name="chunk-element-content">
         <xsl:param name="prev"/>
