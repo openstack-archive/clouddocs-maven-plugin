@@ -57,8 +57,6 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
     color: #000000;
     /*border-left: 2px solid #cccccc; overflow :scroll;*/
     z-index: 1000;
-
-    max-width: 70em;
     min-width:800px;
 }
 
@@ -72,6 +70,56 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
 .navfooter { bottom: 2%; }
 .highlight { background-color: #c5d3c3; }
 .highlightButton{ font-size: 0; }
+
+#content pre.literallayout
+{
+    -x-system-font: none;
+    background-color: silver;
+    border-bottom-color: #DEDEDE !important;
+    border-bottom-style: solid !important;
+    border-bottom-width: 1px !important;
+    border-left-color-ltr-source: physical !important;
+    border-left-color-rtl-source: physical !important;
+    border-left-color-value: #DEDEDE !important;
+    border-left-style-ltr-source: physical !important;
+    border-left-style-rtl-source: physical !important;
+    border-left-style-value: solid !important;
+    border-left-width-ltr-source: physical !important;
+    border-left-width-rtl-source: physical !important;
+    border-left-width-value: 1px !important;
+    border-right-color-ltr-source: physical !important;
+    border-right-color-rtl-source: physical !important;
+    border-right-color-value: #DEDEDE !important;
+    border-right-style-ltr-source: physical !important;
+    border-right-style-rtl-source: physical !important;
+    border-right-style-value: solid !important;
+    border-right-width-ltr-source: physical !important;
+    border-right-width-rtl-source: physical !important;
+    border-right-width-value: 1px !important;
+    border-top-color: #DEDEDE !important;
+    border-top-style: solid !important;
+    border-top-width: 1px !important;
+    color: #23302D;
+    display: block;
+    font-family: Monaco,'Courier New','DejaVu Sans Mono','Bitstream Vera Sans Mono',monospace;
+    font-size: 12px !important;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: normal;
+    margin-bottom: 1em !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 1em !important;
+    overflow-x: scroll;
+    padding-bottom: 0.5em !important;
+    padding-left: 0.5em !important;
+    padding-right: 0.5em !important;
+    padding-top: 0.5em !important;
+    width: 100%;
+}
 
 /*  Show Hide TOC tree */
 .pointLeft {
