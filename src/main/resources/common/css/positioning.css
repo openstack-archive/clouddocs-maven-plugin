@@ -71,7 +71,7 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
 .highlight { background-color: #c5d3c3; }
 .highlightButton{ font-size: 0; }
 
-#content pre.literallayout
+#content pre.literallayout, #content pre.programlisting 
 {
     -x-system-font: none;
     background-color: silver;
