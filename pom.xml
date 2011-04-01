@@ -243,7 +243,7 @@
                             <stylesheetPath>webhelp/xsl/webhelp.xsl</stylesheetPath>
                             <superClassName>com.rackspace.cloud.api.docs.WebHelpMojo</superClassName>
                             <excludedProperties>${excluded.properties},root.filename,base.dir,webhelp.base.dir,manifest.in.base.dir</excludedProperties>
-                            <useStandardOutput>false</useStandardOutput>
+			    <useStandardOutput>false</useStandardOutput>
                         </configuration>
                     </execution>
 
@@ -258,6 +258,7 @@
               <superClassName>com.rackspace.cloud.api.docs.EclipseMojo</superClassName>
               <excludedProperties>${excluded.properties},root.filename,base.dir,manifest.in.base.dir
               </excludedProperties>
+	      <useStandardOutput>false</useStandardOutput>
             </configuration>
           </execution>
 
