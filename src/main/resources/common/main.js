@@ -61,7 +61,7 @@ function syncToc(){
 
         if (b != undefined) {
             //Setting the background for selected node.
-            var style = a.getAttribute("style");
+            var style = a.getAttribute("style", 2);
             if (style != null && !style.match(/background-color: Background;/)) {
                 a.setAttribute("style", "background-color: #DEE9E9;  " + style);
                 b.setAttribute("style", "color: black;");
