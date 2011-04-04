@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.1" encoding="UTF-8"?>
 <xsl:stylesheet 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    xmlns:exsl="http://exslt.org/common" 
+    xmlns:exslt="http://exslt.org/common" 
+    xmlns:d="http://docbook.org/ns/docbook"
     xmlns="http://www.w3.org/1999/xhtml" 
     version="1.0" 
-    exclude-result-prefixes="exsl">
+    exclude-result-prefixes="exslt">
 
   <!-- First import the non-chunking templates that format elements
        within each chunk file. In a customization, you should
@@ -40,6 +41,179 @@
        non-chunking version to format an element.  -->
   <xsl:include href="urn:docbkx:stylesheet-base/xhtml/profile-chunk-code.xsl" />
 
+  <!-- ======================================== -->
+
+  <xsl:variable name="preprocessed-nodes">
+    <xsl:apply-templates select="exslt:node-set($profiled-nodes)" mode="preprocess"/>
+  </xsl:variable>
+
+  <xsl:template match="@*|node()" mode="preprocess">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()" mode="preprocess"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="d:legalnotice" mode="preprocess">
+    <xsl:message>
+########################################
+Processing legalnotice: <xsl:value-of select="@role"/>
+########################################
+    </xsl:message>
+    <d:legalnotice>
+      <xsl:apply-templates select="@*"/>
+      <xsl:choose>
+	<xsl:when test="starts-with(string(@role),'cc-')">
+	  <xsl:call-template name="CCLegalNotice" />
+	</xsl:when>
+	<xsl:when test="@role = 'rs-api'">
+	  <xsl:call-template name="RSAPILegalNotice"/>
+	</xsl:when>
+	<xsl:when test="@role = 'apache2'">
+	  <xsl:call-template name="Apache2LegalNotice"/>
+	</xsl:when>
+      </xsl:choose>
+    </d:legalnotice>	  
+  </xsl:template>
+
+  <xsl:template name="Apache2LegalNotice">
+      <xsl:variable name="a2Link" select="'http://www.apache.org/licenses/LICENSE-2.0'"/>
+      <xsl:if test="@role = 'apache2'">
+          <d:para>
+              Licensed under the Apache License, Version 2.0 (the "License");
+              you may not use this file except in compliance with the License.
+              You may obtain a copy of the License at
+	  </d:para>
+	  <d:para>
+	    <xsl:element name="xlink:href" xmlns:xlink="http://www.w3.org/1999/xlink">
+	      <xsl:attribute name="xlink:href">
+		<xsl:value-of select="$a2Link"/>
+	      </xsl:attribute>
+	      <xsl:value-of select="$a2Link"/>
+	    </xsl:element>
+	  </d:para>
+	  <d:para>
+              Unless required by applicable law or agreed to in writing, software
+              distributed under the License is distributed on an "AS IS" BASIS,
+              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+              See the License for the specific language governing permissions and
+              limitations under the License.
+	  </d:para>
+      </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="RSAPILegalNotice">
+      <xsl:if test="@role = 'rs-api'">
+          <d:para>
+              <xsl:value-of select="/*/d:info/d:abstract"/>
+              The document is for informational purposes only and is
+              provided “AS IS.”
+          </d:para>
+          <d:para>
+              RACKSPACE MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY
+              KIND, EXPRESS OR IMPLIED, AS TO THE ACCURACY OR
+              COMPLETENESS OF THE CONTENTS OF THIS DOCUMENT AND
+              RESERVES THE RIGHT TO MAKE CHANGES TO SPECIFICATIONS AND
+              PRODUCT/SERVICES DESCRIPTION AT ANY TIME WITHOUT NOTICE.
+              RACKSPACE SERVICES OFFERINGS ARE SUBJECT TO CHANGE
+              WITHOUT NOTICE.  USERS MUST TAKE FULL RESPONSIBILITY FOR
+              APPLICATION OF ANY SERVICES MENTIONED HEREIN.  EXCEPT AS
+              SET FORTH IN RACKSPACE GENERAL TERMS AND CONDITIONS
+              AND/OR CLOUD TERMS OF SERVICE, RACKSPACE ASSUMES NO
+              LIABILITY WHATSOEVER, AND DISCLAIMS ANY EXPRESS OR
+              IMPLIED WARRANTY, RELATING TO ITS SERVICES INCLUDING,
+              BUT NOT LIMITED TO, THE IMPLIED WARRANTY OF
+              MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+              NONINFRINGEMENT.
+          </d:para>
+          <d:para>
+              Except as expressly provided in any written license
+              agreement from Rackspace, the furnishing of this
+              document does not give you any license to patents,
+              trademarks, copyrights, or other intellectual property.
+          </d:para>
+          <d:para>
+              Rackspace®, Rackspace logo and Fanatical Support® are
+              registered service marks of Rackspace US,
+              Inc. All other product names and trademarks
+              used in this document are for identification purposes
+              only and are property of their respective owners.
+          </d:para>
+      </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="CCLegalNotice">
+      <xsl:if test="starts-with(string(@role),'cc-')">
+          <xsl:variable name="ccid"><xsl:value-of select="substring-after(string(@role),'cc-')"/></xsl:variable>
+	  <xsl:variable name="ccidURL">http://creativecommons.org/licenses/<xsl:value-of select="$ccid"/>/3.0/legalcode</xsl:variable>
+
+        <d:informaltable frame="void" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <d:col width="10%"/>
+            <d:col width="90%"/>
+            <d:tbody>
+                <d:tr>
+		  <d:td>
+		    <d:link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$ccidURL}">
+		      <d:informalfigure>
+			<d:mediaobject>
+			  <d:imageobject>
+			    <d:imagedata
+				fileref="../common/images/cc/{$ccid}.png"
+				align="center" 
+				valign="middle"/>
+			  </d:imageobject>
+			</d:mediaobject>
+		      </d:informalfigure>
+		    </d:link>
+		  </d:td>
+		  <d:td>
+		    <d:para>Except where otherwise noted, this document is licensed under 
+		    <xsl:element name="d:link">
+		      <xsl:attribute name="xlink:href">
+			<xsl:value-of select="$ccidURL"/>
+		      </xsl:attribute>
+		      <d:emphasis role="bold">
+			Creative Commons Attribution
+			<xsl:choose>
+			  <xsl:when test="$ccid = 'by'" />
+			  <xsl:when test="$ccid = 'by-sa'">
+			    <xsl:text>ShareAlike</xsl:text>
+			  </xsl:when>
+			  <xsl:when test="$ccid = 'by-nd'">
+			    <xsl:text>NoDerivatives</xsl:text>
+			  </xsl:when>
+			  <xsl:when test="$ccid = 'by-nc'">
+			    <xsl:text>NonCommercial</xsl:text>
+			  </xsl:when>
+			  <xsl:when test="$ccid = 'by-nc-sa'">
+			    <xsl:text>NonCommercial ShareAlike</xsl:text>
+			  </xsl:when>
+			  <xsl:when test="$ccid = 'by-nc-nd'">
+			    <xsl:text>NonCommercial NoDerivatives</xsl:text>
+			  </xsl:when>
+			  <xsl:otherwise>
+			    <xsl:message terminate="yes">
+			      I don't understand licence <xsl:value-of select="$ccid"/>
+			    </xsl:message>
+			  </xsl:otherwise>
+			</xsl:choose>
+			3.0 License
+		      </d:emphasis>				   
+		    </xsl:element>
+		    </d:para>
+		    <d:para>
+		      <d:link xlink:href="{$ccidURL}">
+			<xsl:value-of select="$ccidURL"/>
+		      </d:link>
+		    </d:para>
+		  </d:td>
+		</d:tr>
+            </d:tbody>
+	</d:informaltable>
+      </xsl:if>
+  </xsl:template>
+
+
+  <!-- ======================================== -->
 
 <xsl:template match="/" priority="1">
   <!-- * Get a title for current doc so that we let the user -->
@@ -56,7 +230,7 @@
       <xsl:choose>
         <xsl:when test="$rootid != ''">
           <xsl:choose>
-            <xsl:when test="count($profiled-nodes//*[@id=$rootid]) = 0">
+            <xsl:when test="count($preprocessed-nodes//*[@id=$rootid]) = 0">
               <xsl:message terminate="yes">
                 <xsl:text>ID '</xsl:text>
                 <xsl:value-of select="$rootid"/>
@@ -68,9 +242,9 @@
                 <xsl:apply-templates select="key('id', $rootid)" mode="collect.targets"/>
               </xsl:if>
               <xsl:if test="$collect.xref.targets != 'only'">
-                <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]" mode="process.root"/>
+                <xsl:apply-templates select="exslt:node-set($preprocessed-nodes//*[@id=$rootid])" mode="process.root"/>
                 <xsl:if test="$tex.math.in.alt != ''">
-                  <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]" mode="collect.tex.math"/>
+                  <xsl:apply-templates select="exslt:node-set($preprocessed-nodes//*[@id=$rootid])" mode="collect.tex.math"/>
                 </xsl:if>
                 <xsl:if test="$generate.manifest != 0">
                   <xsl:call-template name="generate.manifest">
@@ -83,16 +257,16 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:if test="$collect.xref.targets = 'yes' or                         $collect.xref.targets = 'only'">
-            <xsl:apply-templates select="$profiled-nodes" mode="collect.targets"/>
+            <xsl:apply-templates select="exslt:node-set($preprocessed-nodes)" mode="collect.targets"/>
           </xsl:if>
           <xsl:if test="$collect.xref.targets != 'only'">
-            <xsl:apply-templates select="$profiled-nodes" mode="process.root"/>
+            <xsl:apply-templates select="exslt:node-set($preprocessed-nodes)" mode="process.root"/>
             <xsl:if test="$tex.math.in.alt != ''">
-              <xsl:apply-templates select="$profiled-nodes" mode="collect.tex.math"/>
+              <xsl:apply-templates select="exslt:node-set($preprocessed-nodes)" mode="collect.tex.math"/>
             </xsl:if>
             <xsl:if test="$generate.manifest != 0">
               <xsl:call-template name="generate.manifest">
-                <xsl:with-param name="node" select="$profiled-nodes"/>
+                <xsl:with-param name="node" select="exslt:node-set($preprocessed-nodes)"/>
               </xsl:call-template>
             </xsl:if>
           </xsl:if>
