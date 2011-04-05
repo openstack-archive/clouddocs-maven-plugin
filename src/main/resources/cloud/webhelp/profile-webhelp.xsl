@@ -2,6 +2,7 @@
 <xsl:stylesheet 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:exslt="http://exslt.org/common" 
+    xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:d="http://docbook.org/ns/docbook"
     xmlns="http://www.w3.org/1999/xhtml" 
     version="1.0" 
@@ -84,7 +85,7 @@ Processing legalnotice: <xsl:value-of select="@role"/>
               You may obtain a copy of the License at
 	  </d:para>
 	  <d:para>
-	    <xsl:element name="xlink:href" xmlns:xlink="http://www.w3.org/1999/xlink">
+	    <xsl:element name="d:link">
 	      <xsl:attribute name="xlink:href">
 		<xsl:value-of select="$a2Link"/>
 	      </xsl:attribute>
@@ -146,13 +147,13 @@ Processing legalnotice: <xsl:value-of select="@role"/>
           <xsl:variable name="ccid"><xsl:value-of select="substring-after(string(@role),'cc-')"/></xsl:variable>
 	  <xsl:variable name="ccidURL">http://creativecommons.org/licenses/<xsl:value-of select="$ccid"/>/3.0/legalcode</xsl:variable>
 
-        <d:informaltable frame="void" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <d:informaltable frame="void">
             <d:col width="10%"/>
             <d:col width="90%"/>
             <d:tbody>
                 <d:tr>
 		  <d:td>
-		    <d:link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$ccidURL}">
+		    <d:link xlink:href="{$ccidURL}">
 		      <d:informalfigure>
 			<d:mediaobject>
 			  <d:imageobject>
