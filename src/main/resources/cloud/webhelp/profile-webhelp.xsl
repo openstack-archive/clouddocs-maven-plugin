@@ -61,7 +61,7 @@ Processing legalnotice: <xsl:value-of select="@role"/>
 ########################################
     </xsl:message>
     <d:legalnotice>
-      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="@*" mode="preprocess"/>
       <xsl:choose>
 	<xsl:when test="starts-with(string(@role),'cc-')">
 	  <xsl:call-template name="CCLegalNotice" />
