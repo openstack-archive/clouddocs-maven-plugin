@@ -106,7 +106,7 @@
 
     <distributionManagement>
         <repository>
-            <id>releases.maven.research.rackspacecloud.comd</id>
+            <id>releases.maven.research.rackspacecloud.com</id>
 
             <name>Rackspace Cloud Research Releases</name>
             <url>http://maven.research.rackspacecloud.com/content/repositories/releases/</url>
