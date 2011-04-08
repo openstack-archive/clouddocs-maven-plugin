@@ -34,7 +34,7 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
 import com.agilejava.docbkx.maven.TransformerBuilder;
-import com.agilejava.docbkx.maven.AbstractPdfMojo;
+import com.agilejava.docbkx.maven.AbstractFoMojo;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
@@ -44,7 +44,10 @@ import org.xml.sax.SAXException;
 import com.rackspace.cloud.api.docs.FileUtils;
 import com.rackspace.cloud.api.docs.DocBookResolver;
 
-public abstract class PDFMojo extends AbstractPdfMojo {
+import com.agilejava.docbkx.maven.Parameter;
+import java.util.Iterator;
+
+public abstract class PDFMojo extends AbstractFoMojo {
     private File imageDirectory;
     private File sourceDirectory;
     private File sourceDocBook;
@@ -56,6 +59,21 @@ public abstract class PDFMojo extends AbstractPdfMojo {
     private static final String COVER_IMAGE_NAME = "cover.svg";
 
     private static final String COVER_XSL = "cloud/cover.xsl";
+
+    /**
+     * The greeting to display.
+     *
+     * @parameter expression="${generate-pdf.branding}" default-value="rackspace"
+     */
+    private String branding;
+    
+    /**
+     * The greeting to display.
+     *
+     * @parameter expression="${generate-pdf.variablelistAsBlocks}" 
+     */
+    private String variablelistAsBlocks;
+
 
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
@@ -214,6 +232,8 @@ public abstract class PDFMojo extends AbstractPdfMojo {
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
         super.adjustTransformer(transformer, sourceFilename, targetFile);
 
+	transformer.setParameter("branding", branding);
+
         //
         //  Setup graphics paths
         //
@@ -232,6 +252,8 @@ public abstract class PDFMojo extends AbstractPdfMojo {
         File ccSub    = new File (imageDirectory, "cc");
         coverImage = new File (cloudSub, COVER_IMAGE_NAME);
         coverImageTemplate = new File (cloudSub, COVER_IMAGE_TEMPLATE_NAME);
+
+	coverImageTemplate = new File (cloudSub, branding + "-cover.st");
 
         transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
         transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());

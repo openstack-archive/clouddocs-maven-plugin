@@ -9,7 +9,7 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
 
-  <xsl:import href="urn:docbkx:stylesheet-orig" />
+  <xsl:import href="urn:docbkx:stylesheet-orig/profile-docbook.xsl" />
   <xsl:import href="urn:docbkx:stylesheet-orig/highlight.xsl" />
   <xsl:import href="titlepage.templates.xsl"/>
   <xsl:import href="fop1.xsl"/>
@@ -18,6 +18,8 @@
   <!-- Front-Cover Background Image, should be set by the plugin -->
   <xsl:param name="cloud.api.background.image" select="'images/cover.svg'"/>
   <xsl:param name="cloud.api.cc.image.dir" select="'images/cc/'"/>
+
+  <xsl:param name="branding"/>
   
   <xsl:param name="draft.mode">no</xsl:param>
 
@@ -343,6 +345,7 @@
 
   <!-- Handle Creative Common Legal notice stuff -->
   <xsl:template match="d:legalnotice" mode="titlepage.mode">
+
       <xsl:variable name="id">
           <xsl:call-template name="object.id"/>
       </xsl:variable>

@@ -10,7 +10,7 @@
 
     <name>Cloud API Docs Plugin</name>
 
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <description>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.agilejava.docbkx</groupId>
             <artifactId>docbkx-maven-plugin</artifactId>
-            <version>2.0.11</version>
+            <version>2.0.12</version>
         </dependency>
 
         <dependency>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>net.sf.docbook</groupId>
             <artifactId>docbook-xsl</artifactId>
-            <version>1.75.2</version>
+            <version>1.76.1</version>
             <type>zip</type>
             <classifier>ns-resources</classifier>
         </dependency>
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>com.agilejava.docbkx</groupId>
             <artifactId>docbkx-maven-base</artifactId>
-            <version>2.0.11</version>
+            <version>2.0.12</version>
         </dependency>
 
         <dependency>
@@ -198,7 +198,7 @@
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-builder-maven-plugin</artifactId>
-                <version>2.0.11</version>
+                <version>2.0.12</version>
 
                 <executions>
                     <execution>
@@ -230,6 +230,51 @@
                             <excludedProperties>${excluded.properties}</excludedProperties>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>generate-webhelp</id>
+
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+
+                        <configuration>
+                            <type>webhelp</type>
+                            <stylesheetPath>webhelp/xsl/webhelp.xsl</stylesheetPath>
+                            <superClassName>com.rackspace.cloud.api.docs.WebHelpMojo</superClassName>
+                            <excludedProperties>${excluded.properties},root.filename,base.dir,webhelp.base.dir,manifest.in.base.dir</excludedProperties>
+			    <useStandardOutput>false</useStandardOutput>
+                        </configuration>
+                    </execution>
+
+          <execution>
+            <id>generate-eclipse</id>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <type>eclipse</type>
+              <stylesheetPath>eclipse/eclipse.xsl</stylesheetPath>
+              <superClassName>com.rackspace.cloud.api.docs.EclipseMojo</superClassName>
+              <excludedProperties>${excluded.properties},root.filename,base.dir,manifest.in.base.dir
+              </excludedProperties>
+	      <useStandardOutput>false</useStandardOutput>
+            </configuration>
+          </execution>
+
+            <execution>
+              <id>generate-epub</id>
+              <goals>
+                <goal>build</goal>
+	      </goals>
+	      <configuration>
+                <type>epub</type>
+		<superClassName>com.rackspace.cloud.api.docs.EpubMojo</superClassName>
+		<excludedProperties>${excluded.properties},root.filename,base.dir,epub.oebps.dir,epub.metainf.dir,manifest.in.base.dir,epub.opf.filename</excludedProperties>
+		<useStandardOutput>false</useStandardOutput>
+	      </configuration>
+	    </execution>
+
                 </executions>
 
                 <configuration>
