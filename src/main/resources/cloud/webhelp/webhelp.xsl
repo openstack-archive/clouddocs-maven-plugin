@@ -38,6 +38,7 @@ xmlns:exsl="http://exslt.org/common"
     <xsl:param name="para.propagates.style" select="1"/>
     <xsl:param name="phrase.propagates.style" select="1"/>
     <xsl:param name="chunk.first.sections" select="1"/>
+    <xsl:param name="chunk.section.depth" select="100"/>
     <xsl:param name="chapter.autolabel" select="1"/>
     <xsl:param name="section.autolabel" select="0"/>
     <!--xsl:param name="generate.toc">book toc</xsl:param-->
