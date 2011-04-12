@@ -275,6 +275,9 @@ Processing legalnotice: <xsl:value-of select="@role"/>
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
+  
+  <xsl:call-template name="index.html"/>
+
 </xsl:template>
 
 
