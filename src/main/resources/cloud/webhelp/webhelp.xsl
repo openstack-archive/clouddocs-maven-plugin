@@ -41,7 +41,7 @@ xmlns:exsl="http://exslt.org/common"
     <xsl:param name="chunk.section.depth" select="100"/>
     <xsl:param name="chapter.autolabel" select="1"/>
     <xsl:param name="section.autolabel" select="0"/>
-    <!--xsl:param name="generate.toc">book toc</xsl:param-->
+    <xsl:param name="generate.section.toc.level" select="5"/>
 
     <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
         <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="en">
@@ -628,8 +628,7 @@ These problems go away when you add this IE=7 mode meta tag.
                     <head>
 			            <link rel="shortcut icon" href="favicon.ico"/>
                         <meta http-equiv="Refresh" content="1; URL=content/{$default.topic}"/>
-                        <title><xsl:value-of select="//d:title[1]"/>&#160;
-                        </title>
+                        <title><xsl:value-of select="//d:title[1]"/>&#160;</title>
                     </head>
                     <body>
                         If not automatically redirected, click here: <a href="content/ch01.html">content/ch01.html</a>
