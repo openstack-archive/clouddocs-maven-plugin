@@ -17,6 +17,7 @@
   <xsl:param name="section.autolabel.max.depth" select="3"/>
   <xsl:param name="section.label.includes.component.label" select="1"/>
   <xsl:param name="component.label.includes.part.label" select="1"/>
+  <xsl:param name="ignore.image.scaling" select="1"/>
 
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="enable.disqus">0</xsl:param>
