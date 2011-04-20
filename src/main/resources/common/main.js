@@ -6,6 +6,30 @@
  */
 
 $(document).ready(function() {  
+
+
+	// When you click on a link to an anchor, scroll down 
+	// 105 px to cope with the fact that the banner
+	// hides the top 95px or so of the page.
+	// This code deals with the problem when 
+	// you click on a link within a page.
+	$('a[href*=#]').click(function() {
+		if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'')
+		    && location.hostname == this.hostname) {
+		    var $target = $(this.hash);
+		    $target = $target.length && $target
+			|| $('[name=' + this.hash.slice(1) +']');
+		    if ($target.length) {
+			var targetOffset = $target.offset().top - 105;
+			$('html,body')
+			    .animate({scrollTop: targetOffset}, 200);
+			return false;
+		    }
+		}
+	    });
+
+
+
   //  $("#showHideHighlight").button(); //add jquery button styling to 'Go' button
     //Generate tabs in nav-pane with JQuery
     $(function() {
@@ -49,6 +73,19 @@ $(document).ready(function() {
 
     syncToc(); //Synchronize the toc tree with the content pane, when loading the page.
     //$("#doSearch").button(); //add jquery button styling to 'Go' button
+
+    // When you click on a link to an anchor, scroll down 
+    // 105 px to cope with the fact that the banner
+    // hides the top 95px or so of the page.
+    // This code deals with the problem when 
+    // you click on a link from another page. 
+    var hash = window.location.hash;
+    if(hash){ 
+	var targetOffset = $(hash).offset().top - 105;
+	$('html,body').animate({scrollTop: targetOffset}, 200);
+	return false;
+    }
+
 });
 
 /**
