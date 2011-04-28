@@ -15,6 +15,35 @@ xmlns:exsl="http://exslt.org/common"
             encoding="utf-8"
             cdata-section-elements=""/>
 
+        <xsl:variable name="default.topic">
+            <xsl:choose>
+                <xsl:when test="$webhelp.default.topic != ''">
+                    <xsl:value-of select="$htmlhelp.default.topic"/>
+                </xsl:when>
+                <xsl:when test="$htmlhelp.default.topic != ''">
+                    <xsl:value-of select="$htmlhelp.default.topic"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="make-relative-filename">
+                        <xsl:with-param name="base.dir"/>
+                        <xsl:with-param name="base.name">
+                            <xsl:choose>
+                                <xsl:when test="$rootid != ''">
+                                    <xsl:apply-templates select="key('id',$rootid)" mode="chunk-filename"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:apply-templates
+                                            select="*/*[self::d:preface|self::d:chapter|self::d:appendix|self::d:part|self::d:section][1]"
+                                            mode="chunk-filename"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+
     <!-- webhelp-specific params! -->
     <!-- To be added to normal params file someday -->
     <xsl:param name="webhelp.include.search.tab">true</xsl:param>
@@ -579,33 +608,6 @@ These problems go away when you add this IE=7 mode meta tag.
     </xsl:template>
 
     <xsl:template name="index.html">
-        <xsl:variable name="default.topic">
-            <xsl:choose>
-                <xsl:when test="$webhelp.default.topic != ''">
-                    <xsl:value-of select="$htmlhelp.default.topic"/>
-                </xsl:when>
-                <xsl:when test="$htmlhelp.default.topic != ''">
-                    <xsl:value-of select="$htmlhelp.default.topic"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="make-relative-filename">
-                        <xsl:with-param name="base.dir"/>
-                        <xsl:with-param name="base.name">
-                            <xsl:choose>
-                                <xsl:when test="$rootid != ''">
-                                    <xsl:apply-templates select="key('id',$rootid)" mode="chunk-filename"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:apply-templates
-                                            select="*/*[self::d:preface|self::d:chapter|self::d:appendix|self::d:part][1]"
-                                            mode="chunk-filename"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
         <xsl:call-template name="write.chunk">
             <xsl:with-param name="filename">
                 <!--       <xsl:if test="$manifest.in.base.dir != 0"> -->
@@ -631,7 +633,7 @@ These problems go away when you add this IE=7 mode meta tag.
                         <title><xsl:value-of select="//d:title[1]"/>&#160;</title>
                     </head>
                     <body>
-                        If not automatically redirected, click here: <a href="content/ch01.html">content/ch01.html</a>
+                        If not automatically redirected, click here: <a href="content/{$default.topic}">content/<xsl:value-of select="$default.topic"/></a>
                     </body>
                 </html>
             </xsl:with-param>

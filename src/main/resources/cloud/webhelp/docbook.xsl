@@ -68,7 +68,7 @@
 
     </xsl:template>
 
-    <xsl:template name="webhelpheader">
+      <xsl:template name="webhelpheader">
         <xsl:param name="prev"/>
         <xsl:param name="next"/>
         <xsl:param name="nav.context"/>
@@ -78,7 +78,7 @@
         
         <div id="header">
             <img src='../common/images/{$branding}-logo.png' alt="OpenStack Documentation" width="157" height="47" />
-            <p class="breadcrumbs"><a href="{$main.docs.url}"><xsl:value-of select="$brandname"/> Manuals</a></p>
+	    <p class="breadcrumbs"><a href="{$main.docs.url}"><xsl:value-of select="$brandname"/> Manuals</a>  <a href="{$default.topic}"><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a></p>
             
             <!-- Display the page title and the main heading(parent) of it-->
             <h1>
