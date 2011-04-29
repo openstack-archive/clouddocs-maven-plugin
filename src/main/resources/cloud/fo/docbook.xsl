@@ -245,7 +245,7 @@
           <xsl:choose>
               <xsl:when test="processing-instruction('db-font-size')"><xsl:value-of
               select="processing-instruction('db-font-size')"/></xsl:when>
-              <xsl:otherwise>90%</xsl:otherwise>
+              <xsl:otherwise>85%</xsl:otherwise>
           </xsl:choose>
       </xsl:attribute>
   </xsl:attribute-set>
@@ -257,6 +257,42 @@
   </xsl:attribute-set>
 
   <xsl:param name="hyphenate.verbatim.characters">\/?&amp;=,.</xsl:param>
+
+  <xsl:param name="hyphenate.verbatim" select="1"/>
+
+  <!-- DWC: See comment in this template for more info -->
+<xsl:template name="hyphenate.verbatim">
+  <xsl:param name="content"/>
+  <xsl:variable name="head" select="substring($content, 1, 1)"/>
+  <xsl:variable name="tail" select="substring($content, 2)"/>
+  <xsl:choose>
+    <!-- 
+	 DWC: Don't put soft-hyphens after a space due to this fop bug:
+	 https://issues.apache.org/bugzilla/show_bug.cgi?id=49837 It's
+	 fixed, but apparently the version of fop we're using doesn't
+	 include it yet :-(
+    -->
+    <!-- Place soft-hyphen after space or non-breakable space. -->
+    <!-- <xsl:when test="$head = ' ' or $head = '&#160;'"> -->
+    <!--   <xsl:text>&#160;</xsl:text> -->
+    <!--   <xsl:text>&#x00AD;</xsl:text> -->
+    <!-- </xsl:when> -->
+    <xsl:when test="$hyphenate.verbatim.characters != '' and
+                    translate($head, $hyphenate.verbatim.characters, '') = '' and not($tail = '')">
+      <xsl:value-of select="$head"/>
+      <xsl:text>&#x00AD;</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$head"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:if test="$tail">
+    <xsl:call-template name="hyphenate.verbatim">
+      <xsl:with-param name="content" select="$tail"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
 
   <!-- Admonition Graphics -->
   <xsl:param name="admon.graphics" select="1"/>
