@@ -17,7 +17,7 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
     left: 0;
     border-bottom: 1px solid #bbc4c5;
     z-index: 2000;
-    background: #282828 url("../common/images/main_bg_fade.png") top left no-repeat;
+    background: #282828 url("../images/main_bg_fade.png") top left no-repeat;
 }
 
 #header h1 {
