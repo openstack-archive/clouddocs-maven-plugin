@@ -245,7 +245,7 @@
           <xsl:choose>
               <xsl:when test="processing-instruction('db-font-size')"><xsl:value-of
               select="processing-instruction('db-font-size')"/></xsl:when>
-              <xsl:otherwise>inherit</xsl:otherwise>
+              <xsl:otherwise>90%</xsl:otherwise>
           </xsl:choose>
       </xsl:attribute>
   </xsl:attribute-set>
@@ -255,6 +255,8 @@
       <xsl:attribute name="wrap-option">wrap</xsl:attribute>
       <xsl:attribute name="hyphenation-character">\</xsl:attribute>
   </xsl:attribute-set>
+
+  <xsl:param name="hyphenate.verbatim.characters">\/?&amp;=,.</xsl:param>
 
   <!-- Admonition Graphics -->
   <xsl:param name="admon.graphics" select="1"/>
