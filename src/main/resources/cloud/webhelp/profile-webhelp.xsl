@@ -76,6 +76,21 @@ Processing legalnotice: <xsl:value-of select="@role"/>
     </d:legalnotice>	  
   </xsl:template>
 
+  <!--
+      The abstract is supressed if the rs-api legal notice is used, as
+      it's incorporated into the document in this case.
+  -->
+  <xsl:template match="d:abstract" mode="preprocess">
+    <xsl:choose>
+      <xsl:when test="/*//d:legalnotice[@role = 'rs-api']" />
+      <xsl:otherwise>
+	<xsl:copy>
+	  <xsl:apply-templates select="@*|node()" mode="preprocess"/>
+	</xsl:copy>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <xsl:template name="Apache2LegalNotice">
       <xsl:variable name="a2Link" select="'http://www.apache.org/licenses/LICENSE-2.0'"/>
       <xsl:if test="@role = 'apache2'">
