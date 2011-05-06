@@ -43,7 +43,14 @@ set       toc,title
 
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="enable.disqus">0</xsl:param>
-  <xsl:param name="disqus.shortname">rackspacedocs</xsl:param>
+
+  <xsl:param name="disqus.shortname">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace'">rc-api-docs</xsl:when>
+      <xsl:when test="$branding = 'openstack'">openstackdocs</xsl:when>
+    </xsl:choose>
+  </xsl:param>
+
   <xsl:param name="brandname">
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">OpenStack</xsl:when>

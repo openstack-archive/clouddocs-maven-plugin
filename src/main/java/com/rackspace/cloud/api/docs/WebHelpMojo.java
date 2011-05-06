@@ -41,7 +41,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     /**
      * A parameter used by the Disqus comments. 
      *
-     * @parameter expression="${generate-webhelp.disqus.shortname}" default-value="openstackdocs"
+     * @parameter expression="${generate-webhelp.disqus.shortname}" default-value=""
      */
     private String disqusShortname;
 
@@ -57,7 +57,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     transformer.setParameter("branding", branding);
     transformer.setParameter("enable.disqus", enableDisqus);
-    transformer.setParameter("disqus.shortname", disqusShortname);
+    if(disqusShortname != null){
+	transformer.setParameter("disqus.shortname", disqusShortname);
+    }
   }
 
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
