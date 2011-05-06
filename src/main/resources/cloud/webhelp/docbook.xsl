@@ -8,6 +8,7 @@
   <!-- <xsl:import href="urn:docbkx:stylesheet-orig/xsl/webhelp.xsl" /> -->
   <xsl:import href="webhelp.xsl" />
 
+  <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="section.autolabel" select="1"/>
   <xsl:param name="chapter.autolabel" select="1"/>
   <xsl:param name="appendix.autolabel" select="1"/>
@@ -20,7 +21,19 @@
   <xsl:param name="component.label.includes.part.label" select="1"/>
   <xsl:param name="ignore.image.scaling" select="1"/>
   <xsl:param name="suppress.footer.navigation">1</xsl:param>
-
+  <xsl:param name="enable.google.analytics">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="google.analytics.id">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace'">UA-23102455-1</xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+  </xsl:param>
+  
 <xsl:param name="generate.toc">
 appendix  toc,title
 article/appendix  nop
@@ -41,7 +54,6 @@ section   toc
 set       toc,title
 </xsl:param>
 
-  <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="enable.disqus">0</xsl:param>
 
   <xsl:param name="disqus.shortname">
@@ -69,7 +81,16 @@ set       toc,title
         <script type="text/javascript" src="../common/main.js">
             <xsl:comment></xsl:comment>
         </script>
-        
+	<xsl:if test="$enable.google.analytics = '1' and not($google.analytics.id = '')">
+	  <script type="text/javascript">
+	    var _gaq = _gaq || [];
+	    _gaq.push(['_setAccount', '<xsl:value-of select="$google.analytics.id"/>']);
+	  </script>
+	  <script type="text/javascript" src="../common/ga.js">
+	    <xsl:comment></xsl:comment>
+	  </script>
+	</xsl:if>
+	
 	<xsl:if test="$enable.disqus != '0'">
 	  <hr />
 	  

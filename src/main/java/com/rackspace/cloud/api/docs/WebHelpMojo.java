@@ -45,6 +45,21 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String disqusShortname;
 
+    /**
+     * A parameter used to control whether to include Google Analytics goo.
+     *
+     * @parameter expression="${generate-webhelp.enable.google.analytics}" default-value=""
+     */
+    private String enableGoogleAnalytics;
+
+    /**
+     * A parameter used to control whether to include Google Analytics goo.
+     *
+     * @parameter expression="${generate-webhelp.google.analytics.id}" default-value=""
+     */
+    private String googleAnalyticsId;
+
+
   /**
    * DOCUMENT ME!
    *
@@ -59,6 +74,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     transformer.setParameter("enable.disqus", enableDisqus);
     if(disqusShortname != null){
 	transformer.setParameter("disqus.shortname", disqusShortname);
+    }
+    if(enableGoogleAnalytics != null){
+	transformer.setParameter("enable.google.analytics",enableGoogleAnalytics);
+    }
+    if(googleAnalyticsId != null){
+	transformer.setParameter("google.analytics.id",googleAnalyticsId);
     }
   }
 
