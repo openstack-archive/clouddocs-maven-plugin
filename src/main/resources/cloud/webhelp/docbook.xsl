@@ -67,6 +67,7 @@
 	    <a href="http://disqus.com" class="dsq-brlink">User notes powered by <span class="logo-disqus">Disqus</span></a>
 	  </div>
 	</xsl:if>    
+	<div class="legal"><a href="index.html">Legal notices</a></div>
 
     </xsl:template>
 
