@@ -21,6 +21,26 @@
   <xsl:param name="ignore.image.scaling" select="1"/>
   <xsl:param name="suppress.footer.navigation">1</xsl:param>
 
+<xsl:param name="generate.toc">
+appendix  toc,title
+article/appendix  nop
+article   toc,title
+book      title,figure,table,example,equation
+chapter   toc,title
+part      toc,title
+preface   toc,title
+qandadiv  toc
+qandaset  toc
+reference toc,title
+sect1     toc
+sect2     toc
+sect3     toc
+sect4     toc
+sect5     toc
+section   toc
+set       toc,title
+</xsl:param>
+
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="enable.disqus">0</xsl:param>
   <xsl:param name="disqus.shortname">rackspacedocs</xsl:param>
