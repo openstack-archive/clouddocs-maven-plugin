@@ -73,27 +73,20 @@ set       toc,title
 	<xsl:if test="$enable.disqus != '0'">
 	  <hr />
 	  
-	  <h2 class="userNotes">User Notes On This Page</h2>
+	  <!-- <h2 class="userNotes">User Notes On This Page</h2> -->
 	  <div id="disqus_thread">
 	    <script type="text/javascript">
-	      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>'; 
-	      
-	      <!-- // The following are highly recommended additional parameters. Remove the slashes in front to use. -->
-	      <!-- // var disqus_identifier = 'unique_dynamic_id_1234'; -->
-	      <!-- // var disqus_url = 'http://example.com/permalink-to-page.html'; -->
-	      
-	      <!-- /* * * DON'T EDIT BELOW THIS LINE * * */ -->
-	      (function() {
-	      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-	      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	      })();
+	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>'; 	      
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-	    <a href="http://disqus.com" class="dsq-brlink">User notes powered by <span class="logo-disqus">Disqus</span></a>
+	    <!-- <a href="http://disqus.com" class="dsq-brlink">User notes powered by <span class="logo-disqus">Disqus</span></a> -->
+	    <script type="text/javascript" src="../common/comments.js">
+	      <xsl:comment></xsl:comment>
+	    </script>
 	  </div>
 	</xsl:if>    
+
+	<hr/>
 	<div class="legal"><a href="index.html">Legal notices</a></div>
 
     </xsl:template>
