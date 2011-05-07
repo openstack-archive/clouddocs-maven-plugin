@@ -755,4 +755,19 @@
   <xsl:attribute name="font-size">8pt</xsl:attribute>
 </xsl:attribute-set>
 
+<!-- The following templates change the color of text flagged as reviewer, internal, or writeronly -->
+  <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';internal;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';internal;') ]">
+	<fo:wrapper xmlns:fo="http://www.w3.org/1999/XSL/Format" color="blue"><xsl:apply-imports/></fo:wrapper>
+  </xsl:template>
+  <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') ]" priority="10">
+	<fo:wrapper xmlns:fo="http://www.w3.org/1999/XSL/Format" color="red"><xsl:apply-imports/></fo:wrapper>
+  </xsl:template>
+  <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') ]" priority="10">
+	<fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" background-color="yellow"><xsl:apply-imports/></fo:inline>
+  </xsl:template>
+  <xsl:template match="text()[ ancestor::*/@role = 'highlight' ] | xref[ ancestor::*/@role = 'highlight' ]" priority="10">
+	<fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" background-color="yellow"><xsl:apply-imports/></fo:inline>
+  </xsl:template>
+
+
 </xsl:stylesheet>
