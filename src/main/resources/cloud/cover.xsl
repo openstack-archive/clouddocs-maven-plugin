@@ -230,7 +230,7 @@
 	      <xsl:message terminate="yes">Bad Month value <xsl:value-of select="$month"/></xsl:message>
 	    </xsl:otherwise>
 	  </xsl:choose>
-	  <xsl:text>. </xsl:text>
+	  <xsl:text> </xsl:text>
 	  <xsl:choose>
 	    <xsl:when test="starts-with($day, '0')">
 	      <xsl:value-of select="substring($day, 2)"/>
