@@ -221,3 +221,25 @@ a#showHideButton {
  color: #555;
  text-align: center;
 }
+
+.internal
+	{
+	color : #0000CC;
+	}
+
+.writeronly
+	{
+	color : red;
+	}
+
+.remark, .remark .added, .remark .changed, .remark .deleted{
+	background: yellow;
+	} 
+
+tr th, tr th .internal, tr th .added, tr th .changed
+	{
+	background: #00589E;
+	color: white;
+	font-weight: bold;
+	text-align: left;
+	}

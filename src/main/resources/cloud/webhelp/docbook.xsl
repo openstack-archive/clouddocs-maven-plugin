@@ -341,4 +341,10 @@ set       toc,title
         </xsl:choose>
     </xsl:template>
 
+    <!-- The following templates change the color of text flagged as reviewer, internal, or writeronly -->    
+    <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';internal;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';internal;') ]"><span class="internal"><xsl:apply-imports/></span></xsl:template>
+    <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') ]"><span class="writeronly"><xsl:apply-imports/></span></xsl:template>
+    <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') ]"><span class="remark"><xsl:apply-imports/></span></xsl:template>
+    <xsl:template match="text()[ ancestor::*/@role = 'highlight' ] | xref[ ancestor::*/@role = 'highlight' ]" priority="10"><span class="remark"><xsl:apply-imports/></span></xsl:template>
+
 </xsl:stylesheet>
