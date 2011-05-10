@@ -293,7 +293,7 @@ set       toc,title
                                 </xsl:if>
                             </ul>
                             <div id="treeDiv">
-                                <img src="../../../common/images/loading.gif" alt="loading table of contents..."
+                                <img src="../common/images/loading.gif" alt="loading table of contents..."
                                     id="tocLoading" style="display:block;"/>
                                 <div id="ulTreeDiv" style="display:none">
                                     <ul id="tree" class="filetree">
