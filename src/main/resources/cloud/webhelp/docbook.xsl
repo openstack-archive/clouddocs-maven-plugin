@@ -122,7 +122,11 @@ set       toc,title
         
         <div id="header">
             <img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" />
-	    <p class="breadcrumbs"><a href="{$main.docs.url}"><xsl:value-of select="$brandname"/> Manuals</a>  <a href="{$default.topic}"><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a></p>
+	    <p class="breadcrumbs"><a href="{$main.docs.url}"><xsl:value-of select="$brandname"/> Manuals</a>  <a><xsl:attribute name="href">
+  <xsl:call-template name="href.target">
+    <xsl:with-param name="object" select="$home"/>
+  </xsl:call-template>
+</xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a></p>
             
             <!-- Display the page title and the main heading(parent) of it-->
             <h1>
