@@ -189,6 +189,16 @@
                                 </fileMapper>
                             </fileMappers>
                         </transformationSet>
+                        <transformationSet>
+                            <dir>src/main/resources/cloud/webhelp/titlepage</dir>
+                            <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
+                            <outputDir>target/generated-resources/cloud/webhelp</outputDir>
+                            <fileMappers>
+                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                    <targetExtension>.xsl</targetExtension>
+                                </fileMapper>
+                            </fileMappers>
+                        </transformationSet>
                     </transformationSets>
                 </configuration>
             </plugin>

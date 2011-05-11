@@ -7,6 +7,7 @@
 
   <!-- <xsl:import href="urn:docbkx:stylesheet-orig/xsl/webhelp.xsl" /> -->
   <xsl:import href="webhelp.xsl" />
+  <xsl:import href="titlepage.templates.xsl"/>
 
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="section.autolabel" select="1"/>
