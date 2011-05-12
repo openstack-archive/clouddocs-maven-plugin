@@ -59,6 +59,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String googleAnalyticsId;
 
+    /**
+     * A parameter used to specify the path to the pdf for download in webhelp.
+     *
+     * @parameter expression="${generate-webhelp.pdf.url}" default-value=""
+     */
+    private String pdfUrl;
+
 
   /**
    * DOCUMENT ME!
@@ -81,6 +88,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     if(googleAnalyticsId != null){
 	transformer.setParameter("google.analytics.id",googleAnalyticsId);
     }
+    if(pdfUrl != null){
+	transformer.setParameter("pdf.url",pdfUrl);
+    }
+
   }
 
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {

@@ -9,6 +9,7 @@
   <xsl:import href="webhelp.xsl" />
   <xsl:import href="titlepage.templates.xsl"/>
 
+  <xsl:param name="pdf.url"/>
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="section.autolabel" select="1"/>
   <xsl:param name="chapter.autolabel" select="1"/>
