@@ -76,7 +76,7 @@
                 If there's a product name, and the product name is in the
                 subtitle then use the product name for the title.
             -->
-            <xsl:when test="$productname and contains($plaintitle,$productname)">
+            <xsl:when test="(string-length(string($productname)) > 0) and contains($plaintitle,$productname)">
                 <xsl:copy-of select="$productname"/>
             </xsl:when>
             <xsl:otherwise>
@@ -86,7 +86,7 @@
     </xsl:variable>
     <xsl:variable name="subtitle">
         <xsl:choose>
-            <xsl:when test="$productname and contains($plaintitle,$productname)">
+            <xsl:when test="(string-length(string($productname))) and contains($plaintitle,$productname)">
                 <xsl:value-of select="substring-before($plaintitle,$productname)"/>
                 <xsl:value-of select="substring-after($plaintitle,$productname)"/>
             </xsl:when>
