@@ -265,6 +265,17 @@ These problems go away when you add this IE=7 mode meta tag.
             <xsl:comment> </xsl:comment>
         </script>
         <!--End of index files -->
+
+	<xsl:if test="$enable.google.analytics = '1' and not($google.analytics.id = '')">
+	  <script type="text/javascript">
+	    var _gaq = _gaq || [];
+	    _gaq.push(['_setAccount', '<xsl:value-of select="$google.analytics.id"/>']);
+	  </script>
+	  <script type="text/javascript" src="../common/ga.js">
+	    <xsl:comment></xsl:comment>
+	  </script>
+	</xsl:if>
+		
     </xsl:template>
 
     <xsl:template name="user.header.navigation">

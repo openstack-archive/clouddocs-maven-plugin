@@ -150,6 +150,10 @@ function showHideToc() {
         leftNavigation.css("display","block");
         showHideButton.attr("title", "Hide the TOC Tree");
     }
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_trackEvent', 'Header', 'click', 'hide/show', '1']);
+
 }
 
 /**
