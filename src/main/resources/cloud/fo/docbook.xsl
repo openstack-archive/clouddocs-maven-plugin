@@ -280,7 +280,7 @@
     <xsl:when test="$hyphenate.verbatim.characters != '' and
                     translate($head, $hyphenate.verbatim.characters, '') = '' and not($tail = '')">
       <xsl:value-of select="$head"/>
-      <xsl:text>&#x00AD;</xsl:text>
+      <xsl:text>&#8203;</xsl:text>		<!-- shy: &#x00AD; zwsp: &#8203;-->
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="$head"/>
