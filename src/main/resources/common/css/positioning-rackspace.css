@@ -237,6 +237,7 @@ a#showHideButton {
 .legal, .legal *{
  color: #555;
  text-align: center;
+ padding-bottom: 10px;
 }
 
 .internal
