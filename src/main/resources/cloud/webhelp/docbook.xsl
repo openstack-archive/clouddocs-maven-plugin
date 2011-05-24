@@ -31,7 +31,7 @@
   </xsl:param>
   <xsl:param name="google.analytics.id">
     <xsl:choose>
-      <xsl:when test="$branding = 'rackspace'">UA-23102455-1</xsl:when>
+      <xsl:when test="$branding = 'rackspace'">UA-23102455-3</xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:param>
@@ -114,7 +114,7 @@ set       toc,title
         <xsl:variable name="up" select="parent::*"/>
         
         <div id="header">
-	  <a href="http://www.rackspace.com" onclick="_gaq.push(['_trackEvent', 'Header', 'click', 'logo', '1']);"><img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" /></a>
+	  <a href="http://www.rackspace.com" onclick="_gaq.push(['_trackEvent', 'Header', 'logo', 'click']);"><img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" /></a>
 	  <p class="breadcrumbs"><a href="{$main.docs.url}"><xsl:value-of select="$brandname"/> Manuals</a>  <a><xsl:attribute name="href">
   <xsl:call-template name="href.target">
     <xsl:with-param name="object" select="$home"/>
@@ -149,7 +149,7 @@ set       toc,title
                             or count($next) &gt; 0">
                             <td>
                                 <xsl:if test="count($prev)>0">
-                                    <a accesskey="p" class="navLinkPrevious" onclick="_gaq.push(['_trackEvent', 'Header', 'click', 'prevLink', '1']);"
+                                    <a accesskey="p" class="navLinkPrevious" onclick="_gaq.push(['_trackEvent', 'Header', 'prevLink', 'click']);"
 >
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
@@ -167,7 +167,7 @@ set       toc,title
                                     <xsl:when test="count($up)&gt;0
                                         and generate-id($up) != generate-id($home)">
                                         |
-                                        <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'click', 'upLink', '1']);">
+                                        <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'upLink', 'click']);">
                                             <xsl:attribute name="href">
                                                 <xsl:call-template name="href.target">
                                                     <xsl:with-param name="object" select="$up"/>
@@ -183,7 +183,7 @@ set       toc,title
                                 
                                 <xsl:if test="count($next)>0">
                                     |
-                                    <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'click', 'nextLink', '1']);">
+                                    <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'nextLink', 'click']);">
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
                                                 <xsl:with-param name="object" select="$next"/>

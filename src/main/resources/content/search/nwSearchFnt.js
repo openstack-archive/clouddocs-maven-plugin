@@ -23,7 +23,7 @@ function Verifie(ditaSearch_Form) {
     }
 
 
-    var expressionInput = document.ditaSearch_Form.textToSearch.value;
+    var expressionInput = document.ditaSearch_Form.textToSearch.value.replace(/,/g,'');
     //Set a cookie to store the searched keywords
     $.cookie('textToSearch', expressionInput);
 
@@ -39,6 +39,10 @@ function Verifie(ditaSearch_Form) {
 
         // Effectuer la recherche
         Effectuer_recherche(expressionInput);
+
+	//Track with Google Analytics:
+	_gaq.push(['_trackEvent', 'Search', expressionInput, 'null']);
+
 
         // reactive la fenetre de search (utile car cadres)
         document.ditaSearch_Form.textToSearch.focus();

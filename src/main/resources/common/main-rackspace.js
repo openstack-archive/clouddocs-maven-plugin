@@ -65,7 +65,7 @@ $(document).ready(function() {
     if ($.cookie('ui-tabs-1') === '1') {    //search tab is visible 
         if ($.cookie('textToSearch') != undefined && $.cookie('textToSearch').length > 0) {
             document.getElementById('textToSearch').value = $.cookie('textToSearch');
-            Verifie('diaSearch_Form');
+            Effectuer_recherche($.cookie('textToSearch'));
             searchHighlight($.cookie('textToSearch'));
             $("#showHideHighlight").css("display","block");
         }
@@ -152,7 +152,7 @@ function showHideToc() {
     }
 
     var _gaq = _gaq || [];
-    _gaq.push(['_trackEvent', 'Header', 'click', 'hide/show', '1']);
+    _gaq.push(['_trackEvent', 'Header', 'hide/show', 'click']);
 
 }
 
