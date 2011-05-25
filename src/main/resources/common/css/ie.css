@@ -1,0 +1,6 @@
+.statustext{
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1)
+            progid:DXImageTransform.Microsoft.BasicImage(opacity=.3);       
+    width: 50%;
+    height: 50%;
+}

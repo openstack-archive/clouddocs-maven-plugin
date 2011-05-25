@@ -220,6 +220,7 @@ a#showHideButton {
 .legal, .legal *{
  color: #555;
  text-align: center;
+ padding-bottom: 10px;
 }
 
 .internal
@@ -243,3 +244,19 @@ tr th, tr th .internal, tr th .added, tr th .changed
 	font-weight: bold;
 	text-align: left;
 	}
+
+
+.statustext{
+    position:fixed;
+    top:100px;
+    width: 0%;
+    height: 0%;
+    opacity: .3;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    white-space: nowrap;
+    color: red; 
+    font-weight: bold; 
+    font-size: 2em;
+    }

@@ -1,3 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE xsl:stylesheet [
+<!ENTITY lowercase "'abcdefghijklmnopqrstuvwxyz'">
+<!ENTITY uppercase "'ABCDEFGHIJKLMNOPQRSTUVWXYZ'">
+ ]>
 <xsl:stylesheet exclude-result-prefixes="d"
                 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -208,6 +213,9 @@ These problems go away when you add this IE=7 mode meta tag.
         </style>
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="../common/css/positioning.css"/>
+	<xsl:comment><xsl:text>[if IE]>
+	&lt;link rel="stylesheet" type="text/css" href="../common/css/ie.css"/>
+	&lt;![endif]</xsl:text></xsl:comment>
         <link rel="stylesheet" type="text/css" href="../common/jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
         <link rel="stylesheet" type="text/css" href="../common/jquery/treeview/jquery.treeview.css"/>
 
@@ -296,8 +304,20 @@ These problems go away when you add this IE=7 mode meta tag.
         </xsl:if-->
     </xsl:template>
 
+  <xsl:param name="rackspace.status.pi">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
+      <xsl:with-param name="attribute" select="'status.bar.text'"/>
+    </xsl:call-template>
+  </xsl:param>
+
+  <xsl:param name="rackspace.status.text">
+    <xsl:if test="/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')]">DRAFT</xsl:if><xsl:if test="/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')] and not(normalize-space($rackspace.status.pi) = '')"><xsl:text>&#160;-&#160;</xsl:text></xsl:if><xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/></xsl:if> 
+  </xsl:param>
+
     <xsl:template name="user.header.content">
-        <xsl:comment> <!-- KEEP this code. --> </xsl:comment>
+      <div class="statustext">
+	<xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/><xsl:comment> <!-- KEEP this code. --> </xsl:comment></div>
     </xsl:template>
 
     <xsl:template name="user.footer.navigation">
