@@ -123,7 +123,15 @@ set       toc,title
         <xsl:variable name="up" select="parent::*"/>
         
         <div id="header">
-	  <a href="http://www.rackspace.com" onclick="_gaq.push(['_trackEvent', 'Header', 'logo', 'click']);"><img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" /></a>
+	  <a onclick="_gaq.push(['_trackEvent', 'Header', 'logo', 'click']);" target="_blank">
+	    <xsl:attribute name="href">
+	      <xsl:choose>
+		<xsl:when test="$branding = 'openstack'">http://www.openstack.org</xsl:when>
+		<xsl:otherwise>http://www.rackspace.com</xsl:otherwise>
+	      </xsl:choose>
+	    </xsl:attribute>
+	    <img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" />
+	  </a>
 	  <xsl:if test="$branding = 'openstack'">
 	    <xsl:call-template name="breadcrumbs">
 	      <xsl:with-param name="home" select="$home"/>
