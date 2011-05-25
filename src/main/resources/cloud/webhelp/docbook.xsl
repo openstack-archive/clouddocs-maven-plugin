@@ -87,13 +87,13 @@ set       toc,title
 	<xsl:if test="$enable.disqus != '0'">
 	  <hr />
 	  
-	  <!-- <h2 class="userNotes">User Notes On This Page</h2> -->
+
 	  <div id="disqus_thread">
 	    <script type="text/javascript">
 	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>'; 	      
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-	    <!-- <a href="http://disqus.com" class="dsq-brlink">User notes powered by <span class="logo-disqus">Disqus</span></a> -->
+
 	    <script type="text/javascript" src="../common/comments.js">
 	      <xsl:comment></xsl:comment>
 	    </script>
@@ -103,6 +103,15 @@ set       toc,title
 	<hr/>
 	<div class="legal"><a href="index.html">Legal notices</a></div>
 
+    </xsl:template>
+
+    <xsl:template name="breadcrumbs">
+      <xsl:param name="home"/>
+      <p class="breadcrumbs"><a href="{$main.docs.url}"><xsl:value-of select="$brandname"/> Manuals</a>  <a><xsl:attribute name="href">
+      <xsl:call-template name="href.target">
+	<xsl:with-param name="object" select="$home"/>
+      </xsl:call-template>
+      </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a></p>	  
     </xsl:template>
 
       <xsl:template name="webhelpheader">
@@ -115,12 +124,11 @@ set       toc,title
         
         <div id="header">
 	  <a href="http://www.rackspace.com" onclick="_gaq.push(['_trackEvent', 'Header', 'logo', 'click']);"><img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" /></a>
-	  <p class="breadcrumbs"><a href="{$main.docs.url}"><xsl:value-of select="$brandname"/> Manuals</a>  <a><xsl:attribute name="href">
-  <xsl:call-template name="href.target">
-    <xsl:with-param name="object" select="$home"/>
-  </xsl:call-template>
-</xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a></p>
-            
+	  <xsl:if test="$branding = 'openstack'">
+	    <xsl:call-template name="breadcrumbs">
+	      <xsl:with-param name="home" select="$home"/>
+	    </xsl:call-template>
+	  </xsl:if>
             <!-- Display the page title and the main heading(parent) of it-->
             <h1>
                 <xsl:apply-templates select="." mode="object.title.markup"/>
@@ -198,13 +206,20 @@ set       toc,title
                         </xsl:if>
                         
                     </tr>
-                </table>
-                
-                
-                
-            </div>
-            
+                </table>                
+            </div>            
         </div>
+
+	<xsl:if test="$branding = 'rackspace'">
+	  <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+	    <div id="toolbar-left">
+	      <xsl:call-template name="breadcrumbs">
+		<xsl:with-param name="home" select="$home"/>
+	      </xsl:call-template>
+	    </div>
+	  </div>
+	</xsl:if>
+
     </xsl:template>
     
     <xsl:template name="webhelptoc">

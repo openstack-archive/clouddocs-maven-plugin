@@ -140,15 +140,17 @@ function showHideToc() {
     if (showHideButton != undefined && showHideButton.hasClass("pointLeft")) {
         //Hide TOC
         showHideButton.removeClass('pointLeft').addClass('pointRight');
-        content.css("margin", "0 0 0 0");
+        content.css("margin", "125px 0 0 0");
         leftNavigation.css("display","none");
         showHideButton.attr("title", "Show the TOC tree");
+	$("body").addClass("sidebar")
     } else {
         //Show the TOC
         showHideButton.removeClass('pointRight').addClass('pointLeft');
-        content.css("margin", "0 0 0 280px");
+        content.css("margin", "125px 0 0 280px");
         leftNavigation.css("display","block");
         showHideButton.attr("title", "Hide the TOC Tree");
+	$("body").removeClass("sidebar");
     }
 
     var _gaq = _gaq || [];
