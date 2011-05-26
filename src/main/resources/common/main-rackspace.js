@@ -143,7 +143,7 @@ function showHideToc() {
         content.css("margin", "125px 0 0 0");
         leftNavigation.css("display","none");
         showHideButton.attr("title", "Show the TOC tree");
-	$("body").addClass("sidebar")
+	$("body").addClass("sidebar");
     } else {
         //Show the TOC
         showHideButton.removeClass('pointRight').addClass('pointLeft');
@@ -152,10 +152,6 @@ function showHideToc() {
         showHideButton.attr("title", "Hide the TOC Tree");
 	$("body").removeClass("sidebar");
     }
-
-    var _gaq = _gaq || [];
-    _gaq.push(['_trackEvent', 'Header', 'hide/show', 'click']);
-
 }
 
 /**
