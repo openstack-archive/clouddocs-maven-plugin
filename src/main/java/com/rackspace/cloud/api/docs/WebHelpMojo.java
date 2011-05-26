@@ -66,6 +66,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String pdfUrl;
 
+    /**
+     * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
+     *
+     * @parameter expression="${generate-webhelp.security}" default-value=""
+     */
+    private String security;
+
 
   /**
    * DOCUMENT ME!
@@ -90,6 +97,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     }
     if(pdfUrl != null){
 	transformer.setParameter("pdf.url",pdfUrl);
+    }
+    if(security != null){
+	transformer.setParameter("security",security);
     }
 
   }

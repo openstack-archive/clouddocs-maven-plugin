@@ -74,6 +74,13 @@ public abstract class PDFMojo extends AbstractFoMojo {
      */
     private String variablelistAsBlocks;
 
+    /**
+     * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
+     *
+     * @parameter expression="${generate-pdf.security}" default-value=""
+     */
+    private String security;
+
 
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
@@ -233,6 +240,10 @@ public abstract class PDFMojo extends AbstractFoMojo {
         super.adjustTransformer(transformer, sourceFilename, targetFile);
 
 	transformer.setParameter("branding", branding);
+
+	if(security != null){
+	    transformer.setParameter("security",security);
+	}
 
         //
         //  Setup graphics paths

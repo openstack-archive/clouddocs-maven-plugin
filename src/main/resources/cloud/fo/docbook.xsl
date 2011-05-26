@@ -25,6 +25,30 @@
 
   <xsl:param name="alignment">start</xsl:param>
     
+  <xsl:param name="security">external</xsl:param>
+  <xsl:param name="root.attr.status"><xsl:if test="/*[@status = 'draft']">draft;</xsl:if></xsl:param>
+  <xsl:param name="profile.security">
+    <xsl:choose>
+      <xsl:when test="$security = 'external'"><xsl:value-of select="$root.attr.status"/>external</xsl:when>
+      <xsl:when test="$security = 'internal'"><xsl:value-of select="$root.attr.status"/>internal;external</xsl:when>
+      <xsl:when test="$security = 'reviewer'"><xsl:value-of select="$root.attr.status"/>reviewer;internal;external</xsl:when>
+      <xsl:when test="$security = 'writeronly'"><xsl:value-of select="$root.attr.status"/>reviewer;internal;external;writeronly</xsl:when>
+      <xsl:when test="$security = 'external'"><xsl:value-of select="$root.attr.status"/>external</xsl:when>
+      <xsl:otherwise>
+	<xsl:message terminate="yes"> 
+	  ERROR: The value "<xsl:value-of select="$security"/>" is not valid for the security paramter. 
+	         Valid values are: external, internal, reviewer, and writeronly. 
+	</xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="show.comments">
+    <xsl:choose>
+      <xsl:when test="$security = 'reviewer' or $security = 'writeronly'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
   <xsl:param name="rackspace.status.pi">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
@@ -33,7 +57,12 @@
   </xsl:param>
 
   <xsl:param name="rackspace.status.text">
-    <xsl:if test="/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')]">DRAFT<xsl:text> -&#160;</xsl:text></xsl:if><xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/><xsl:text> -&#160;</xsl:text></xsl:if> 
+    <xsl:if test="/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')]">DRAFT<xsl:text>&#160;-&#160;</xsl:text></xsl:if><xsl:choose>
+  <xsl:when test="$security = 'internal'">INTERNAL<xsl:text> -&#160;</xsl:text></xsl:when>
+  <xsl:when test="$security = 'reviewer'">REVIEWER<xsl:text> -&#160;</xsl:text></xsl:when>
+  <xsl:when test="$security = 'writeronly'">WRITERONLY<xsl:text> -&#160;</xsl:text></xsl:when>
+  <xsl:when test="$security = 'external'"/>
+</xsl:choose><xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/><xsl:text> -&#160;</xsl:text></xsl:if> 
   </xsl:param>
 
   <xsl:attribute-set name="example.properties">
