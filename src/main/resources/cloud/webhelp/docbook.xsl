@@ -119,7 +119,7 @@ set       toc,title
       </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a> 
       </p> 
       <xsl:if test="normalize-space($pdf.url) != ''">
-	<a class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
+	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click']);" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
       </xsl:if>
     </xsl:template>
 
