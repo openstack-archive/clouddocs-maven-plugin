@@ -314,7 +314,7 @@ These problems go away when you add this IE=7 mode meta tag.
   <xsl:param name="rackspace.status.text">
     <xsl:if test="/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')]">DRAFT<xsl:text>&#160;-&#160;</xsl:text></xsl:if><xsl:choose>
   <xsl:when test="$security = 'internal'">INTERNAL<xsl:text> -&#160;</xsl:text></xsl:when>
-  <xsl:when test="$security = 'reviewer'">REVIEWER<xsl:text> -&#160;</xsl:text></xsl:when>
+  <xsl:when test="$security = 'reviewer'">REVIEW<xsl:text> -&#160;</xsl:text></xsl:when>
   <xsl:when test="$security = 'writeronly'">WRITERONLY<xsl:text> -&#160;</xsl:text></xsl:when>
   <xsl:when test="$security = 'external'"/>
 </xsl:choose><xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/></xsl:if> 
