@@ -317,7 +317,13 @@ These problems go away when you add this IE=7 mode meta tag.
 
     <xsl:template name="user.header.content">
       <div class="statustext">
-	<xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/><xsl:comment> <!-- KEEP this code. --> </xsl:comment></div>
+	<xsl:choose>
+	  <xsl:when test="not($rackspace.status.text = '')">
+	    <xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/><xsl:comment> <!-- KEEP this code. --> </xsl:comment>
+	  </xsl:when>
+	  <xsl:otherwise>&#160;</xsl:otherwise>
+	</xsl:choose>
+      </div>
     </xsl:template>
 
     <xsl:template name="user.footer.navigation">
