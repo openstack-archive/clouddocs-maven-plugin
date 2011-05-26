@@ -119,7 +119,7 @@ set       toc,title
       </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a> 
       </p> 
       <xsl:if test="normalize-space($pdf.url) != ''">
-	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click']);" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
+	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
       </xsl:if>
     </xsl:template>
 
@@ -132,7 +132,7 @@ set       toc,title
         <xsl:variable name="up" select="parent::*"/>
         
         <div id="header">
-	  <a onclick="_gaq.push(['_trackEvent', 'Header', 'logo', 'click']);" target="_blank">
+	  <a onclick="_gaq.push(['_trackEvent', 'Header', 'logo', 'click', 1]);" target="_blank">
 	    <xsl:attribute name="href">
 	      <xsl:choose>
 		<xsl:when test="$branding = 'openstack'">http://www.openstack.org</xsl:when>
@@ -163,7 +163,7 @@ set       toc,title
                 <table class="navLinks">
                     <tr>
                         <td>
-                            <a id="showHideButton" onclick="showHideToc();"
+                            <a id="showHideButton" onclick="showHideToc(); _gaq.push(['_trackEvent', 'Header', 'show/hide', 'click', 1]);"
                                 class="pointLeft" title="Hide TOC tree">Sidebar
                             </a>
                         </td>
@@ -174,7 +174,7 @@ set       toc,title
                             or count($next) &gt; 0">
                             <td>
                                 <xsl:if test="count($prev)>0">
-                                    <a accesskey="p" class="navLinkPrevious" onclick="_gaq.push(['_trackEvent', 'Header', 'prevLink', 'click']);"
+                                    <a accesskey="p" class="navLinkPrevious" onclick="_gaq.push(['_trackEvent', 'Header', 'prevLink', 'click', 1]);"
 >
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
@@ -192,7 +192,7 @@ set       toc,title
                                     <xsl:when test="count($up)&gt;0
                                         and generate-id($up) != generate-id($home)">
                                         |
-                                        <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'upLink', 'click']);">
+                                        <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'upLink', 'click', 1]);">
                                             <xsl:attribute name="href">
                                                 <xsl:call-template name="href.target">
                                                     <xsl:with-param name="object" select="$up"/>
@@ -208,7 +208,7 @@ set       toc,title
                                 
                                 <xsl:if test="count($next)>0">
                                     |
-                                    <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'nextLink', 'click']);">
+                                    <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'nextLink', 'click', 1]);">
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
                                                 <xsl:with-param name="object" select="$next"/>

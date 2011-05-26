@@ -41,7 +41,7 @@ function Verifie(ditaSearch_Form) {
         Effectuer_recherche(expressionInput);
 
 	//Track with Google Analytics:
-	_gaq.push(['_trackEvent', 'Search', expressionInput, 'null']);
+	_gaq.push(['_trackEvent', 'Search', expressionInput, 'null', 1]);
 
 
         // reactive la fenetre de search (utile car cadres)
