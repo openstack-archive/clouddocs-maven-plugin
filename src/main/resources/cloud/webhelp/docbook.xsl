@@ -111,7 +111,11 @@ set       toc,title
       <xsl:call-template name="href.target">
 	<xsl:with-param name="object" select="$home"/>
       </xsl:call-template>
-      </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a></p>	  
+      </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a> 
+      </p> 
+      <xsl:if test="$pdf.url != ''">
+	<a class="pdficon" href="{$pdf.url}"><img src="../common/images/pdf.png"/></a>	  
+      </xsl:if>
     </xsl:template>
 
       <xsl:template name="webhelpheader">

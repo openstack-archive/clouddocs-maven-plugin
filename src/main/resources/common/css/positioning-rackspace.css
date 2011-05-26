@@ -181,6 +181,7 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
 	}
 	
 p.breadcrumbs {
+        display: inline;
 	margin-bottom: 0px;
 	margin-top: 33px;
 }
@@ -192,7 +193,10 @@ p.breadcrumbs a {
 	color: #575757;
 	text-transform: uppercase;
 	font-size: 10px;
-	background: url(../images/breadcrumb-arrow-white.png) no-repeat right center;
+}
+
+p.breadcrumbs a:first-child {
+    background: url(../images/breadcrumb-arrow-white.png) no-repeat right center;
 }
 
 p.breadcrumbs a:hover {
@@ -321,3 +325,6 @@ body.sidebar #toolbar-left{
    left: 0px;
 }
 
+div#toolbar-left img {
+    vertical-align: text-top;
+}
