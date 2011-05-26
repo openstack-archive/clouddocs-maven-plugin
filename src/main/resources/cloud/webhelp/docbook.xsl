@@ -9,7 +9,12 @@
   <xsl:import href="webhelp.xsl" />
   <xsl:import href="titlepage.templates.xsl"/>
 
-  <xsl:param name="pdf.url"/>
+  <xsl:param name="pdf.url">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
+      <xsl:with-param name="attribute" select="'pdf.url'"/>
+    </xsl:call-template>
+  </xsl:param>
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="section.autolabel" select="1"/>
   <xsl:param name="chapter.autolabel" select="1"/>
@@ -113,8 +118,8 @@ set       toc,title
       </xsl:call-template>
       </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a> 
       </p> 
-      <xsl:if test="$pdf.url != ''">
-	<a class="pdficon" href="{$pdf.url}"><img src="../common/images/pdf.png"/></a>	  
+      <xsl:if test="normalize-space($pdf.url) != ''">
+	<a class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
       </xsl:if>
     </xsl:template>
 
