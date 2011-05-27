@@ -198,12 +198,7 @@ set       toc,title
                             or count($next) &gt; 0">
                             <td>
                                 <xsl:if test="count($prev)>0">
-<<<<<<< Updated upstream
-                                    <a accesskey="p" class="navLinkPrevious" onclick="_gaq.push(['_trackEvent', 'Header', 'prevLink', 'click', 1]);"
->
-=======
-                                    <a accesskey="p" class="navLinkPrevious" onclick="_gaq.push(['_trackEvent', 'Header', 'prevLink', 'click']);" tabindex="5">
->>>>>>> Stashed changes
+                                    <a accesskey="p" class="navLinkPrevious" onclick="_gaq.push(['_trackEvent', 'Header', 'prevLink', 'click', 1]);" tabindex="5">
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
                                                 <xsl:with-param name="object" select="$prev"/>
@@ -219,12 +214,7 @@ set       toc,title
                                 <xsl:choose>
                                     <xsl:when test="count($up)&gt;0
                                         and generate-id($up) != generate-id($home)">
-                                        |
-<<<<<<< Updated upstream
-                                        <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'upLink', 'click', 1]);">
-=======
-                                        <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'upLink', 'click']);" tabindex="5">
->>>>>>> Stashed changes
+                                        <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'upLink', 'click', 1]);" tabindex="5">
                                             <xsl:attribute name="href">
                                                 <xsl:call-template name="href.target">
                                                     <xsl:with-param name="object" select="$up"/>
@@ -239,12 +229,7 @@ set       toc,title
                                 </xsl:choose>
                                 
                                 <xsl:if test="count($next)>0">
-                                    |
-<<<<<<< Updated upstream
-                                    <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'nextLink', 'click', 1]);">
-=======
-                                    <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'nextLink', 'click']);" tabindex="5">
->>>>>>> Stashed changes
+                                    <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'nextLink', 'click', 1]);" tabindex="5">
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
                                                 <xsl:with-param name="object" select="$next"/>
