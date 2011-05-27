@@ -517,7 +517,7 @@ These problems go away when you add this IE=7 mode meta tag.
                         <div id="tabs">
                             <ul>
                                 <li>
-                                    <a href="#treeDiv">
+                                    <a href="#treeDiv" tabindex="1">
                                         <em>
                                             <xsl:call-template name="gentext">
                                                 <xsl:with-param name="key" select="'TableofContents'"/>
@@ -527,7 +527,7 @@ These problems go away when you add this IE=7 mode meta tag.
                                 </li>
                                 <xsl:if test="$webhelp.include.search.tab != 'false'">
                                     <li>
-                                        <a href="#searchDiv">
+                                        <a href="#searchDiv" tabindex="1">
                                             <em>
                                                 <xsl:call-template name="gentext">
                                                     <xsl:with-param name="key" select="'Search'"/>
@@ -619,7 +619,7 @@ These problems go away when you add this IE=7 mode meta tag.
 
         <xsl:if test="not(self::d:index) or (self::d:index and not($generate.index = 0))">
             <!--li style="white-space: pre; line-height: 0em;"-->
-            <li>
+            <li tabindex="2">
                 <xsl:if test="$id = $currentid">
                     <xsl:attribute name="id">webhelp-currentid</xsl:attribute>
                 </xsl:if>

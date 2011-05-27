@@ -268,7 +268,7 @@ tr th, tr th .internal, tr th .added, tr th .changed
 
 .statustext{
     position:fixed;
-    top:100px;
+    top:200px;
     width: 0%;
     height: 0%;
     opacity: .3;

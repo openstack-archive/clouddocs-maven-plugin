@@ -198,8 +198,12 @@ set       toc,title
                             or count($next) &gt; 0">
                             <td>
                                 <xsl:if test="count($prev)>0">
+<<<<<<< Updated upstream
                                     <a accesskey="p" class="navLinkPrevious" onclick="_gaq.push(['_trackEvent', 'Header', 'prevLink', 'click', 1]);"
 >
+=======
+                                    <a accesskey="p" class="navLinkPrevious" onclick="_gaq.push(['_trackEvent', 'Header', 'prevLink', 'click']);" tabindex="5">
+>>>>>>> Stashed changes
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
                                                 <xsl:with-param name="object" select="$prev"/>
@@ -216,7 +220,11 @@ set       toc,title
                                     <xsl:when test="count($up)&gt;0
                                         and generate-id($up) != generate-id($home)">
                                         |
+<<<<<<< Updated upstream
                                         <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'upLink', 'click', 1]);">
+=======
+                                        <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'upLink', 'click']);" tabindex="5">
+>>>>>>> Stashed changes
                                             <xsl:attribute name="href">
                                                 <xsl:call-template name="href.target">
                                                     <xsl:with-param name="object" select="$up"/>
@@ -232,7 +240,11 @@ set       toc,title
                                 
                                 <xsl:if test="count($next)>0">
                                     |
+<<<<<<< Updated upstream
                                     <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'nextLink', 'click', 1]);">
+=======
+                                    <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'nextLink', 'click']);" tabindex="5">
+>>>>>>> Stashed changes
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
                                                 <xsl:with-param name="object" select="$next"/>
@@ -326,7 +338,7 @@ set       toc,title
                         <div id="tabs">
                             <ul>
                                 <li>
-                                    <a href="#treeDiv">
+                                    <a href="#treeDiv" tabindex="1">
                                         <span class="contentsTab">
                                             <xsl:call-template name="gentext">
                                                 <xsl:with-param name="key" select="'TableofContents'"/>
@@ -336,7 +348,7 @@ set       toc,title
                                 </li>
                                 <xsl:if test="$webhelp.include.search.tab != 'false'">
                                     <li>
-                                        <a href="#searchDiv">
+                                        <a href="#searchDiv" tabindex="1">
                                             <span class="searchTab">
                                                 <xsl:call-template name="gentext">
                                                     <xsl:with-param name="key" select="'Search'"/>
@@ -349,7 +361,7 @@ set       toc,title
                             <div id="treeDiv">
                                 <img src="../common/images/loading.gif" alt="loading table of contents..."
                                     id="tocLoading" style="display:block;"/>
-                                <div id="ulTreeDiv" style="display:none">
+                                <div id="ulTreeDiv" style="display:none" class="thisisthat">
                                     <ul id="tree" class="filetree">
                                         <xsl:apply-templates select="/*/*" mode="webhelptoc">
                                             <xsl:with-param name="currentid" select="$currentid"/>
