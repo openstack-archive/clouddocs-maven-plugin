@@ -317,14 +317,14 @@ These problems go away when you add this IE=7 mode meta tag.
   <xsl:when test="$security = 'reviewer'">REVIEW<xsl:text> -&#160;</xsl:text></xsl:when>
   <xsl:when test="$security = 'writeronly'">WRITERONLY<xsl:text> -&#160;</xsl:text></xsl:when>
   <xsl:when test="$security = 'external'"/>
-</xsl:choose><xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/></xsl:if> 
+</xsl:choose><xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/> -&#160;</xsl:if> 
   </xsl:param>
 
     <xsl:template name="user.header.content">
       <div class="statustext">
 	<xsl:choose>
 	  <xsl:when test="not($rackspace.status.text = '')">   <!--TODO: Someday repeat this using javascript -->
-	    <xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;-&#160;<xsl:value-of select="$rackspace.status.text"/>
+	    <xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>
 	  </xsl:when>
 	  <xsl:otherwise>&#160;</xsl:otherwise>
 	</xsl:choose>
