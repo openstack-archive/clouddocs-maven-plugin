@@ -214,6 +214,7 @@ set       toc,title
                                 <xsl:choose>
                                     <xsl:when test="count($up)&gt;0
                                         and generate-id($up) != generate-id($home)">
+				      |
                                         <a accesskey="u" class="navLinkUp" onclick="_gaq.push(['_trackEvent', 'Header', 'upLink', 'click', 1]);" tabindex="5">
                                             <xsl:attribute name="href">
                                                 <xsl:call-template name="href.target">
@@ -229,6 +230,7 @@ set       toc,title
                                 </xsl:choose>
                                 
                                 <xsl:if test="count($next)>0">
+				  |
                                     <a accesskey="n" class="navLinkNext" onclick="_gaq.push(['_trackEvent', 'Header', 'nextLink', 'click', 1]);" tabindex="5">
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
