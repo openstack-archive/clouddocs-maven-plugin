@@ -266,7 +266,17 @@
   </xsl:template>
 
   <!-- Source Code Properties -->
-  <xsl:param name="shade.verbatim" select="0"/>
+  <xsl:param name="shade.verbatim" select="1"/>
+
+  <!-- Uncomment this to get a border without shading: -->
+  <!-- <xsl:attribute-set name="shade.verbatim.style"> -->
+  <!--   <xsl:attribute name="background-color">#FFFFFF</xsl:attribute> -->
+  <!--   <xsl:attribute name="border-width">0.5pt</xsl:attribute> -->
+  <!--   <xsl:attribute name="border-style">solid</xsl:attribute> -->
+  <!--   <xsl:attribute name="border-color">#575757</xsl:attribute> -->
+  <!--   <xsl:attribute name="padding">3pt</xsl:attribute> -->
+  <!-- </xsl:attribute-set> -->
+
   <xsl:param name="highlight.source" select="1"/>
 
   <xsl:attribute-set name="monospace.verbatim.properties">
