@@ -266,7 +266,7 @@
   </xsl:template>
 
   <!-- Source Code Properties -->
-  <xsl:param name="shade.verbatim" select="1"/>
+  <xsl:param name="shade.verbatim" select="0"/>
   <xsl:param name="highlight.source" select="1"/>
 
   <xsl:attribute-set name="monospace.verbatim.properties">
