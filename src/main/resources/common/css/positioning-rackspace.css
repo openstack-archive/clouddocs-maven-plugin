@@ -329,3 +329,8 @@ body.sidebar #toolbar-left{
 div#toolbar-left img {
     vertical-align: text-top;
 }
+
+div.note table tr th, div.caution table tr th, div.important table tr th, div.tip table tr th, div.warning table tr th{
+    background: inherit;
+    color: inherit;
+}

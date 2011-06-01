@@ -260,3 +260,8 @@ tr th, tr th .internal, tr th .added, tr th .changed
     font-weight: bold; 
     font-size: 2em;
     }
+
+div.note table tr th, div.caution table tr th, div.important table tr th, div.tip table tr th, div.warning table tr th{
+    background: inherit;
+    color: inherit;
+}

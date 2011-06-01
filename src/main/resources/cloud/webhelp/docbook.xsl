@@ -9,7 +9,10 @@
   <xsl:import href="webhelp.xsl" />
   <xsl:import href="titlepage.templates.xsl"/>
 
+  <xsl:param name="admon.graphics" select="1"></xsl:param>
+  <xsl:param name="admon.graphics.path">../common/images/admon/</xsl:param>
   <xsl:param name="callout.graphics.path">../common/images/callouts/</xsl:param>
+
   <xsl:param name="pdf.url">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
