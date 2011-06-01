@@ -9,6 +9,7 @@
   <xsl:import href="webhelp.xsl" />
   <xsl:import href="titlepage.templates.xsl"/>
 
+  <xsl:param name="callout.graphics.path">../common/images/callouts/</xsl:param>
   <xsl:param name="pdf.url">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
