@@ -1,12 +1,14 @@
 
 _gaq.push(['_trackPageview']);
 
-var disqus_config = function (){
-    var config = this;
-    config.callbacks.onNewComment.push (function () {
-	_gaq.push(['_trackPageview', '/disqus/' + $(this).attr('id') + '/click']);
-    });
-}; 
+var disqus_config = function ()
+ {
+     var config = this;
+     config.callbacks.onNewComment.push (function () 
+     {
+         _gaq.push (['_trackEvent', 'Disqus', 'Comment', 'null', 1]);
+     });
+ }; 
 
 (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
