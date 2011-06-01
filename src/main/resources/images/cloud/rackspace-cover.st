@@ -4968,17 +4968,17 @@
 
 	<a
    id="a5906"
-   xlink:href="http://docs.rackspacecloud.com/api/"
+   xlink:href="http://docs.rackspace.com/api/"
    transform="translate(-3.1961502,3.5469611e-8)"><a
    id="a4185"
-   xlink:href="http://docs.rackspacecloud.com/api"><text
+   xlink:href="http://docs.rackspace.com/api"><text
      transform="translate(447.6157,739.9253)"
      id="text2797"><tspan
        x="0"
        y="0"
        font-size="9.1239"
        id="tspan2799"
-       style="font-size:9.12390041px;font-family:CartoGothic Std">docs.rackspacecloud.com/api</tspan></text>
+       style="font-size:9.12390041px;font-family:CartoGothic Std">docs.rackspace.com/api</tspan></text>
 </a>
 
 </a>

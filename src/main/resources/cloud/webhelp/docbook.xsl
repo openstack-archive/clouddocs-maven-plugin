@@ -107,7 +107,7 @@ set       toc,title
   <xsl:param name="main.docs.url">
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">http://docs.openstack.org/</xsl:when>
-      <xsl:otherwise>http://docs.rackspacecloud.com/api/</xsl:otherwise>
+      <xsl:otherwise>http://docs.rackspace.com/api/</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
 
