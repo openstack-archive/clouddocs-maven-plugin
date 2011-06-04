@@ -19,6 +19,7 @@
       <xsl:with-param name="attribute" select="'pdf.url'"/>
     </xsl:call-template>
   </xsl:param>
+  <xsl:param name="use.id.as.filename" select="1"/>
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="section.autolabel" select="1"/>
   <xsl:param name="chapter.autolabel" select="1"/>
@@ -40,7 +41,7 @@
   </xsl:param>
   <xsl:param name="google.analytics.id">
     <xsl:choose>
-      <xsl:when test="$branding = 'rackspace'">UA-23102455-3</xsl:when>
+      <xsl:when test="$branding = 'rackspace'">UA-23102455-4</xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:param>
