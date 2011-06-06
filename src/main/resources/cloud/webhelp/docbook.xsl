@@ -124,6 +124,9 @@ set       toc,title
 
 	  <div id="disqus_thread">
 	    <script type="text/javascript">
+	      <xsl:if test="$enable.disqus = 'intranet'">
+              var disqus_developer = 1;
+	      </xsl:if>
 	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>'; 	      
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
