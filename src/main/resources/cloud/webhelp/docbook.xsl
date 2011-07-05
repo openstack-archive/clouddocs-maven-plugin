@@ -411,4 +411,24 @@ set       toc,title
     <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') ]"><span class="remark"><xsl:apply-imports/></span></xsl:template>
     <xsl:template match="text()[ ancestor::*/@role = 'highlight' ] | xref[ ancestor::*/@role = 'highlight' ]" priority="10"><span class="remark"><xsl:apply-imports/></span></xsl:template>
 
+    <xsl:template match="d:parameter[@role = 'template']">
+      <xsl:param name="content">
+	<xsl:call-template name="anchor"/>
+	<xsl:call-template name="simple.xlink">
+	  <xsl:with-param name="content">
+	    <xsl:apply-templates/>
+	  </xsl:with-param>
+	</xsl:call-template>
+      </xsl:param>
+      <em>
+	<xsl:call-template name="common.html.attributes"/>
+	<code>
+	  <xsl:call-template name="generate.html.title"/>
+	  <xsl:call-template name="dir"/>
+	  {<xsl:copy-of select="$content"/>}
+	  <xsl:call-template name="apply-annotations"/>
+	</code>
+      </em>
+    </xsl:template>
+    
 </xsl:stylesheet>
