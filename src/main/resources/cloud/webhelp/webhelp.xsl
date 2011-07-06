@@ -23,7 +23,7 @@ xmlns:exsl="http://exslt.org/common"
         <xsl:variable name="default.topic">
             <xsl:choose>
                 <xsl:when test="$webhelp.default.topic != ''">
-                    <xsl:value-of select="$htmlhelp.default.topic"/>
+                    <xsl:value-of select="$webhelp.default.topic"/>
                 </xsl:when>
                 <xsl:when test="$htmlhelp.default.topic != ''">
                     <xsl:value-of select="$htmlhelp.default.topic"/>
