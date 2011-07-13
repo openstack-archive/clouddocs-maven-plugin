@@ -29,6 +29,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      *
      * @parameter expression="${generate-webhelp.branding}" default-value="rackspace"
      */
+    private String useVersionForDisqus;
+
+    /**
+     * Controls the branding of the output.
+     *
+     * @parameter expression="${generate-webhelp.branding}" default-value="rackspace"
+     */
     private String branding;
 
     /**
@@ -83,7 +90,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
    */
   public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
     super.adjustTransformer(transformer, sourceFilename, targetFile);
-
+    
+    if(useVersionForDisqus != null){
+	transformer.setParameter("useVersionForDisqus", useVersionForDisqus);
+    }
     transformer.setParameter("branding", branding);
     transformer.setParameter("enable.disqus", enableDisqus);
     if(disqusShortname != null){

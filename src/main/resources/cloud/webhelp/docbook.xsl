@@ -100,8 +100,9 @@ set       toc,title
       <xsl:when test="$branding = 'rackspace'">rc-api-docs</xsl:when>
       <xsl:when test="$branding = 'openstack'">openstackdocs</xsl:when>
     </xsl:choose>
+      
   </xsl:param>
-
+    
   <xsl:param name="brandname">
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">OpenStack</xsl:when>
@@ -114,23 +115,41 @@ set       toc,title
       <xsl:otherwise>http://docs.rackspace.com/api/</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
-
+  <xsl:param name="useVersionForDisqus">no</xsl:param>
+    <xsl:variable name="versionForDisqus">
+        <xsl:choose>
+            <xsl:when test="$useVersionForDisqus='yes'">
+              <xsl:value-of select="/d:book/d:info/d:releaseinfo[1]"/>
+            </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+        </xsl:choose>       
+    </xsl:variable>
+    
+ 
+    
     <xsl:template name="user.footer.content">
-
+        <xsl:if test="//d:section[not(@xml:id)]|//d:chapter[not(@xml:id)]|//d:part[not(@xml:id)]|//d:appendix[not(@xml:id)]|//d:preface[not(@xml:id)]">
+            <xsl:message terminate="yes"> 
+                <xsl:for-each select="//d:section[not(@xml:id)]|//d:chapter[not(@xml:id)]|//d:part[not(@xml:id)]|//d:appendix[not(@xml:id)]|//d:preface[not(@xml:id)]">
+                    ERROR: The <xsl:value-of select="local-name()"/> "<xsl:value-of select=".//d:title[1]"/>" is missing an id.
+                </xsl:for-each>
+                     Every part, chapter, appendix, preface, and section must have an xml:id attribute.
+            </xsl:message>
+        </xsl:if>
+        
         <script type="text/javascript" src="../common/main.js">
             <xsl:comment></xsl:comment>
         </script>
 	
 	<xsl:if test="$enable.disqus != '0'">
 	  <hr />
-	  
-
 	  <div id="disqus_thread">
 	    <script type="text/javascript">
 	      <xsl:if test="$enable.disqus = 'intranet'">
               var disqus_developer = 1;
 	      </xsl:if>
-	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>'; 	      
+	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>'; 	
+	      var disqus_identifier = '<xsl:value-of select="@xml:id"/><xsl:call-template name="href.target"/><xsl:value-of select="$versionForDisqus"/>';
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
