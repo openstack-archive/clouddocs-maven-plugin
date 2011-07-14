@@ -25,9 +25,9 @@ import com.agilejava.docbkx.maven.FileUtils;
 public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     /**
-     * Controls the branding of the output.
+     * Controls whether the version string is used as part of the Disqus identifier.
      *
-     * @parameter expression="${generate-webhelp.branding}" default-value="rackspace"
+     * @parameter expression="${generate-webhelp.use.version.for.disqus}" default-value="0"
      */
     private String useVersionForDisqus;
 
@@ -92,7 +92,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     super.adjustTransformer(transformer, sourceFilename, targetFile);
     
     if(useVersionForDisqus != null){
-	transformer.setParameter("useVersionForDisqus", useVersionForDisqus);
+	transformer.setParameter("use.version.for.disqus", useVersionForDisqus);
     }
     transformer.setParameter("branding", branding);
     transformer.setParameter("enable.disqus", enableDisqus);
