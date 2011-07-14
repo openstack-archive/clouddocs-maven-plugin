@@ -6,6 +6,7 @@
 <xsl:stylesheet exclude-result-prefixes="d"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://docbook.org/ns/docbook"
+		xmlns:exslt="http://exslt.org/common" 
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
 
@@ -14,6 +15,13 @@
   <xsl:import href="titlepage.templates.xsl"/>
   <xsl:import href="fop1.xsl"/>
   <xsl:import href="../date.xsl"/>
+  <xsl:include href="../process-embedded-wadl.xsl"/>
+
+  <xsl:variable name="preprocessed-nodes">
+    <xsl:apply-templates select="exslt:node-set($profiled-content)" mode="preprocess"/>
+  </xsl:variable>
+
+  <xsl:variable name="profiled-nodes" select="exslt:node-set($preprocessed-nodes)"/>
 
   <!-- Front-Cover Background Image, should be set by the plugin -->
   <xsl:param name="cloud.api.background.image" select="'images/cover.svg'"/>

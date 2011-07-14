@@ -4,6 +4,8 @@
     xmlns:exslt="http://exslt.org/common" 
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:d="http://docbook.org/ns/docbook"
+    xmlns:wadl="http://wadl.dev.java.net/2009/02" 
+    xmlns:rax="http://docs.rackspace.com/api" 
     xmlns="http://www.w3.org/1999/xhtml" 
     version="1.0" 
     exclude-result-prefixes="exslt">
@@ -42,17 +44,13 @@
        non-chunking version to format an element.  -->
   <xsl:include href="urn:docbkx:stylesheet-base/xhtml/profile-chunk-code.xsl" />
 
+  <xsl:include href="../process-embedded-wadl.xsl"/>
+
   <!-- ======================================== -->
 
   <xsl:variable name="preprocessed-nodes">
     <xsl:apply-templates select="exslt:node-set($profiled-nodes)" mode="preprocess"/>
   </xsl:variable>
-
-  <xsl:template match="@*|node()" mode="preprocess">
-    <xsl:copy>
-      <xsl:apply-templates select="@*|node()" mode="preprocess"/>
-    </xsl:copy>
-  </xsl:template>
 
   <xsl:template match="d:legalnotice" mode="preprocess">
     <xsl:message>
@@ -228,8 +226,6 @@ Processing legalnotice: <xsl:value-of select="@role"/>
       </xsl:if>
   </xsl:template>
 
-
-  <!-- ======================================== -->
 
 <xsl:template match="/" priority="1">
   <!-- * Get a title for current doc so that we let the user -->
