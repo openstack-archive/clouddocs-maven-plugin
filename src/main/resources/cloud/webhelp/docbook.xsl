@@ -128,12 +128,12 @@ set       toc,title
  
     
     <xsl:template name="user.footer.content">
-        <xsl:if test="$enable.disqus!='0' and (//d:section[not(@xml:id)] or //d:chapter[not(@xml:id)] or //d:part[not(@xml:id)] or //d:appendix[not(@xml:id)] or //d:preface[not(@xml:id)])">
+        <xsl:if test="$enable.disqus!='0' and (//d:section[not(@xml:id)] or //d:chapter[not(@xml:id)] or //d:part[not(@xml:id)] or //d:appendix[not(@xml:id)] or //d:preface[not(@xml:id)] or /*[not(@xml:id)])">
             <xsl:message terminate="yes"> 
-                <xsl:for-each select="//d:section[not(@xml:id)]|//d:chapter[not(@xml:id)]|//d:part[not(@xml:id)]|//d:appendix[not(@xml:id)]|//d:preface[not(@xml:id)]">
+                <xsl:for-each select="//d:section[not(@xml:id)]|//d:chapter[not(@xml:id)]|//d:part[not(@xml:id)]|//d:appendix[not(@xml:id)]|//d:preface[not(@xml:id)]|/*[not(@xml:id)]">
                     ERROR: The <xsl:value-of select="local-name()"/> "<xsl:value-of select=".//d:title[1]"/>" is missing an id.
                 </xsl:for-each>
-                     When Disqus comments are enabled, every part, chapter, appendix, preface, and section must have an xml:id attribute.
+                     When Disqus comments are enabled, the root element and every part, chapter, appendix, preface, and section must have an xml:id attribute.
             </xsl:message>
         </xsl:if>
         
@@ -149,7 +149,7 @@ set       toc,title
               var disqus_developer = 1;
 	      </xsl:if>
 	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>'; 	
-	      var disqus_identifier = '<xsl:value-of select="@xml:id"/><xsl:call-template name="href.target"/><xsl:value-of select="$version.for.disqus"/>';
+	      var disqus_identifier = '<xsl:value-of select="/*/@xml:id"/><xsl:value-of select="@xml:id"/><xsl:value-of select="$version.for.disqus"/>';
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
