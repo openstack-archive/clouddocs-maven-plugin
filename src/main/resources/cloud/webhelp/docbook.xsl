@@ -97,7 +97,7 @@ set       toc,title
 
   <xsl:param name="disqus.shortname">
     <xsl:choose>
-        <xsl:when test="$branding = 'test'">jonathan-test-dns</xsl:when>
+      <xsl:when test="$branding = 'test'">jonathan-test-dns</xsl:when>
       <xsl:when test="$branding = 'rackspace'">rc-api-docs</xsl:when>
       <xsl:when test="$branding = 'openstack'">openstackdocs</xsl:when>
     </xsl:choose>
@@ -116,6 +116,7 @@ set       toc,title
       <xsl:otherwise>http://docs.rackspace.com/api/</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
+    
   <xsl:param name="use.version.for.disqus">0</xsl:param>
     <xsl:variable name="version.for.disqus">
         <xsl:choose>
@@ -126,6 +127,7 @@ set       toc,title
         </xsl:choose>       
     </xsl:variable>
     
+    <xsl:param name="use.disqus.id">1</xsl:param>
  
     
     <xsl:template name="user.footer.content">
@@ -149,8 +151,10 @@ set       toc,title
 	      <xsl:if test="$enable.disqus = 'intranet'">
               var disqus_developer = 1;
 	      </xsl:if>
-	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>'; 	
+	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>';
+	        <xsl:if test="$use.disqus.id != '0'">
 	      var disqus_identifier = '<xsl:value-of select="/*/@xml:id"/><xsl:value-of select="$version.for.disqus"/><xsl:value-of select="@xml:id"/>';
+	        </xsl:if>
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 

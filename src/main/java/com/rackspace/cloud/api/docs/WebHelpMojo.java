@@ -30,6 +30,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.use.version.for.disqus}" default-value="0"
      */
     private String useVersionForDisqus;
+    
+    /**
+     * Controls whether the disqus identifier is used.
+     *
+     * @parameter expression="${generate-webhelp.use.disqus.id}" default-value="1"
+     */
+    private String useDisqusId;
 
     /**
      * Controls the branding of the output.
@@ -91,6 +98,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
   public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
     super.adjustTransformer(transformer, sourceFilename, targetFile);
     
+    if(useDisqusId != null){
+    	transformer.setParameter("use.disqus.id", useDisqusId);
+    }
     if(useVersionForDisqus != null){
 	transformer.setParameter("use.version.for.disqus", useVersionForDisqus);
     }
