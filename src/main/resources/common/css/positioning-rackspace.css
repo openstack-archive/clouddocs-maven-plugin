@@ -334,3 +334,15 @@ div.note table tr th, div.caution table tr th, div.important table tr th, div.ti
     background: inherit;
     color: inherit;
 }
+
+#content table td {
+	border: 1px solid black;
+}
+
+#content table td, #content table th {
+	padding: 5px;
+}
+
+#content table {
+	width: 100%;
+	margin-bottom: 20px;
