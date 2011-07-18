@@ -25,6 +25,11 @@ import com.agilejava.docbkx.maven.FileUtils;
 public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     /**
+     * @parameter expression="${project.build.directory}"
+     */
+    private String projectBuildDirectory;
+
+    /**
      * Controls whether the version string is used as part of the Disqus identifier.
      *
      * @parameter expression="${generate-webhelp.use.version.for.disqus}" default-value="0"
@@ -90,10 +95,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
    */
   public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
     super.adjustTransformer(transformer, sourceFilename, targetFile);
-    
+
     if(useVersionForDisqus != null){
 	transformer.setParameter("use.version.for.disqus", useVersionForDisqus);
     }
+    transformer.setParameter("project.build.directory", projectBuildDirectory);
     transformer.setParameter("branding", branding);
     transformer.setParameter("enable.disqus", enableDisqus);
     if(disqusShortname != null){

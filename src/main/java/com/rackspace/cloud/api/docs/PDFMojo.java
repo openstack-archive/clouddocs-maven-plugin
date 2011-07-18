@@ -61,6 +61,11 @@ public abstract class PDFMojo extends AbstractFoMojo {
     private static final String COVER_XSL = "cloud/cover.xsl";
 
     /**
+     * @parameter expression="${project.build.directory}"
+     */
+    private String projectBuildDirectory;
+
+    /**
      * The greeting to display.
      *
      * @parameter expression="${generate-pdf.branding}" default-value="rackspace"
@@ -240,6 +245,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
         super.adjustTransformer(transformer, sourceFilename, targetFile);
 
 	transformer.setParameter("branding", branding);
+	transformer.setParameter("project.build.directory", projectBuildDirectory);
 
 	if(security != null){
 	    transformer.setParameter("security",security);

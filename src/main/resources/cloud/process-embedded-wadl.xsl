@@ -8,6 +8,8 @@
     exclude-result-prefixes="wadl rax d"
     version="1.0">
 
+  <xsl:param name="project.build.directory"/>
+
     <xsl:variable name="root" select="/"/>
     
     <xsl:template match="@*|node()" mode="preprocess">
@@ -57,8 +59,15 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[@href]" mode="preprocess-verb">
+
+	  <xsl:variable name="wadl.path">
+	    <xsl:call-template name="wadlPath">
+	      <xsl:with-param name="path" select="@href"/>
+	    </xsl:call-template>
+	  </xsl:variable>
+
 		<d:td>
-			<xsl:value-of select="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]/@name"/>
+			<xsl:value-of select="document($wadl.path,$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]/@name"/>
 		</d:td>
 	</xsl:template>
 
@@ -69,8 +78,15 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[@href]" mode="preprocess-uri">
+
+	  <xsl:variable name="wadl.path">
+	    <xsl:call-template name="wadlPath">
+	      <xsl:with-param name="path" select="@href"/>
+	    </xsl:call-template>
+	  </xsl:variable>
+s
 		<d:td>
-			<xsl:value-of select="document(substring-before(@href,'#'),$root)//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
+			<xsl:value-of select="document($wadl.path,$root)//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
 			
 			<!-- TODO: Deal with query params -->
 		</d:td>
@@ -88,8 +104,15 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[@href]" mode="preprocess-description">
+
+	  <xsl:variable name="wadl.path">
+	    <xsl:call-template name="wadlPath">
+	      <xsl:with-param name="path" select="@href"/>
+	    </xsl:call-template>
+	  </xsl:variable>
+
 		<d:td>
-			<xsl:value-of select="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]/wadl:doc"/>
+			<xsl:value-of select="document($wadl.path,$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]/wadl:doc"/>
 		</d:td>
 	</xsl:template>
 
@@ -100,10 +123,17 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[@href]" mode="preprocess-params">
+
+	  <xsl:variable name="wadl.path">
+	    <xsl:call-template name="wadlPath">
+	      <xsl:with-param name="path" select="@href"/>
+	    </xsl:call-template>
+	  </xsl:variable>
+
 		<d:td>
-			<xsl:if test="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]//wadl:param">
+			<xsl:if test="document($wadl.path,$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]//wadl:param">
 				<itemizedlist spacing="compact">
-					<xsl:apply-templates select="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]//wadl:param|document(substring-before(@href,'#'),$root)//wadl:param[@style = 'template' 
+					<xsl:apply-templates select="document($wadl.path,$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]//wadl:param|document($wadl.path,$root)//wadl:param[@style = 'template' 
 						and ( .//wadl:resource[@id = substring-after(current()/@href,'#')] 
 						or parent::wadl:resource[@id = substring-after(current()/@href,'#')] )
 						]" mode="preprocess-params">
@@ -155,10 +185,17 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[@href]" mode="preprocess-faults">
-	  <xsl:if test="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]/wadl:response[not(starts-with(normalize-space(@status),'2')) and wadl:representation/@element]">
+
+	  <xsl:variable name="wadl.path">
+	    <xsl:call-template name="wadlPath">
+	      <xsl:with-param name="path" select="@href"/>
+	    </xsl:call-template>
+	  </xsl:variable>
+
+	  <xsl:if test="document($wadl.path,$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]/wadl:response[not(starts-with(normalize-space(@status),'2')) and wadl:representation/@element]">
 		<td>
 			<itemizedlist spacing="compact">
-				<xsl:apply-templates select="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]" mode="preprocess-faults"/>
+				<xsl:apply-templates select="document($wadl.path,$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]" mode="preprocess-faults"/>
 			</itemizedlist>
 		</td>
 	  </xsl:if>
@@ -179,4 +216,29 @@
 	</xsl:template>
 
 	<!-- ======================================== -->
+
+	<xsl:template name="wadlPath">
+	  <xsl:param name="path" />
+	  <xsl:choose>
+	    <xsl:when test="contains($path,'#')">
+	      <xsl:call-template name="wadlPath">
+		<xsl:with-param name="path" select="substring-before($path,'#')" />
+	      </xsl:call-template>
+	    </xsl:when>
+	    <xsl:when test="contains($path,'\')">
+	      <xsl:call-template name="wadlPath">
+		<xsl:with-param name="path" select="substring-after($path,'\')" />
+	      </xsl:call-template>
+	    </xsl:when>
+	    <xsl:when test="contains($path,'/')">
+	      <xsl:call-template name="wadlPath">
+		<xsl:with-param name="path" select="substring-after($path,'/')" />
+	      </xsl:call-template>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:value-of select="concat($project.build.directory, '/generated-resources/xml/xslt/',$path)" />
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:template>
+
 </xsl:stylesheet>
