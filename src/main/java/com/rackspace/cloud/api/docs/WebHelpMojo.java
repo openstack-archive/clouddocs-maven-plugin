@@ -103,6 +103,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
   public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
     super.adjustTransformer(transformer, sourceFilename, targetFile);
 
+    if(useDisqusId != null){
+	transformer.setParameter("use.disqus.id", useDisqusId);
+    }
+
     if(useVersionForDisqus != null){
 	transformer.setParameter("use.version.for.disqus", useVersionForDisqus);
     }
