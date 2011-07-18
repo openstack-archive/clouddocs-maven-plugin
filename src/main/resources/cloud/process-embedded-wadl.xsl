@@ -58,7 +58,7 @@
 
 	<xsl:template match="wadl:resource[@href]" mode="preprocess-verb">
 		<d:td>
-			<xsl:value-of select="document(substring-before(@href,'#'),$root)//wadl:method[@id = current()/wadl:method[1]/@href]/@name"/>
+			<xsl:value-of select="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]/@name"/>
 		</d:td>
 	</xsl:template>
 
@@ -89,7 +89,7 @@
 
 	<xsl:template match="wadl:resource[@href]" mode="preprocess-description">
 		<d:td>
-			<xsl:value-of select="document(substring-before(@href,'#'),$root)//wadl:method[@id = current()/wadl:method[1]/@href]/wadl:doc"/>
+			<xsl:value-of select="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]/wadl:doc"/>
 		</d:td>
 	</xsl:template>
 
@@ -101,9 +101,9 @@
 
 	<xsl:template match="wadl:resource[@href]" mode="preprocess-params">
 		<d:td>
-			<xsl:if test="document(substring-before(@href,'#'),$root)//wadl:method[@id = current()/wadl:method[1]/@href]//wadl:param">
+			<xsl:if test="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]//wadl:param">
 				<itemizedlist spacing="compact">
-					<xsl:apply-templates select="document(substring-before(@href,'#'),$root)//wadl:method[@id = current()/wadl:method[1]/@href]//wadl:param|document(substring-before(@href,'#'),$root)//wadl:param[@style = 'template' 
+					<xsl:apply-templates select="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]//wadl:param|document(substring-before(@href,'#'),$root)//wadl:param[@style = 'template' 
 						and ( .//wadl:resource[@id = substring-after(current()/@href,'#')] 
 						or parent::wadl:resource[@id = substring-after(current()/@href,'#')] )
 						]" mode="preprocess-params"/>
@@ -143,19 +143,23 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[not(@href)]" mode="preprocess-faults">
+	  <xsl:if test="wadl:method[1][not(@href)]/wadl:response[not(starts-with(normalize-space(@status),'2')) and wadl:representation/@element]">
 		<td>
 			<itemizedlist spacing="compact">
 				<xsl:apply-templates select="wadl:method[1]" mode="preprocess-faults"/>
 			</itemizedlist>
 		</td>
+	  </xsl:if>
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[@href]" mode="preprocess-faults">
+	  <xsl:if test="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]/wadl:response[not(starts-with(normalize-space(@status),'2')) and wadl:representation/@element]">
 		<td>
 			<itemizedlist spacing="compact">
-				<xsl:apply-templates select="document(substring-before(@href,'#'),$root)//wadl:method[@id = current()/wadl:method[1]/@href]" mode="preprocess-faults"/>
+				<xsl:apply-templates select="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]" mode="preprocess-faults"/>
 			</itemizedlist>
 		</td>
+	  </xsl:if>
 	</xsl:template>
 
 	<xsl:template match="wadl:method" mode="preprocess-faults">
