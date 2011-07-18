@@ -106,7 +106,9 @@
 					<xsl:apply-templates select="document(substring-before(@href,'#'),$root)//wadl:method[@rax:id = current()/wadl:method[1]/@href]//wadl:param|document(substring-before(@href,'#'),$root)//wadl:param[@style = 'template' 
 						and ( .//wadl:resource[@id = substring-after(current()/@href,'#')] 
 						or parent::wadl:resource[@id = substring-after(current()/@href,'#')] )
-						]" mode="preprocess-params"/>
+						]" mode="preprocess-params">
+					  <xsl:sort select="@style"/>
+					</xsl:apply-templates>
 						<!--- That xpath feels inelegant, but it's the best I could think of -->
 				</itemizedlist>
 			</xsl:if>
@@ -126,7 +128,7 @@
 	<xsl:template match="wadl:param" mode="preprocess-params">
 		<listitem>
 			<para>
-				<xsl:value-of select="@name"/>: <xsl:value-of select="wadl:doc"/>
+				<xsl:value-of select="@name"/> (<xsl:value-of select="@style"/>): <xsl:value-of select="wadl:doc"/>
 				<xsl:value-of select="substring-after(@type,':')"/>. 
 			</para>
 				<xsl:if test="wadl:option">
