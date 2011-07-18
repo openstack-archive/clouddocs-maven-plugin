@@ -97,6 +97,7 @@ set       toc,title
 
   <xsl:param name="disqus.shortname">
     <xsl:choose>
+        <xsl:when test="$branding = 'test'">jonathan-test-dns</xsl:when>
       <xsl:when test="$branding = 'rackspace'">rc-api-docs</xsl:when>
       <xsl:when test="$branding = 'openstack'">openstackdocs</xsl:when>
     </xsl:choose>
@@ -119,7 +120,7 @@ set       toc,title
     <xsl:variable name="version.for.disqus">
         <xsl:choose>
             <xsl:when test="$use.version.for.disqus!='0'">
-              <xsl:value-of select="/d:book/d:info/d:releaseinfo[1]"/>
+              <xsl:value-of select="translate(//d:releaseinfo[1],' ','')"/>
             </xsl:when>
         <xsl:otherwise></xsl:otherwise>
         </xsl:choose>       
@@ -149,7 +150,7 @@ set       toc,title
               var disqus_developer = 1;
 	      </xsl:if>
 	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>'; 	
-	      var disqus_identifier = '<xsl:value-of select="/*/@xml:id"/><xsl:value-of select="@xml:id"/><xsl:value-of select="$version.for.disqus"/>';
+	      var disqus_identifier = '<xsl:value-of select="/*/@xml:id"/><xsl:value-of select="$version.for.disqus"/><xsl:value-of select="@xml:id"/>';
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
