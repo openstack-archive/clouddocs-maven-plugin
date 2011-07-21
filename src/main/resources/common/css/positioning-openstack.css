@@ -1,3 +1,18 @@
+tr th .added { color: #E6E6FA; } 
+tr th .changed {color: #99ff99; }
+div.added tr, div.added    { background-color: #E6E6FA; }
+div.deleted tr, div.deleted  { text-decoration: line-through;
+               background-color: #FF7F7F; }
+div.changed tr, div.changed  { background-color: #99ff99; }
+div.off      {  }
+
+span.added   { background-color: #E6E6FA; }
+span.deleted { text-decoration: line-through;
+               background-color: #FF7F7F; }
+span.changed { background-color: #99ff99; }
+span.off     {  }
+
+
 body { font: 12px Verdana, Geneva, sans-serif; }
 p, ul, ol, li { font: 10pt Verdana, Geneva, sans-serif; }
 h1 { font: 15pt Arial, Helvetica, geneva;
@@ -266,14 +281,4 @@ div.note table tr th, div.caution table tr th, div.important table tr th, div.ti
     color: inherit;
 }
 
-#content table td {
-	border: 1px solid #c8eff5;
-}
 
-#content table td, #content table th {
-	padding: 5px;
-}
-
-#content table {
-	width: 100%;
-	margin-bottom: 20px;

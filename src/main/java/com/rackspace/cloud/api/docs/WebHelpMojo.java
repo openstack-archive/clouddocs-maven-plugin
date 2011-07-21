@@ -30,6 +30,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String projectBuildDirectory;
 
     /**
+     * Controls whether output is colorized based on revisionflag attributes.
+     *
+     * @parameter expression="${generate-webhelp.show.changebars}" 
+     */
+    private String showChangebars;
+
+
+    /**
      * Controls whether the version string is used as part of the Disqus identifier.
      *
      * @parameter expression="${generate-webhelp.use.version.for.disqus}" default-value="0"
@@ -128,6 +136,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     if(security != null){
 	transformer.setParameter("security",security);
     }
+   if(showChangebars != null){
+	transformer.setParameter("show.changebars",showChangebars);
+    }
+
 
   }
 

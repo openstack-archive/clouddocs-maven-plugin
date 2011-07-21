@@ -8,6 +8,7 @@
   <!-- <xsl:import href="urn:docbkx:stylesheet-orig/xsl/webhelp.xsl" /> -->
   <xsl:import href="webhelp.xsl" />
   <xsl:import href="titlepage.templates.xsl"/>
+  <xsl:import href="changebars.xsl"/>
 
   <xsl:param name="admon.graphics" select="1"></xsl:param>
   <xsl:param name="admon.graphics.path">../common/images/admon/</xsl:param>
