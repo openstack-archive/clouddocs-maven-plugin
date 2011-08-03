@@ -38,7 +38,7 @@ xmlns:exsl="http://exslt.org/common"
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:apply-templates
-                                            select="*/*[self::d:preface|self::d:chapter|self::d:appendix|self::d:part|self::d:section][1]"
+                                            select="*/*[self::d:preface|self::d:glossary|self::d:chapter|self::d:appendix|self::d:part|self::d:section][1]"
                                             mode="chunk-filename"/>
                                 </xsl:otherwise>
                             </xsl:choose>
@@ -212,14 +212,16 @@ These problems go away when you add this IE=7 mode meta tag.
             <![endif]-->
         </style>
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
-        <link rel="stylesheet" type="text/css" href="../common/css/positioning.css"/>
+    <link rel="stylesheet" type="text/css" href="../common/css/positioning.css"/>
+    <link rel="stylesheet" type="text/css" href="../common/css/custom.css"/>
+    
 	<xsl:comment><xsl:text>[if IE]>
 	&lt;link rel="stylesheet" type="text/css" href="../common/css/ie.css"/>
 	&lt;![endif]</xsl:text></xsl:comment>
         <link rel="stylesheet" type="text/css" href="../common/jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
         <link rel="stylesheet" type="text/css" href="../common/jquery/treeview/jquery.treeview.css"/>
 
-        <script type="text/javascript" src="../common/jquery/jquery-1.4.2.min.js">
+        <script type="text/javascript" src="../common/jquery/jquery-1.4.3.min.js">
             <xsl:comment> </xsl:comment>
         </script>
         <script type="text/javascript" src="../common/jquery/jquery-ui-1.8.2.custom.min.js">
@@ -231,7 +233,10 @@ These problems go away when you add this IE=7 mode meta tag.
         <script type="text/javascript" src="../common/jquery/treeview/jquery.treeview.min.js">
             <xsl:comment> </xsl:comment>
         </script>
-        <!--Scripts/css stylesheets for Search-->
+        <script type="text/javascript" src="../common/jquery/jquery.qtip-1.0.0-rc3/jquery.qtip-1.0.0-rc3.min.js">
+            <xsl:comment>jQuery plugin for glossary popups. </xsl:comment>
+        </script>
+            <!--Scripts/css stylesheets for Search-->
         <script type="text/javascript" src="search/htmlFileList.js">
             <xsl:comment> </xsl:comment>
         </script>

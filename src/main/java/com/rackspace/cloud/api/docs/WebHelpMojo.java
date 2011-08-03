@@ -23,6 +23,12 @@ import com.agilejava.docbkx.maven.Parameter;
 import com.agilejava.docbkx.maven.FileUtils;
 
 public abstract class WebHelpMojo extends AbstractWebhelpMojo {
+    /**
+     * Sets the URI for the glossary.
+     *
+     * @parameter expression="${glossary.uri}" default-value=""
+     */
+    private String glossaryUri;
 
     /**
      * @parameter expression="${project.build.directory}"
@@ -103,6 +109,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
   public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
     super.adjustTransformer(transformer, sourceFilename, targetFile);
 
+    if(glossaryUri != null){
+	transformer.setParameter("glossary.uri", glossaryUri);
+    }
     if(useDisqusId != null){
 	transformer.setParameter("use.disqus.id", useDisqusId);
     }
