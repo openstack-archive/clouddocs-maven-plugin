@@ -129,7 +129,8 @@ set       toc,title
     
     <xsl:param name="use.disqus.id">1</xsl:param>
     
-    <xsl:param name="glossary.uri">http://docs-beta.rackspace.com/test/jonathan/glossary/glossary.xml</xsl:param>
+    <xsl:param name="glossary.uri">http://docs-beta.rackspace.com/test/jonathan/glossary</xsl:param>
+    <xsl:param name="glossary.xml.uri"><xsl:value-of select="$glossary.uri"/>/glossary.xml</xsl:param>
     <xsl:template name="user.footer.content">
         <xsl:if test="$enable.disqus!='0' and (//d:section[not(@xml:id)] or //d:chapter[not(@xml:id)] or //d:part[not(@xml:id)] or //d:appendix[not(@xml:id)] or //d:preface[not(@xml:id)] or /*[not(@xml:id)])">
             <xsl:message terminate="yes"> 
@@ -431,7 +432,7 @@ set       toc,title
     
     <xsl:template match="//d:gloss">
         <xsl:variable name="term"><xsl:value-of select="."/></xsl:variable>
-        <xsl:variable name="definition"><xsl:value-of select="normalize-space(document($glossary.uri)//d:glossentry[d:glossterm=$term]/d:glossdef)"/></xsl:variable>
+        <xsl:variable name="definition"><xsl:value-of select="normalize-space(document($glossary.xml.uri)//d:glossentry[d:glossterm=$term]/d:glossdef)"/></xsl:variable>
         <xsl:variable name="displayDefinition">
           <xsl:choose>
             <xsl:when test="$definition=''">No definition found. </xsl:when>
@@ -443,7 +444,7 @@ set       toc,title
              <script>
              $(document).ready(function(){
                $("a.gloss#<xsl:value-of select="$term"/>").qtip({
-               content: '<xsl:value-of select='$displayDefinition'/> <a href="http://google.com">Glossary</a>',
+               content: '<xsl:value-of select='$displayDefinition'/><br/><a><xsl:attribute name="href"><xsl:value-of select="$glossary.uri"/></xsl:attribute>View Glossary</a>',
                show: {event:'mouseover',delay:500},
                hide: {event:'mouseout',delay:500, fixed:true},
                style: { 
