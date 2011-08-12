@@ -445,15 +445,7 @@ set       toc,title
 	  </xsl:with-param>
 	</xsl:call-template>
       </xsl:param>
-      <em>
-	<xsl:call-template name="common.html.attributes"/>
-	<code>
-	  <xsl:call-template name="generate.html.title"/>
-	  <xsl:call-template name="dir"/>
-	  {<xsl:copy-of select="$content"/>}
-	  <xsl:call-template name="apply-annotations"/>
-	</code>
-      </em>
+      <em><xsl:call-template name="common.html.attributes"/><code><xsl:call-template name="generate.html.title"/><xsl:call-template name="dir"/>{<xsl:copy-of select="$content"/>}<xsl:call-template name="apply-annotations"/></code></em>
     </xsl:template>
     
 </xsl:stylesheet>

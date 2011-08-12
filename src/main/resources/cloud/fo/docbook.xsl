@@ -834,9 +834,7 @@
 	      <xsl:otherwise>rtl</xsl:otherwise>
 	    </xsl:choose>
 	  </xsl:attribute>
-	</xsl:if>
-	{<xsl:copy-of select="$content"/>}
-      </fo:inline>
+	</xsl:if>{<xsl:copy-of select="$content"/>}</fo:inline>
     </xsl:template>
     
 </xsl:stylesheet>
