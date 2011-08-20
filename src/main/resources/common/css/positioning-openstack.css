@@ -276,9 +276,34 @@ tr th, tr th .internal, tr th .added, tr th .changed
     font-size: 2em;
     }
 
-div.note table tr th, div.caution table tr th, div.important table tr th, div.tip table tr th, div.warning table tr th{
+
+div.note table, div.note table td, div.note table tr th, div.caution table, div.caution table td, div.caution table tr th, div.important table, div.important table td, div.important table tr th, div.tip table, div.tip table td, div.tip table tr th, div.warning table, div.warning table td, div.warning table tr th{
     background: inherit;
     color: inherit;
+    border: 0px  !important;
+    
+}
+
+/* #content table thead{ */
+/*     background: #f2f7f7; */
+/*     color: white; */
+/* } */
+
+#content table caption, #content table thead td{
+    font-weight: bold;
+}
+
+#content table td, #content table {
+	border: 1px solid black;
+}
+
+#content table td, #content table th {
+	padding: 5px;
+}
+
+#content table {
+	margin-bottom: 20px;
+
 }
 
 
