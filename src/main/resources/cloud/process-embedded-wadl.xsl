@@ -84,7 +84,7 @@
 	      <xsl:with-param name="path" select="@href"/>
 	    </xsl:call-template>
 	  </xsl:variable>
-s
+
 		<d:td>
 			<xsl:value-of select="document($wadl.path,$root)//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
 			
