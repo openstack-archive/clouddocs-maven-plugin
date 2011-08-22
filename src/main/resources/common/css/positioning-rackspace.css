@@ -353,6 +353,11 @@ div.note table, div.note table td, div.note table tr th, div.caution table, div.
     
 }
 
+#content table thead{
+    background: #f2f7f7;
+    color: white;
+}
+
 #content table caption, #content table thead td{
     font-weight: bold;
 }
