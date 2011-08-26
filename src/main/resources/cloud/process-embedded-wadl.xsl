@@ -136,9 +136,13 @@
 					<xsl:when test="wadl:doc/@title">
 						<xsl:value-of select="wadl:doc/@title"/>
 					</xsl:when>
+					<xsl:when test="@id or @rax:id">
+						<xsl:message>Warning: No title found for wadl:method</xsl:message>
+						<xsl:value-of select="@id|@rax:id"/>
+					</xsl:when>
 					<xsl:otherwise>
 						<xsl:message>Warning: No title found for wadl:method</xsl:message>
-						<xsl:value-of select="parent::wadl:resource/@path"/>
+						<xsl:value-of select="@name"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</title>
