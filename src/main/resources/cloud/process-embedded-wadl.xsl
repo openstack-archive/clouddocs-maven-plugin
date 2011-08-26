@@ -24,9 +24,9 @@
 		<xsl:element name="{name(.)}">
 			<xsl:apply-templates select="d:*[not(local-name() = 'section')]" mode="preprocess"/>
 			<!-- 
-			TODO: Build summary template for whole reference: xsl:apply-templates select="d:section". 
-				  Combine the tables for a section into one big table
-		-->
+			 Here we build a summary template for whole reference. 
+  			 Combine the tables for a section into one big table
+		    -->
 			<informaltable rules="all">
 				<col width="10%"/>
 				<col width="40%"/>
@@ -155,7 +155,8 @@
 				</tbody>
 			</informaltable>
 
-			<!-- TODO: Other stuff here -->
+			<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
+
 			<itemizedlist spacing="compact">
 				<title>Request parameters</title>
 				<xsl:apply-templates
@@ -211,7 +212,14 @@
 				</code>
 			</td>
 			<td>
-				<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
+				<xsl:choose>
+					<xsl:when test="wadl:doc//*[@class = 'shortdesc']">
+						<xsl:apply-templates select="wadl:doc//*[@class = 'shortdesc'][1]" mode="process-shortdesc"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</td>
 		</tr>
 	</xsl:template>
@@ -220,12 +228,35 @@
 		<xsl:apply-templates mode="process-xhtml"/>
 	</xsl:template>
 
-	<xsl:template match="xhtml:p"  mode="process-xhtml">
+	<xsl:template match="*"  mode="process-shortdesc">
+		<xsl:apply-templates mode="process-xhtml"/>
+	</xsl:template>
+
+	<xsl:template match="xhtml:p[@class = 'shortdesc']" mode="process-xhtml"/>
+
+	<xsl:template match="xhtml:p[not(self::xhtml:p/@class = 'shortdesc')]"  mode="process-xhtml">
 		<para>
 			<xsl:apply-templates mode="process-xhtml"/>
 		</para>
 	</xsl:template>
-	<!-- TODO: handle more xhtml: ul, ol, li, b, i, em, strong, code, table, span, div -->
+	
+	<xsl:template match="xhtml:b|xhtml:strong"  mode="process-xhtml">
+		<emphasis role="bold"><xsl:apply-templates  mode="process-xhtml"/></emphasis>
+	</xsl:template>
+	
+	<xsl:template match="xhtml:i"  mode="process-xhtml">
+		<emphasis><xsl:apply-templates  mode="process-xhtml"/></emphasis>
+	</xsl:template>
+	
+		<xsl:template match="xhtml:code|xhtml:tt"  mode="process-xhtml">
+		<code><xsl:apply-templates  mode="process-xhtml"/></code>
+	</xsl:template>
+
+	<xsl:template match="xhtml:span"  mode="process-xhtml">
+		<xsl:apply-templates  mode="process-xhtml"/>
+	</xsl:template>
+	
+	<!-- TODO: handle more xhtml: ul, ol, li, b, i, table, div -->
 
 	<xsl:template match="wadl:param" mode="preprocess">
 		<!-- TODO: Get more info from the xsd about these params-->
@@ -264,7 +295,7 @@
 			<listitem>
 				<para>
 					<xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
-						(<xsl:value-of select="@status"/>)<!-- TODO: handle lists -->
+						(<xsl:value-of select="@status"/>)
 				</para>
 			</listitem>
 		</xsl:if>
