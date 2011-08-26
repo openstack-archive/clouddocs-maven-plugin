@@ -247,7 +247,7 @@
 		<emphasis role="bold"><xsl:apply-templates  mode="process-xhtml"/></emphasis>
 	</xsl:template>
 	
-	<xsl:template match="xhtml:i"  mode="process-xhtml">
+	<xsl:template match="xhtml:i|xhtml:em"  mode="process-xhtml">
 		<emphasis><xsl:apply-templates  mode="process-xhtml"/></emphasis>
 	</xsl:template>
 	
@@ -255,11 +255,57 @@
 		<code><xsl:apply-templates  mode="process-xhtml"/></code>
 	</xsl:template>
 
-	<xsl:template match="xhtml:span"  mode="process-xhtml">
+	<xsl:template match="xhtml:span|xhtml:div"  mode="process-xhtml">
 		<xsl:apply-templates  mode="process-xhtml"/>
 	</xsl:template>
 	
-	<!-- TODO: handle more xhtml: ul, ol, li, b, i, table, div -->
+	<xsl:template match="xhtml:ul" mode="process-xhtml">
+		<itemizedlist>
+			<xsl:apply-templates  mode="process-xhtml"/>			
+		</itemizedlist>
+	</xsl:template>
+
+	<xsl:template match="xhtml:ol" mode="process-xhtml">
+		<orderedlist>
+			<xsl:apply-templates  mode="process-xhtml"/>			
+		</orderedlist>
+	</xsl:template>
+	
+	<!-- TODO: Try to make this less brittle. What if they have a li/ul or li/table? -->
+	<xsl:template match="xhtml:li[not(xhtml:p)]" mode="process-xhtml">
+		<listitem>
+			<para>
+			  <xsl:apply-templates  mode="process-xhtml"/>	
+			</para>
+		</listitem>
+	</xsl:template>
+
+	<xsl:template match="xhtml:li[xhtml:p]" mode="process-xhtml">
+		<listitem>
+		   <xsl:apply-templates  mode="process-xhtml"/>	
+		</listitem>
+	</xsl:template>
+	
+	<xsl:template match="xhtml:table" mode="process-xhtml">
+		<informaltable>
+			<xsl:copy-of select="@*"/>
+			<xsl:apply-templates  mode="xhtml2docbookns"/>
+		</informaltable>
+	</xsl:template>
+	
+	<xsl:template match="xhtml:pre" mode="process-xhtml">
+		<programlisting>
+			<xsl:apply-templates mode="process-xhtml"/>
+		</programlisting>
+	</xsl:template>
+	
+	<xsl:template match="*" mode="xhtml2docbookns">
+		<xsl:element name="{local-name(.)}" namespace="http://docbook.org/ns/docbook">
+			<xsl:apply-templates mode="xhtml2docbookns"/>
+		</xsl:element>
+	</xsl:template>
+	
+	<!-- TODO: handle more xhtml: div -->
 
 	<xsl:template match="wadl:param" mode="preprocess">
 		<!-- TODO: Get more info from the xsd about these params-->
