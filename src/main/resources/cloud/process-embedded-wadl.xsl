@@ -4,12 +4,14 @@
 	xmlns:d="http://docbook.org/ns/docbook" xmlns:rax="http://docs.rackspace.com/api"
 	exclude-result-prefixes="wadl rax d" version="1.0">
 	
-<!--	<xsl:output indent="yes"/>-->
+	<!-- For readability while testing -->
+	<!-- <xsl:output indent="yes"/>    -->
 
 	<xsl:param name="project.build.directory">../../target</xsl:param>
 
 	<xsl:variable name="root" select="/"/>
 
+<!-- Uncomment this template for testing in Oxygen -->
 <!--	<xsl:template match="/">
 		<xsl:apply-templates mode="preprocess"/>
 	</xsl:template>-->
@@ -127,7 +129,8 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:method" mode="preprocess">
-		<section>
+		<xsl:variable name="replacechars">/{}</xsl:variable>
+		<section xml:id="{concat(@name,'_',translate(parent::wadl:resource/@path, $replacechars, '___'))}">
 			<title>
 				<xsl:choose>
 					<xsl:when test="wadl:doc/@title">
@@ -135,7 +138,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:message>Warning: No title found for wadl:method</xsl:message>
-						<xsl:value-of select="@rax:id|@id"/>
+						<xsl:value-of select="parent::wadl:resource/@path"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</title>
