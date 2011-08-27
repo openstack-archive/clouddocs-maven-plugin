@@ -8,7 +8,8 @@
 	<!-- <xsl:output indent="yes"/>    -->
 
 	<xsl:param name="project.build.directory">../../target</xsl:param>
-
+	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
+	
 	<xsl:variable name="root" select="/"/>
 
 <!-- Uncomment this template for testing in Oxygen -->
@@ -209,7 +210,12 @@
 						TODO: Deal with non-flattened path in embedded wadl? 
 						TODO: Chop off v2.0 or whatever...
 					-->
-					<xsl:value-of select="parent::wadl:resource/@path"/>
+					<xsl:call-template name="trimUri">
+							<xsl:with-param name="trimCount" select="$trim.wadl.uri.count"/>
+							<xsl:with-param name="uri">
+								<xsl:value-of select="parent::wadl:resource/@path"/>
+							</xsl:with-param>
+					</xsl:call-template>
 					<xsl:for-each select="wadl:request/wadl:param[@style = 'query']">
 						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1"
 							>?</xsl:if><xsl:value-of select="@name"/>=<replaceable><xsl:value-of
@@ -378,6 +384,29 @@
 				<xsl:value-of
 					select="concat($project.build.directory, '/generated-resources/xml/xslt/',$path)"
 				/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="trimUri">
+		<!-- Trims elements -->
+		<xsl:param name="trimCount"/>
+		<xsl:param name="uri"/>
+		<xsl:param name="i">0</xsl:param>
+		<xsl:choose>
+			<xsl:when test="$i &lt; $trimCount and contains($uri,'/')">
+				<xsl:call-template name="trimUri">
+					<xsl:with-param name="i" select="$i + 1"/>
+					<xsl:with-param name="trimCount">
+						<xsl:value-of select="$trimCount"/>
+					</xsl:with-param> 
+					<xsl:with-param name="uri">
+						<xsl:value-of select="substring-after($uri,'/')"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$uri"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

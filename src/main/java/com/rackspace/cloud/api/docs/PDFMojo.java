@@ -85,6 +85,13 @@ public abstract class PDFMojo extends AbstractFoMojo {
      * @parameter expression="${generate-pdf.security}" default-value=""
      */
     private String security;
+    
+    /**
+     * A parameter used to configure how many elements to trim from the URI in the documentation for a wadl method.
+     *
+     * @parameter expression="${generate-pdf.trim.wadl.uri.count}" default-value=""
+     */
+    private String trimWadlUriCount;
 
 
     protected void setImageDirectory (File imageDirectory) {
@@ -250,6 +257,10 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	if(security != null){
 	    transformer.setParameter("security",security);
 	}
+	
+   if(trimWadlUriCount != null){
+	transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);
+    }
 
         //
         //  Setup graphics paths

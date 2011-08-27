@@ -100,6 +100,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String security;
 
+    /**
+     * A parameter used to configure how many elements to trim from the URI in the documentation for a wadl method.
+     *
+     * @parameter expression="${generate-webhelp.trim.wadl.uri.count}" default-value=""
+     */
+    private String trimWadlUriCount;
 
   /**
    * DOCUMENT ME!
@@ -139,7 +145,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
    if(showChangebars != null){
 	transformer.setParameter("show.changebars",showChangebars);
     }
-
+   if(trimWadlUriCount != null){
+	transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);
+    }
 
   }
 
