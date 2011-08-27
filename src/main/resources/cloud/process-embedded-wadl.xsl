@@ -169,8 +169,8 @@
 				<table rules="all">
 					<caption>Parameters</caption>
 					<col width="10%"/>
-					<col width="40%"/>
-					<col width="50%"/>
+					<col width="20%"/>
+					<col width="70%"/>
 					<thead>
 						<tr>
 							<th align="center">Name</th>
@@ -345,8 +345,8 @@
 				<xsl:value-of select="@style"/>
 			</td>
 			<td>
+				<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
 				<para>
-					<xsl:value-of select="wadl:doc"/>
 					<xsl:value-of select="substring-after(@type,':')"/>. 
 				</para>
 				<xsl:if test="wadl:option">
