@@ -35,10 +35,10 @@
 				<col width="40%"/>
 				<col width="50%"/>
 				<thead>
-					<tr align="center">
-						<th>Verb</th>
-						<th>URI</th>
-						<th>Description</th>
+					<tr>
+						<th align="center">Verb</th>
+						<th align="center">URI</th>
+						<th align="center">Description</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -72,10 +72,10 @@
 			<col width="40%"/>
 			<col width="50%"/>
 			<thead>
-				<tr align="center">
-					<th>Verb</th>
-					<th>URI</th>
-					<th>Description</th>
+				<tr>
+					<th align="center">Verb</th>
+					<th align="center">URI</th>
+					<th align="center">Description</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -152,10 +152,10 @@
 				<col width="40%"/>
 				<col width="50%"/>
 				<thead>
-					<tr align="center">
-						<th>Verb</th>
-						<th>URI</th>
-						<th>Description</th>
+					<tr>
+						<th align="center">Verb</th>
+						<th align="center">URI</th>
+						<th align="center">Description</th>
 					</tr>
 				</thead>
 				<tbody>
