@@ -306,4 +306,7 @@ div.note table, div.note table td, div.note table tr th, div.caution table, div.
 
 }
 
+*[align = 'center']{
+    text-align: center;
+}
 
