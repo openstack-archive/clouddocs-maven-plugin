@@ -164,22 +164,42 @@
 			</informaltable>
 
 			<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
-
-			<itemizedlist spacing="compact">
-				<title>Request parameters</title>
-				<xsl:apply-templates
-					select="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param"
-					mode="preprocess">
-					<xsl:sort select="@style"/>
-				</xsl:apply-templates>
-			</itemizedlist>
-
-			<itemizedlist spacing="compact">
-				<title>Response parameters</title>
-				<xsl:apply-templates
-					select="wadl:method[1]/wadl:request/wadl:param|ancestor-or-self::*/wadl:param"
-					mode="preprocess"/>
-			</itemizedlist>
+			
+			<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param or wadl:response/wadl:param">
+				<table rules="all">
+					<caption>Parameters</caption>
+					<col width="10%"/>
+					<col width="40%"/>
+					<col width="50%"/>
+					<thead>
+						<tr>
+							<th align="center">Name</th>
+							<th align="center">Style</th>
+							<th align="center">Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param">
+							<tr>
+								<th align="center" colspan="3">Request parameters</th>
+							</tr>	
+							<xsl:apply-templates
+								select="wadl:request//wadl:param|ancestor::wadl:resource/wadl:param"
+								mode="preprocess">
+								<xsl:sort select="@style"/>
+							</xsl:apply-templates>
+						</xsl:if>
+						<xsl:if test="wadl:response/wadl:param">
+							<tr>
+								<th align="center" colspan="3">Response parameters</th>
+							</tr>	
+							<xsl:apply-templates
+								select="wadl:response//wadl:param"
+								mode="preprocess"/>
+						</xsl:if>
+					</tbody>
+				</table>
+			</xsl:if>
 
 			<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2')]">
 				<itemizedlist spacing="compact">
@@ -314,27 +334,33 @@
 			<xsl:apply-templates mode="xhtml2docbookns"/>
 		</xsl:element>
 	</xsl:template>
-	
-	<!-- TODO: handle more xhtml: div -->
 
 	<xsl:template match="wadl:param" mode="preprocess">
 		<!-- TODO: Get more info from the xsd about these params-->
-		<listitem>
-			<para>
-				<xsl:value-of select="@name"/> (<xsl:value-of select="@style"/>): <xsl:value-of
-					select="wadl:doc"/>
-				<xsl:value-of select="substring-after(@type,':')"/>. </para>
-			<xsl:if test="wadl:option">
-				<para>Possible values: <xsl:for-each select="wadl:option">
+		<tr>
+			<td>
+				<xsl:value-of select="@name"/>
+			</td>
+			<td>
+				<xsl:value-of select="@style"/>
+			</td>
+			<td>
+				<para>
+					<xsl:value-of select="wadl:doc"/>
+					<xsl:value-of select="substring-after(@type,':')"/>. 
+				</para>
+				<xsl:if test="wadl:option">
+					<para>Possible values: <xsl:for-each select="wadl:option">
 						<xsl:value-of select="@value"/><xsl:choose>
 							<xsl:when test="position() = last()">. </xsl:when>
 							<xsl:otherwise>, </xsl:otherwise>
 						</xsl:choose>
 					</xsl:for-each></para>
-				<para>Default: <xsl:value-of select="@default"/><xsl:text>. </xsl:text>
-				</para>
-			</xsl:if>
-		</listitem>
+					<para>Default: <xsl:value-of select="@default"/><xsl:text>. </xsl:text>
+					</para>
+				</xsl:if>
+			</td>
+		</tr>
 	</xsl:template>
 
 	<xsl:template match="wadl:response" mode="preprocess-normal">
