@@ -267,11 +267,13 @@
 
 	<xsl:template match="xhtml:p[@class = 'shortdesc']" mode="process-xhtml"/>
 
-	<xsl:template match="xhtml:p[not(self::xhtml:p/@class = 'shortdesc')]"  mode="process-xhtml">
+	<xsl:template match="xhtml:p[not(@class = 'shortdesc')]"  mode="process-xhtml">
 		<para>
 			<xsl:apply-templates mode="process-xhtml"/>
 		</para>
 	</xsl:template>
+	
+	<xsl:template match="span[@class='shortdesc']" mode="process-xhtml"/>
 	
 	<xsl:template match="xhtml:b|xhtml:strong"  mode="process-xhtml">
 		<emphasis role="bold"><xsl:apply-templates  mode="process-xhtml"/></emphasis>
