@@ -23,8 +23,9 @@
 		</xsl:copy>
 	</xsl:template>
 
-	<xsl:template match="d:chapter[@role = 'api-reference']" mode="preprocess">
+	<xsl:template match="d:*[@role = 'api-reference']" mode="preprocess">
 		<xsl:element name="{name(.)}">
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates select="d:*[not(local-name() = 'section')]" mode="preprocess"/>
 			<!-- 
 			 Here we build a summary template for whole reference. 
