@@ -406,7 +406,7 @@
 			<listitem>
 				<para>
 					<xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
-						(<xsl:value-of select="@status"/>)
+						<xsl:if test="@status">(<xsl:value-of select="@status"/>)</xsl:if>
 				</para>
 			</listitem>
 		</xsl:if>
