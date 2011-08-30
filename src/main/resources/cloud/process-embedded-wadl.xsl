@@ -241,12 +241,19 @@
 						TODO: Deal with non-flattened path in embedded wadl? 
 						TODO: Chop off v2.0 or whatever...
 					-->
-					<xsl:call-template name="trimUri">
-							<xsl:with-param name="trimCount" select="$trim.wadl.uri.count"/>
-							<xsl:with-param name="uri">
-								<xsl:value-of select="parent::wadl:resource/@path"/>
-							</xsl:with-param>
-					</xsl:call-template>
+					<xsl:choose>
+						<xsl:when test="$trim.wadl.uri.count &gt; 0">
+							<xsl:call-template name="trimUri">
+								<xsl:with-param name="trimCount" select="$trim.wadl.uri.count"/>
+								<xsl:with-param name="uri">
+									<xsl:value-of select="parent::wadl:resource/@path"/>
+								</xsl:with-param>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="parent::wadl:resource/@path"/>
+						</xsl:otherwise>
+					</xsl:choose>
 					<xsl:for-each select="wadl:request/wadl:param[@style = 'query']">
 						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1"
 							>?</xsl:if><xsl:value-of select="@name"/>=<replaceable><xsl:value-of
@@ -451,7 +458,7 @@
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="$uri"/>
+				<xsl:value-of select="concat('/',$uri)"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
