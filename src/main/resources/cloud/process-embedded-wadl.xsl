@@ -66,7 +66,14 @@
 
 	</xsl:template>
 
-	<xsl:template match="wadl:resources" mode="preprocess">
+	<xsl:template match="wadl:resources[wadl:resource[not(./wadl:method)]]" mode="preprocess">
+		<section xml:id="{generate-id()}">
+			<title>FOOBAR</title>
+			<xsl:call-template name="wadl-resources"/>
+		</section>
+	</xsl:template>
+
+	<xsl:template match="wadl:resources" name="wadl-resources" mode="preprocess">
 		<!-- Make a summary table then apply templates to wadl:resource/wadl:method (from wadl) -->
 		<informaltable rules="all">
 			<col width="10%"/>
@@ -215,6 +222,9 @@
 					<xsl:apply-templates select="wadl:response" mode="preprocess-faults"/>
 				</itemizedlist>
 			</xsl:if>
+			
+			<xsl:copy-of select="wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+			
 		</section>
 	</xsl:template>
 
@@ -280,6 +290,10 @@
 		<emphasis role="bold"><xsl:apply-templates  mode="process-xhtml"/></emphasis>
 	</xsl:template>
 	
+	<xsl:template match="xhtml:a[@href]" mode="process-xhtml">
+		<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{@href}"><xsl:apply-templates mode="process-xhtml"/></link>
+	</xsl:template>
+	
 	<xsl:template match="xhtml:i|xhtml:em"  mode="process-xhtml">
 		<emphasis><xsl:apply-templates  mode="process-xhtml"/></emphasis>
 	</xsl:template>
@@ -303,6 +317,8 @@
 			<xsl:apply-templates  mode="process-xhtml"/>			
 		</orderedlist>
 	</xsl:template>
+	
+	<xsl:template match="db:*" mode="process-xhtml" xmlns:db="http://docbook.org/ns/docbook"/>
 	
 	<!-- TODO: Try to make this less brittle. What if they have a li/ul or li/table? -->
 	<xsl:template match="xhtml:li[not(xhtml:p)]" mode="process-xhtml">
