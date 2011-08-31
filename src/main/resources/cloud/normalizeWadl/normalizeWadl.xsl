@@ -11,7 +11,7 @@
 
     <xsl:param name="xsdVersion" select="xs:decimal(1.1)"/>
     <xsl:param name="flattenXsds">true</xsl:param>
-    <xsl:param name="debug">1</xsl:param>
+    <xsl:param name="debug">0</xsl:param>
     <xsl:param name="format">path-format</xsl:param>
 
     <xsl:param name="samples.path" select="replace(base-uri(/),'(.*/).*\.wadl', '$1')"/>
@@ -44,8 +44,6 @@
         </xsl:for-each-group>
       </xsl:if>
     </xsl:variable>
-
-
 
     <xsl:variable name="normalizeWadl2.xsl">
         <!-- Here we store the base-uri of this file so we can use it to find files relative to this file later -->
@@ -96,16 +94,21 @@
             <xsl:message>[INFO] Writing: <xsl:value-of select="@location"/> as <xsl:value-of select="@name"/></xsl:message>
 
             <xsl:variable name="contents">
+                <xsl:comment>Original xsd: <xsl:value-of select="@location"/></xsl:comment>
                 <xsd:schema>
-                    <xsl:comment>Original xsd: <xsl:value-of select="@location"/></xsl:comment>
+                    <xsl:copy-of select="document(@location,.)/xsd:schema/@*"/> 
                     <xsl:apply-templates select="document(@location,.)" mode="flatten-xsd">
                         <xsl:with-param name="stack" select="@location"/>
                     </xsl:apply-templates>
                 </xsd:schema>
             </xsl:variable>
 
+            <xsl:variable name="prune-imports">
+                 <xsl:apply-templates select="$contents" mode="prune-imports"/>
+            </xsl:variable>
+
             <xsl:result-document href="{concat('target/generated-resources/xml/xslt/',@name)}">
-                <xsl:apply-templates select="$contents" mode="prune-imports"/>
+                <xsl:apply-templates select="$prune-imports" mode="sort-schema"/>
             </xsl:result-document>
         </xsl:for-each>
 
@@ -123,10 +126,27 @@
 
         </xsl:if>
 
-
         <xsl:copy-of select="$normalizeWadl3.xsl"/>
     </xsl:template>
-
+    
+   <!-- Sort the declarations in the flattened schema -->
+    <xsl:template match="node() | @*" mode="sort-schema">
+        <xsl:copy>
+            <xsl:apply-templates select="node() | @*" mode="sort-schema"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="xsd:schema" mode="sort-schema">
+        <xsl:message>SORTING</xsl:message>
+         <xsl:copy>
+            <xsl:apply-templates select="@*" mode="sort-schema"/>
+            <xsl:apply-templates select="comment()|*[not(self::xsd:element) and not(self::xsd:simpleType) and not(self::xsd:complexType)]" mode="sort-schema"/>
+            <xsl:apply-templates select="xsd:element" mode="sort-schema"/>
+            <xsl:apply-templates select="xsd:simpleType" mode="sort-schema"/>
+            <xsl:apply-templates select="xsd:complexType" mode="sort-schema"/>
+        </xsl:copy>
+    </xsl:template>
+    
     <!-- Prune imports removes redundant import statements -->
     <xsl:template match="xsd:schema" mode="prune-imports">
         <xsl:copy>
