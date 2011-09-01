@@ -388,6 +388,10 @@
 					<para>Default: <xsl:value-of select="@default"/><xsl:text>. </xsl:text>
 					</para>
 				</xsl:if>
+				<xsl:choose>
+					<xsl:when test="@required = 'true'">Required.</xsl:when>
+					<xsl:otherwise>Optional.</xsl:otherwise>
+				</xsl:choose>
 			</td>
 		</tr>
 	</xsl:template>
