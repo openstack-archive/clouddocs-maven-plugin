@@ -277,11 +277,10 @@ tr th, tr th .internal, tr th .added, tr th .changed
     }
 
 
-div.note table, div.note table td, div.note table tr th, div.caution table, div.caution table td, div.caution table tr th, div.important table, div.important table td, div.important table tr th, div.tip table, div.tip table td, div.tip table tr th, div.warning table, div.warning table td, div.warning table tr th{
-    background: inherit;
-    color: inherit;
-    border: 0px  !important;
-    
+div.note *, div.caution *, div.important *, div.tip *, div.warning * {
+    background: inherit !important;
+    color: inherit !important;
+    border: inherit  !important;    
 }
 
 #content table thead, #content table th{
