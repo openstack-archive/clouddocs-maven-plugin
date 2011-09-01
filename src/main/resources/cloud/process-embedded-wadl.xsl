@@ -124,7 +124,9 @@
 			<xsl:when test="@href">
 				<xsl:apply-templates
 					select="document($wadl.path,$root)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method[@rax:id = current()/wadl:method/@href]"
-					mode="preprocess"/>
+					mode="preprocess">
+					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
+				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:apply-templates select="wadl:method" mode="preprocess"/>
@@ -138,8 +140,9 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:method" mode="preprocess">
+		<xsl:param name="sectionId"/>
 		<xsl:variable name="replacechars">/{}</xsl:variable>
-		<section xml:id="{concat(@name,'_',translate(parent::wadl:resource/@path, $replacechars, '___'))}">
+		<section xml:id="{concat(@name,'_',$sectionId,'_',translate(parent::wadl:resource/@path, $replacechars, '___'))}">
 			<title>
 				<xsl:choose>
 					<xsl:when test="wadl:doc/@title">
