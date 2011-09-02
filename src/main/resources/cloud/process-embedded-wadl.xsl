@@ -43,7 +43,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<xsl:apply-templates select="//wadl:resources" mode="cheat-sheet"/>
+					<xsl:apply-templates select=".//wadl:resources" mode="cheat-sheet"/>
 				</tbody>
 			</informaltable>
 
