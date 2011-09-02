@@ -368,7 +368,7 @@
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
 			<td>
-				<xsl:value-of select="@name"/>
+				<code><xsl:value-of select="@name"/></code>
 			</td>
 			<td>
 				<xsl:value-of select="@style"/>
