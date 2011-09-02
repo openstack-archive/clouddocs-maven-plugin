@@ -142,7 +142,7 @@
 	<xsl:template match="wadl:method" mode="preprocess">
 		<xsl:param name="sectionId"/>
 		<xsl:variable name="replacechars">/{}</xsl:variable>
-		<section xml:id="{concat(@name,'_',$sectionId,'_',translate(parent::wadl:resource/@path, $replacechars, '___'))}">
+		<section xml:id="{concat(@name,'_',@rax:id,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)}">
 			<title>
 				<xsl:choose>
 					<xsl:when test="wadl:doc/@title">
