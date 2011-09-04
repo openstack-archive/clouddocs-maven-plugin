@@ -365,6 +365,7 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:param" mode="preprocess">
+		<xsl:variable name="type"><xsl:value-of select="substring-after(@type,':')"/></xsl:variable>
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
 			<td>
@@ -376,22 +377,22 @@
 			<td>
 				<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
 				<para>
-					<xsl:value-of select="substring-after(@type,':')"/>. 
+					<xsl:value-of
+						select="concat(translate(substring($type,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($type,2))"
+					/>. <xsl:if test="wadl:option"> Possible values: <xsl:for-each
+							select="wadl:option">
+							<xsl:value-of select="@value"/><xsl:choose>
+								<xsl:when test="position() = last()">. </xsl:when>
+								<xsl:otherwise>, </xsl:otherwise>
+							</xsl:choose>
+						</xsl:for-each> Default: <xsl:value-of select="@default"
+						/><xsl:text>. </xsl:text>
+					</xsl:if>
+					<xsl:choose>
+						<xsl:when test="@required = 'true'">Required. </xsl:when>
+						<xsl:otherwise>Optional. </xsl:otherwise>
+					</xsl:choose>
 				</para>
-				<xsl:if test="wadl:option">
-					<para>Possible values: <xsl:for-each select="wadl:option">
-						<xsl:value-of select="@value"/><xsl:choose>
-							<xsl:when test="position() = last()">. </xsl:when>
-							<xsl:otherwise>, </xsl:otherwise>
-						</xsl:choose>
-					</xsl:for-each></para>
-					<para>Default: <xsl:value-of select="@default"/><xsl:text>. </xsl:text>
-					</para>
-				</xsl:if>
-				<xsl:choose>
-					<xsl:when test="@required = 'true'">Required.</xsl:when>
-					<xsl:otherwise>Optional.</xsl:otherwise>
-				</xsl:choose>
 			</td>
 		</tr>
 	</xsl:template>
