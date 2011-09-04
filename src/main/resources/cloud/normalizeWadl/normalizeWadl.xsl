@@ -136,8 +136,26 @@
         </xsl:copy>
     </xsl:template>
     
+    <!-- Hack alert: Removing redundant elements and empty import-->
+    <xsl:template match="xsd:element" mode="sort-schema">
+        <xsl:if test="not(preceding-sibling::xsd:element[@name = current()/@name])">
+            <xsl:copy>
+                <xsl:apply-templates select="node() | @*" mode="sort-schema"/>
+            </xsl:copy>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template match="xsd:complexType" mode="sort-schema">
+        <xsl:if test="not(preceding-sibling::xsd:complexType[@name = current()/@name])">
+            <xsl:copy>
+                <xsl:apply-templates select="node() | @*" mode="sort-schema"/>
+            </xsl:copy>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template match="xsd:import[@schemaLocation = '']" mode="sort-schema"/>
+    <!-- Hack alert -->
     <xsl:template match="xsd:schema" mode="sort-schema">
-        <xsl:message>SORTING</xsl:message>
          <xsl:copy>
             <xsl:apply-templates select="@*" mode="sort-schema"/>
             <xsl:apply-templates select="comment()|*[not(self::xsd:element) and not(self::xsd:simpleType) and not(self::xsd:complexType)]" mode="sort-schema"/>
