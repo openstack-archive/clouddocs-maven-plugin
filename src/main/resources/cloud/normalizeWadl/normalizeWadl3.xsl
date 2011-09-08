@@ -67,16 +67,6 @@ This XSLT flattens or expands the path in the path attributes of the resource el
         <xsl:for-each-group select="$resources" group-by="wadl:tokens/wadl:token[$token-number]">
 
             <resource path="{current-grouping-key()}">
-                <xsl:attribute name="id">
-                    <xsl:choose>
-                        <xsl:when test="$token-number = 1">
-                            <xsl:value-of select="@id"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="concat(replace(current-grouping-key(),'[{}]',''),'-',generate-id(.))"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
                 <xsl:if test="count(wadl:tokens/wadl:token) = $token-number">
                     <xsl:apply-templates select="*[not(self::wadl:resource)]" mode="tree-format"/>
                 </xsl:if>
@@ -110,7 +100,7 @@ This XSLT flattens or expands the path in the path attributes of the resource el
         <resource>
             <xsl:copy-of select="@*"/>
             <tokens>
-                <xsl:for-each select="tokenize(@path,'/')">
+                <xsl:for-each select="tokenize(replace(@path,'(.*)/$','$1'),'/')">
                     <token>
                         <xsl:value-of select="."/>
                     </token>
@@ -136,26 +126,27 @@ This XSLT flattens or expands the path in the path attributes of the resource el
 
     <xsl:template match="wadl:method[parent::wadl:resource]|wadl:param[ancestor::wadl:resource]" mode="path-format"/>
 
-    <xsl:template match="wadl:resource[not(child::wadl:method) and not(child::wadl:param)]" mode="path-format">
+    <xsl:template match="wadl:resource[not(child::wadl:method)]" mode="path-format">
         <xsl:apply-templates select="wadl:resource" mode="path-format"/>
     </xsl:template>
 
-    <xsl:template match="wadl:resource[wadl:method or wadl:param]" mode="path-format">
+    <xsl:template match="wadl:resource[wadl:method]" mode="path-format">
         <resource>
             <xsl:copy-of select="@*"/>
             <xsl:attribute name="path">
                 <xsl:for-each select="ancestor-or-self::wadl:resource">
                     <xsl:sort order="ascending" select="position()"/>
-                    <xsl:value-of select="@path"/>
+                    <xsl:value-of select="replace(@path,'(.*)/$','$1')"/>
                     <xsl:if test="not(position() = last())">/</xsl:if>
                 </xsl:for-each>
             </xsl:attribute>
+            <xsl:apply-templates select="wadl:doc" mode="copy"/>
             <xsl:apply-templates select="ancestor-or-self::wadl:resource/wadl:param[@style = 'template' or @style = 'header' ]" mode="copy"/>
             <xsl:apply-templates select="wadl:method" mode="copy"/>
         </resource>
         <xsl:apply-templates mode="path-format"/>
     </xsl:template>
 
-    <xsl:template match="processing-instruction('base-uri')" mode="path-format"/>
+    <xsl:template match="processing-instruction('base-uri')|wadl:doc" mode="path-format"/>
 
 </xsl:stylesheet>
