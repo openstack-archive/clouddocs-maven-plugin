@@ -142,8 +142,7 @@
 	<xsl:template match="wadl:method" mode="preprocess">
 		<xsl:param name="sectionId"/>
 		<xsl:variable name="replacechars">/{}</xsl:variable>
-		<section xml:id="{concat(@name,'_',@rax:id,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)}">
-			<title>
+		<xsl:variable name="method.title">
 				<xsl:choose>
 					<xsl:when test="wadl:doc/@title">
 						<xsl:value-of select="wadl:doc/@title"/>
@@ -157,7 +156,9 @@
 						<xsl:value-of select="@name"/>
 					</xsl:otherwise>
 				</xsl:choose>
-			</title>
+		</xsl:variable>
+		<section xml:id="{concat(@name,'_',@rax:id,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)}">
+			<title><xsl:value-of select="$method.title"/></title>
 			<informaltable rules="all">
 				<col width="10%"/>
 				<col width="40%"/>
@@ -178,10 +179,10 @@
 			
 			<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param or wadl:response/wadl:param">
 				<table rules="all">
-					<caption>Parameters</caption>
-					<col width="10%"/>
-					<col width="20%"/>
-					<col width="70%"/>
+					<caption><xsl:value-of select="$method.title"/> parameters</caption>
+					<col width="25%"/>
+					<col width="15%"/>
+					<col width="60%"/>
 					<thead>
 						<tr>
 							<th align="center">Name</th>
