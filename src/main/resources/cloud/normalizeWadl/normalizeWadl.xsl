@@ -88,17 +88,23 @@
     <xsl:template match="xsdxt:sample" 
         xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" 
         mode="normalizeWadl2">
-<example xmlns="http://docbook.org/ns/docbook">
-            <title><xsl:value-of select="parent::xsdxt:samples/@title"/><xsl:choose>
-                <xsl:when test="xsdxt:code/@type = 'application/xml'">: XML</xsl:when>
-                <xsl:when test="xsdxt:code/@type = 'application/json'">: JSON</xsl:when>                
+            <xsl:apply-templates select="xsdxt:code" mode="normalizeWadl2"/>
+    </xsl:template>
+    
+    <xsl:template match="xsdxt:code" xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" mode="normalizeWadl2">
+        <example xmlns="http://docbook.org/ns/docbook">
+            <title><xsl:value-of select="parent::xsdxt:sample/@title"/><xsl:choose>
+                <xsl:when test="@type = 'application/xml'">: XML</xsl:when>
+                <xsl:when test="@type = 'application/json'">: JSON</xsl:when>                
             </xsl:choose></title>
-<programlisting xmlns="http://docbook.org/ns/docbook"><xsl:attribute name="language">
+        <programlisting xmlns="http://docbook.org/ns/docbook"><xsl:attribute name="language">
             <xsl:choose>
-                <xsl:when test="xsdxt:code/@type = 'application/xml'">xml</xsl:when>
-                <xsl:when test="xsdxt:code/@type = 'application/json'">javascript</xsl:when>                
+                <xsl:when test="@type = 'application/xml'">xml</xsl:when>
+                <xsl:when test="@type = 'application/json'">javascript</xsl:when>                
             </xsl:choose>
-        </xsl:attribute><xsl:copy-of select="unparsed-text(concat($samples.path, '/',xsdxt:code/@href))"/></programlisting></example></xsl:template>
+        </xsl:attribute><xsl:copy-of select="unparsed-text(concat($samples.path, '/',@href))"/></programlisting>
+            </example>
+    </xsl:template>
 
     <xsl:template match="rax:example" 
         xmlns:rax="http://docs.rackspace.com/api" mode="normalizeWadl2"><example xmlns="http://docbook.org/ns/docbook">
