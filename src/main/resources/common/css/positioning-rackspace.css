@@ -25,7 +25,7 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
 #header {
     position: fixed;
     width: 100%;
-    height: 95px;
+    height: 97px;
     top: 0;
     right: 0;
     bottom: auto;
@@ -55,6 +55,14 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
     color: #bbb;
 }
 
+.ie #leftnavigation {
+    top: 96px;
+}
+
+.chrome #leftnavigation {
+    top: 92px;
+}
+
 #leftnavigation {
     overflow: auto;
     position: fixed;
@@ -69,6 +77,29 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
     background-color: #f0f0f0!important;
 }
 
+#treeDiv {
+    overflow: auto;
+    position: fixed;
+    height: auto;
+    top: 130px;
+    bottom: 0;
+    left: 0;
+    width: 243px;
+    z-index: 1500;
+    border-right:2px solid #CCCCCC;
+}
+
+#searchDiv {
+    overflow: auto;
+    position: fixed;
+    height: auto;
+    top: 130px;
+    bottom: 0;
+    left: 0;
+    width: 243px;
+    z-index: 1500;
+    border-right:2px solid #CCCCCC;
+}
 #content {
     position: relative;
     top: 90px; /* left: 240px;*/
