@@ -8,19 +8,10 @@
 	<!-- <xsl:output indent="yes"/>    -->
 
 	<xsl:param name="project.build.directory">../../target</xsl:param>
-	<xsl:param name="docbook.infile"/>
+	<xsl:param name="project.directory" select="substring-before($project.build.directory,'/target')"/>
 	<xsl:param name="source.directory"/>
-	<xsl:param name="docbook.partial.path">
-	  <xsl:call-template name="getUrl">
-	    <xsl:with-param name="path" select="substring-after($docbook.infile,$source.directory)"/>
-	  </xsl:call-template>
-	</xsl:param>
-	<xsl:param name="docbook.partial.path.adjusted">
-	  <xsl:choose>
-	    <xsl:when test="$docbook.partial.path=''">/</xsl:when>
-	    <xsl:otherwise><xsl:value-of select="$docbook.partial.path"/></xsl:otherwise>
-	  </xsl:choose>
-	</xsl:param>
+	<xsl:param name="docbook.partial.path" select="concat(substring-after($source.directory,$project.directory),'/')"/>
+	<xsl:param name="compute.wadl.path.from.docbook.path" select="'0'"/>
 
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
 
@@ -44,7 +35,7 @@
 			<!-- 
 			 Here we build a summary template for whole reference. 
   			 Combine the tables for a section into one big table
-		    -->
+			-->
 			<informaltable rules="all">
 				<col width="10%"/>
 				<col width="40%"/>
@@ -141,22 +132,6 @@
 	  <xsl:apply-templates
 	      select="document(concat('file:///', $wadl.path))//wadl:resource[@id = $resourceId]/wadl:method[@rax:id = current()/@href]"
 	      mode="method-rows"/>  
-
-			<xsl:message>
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				<xsl:value-of
-				    select="$wadl.path"
-				/>
-
-				.="<xsl:copy-of select="."/>"
-				-----------------------------
-				<xsl:apply-templates
-				    select="document(concat('file:///', $wadl.path))//wadl:resource[@id = $resourceId]/wadl:method[@rax:id = current()/@href]"
-				    mode="method-rows"/>  
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			</xsl:message>
-
-
 	</xsl:template>
 
 	<xsl:template match="wadl:resource" mode="preprocess">
@@ -477,19 +452,24 @@
 					<xsl:with-param name="path" select="substring-before($path,'#')"/>
 				</xsl:call-template>
 			</xsl:when>
-			<!-- <xsl:when test="contains($path,'\')"> -->
-			<!-- 	<xsl:call-template name="wadlPath"> -->
-			<!-- 		<xsl:with-param name="path" select="substring-after($path,'\')"/> -->
-			<!-- 	</xsl:call-template> -->
-			<!-- </xsl:when> -->
-			<!-- <xsl:when test="contains($path,'/')"> -->
-			<!-- 	<xsl:call-template name="wadlPath"> -->
-			<!-- 		<xsl:with-param name="path" select="substring-after($path,'/')"/> -->
-			<!-- 	</xsl:call-template> -->
-			<!-- </xsl:when> -->
+			<xsl:when test="$compute.wadl.path.from.docbook.path = '0' and contains($path,'\')">
+				<xsl:call-template name="wadlPath">
+					<xsl:with-param name="path" select="substring-after($path,'\')"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="$compute.wadl.path.from.docbook.path = '0' and contains($path,'/')">
+				<xsl:call-template name="wadlPath">
+					<xsl:with-param name="path" select="substring-after($path,'/')"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="$compute.wadl.path.from.docbook.path = '0'">
+				<xsl:value-of
+				    select="concat($project.build.directory, '/generated-resources/xml/xslt/',$path)"
+				/>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of
-				    select="concat($project.build.directory, '/generated-resources/xml/xslt',$docbook.partial.path.adjusted,$path)"
+				    select="concat($project.build.directory, '/generated-resources/xml/xslt',$docbook.partial.path,$path)"
 				/>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -516,20 +496,6 @@
 				<xsl:value-of select="concat('/',$uri)"/>
 			</xsl:otherwise>
 		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template name="getUrl">
-	  <xsl:param name="path" />
-	  <xsl:choose>
-	    <xsl:when test="contains($path,'/')">
-	      <xsl:value-of select="substring-before($path,'/')" />
-	      <xsl:text>/</xsl:text>
-	      <xsl:call-template name="getUrl">
-		<xsl:with-param name="path" select="substring-after($path,'/')" />
-	      </xsl:call-template>
-	    </xsl:when>
-	    <xsl:otherwise />
-	  </xsl:choose>
 	</xsl:template>
 	
 </xsl:stylesheet>

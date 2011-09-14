@@ -110,6 +110,17 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String trimWadlUriCount;
 
+    /**
+     * Controls how the path to the wadl is calculated. If 0 or not set, then 
+     * The xslts look for the normalized wadl in /generated-resources/xml/xslt/.
+     * Otherwise, in /generated-resources/xml/xslt/path/to/docbook-src, e.g.
+     * /generated-resources/xml/xslt/src/docbkx/foo.wadl
+     *
+     * @parameter expression="${generate-webhelp.compute.wadl.path.from.docbook.path}" default-value="0"
+     */
+    private String computeWadlPathFromDocbookPath;
+
+
   /**
    * DOCUMENT ME!
    *
@@ -156,6 +167,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
    sourceDirectory = sourceDocBook.getParentFile();
    transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
    transformer.setParameter("source.directory",sourceDirectory);
+   transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
 
   }
 
