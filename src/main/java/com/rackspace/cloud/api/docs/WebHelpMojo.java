@@ -24,6 +24,9 @@ import com.agilejava.docbkx.maven.FileUtils;
 
 public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
+    private File sourceDirectory;
+    private File sourceDocBook;
+
     /**
      * @parameter expression="${project.build.directory}"
      */
@@ -148,6 +151,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
    if(trimWadlUriCount != null){
 	transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);
     }
+
+   sourceDocBook = new File(sourceFilename);
+   sourceDirectory = sourceDocBook.getParentFile();
+   transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
+   transformer.setParameter("source.directory",sourceDirectory);
 
   }
 

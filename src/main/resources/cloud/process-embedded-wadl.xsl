@@ -8,8 +8,22 @@
 	<!-- <xsl:output indent="yes"/>    -->
 
 	<xsl:param name="project.build.directory">../../target</xsl:param>
+	<xsl:param name="docbook.infile"/>
+	<xsl:param name="source.directory"/>
+	<xsl:param name="docbook.partial.path">
+	  <xsl:call-template name="getUrl">
+	    <xsl:with-param name="path" select="substring-after($docbook.infile,$source.directory)"/>
+	  </xsl:call-template>
+	</xsl:param>
+	<xsl:param name="docbook.partial.path.adjusted">
+	  <xsl:choose>
+	    <xsl:when test="$docbook.partial.path=''">/</xsl:when>
+	    <xsl:otherwise><xsl:value-of select="$docbook.partial.path"/></xsl:otherwise>
+	  </xsl:choose>
+	</xsl:param>
+
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
-	
+
 	<xsl:variable name="root" select="/"/>
 
 <!-- Uncomment this template for testing in Oxygen -->
@@ -66,12 +80,12 @@
 
 	</xsl:template>
 
-	<xsl:template match="wadl:resources[wadl:resource[not(./wadl:method)]]" mode="preprocess">
-		<section xml:id="{generate-id()}">
-			<title>FOOBAR</title>
-			<xsl:call-template name="wadl-resources"/>
-		</section>
-	</xsl:template>
+	<!-- <xsl:template match="wadl:resources[wadl:resource[not(./wadl:method)]]" mode="preprocess"> -->
+	<!-- 	<section xml:id="{generate-id()}"> -->
+	<!-- 		<title>FOOBAR</title> -->
+	<!-- 		<xsl:call-template name="wadl-resources"/> -->
+	<!-- 	</section> -->
+	<!-- </xsl:template> -->
 
 	<xsl:template match="wadl:resources" name="wadl-resources" mode="preprocess">
 		<!-- Make a summary table then apply templates to wadl:resource/wadl:method (from wadl) -->
@@ -100,17 +114,49 @@
 				<xsl:with-param name="path" select="@href"/>
 			</xsl:call-template>
 		</xsl:variable>
+		<xsl:variable name="href" select="wadl:method/@href"/>
 
 		<xsl:choose>
 			<xsl:when test="@href">
-				<xsl:apply-templates
-					select="document($wadl.path,$root)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method[@rax:id = current()/wadl:method/@href]"
-					mode="method-rows"/>
+			  <xsl:apply-templates mode="method-rows">
+			    <xsl:with-param name="wadl.path" select="$wadl.path"/>
+			    <xsl:with-param name="resourceId" select="substring-after(current()/@href,'#')"/>
+			  </xsl:apply-templates>
+
+				<!-- <xsl:apply-templates -->
+				<!-- 	select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method" -->
+				<!-- 	mode="method-rows"/>   --> <!--[@rax:id = $href]-->
+
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:apply-templates select="wadl:method" mode="method-rows"/>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="wadl:method[@href]" mode="method-rows">
+	  <xsl:param name="wadl.path"/>
+	  <xsl:param name="resourceId"/>
+	  
+	  <xsl:apply-templates
+	      select="document(concat('file:///', $wadl.path))//wadl:resource[@id = $resourceId]/wadl:method[@rax:id = current()/@href]"
+	      mode="method-rows"/>  
+
+			<xsl:message>
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				<xsl:value-of
+				    select="$wadl.path"
+				/>
+
+				.="<xsl:copy-of select="."/>"
+				-----------------------------
+				<xsl:apply-templates
+				    select="document(concat('file:///', $wadl.path))//wadl:resource[@id = $resourceId]/wadl:method[@rax:id = current()/@href]"
+				    mode="method-rows"/>  
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			</xsl:message>
+
+
 	</xsl:template>
 
 	<xsl:template match="wadl:resource" mode="preprocess">
@@ -123,7 +169,7 @@
 		<xsl:choose>
 			<xsl:when test="@href">
 				<xsl:apply-templates
-					select="document($wadl.path,$root)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method[@rax:id = current()/wadl:method/@href]"
+					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method[@rax:id = current()/wadl:method/@href]"
 					mode="preprocess">
 					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
 				</xsl:apply-templates>
@@ -431,19 +477,19 @@
 					<xsl:with-param name="path" select="substring-before($path,'#')"/>
 				</xsl:call-template>
 			</xsl:when>
-			<xsl:when test="contains($path,'\')">
-				<xsl:call-template name="wadlPath">
-					<xsl:with-param name="path" select="substring-after($path,'\')"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="contains($path,'/')">
-				<xsl:call-template name="wadlPath">
-					<xsl:with-param name="path" select="substring-after($path,'/')"/>
-				</xsl:call-template>
-			</xsl:when>
+			<!-- <xsl:when test="contains($path,'\')"> -->
+			<!-- 	<xsl:call-template name="wadlPath"> -->
+			<!-- 		<xsl:with-param name="path" select="substring-after($path,'\')"/> -->
+			<!-- 	</xsl:call-template> -->
+			<!-- </xsl:when> -->
+			<!-- <xsl:when test="contains($path,'/')"> -->
+			<!-- 	<xsl:call-template name="wadlPath"> -->
+			<!-- 		<xsl:with-param name="path" select="substring-after($path,'/')"/> -->
+			<!-- 	</xsl:call-template> -->
+			<!-- </xsl:when> -->
 			<xsl:otherwise>
 				<xsl:value-of
-					select="concat($project.build.directory, '/generated-resources/xml/xslt/',$path)"
+				    select="concat($project.build.directory, '/generated-resources/xml/xslt',$docbook.partial.path.adjusted,$path)"
 				/>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -472,4 +518,18 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:template name="getUrl">
+	  <xsl:param name="path" />
+	  <xsl:choose>
+	    <xsl:when test="contains($path,'/')">
+	      <xsl:value-of select="substring-before($path,'/')" />
+	      <xsl:text>/</xsl:text>
+	      <xsl:call-template name="getUrl">
+		<xsl:with-param name="path" select="substring-after($path,'/')" />
+	      </xsl:call-template>
+	    </xsl:when>
+	    <xsl:otherwise />
+	  </xsl:choose>
+	</xsl:template>
+	
 </xsl:stylesheet>

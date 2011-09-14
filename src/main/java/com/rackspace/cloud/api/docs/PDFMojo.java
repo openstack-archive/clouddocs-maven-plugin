@@ -270,6 +270,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
         File imageDirectory = getImageDirectory();
         File calloutDirectory = new File (imageDirectory, "callouts");
 
+	transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
+	transformer.setParameter("source.directory",sourceDirectory);
+
         transformer.setParameter ("admon.graphics.path", imageDirectory.getAbsolutePath()+File.separator);
         transformer.setParameter ("callout.graphics.path", calloutDirectory.getAbsolutePath()+File.separator);
 
