@@ -430,9 +430,9 @@ set       toc,title
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template match="//d:gloss">
+    <xsl:template match="//d:para/d:glossterm">
         <xsl:variable name="term"><xsl:value-of select="."/></xsl:variable>
-        <xsl:variable name="definition"><xsl:value-of select="normalize-space(document($glossary.xml.uri)//d:glossentry[d:glossterm=$term]/d:glossdef)"/></xsl:variable>
+        <xsl:variable name="definition"><xsl:value-of select="normalize-space(//d:glossentry[d:glossterm=$term]/d:glossdef)"/></xsl:variable>
         <xsl:variable name="displayDefinition">
           <xsl:choose>
             <xsl:when test="$definition=''">No definition found. </xsl:when>
@@ -444,7 +444,7 @@ set       toc,title
              <script>
              $(document).ready(function(){
                $("a.gloss#<xsl:value-of select="$term"/>").qtip({
-               content: '<xsl:value-of select='$displayDefinition'/><br/><a><xsl:attribute name="href"><xsl:value-of select="$glossary.uri"/></xsl:attribute>View Glossary</a>',
+               content: '<xsl:value-of select='$displayDefinition'/>',
                show: {event:'mouseover',delay:500},
                hide: {event:'mouseout',delay:500, fixed:true},
                style: { 
