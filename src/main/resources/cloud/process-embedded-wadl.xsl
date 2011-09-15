@@ -410,10 +410,16 @@
 						</xsl:for-each> Default: <xsl:value-of select="@default"
 						/><xsl:text>. </xsl:text>
 					</xsl:if>
-					<xsl:choose>
-						<xsl:when test="@required = 'true'">Required. </xsl:when>
-						<xsl:otherwise>Optional. </xsl:otherwise>
-					</xsl:choose>
+                    <!--
+                        Template parameters are always required, so
+                        there's no poin in processing @required.
+                    -->
+                    <xsl:if test="@style != 'template'">
+                        <xsl:choose>
+                            <xsl:when test="@required = 'true'">Required. </xsl:when>
+                            <xsl:otherwise>Optional. </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
 				</para>
 			</td>
 		</tr>
