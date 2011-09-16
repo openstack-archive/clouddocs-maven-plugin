@@ -247,7 +247,7 @@
 					<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
 				</itemizedlist>
 			</xsl:if>
-			<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2'))]">
+			<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2')) and wadl:representation/@element]">
 
 				<itemizedlist spacing="compact">
 					<title>Error Response Code(s)</title>
