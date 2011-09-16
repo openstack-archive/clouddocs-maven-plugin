@@ -197,42 +197,19 @@
 			</informaltable>
 
 			<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
-			
-			<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param or wadl:response/wadl:param">
-				<table rules="all">
-					<caption><xsl:value-of select="$method.title"/> parameters</caption>
-					<col width="25%"/>
-					<col width="15%"/>
-					<col width="60%"/>
-					<thead>
-						<tr>
-							<th align="center">Name</th>
-							<th align="center">Style</th>
-							<th align="center">Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param">
-							<tr>
-								<th align="center" colspan="3">Request parameters</th>
-							</tr>	
-							<xsl:apply-templates
-								select="wadl:request//wadl:param|ancestor::wadl:resource/wadl:param"
-								mode="preprocess">
-								<xsl:sort select="@style"/>
-							</xsl:apply-templates>
-						</xsl:if>
-						<xsl:if test="wadl:response/wadl:param">
-							<tr>
-								<th align="center" colspan="3">Response parameters</th>
-							</tr>	
-							<xsl:apply-templates
-								select="wadl:response//wadl:param"
-								mode="preprocess"/>
-						</xsl:if>
-					</tbody>
-				</table>
-			</xsl:if>
+
+			<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param">
+                <xsl:call-template name="paramTable">
+                    <xsl:with-param name="mode" select="'Request'"/>
+                    <xsl:with-param name="method.title" select="$method.title"/>
+                </xsl:call-template>
+            </xsl:if>
+			<xsl:if test="wadl:response/wadl:param">
+                <xsl:call-template name="paramTable">
+                    <xsl:with-param name="mode" select="'Response'"/>
+                    <xsl:with-param name="method.title" select="$method.title"/>
+                </xsl:call-template>
+            </xsl:if>
 
 			<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2')]">
 				<itemizedlist spacing="compact">
@@ -503,5 +480,44 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+    <xsl:template name="paramTable">
+        <xsl:param name="mode"/>
+    	<xsl:param name="method.title"/>
+        <xsl:if test="$mode='Request' or $mode='Response'">
+            <table rules="all">
+                <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
+                <col width="25%"/>
+                <col width="15%"/>
+                <col width="60%"/>
+                <thead>
+                    <tr>
+                        <th align="center">Name</th>
+                        <th align="center">Style</th>
+                        <th align="center">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <xsl:choose>
+                        <xsl:when test="$mode = 'Request'">
+                            <xsl:apply-templates
+                            select="wadl:request//wadl:param|ancestor::wadl:resource/wadl:param"
+                            mode="preprocess">
+                                <xsl:sort select="@style"/>
+                            </xsl:apply-templates>
+                        </xsl:when>
+                        <xsl:when test="$mode = 'Response'">
+                            <xsl:apply-templates
+                                select="wadl:response//wadl:param"
+                                mode="preprocess"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <tr>
+                                <td>WTF? <xsl:value-of select="$mode"/></td>
+                            </tr>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </tbody>
+            </table>
+        </xsl:if>
+    </xsl:template>
 </xsl:stylesheet>
