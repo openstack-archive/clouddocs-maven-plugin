@@ -92,7 +92,7 @@
     </xsl:template>
     
     <xsl:template match="xsdxt:code" xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" mode="normalizeWadl2">
-        <example xmlns="http://docbook.org/ns/docbook">
+        <example xmlns="http://docbook.org/ns/docbook" role="wadl">
             <title><xsl:value-of select="parent::xsdxt:sample/@title"/><xsl:choose>
                 <xsl:when test="@type = 'application/xml'">: XML</xsl:when>
                 <xsl:when test="@type = 'application/json'">: JSON</xsl:when>                
@@ -107,7 +107,7 @@
     </xsl:template>
 
     <xsl:template match="rax:example" 
-        xmlns:rax="http://docs.rackspace.com/api" mode="normalizeWadl2"><example xmlns="http://docbook.org/ns/docbook">
+        xmlns:rax="http://docs.rackspace.com/api" mode="normalizeWadl2"><example xmlns="http://docbook.org/ns/docbook" role="wadl">
             <title><xsl:value-of select="parent::rax:examples/@title"/><xsl:choose>
                 <xsl:when test="@language = 'xml'">: XML</xsl:when>
                 <xsl:when test="@language = 'javascript'">: JSON</xsl:when>                
