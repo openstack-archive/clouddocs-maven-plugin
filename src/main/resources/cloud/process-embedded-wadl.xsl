@@ -451,6 +451,7 @@
             <xsl:text> (</xsl:text>
             <xsl:call-template name="statusCodeList">
                 <xsl:with-param name="codes" select="$codes"/>
+                <xsl:with-param name="inError" select="true()"/>
             </xsl:call-template>
             <xsl:text>)</xsl:text>
             <xsl:choose>
@@ -562,11 +563,15 @@
     <xsl:template name="statusCodeList">
         <xsl:param name="codes" select="'400 500 &#x2026;'"/>
         <xsl:param name="separator" select="','"/>
+        <xsl:param name="inError" select="false()"/>
         <xsl:variable name="code" select="substring-before($codes,' ')"/>
         <xsl:variable name="nextCodes" select="substring-after($codes,' ')"/>
         <xsl:choose>
             <xsl:when test="$code != ''">
-                <xsl:value-of select="$code"/>
+                <xsl:call-template name="statusCode">
+                    <xsl:with-param name="code" select="$code"/>
+                    <xsl:with-param name="inError" select="$inError"/>
+                </xsl:call-template>
                 <xsl:text>, </xsl:text>
                 <xsl:call-template name="statusCodeList">
                     <xsl:with-param name="codes" select="$nextCodes"/>
@@ -574,7 +579,26 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$codes"/>
+                <xsl:call-template name="statusCode">
+                    <xsl:with-param name="code" select="$codes"/>
+                    <xsl:with-param name="inError" select="$inError"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="statusCode">
+        <xsl:param name="code" select="'200'"/>
+        <xsl:param name="inError" select="false()"/>
+        <xsl:choose>
+            <xsl:when test="$inError">
+                <errorcode>
+                    <xsl:value-of select='$code'/>
+                </errorcode>
+            </xsl:when>
+            <xsl:otherwise>
+                <returnvalue>
+                    <xsl:value-of select='$code'/>
+                </returnvalue>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
