@@ -233,11 +233,15 @@
                 </simpara>
 			</xsl:if>
 			<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2'))]">
-
-				<itemizedlist spacing="compact">
-					<title>Error Response Code(s)</title>
-					<xsl:apply-templates select="wadl:response" mode="preprocess-faults"/>
-				</itemizedlist>
+                <simpara>
+                    Error Response Code(s):
+                    <!--
+                        Put those errors that don't have a set status
+                        up front.  These are typically general errors.
+                    -->
+					<xsl:apply-templates select="wadl:response[not(@status)]" mode="preprocess-faults"/>
+					<xsl:apply-templates select="wadl:response[@status]" mode="preprocess-faults"/>
+                </simpara>
 			</xsl:if>
 			
 			<!-- <xsl:copy-of select="wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" /> -->
@@ -432,14 +436,32 @@
 
 	<xsl:template match="wadl:response" mode="preprocess-faults">
 		<xsl:if
-			test="not(starts-with(normalize-space(@status),'2')) and wadl:representation/@element">
-			<listitem>
-				<para>
-					<xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
-						<xsl:if test="@status">(<xsl:value-of select="@status"/>)</xsl:if>
-				</para>
-			</listitem>
-		</xsl:if>
+			test="(not(@status) or not(starts-with(normalize-space(@status),'2'))) and wadl:representation/@element">
+            <xsl:variable name="codes">
+                <xsl:choose>
+                    <xsl:when test="@status">
+                        <xsl:value-of select="normalize-space(@status)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="'400 500 &#x2026;'"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
+            <xsl:text> (</xsl:text>
+            <xsl:call-template name="statusCodeList">
+                <xsl:with-param name="codes" select="$codes"/>
+            </xsl:call-template>
+            <xsl:text>)</xsl:text>
+            <xsl:choose>
+                <xsl:when test="following-sibling::wadl:response">
+                    <xsl:text>,&#x0a;            </xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>&#x0a;   </xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
 	</xsl:template>
 
 	<!-- ======================================== -->
