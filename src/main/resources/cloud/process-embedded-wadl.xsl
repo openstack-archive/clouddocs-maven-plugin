@@ -204,7 +204,14 @@
 				</tbody>
 			</informaltable>
 
-			<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
+			<xsl:choose>
+			  <xsl:when test="wadl:doc//xhtml:*[@class = 'shortdesc'] or wadl:doc//d:*[@role = 'shortdesc']">
+			    <xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
+			  </xsl:when>
+			  <xsl:otherwise>
+			    <!-- Suppress because everything will be in the table -->
+			  </xsl:otherwise>
+			</xsl:choose>
 
 			<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param">
                 <xsl:call-template name="paramTable">
@@ -233,7 +240,7 @@
 				</itemizedlist>
 			</xsl:if>
 			
-			<xsl:copy-of select="wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+			<!-- <xsl:copy-of select="wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" /> -->
 			
 		</section>
 	</xsl:template>
@@ -274,8 +281,8 @@
 			</td>
 			<td>
 				<xsl:choose>
-					<xsl:when test="wadl:doc//*[@class = 'shortdesc']">
-						<xsl:apply-templates select="wadl:doc//*[@class = 'shortdesc'][1]" mode="process-shortdesc"/>
+					<xsl:when test="wadl:doc//*[@class = 'shortdesc' or @role='shortdesc']">
+						<xsl:apply-templates select="wadl:doc//*[@class = 'shortdesc' or @role = 'shortdesc'][1]" mode="process-shortdesc"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
@@ -293,15 +300,19 @@
 		<xsl:apply-templates mode="process-xhtml"/>
 	</xsl:template>
 
-	<xsl:template match="xhtml:p[@class = 'shortdesc']" mode="process-xhtml"/>
+	<xsl:template match="xhtml:p[@class = 'shortdesc']|d:para[@role = 'shortdesc']|d:example[@role='wadl']" mode="process-xhtml"/>
 
 	<xsl:template match="xhtml:p[not(@class = 'shortdesc')]"  mode="process-xhtml">
-		<para>
-			<xsl:apply-templates mode="process-xhtml"/>
-		</para>
+	  <para>
+	    <xsl:apply-templates mode="process-xhtml"/>
+	  </para>
 	</xsl:template>
-	
-	<xsl:template match="span[@class='shortdesc']" mode="process-xhtml"/>
+
+	<xsl:template match="d:*[not(@role = 'wadl') and not(@role = 'shortdesc')]|@*"  mode="process-xhtml">
+		<xsl:copy>
+		  <xsl:apply-templates select="@*|d:*|text()|comment()|processing-instruction()" mode="process-xhtml"/>
+		</xsl:copy>
+	</xsl:template>
 	
 	<xsl:template match="xhtml:b|xhtml:strong"  mode="process-xhtml">
 		<emphasis role="bold"><xsl:apply-templates  mode="process-xhtml"/></emphasis>
@@ -335,7 +346,7 @@
 		</orderedlist>
 	</xsl:template>
 	
-	<xsl:template match="db:*" mode="process-xhtml" xmlns:db="http://docbook.org/ns/docbook"/>
+	<!-- <xsl:template match="db:*" mode="process-xhtml" xmlns:db="http://docbook.org/ns/docbook"/> -->
 	
 	<!-- TODO: Try to make this less brittle. What if they have a li/ul or li/table? -->
 	<xsl:template match="xhtml:li[not(xhtml:p)]" mode="process-xhtml">
