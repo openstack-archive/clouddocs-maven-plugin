@@ -227,10 +227,10 @@
             </xsl:if>
 
 			<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2')]">
-				<itemizedlist spacing="compact">
-					<title>Normal Response Code(s)</title>
+                <simpara>
+                    Normal Response Code(s):
 					<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
-				</itemizedlist>
+                </simpara>
 			</xsl:if>
 			<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2'))]">
 
@@ -422,13 +422,11 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:response" mode="preprocess-normal">
-		<xsl:if test="starts-with(normalize-space(@status),'2')">
-			<listitem>
-				<para>
-					<xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
-						(<xsl:value-of select="@status"/>)
-				</para>
-			</listitem>
+        <xsl:variable name="normStatus" select="normalize-space(@status)"/>
+		<xsl:if test="starts-with($normStatus,'2')">
+            <xsl:call-template name="statusCodeList">
+                <xsl:with-param name="codes" select="$normStatus"/>
+            </xsl:call-template>
 		</xsl:if>
 	</xsl:template>
 
@@ -538,6 +536,25 @@
                 </tbody>
             </table>
         </xsl:if>
+    </xsl:template>
+    <xsl:template name="statusCodeList">
+        <xsl:param name="codes" select="'400 500 &#x2026;'"/>
+        <xsl:param name="separator" select="','"/>
+        <xsl:variable name="code" select="substring-before($codes,' ')"/>
+        <xsl:variable name="nextCodes" select="substring-after($codes,' ')"/>
+        <xsl:choose>
+            <xsl:when test="$code != ''">
+                <xsl:value-of select="$code"/>
+                <xsl:text>, </xsl:text>
+                <xsl:call-template name="statusCodeList">
+                    <xsl:with-param name="codes" select="$nextCodes"/>
+                    <xsl:with-param name="separator" select="$separator"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$codes"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 	<!-- DWC: This template comes from the DocBook xsls (MIT-style license) -->
 	<xsl:template name="pi-attribute">
