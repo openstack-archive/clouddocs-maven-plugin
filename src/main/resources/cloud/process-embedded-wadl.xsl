@@ -80,21 +80,29 @@
 
 	<xsl:template match="wadl:resources" name="wadl-resources" mode="preprocess">
 		<!-- Make a summary table then apply templates to wadl:resource/wadl:method (from wadl) -->
-		<informaltable rules="all">
-			<col width="10%"/>
-			<col width="40%"/>
-			<col width="50%"/>
-			<thead>
-				<tr>
-					<th align="center">Verb</th>
-					<th align="center">URI</th>
-					<th align="center">Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<xsl:apply-templates select="wadl:resource" mode="method-rows"/>
-			</tbody>
-		</informaltable>
+		<xsl:variable name="skipSummary">
+			<xsl:call-template name="pi-attribute">
+				<xsl:with-param name="pis" select="processing-instruction('rax-wadl')"/>
+				<xsl:with-param name="attribute" select="'skipSummary'"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:if test="$skipSummary = '' or $skipSummary='false' or $skipSummary='no'">
+			<informaltable rules="all">
+				<col width="10%"/>
+				<col width="40%"/>
+				<col width="50%"/>
+				<thead>
+					<tr>
+						<th align="center">Verb</th>
+						<th align="center">URI</th>
+						<th align="center">Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<xsl:apply-templates select="wadl:resource" mode="method-rows"/>
+				</tbody>
+			</informaltable>
+		</xsl:if>
 
 		<xsl:apply-templates select=".//wadl:resource" mode="preprocess"/>
 	</xsl:template>
@@ -520,4 +528,38 @@
             </table>
         </xsl:if>
     </xsl:template>
+	<!-- DWC: This template comes from the DocBook xsls (MIT-style license) -->
+	<xsl:template name="pi-attribute">
+		<xsl:param name="pis" select="processing-instruction('BOGUS_PI')"></xsl:param>
+		<xsl:param name="attribute">filename</xsl:param>
+		<xsl:param name="count">1</xsl:param>
+		
+		<xsl:choose>
+			<xsl:when test="$count>count($pis)">
+				<!-- not found -->
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="pi">
+					<xsl:value-of select="$pis[$count]"></xsl:value-of>
+				</xsl:variable>
+				<xsl:variable name="pivalue">
+					<xsl:value-of select="concat(' ', normalize-space($pi))"></xsl:value-of>
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="contains($pivalue,concat(' ', $attribute, '='))">
+						<xsl:variable name="rest" select="substring-after($pivalue,concat(' ', $attribute,'='))"></xsl:variable>
+						<xsl:variable name="quote" select="substring($rest,1,1)"></xsl:variable>
+						<xsl:value-of select="substring-before(substring($rest,2),$quote)"></xsl:value-of>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="pi-attribute">
+							<xsl:with-param name="pis" select="$pis"></xsl:with-param>
+							<xsl:with-param name="attribute" select="$attribute"></xsl:with-param>
+							<xsl:with-param name="count" select="$count + 1"></xsl:with-param>
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
 </xsl:stylesheet>
