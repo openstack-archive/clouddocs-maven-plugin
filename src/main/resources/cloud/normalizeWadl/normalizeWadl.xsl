@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This XSLT flattens the xsds associated with the wadl.  -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:xsd="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs wadl xsd" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" exclude-result-prefixes="xs wadl xsd xsdxt" version="2.0">
 
     <xsl:import href="normalizeWadl2.xsl"/>
     <xsl:import href="normalizeWadl3.xsl"/>
@@ -95,19 +95,63 @@
             <xsl:apply-templates select="xsdxt:code" mode="normalizeWadl2"/>
     </xsl:template>
     
-    <xsl:template match="xsdxt:code" xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" mode="normalizeWadl2">
-        <example xmlns="http://docbook.org/ns/docbook" role="wadl">
-            <title><xsl:value-of select="parent::xsdxt:sample/@title"/><xsl:choose>
-                <xsl:when test="@type = 'application/xml'">: XML</xsl:when>
-                <xsl:when test="@type = 'application/json'">: JSON</xsl:when>                
-            </xsl:choose></title>
-        <programlisting xmlns="http://docbook.org/ns/docbook"><xsl:attribute name="language">
-            <xsl:choose>
-                <xsl:when test="@type = 'application/xml'">xml</xsl:when>
-                <xsl:when test="@type = 'application/json'">javascript</xsl:when>                
-            </xsl:choose>
-        </xsl:attribute><xsl:copy-of select="unparsed-text(concat($samples.path, '/',@href))"/></programlisting>
-            </example>
+    <xsl:template match="xsdxt:code" mode="normalizeWadl2">
+        <!--
+            In order to create a DocBook example from a sample of code there are,
+            three variables we must determine: the media type of the example,
+            a human readable title, and the content of the example itself.
+
+            We try to determine as much as we can from context.
+        -->
+        <xsl:variable
+            name="content"
+            as="xs:string"
+            select="if (@href)
+                    then unparsed-text(concat($samples.path, '/',@href))
+                    else xs:string(.)"/>
+        <xsl:variable
+            name="type"
+            as="xs:string"
+            select="if (@type) then @type
+                    else if (ancestor::wadl:representation/@mediaType)
+                    then ancestor::wadl:representation/@mediaType
+                    else 'application/xml'"/> <!-- xml is the default -->
+        <xsl:variable
+            name="title"
+            as="xs:string"
+            select="if (ancestor::xsdxt:sample/@title) then ancestor::xsdxt:sample/@title
+                    else if (ancestor::wadl:doc/@title) then ancestor::wadl:doc/@title
+                    else ''"/> <!-- a defualt title will be computed below in this case -->
+       <example xmlns="http://docbook.org/ns/docbook" role="wadl">
+            <title>
+                <xsl:choose>
+                    <xsl:when test="string-length($title) != 0"><xsl:value-of select="$title"/></xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="ancestor::wadl:method/wadl:doc/@title">
+                            <xsl:value-of select="ancestor::wadl:method/wadl:doc/@title"/>
+                        </xsl:if>
+                        <xsl:choose>
+                            <xsl:when test="ancestor::wadl:response"> Response</xsl:when>
+                            <xsl:when test="ancestor::wadl:request"> Request</xsl:when>
+                        </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="$type = 'application/xml'">: XML</xsl:when>
+                            <xsl:when test="$type = 'application/json'">: JSON</xsl:when>
+                            <xsl:otherwise>: <xsl:value-of select="$type"/></xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </title>
+            <programlisting xmlns="http://docbook.org/ns/docbook">
+                <xsl:attribute name="language">
+                    <xsl:choose>
+                        <xsl:when test="$type = 'application/xml'">xml</xsl:when>
+                        <xsl:when test="$type = 'application/json'">javascript</xsl:when>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:value-of select="$content"/>
+            </programlisting>
+       </example>
     </xsl:template>
 
     <xsl:template match="rax:example" 
