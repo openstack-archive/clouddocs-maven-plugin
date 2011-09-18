@@ -222,6 +222,7 @@
                 </simpara>
 			</xsl:if>
 
+            <!-- Method Docs -->
 			<xsl:choose>
 			  <xsl:when test="wadl:doc//xhtml:*[@class = 'shortdesc'] or wadl:doc//d:*[@role = 'shortdesc']">
 			    <xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
@@ -231,12 +232,21 @@
 			  </xsl:otherwise>
 			</xsl:choose>
 
+            <xsl:copy-of select="wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+
+            <!-- About the request -->
+
 			<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param">
                 <xsl:call-template name="paramTable">
                     <xsl:with-param name="mode" select="'Request'"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
                 </xsl:call-template>
             </xsl:if>
+
+			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+
+            <!-- About the response -->
+
 			<xsl:if test="wadl:response/wadl:param">
                 <xsl:call-template name="paramTable">
                     <xsl:with-param name="mode" select="'Response'"/>
@@ -244,8 +254,6 @@
                 </xsl:call-template>
             </xsl:if>
 			
-            <xsl:copy-of select="wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
-			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
 			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
 		</section>
 	</xsl:template>
