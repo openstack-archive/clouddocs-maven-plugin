@@ -10,9 +10,13 @@
     <xsl:output indent="yes"/>
 
     <xsl:param name="xsdVersion" select="xs:decimal(1.1)"/>
+
     <xsl:param name="flattenXsds">true</xsl:param>
+
     <xsl:param name="debug">0</xsl:param>
     <xsl:param name="format">path-format</xsl:param>
+
+	<xsl:param name="xsd.output.path">target/generated-resources/xml/xslt/</xsl:param>
 
     <xsl:param name="samples.path" select="replace(base-uri(/),'(.*/).*\.wadl', '$1')"/>
 
@@ -135,7 +139,7 @@
                  <xsl:apply-templates select="$contents" mode="prune-imports"/>
             </xsl:variable>
 
-            <xsl:result-document href="{concat('target/generated-resources/xml/xslt/',@name)}">
+            <xsl:result-document href="{concat($xsd.output.path,@name)}">
                 <xsl:apply-templates select="$prune-imports" mode="sort-schema"/>
             </xsl:result-document>
         </xsl:for-each>
