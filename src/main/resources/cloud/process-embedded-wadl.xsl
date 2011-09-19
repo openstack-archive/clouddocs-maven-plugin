@@ -273,14 +273,13 @@
 
             <!-- Method Docs -->
 			<xsl:choose>
-			  <xsl:when test="wadl:doc//xhtml:*[@class = 'shortdesc'] or wadl:doc//d:*[@role = 'shortdesc']">
+			  <xsl:when test="wadl:doc//xhtml:*">
 			    <xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
 			  </xsl:when>
 			  <xsl:otherwise>
 			    <!-- Suppress because everything will be in the table -->
 			  </xsl:otherwise>
 			</xsl:choose>
-
             <xsl:copy-of select="wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
 
             <!-- About the request -->
@@ -293,6 +292,9 @@
             </xsl:if>
 
 			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+            <xsl:if test="wadl:request/wadl:representation/wadl:doc//xhtml:*">
+                <xsl:apply-templates select="wadl:request/wadl:representation/wadl:doc//xhtml:*" mode="process-xhtml"/>
+            </xsl:if>
             <!-- we allow no request text and there is no request ... -->
             <xsl:if test="not($skipNoRequestText) and not(wadl:request)">
                 <!-- ...and we have a valid response OR we are skipping response text -->
@@ -310,6 +312,9 @@
                 </xsl:call-template>
             </xsl:if>
 			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+            <xsl:if test="wadl:response/wadl:representation/wadl:doc//xhtml:*">
+                <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc//xhtml:*" mode="process-xhtml"/>
+            </xsl:if>
             <!-- we allow no response text and we dont have a 200 level response with a representation -->
             <xsl:if test="not($skipNoResponseText) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
                 <!-- if we are also missing request text and it's not
