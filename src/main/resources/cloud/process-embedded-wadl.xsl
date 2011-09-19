@@ -164,6 +164,7 @@
 					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method[@rax:id = current()/wadl:method/@href]"
 					mode="preprocess">
 					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
+                    <xsl:with-param name="resourceLink" select="."/>
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
@@ -179,12 +180,14 @@
 
 	<xsl:template match="wadl:method" mode="preprocess">
 		<xsl:param name="sectionId"/>
+        <xsl:param name="resourceLink"/>
+        <xsl:variable name="id" select="@rax:id"/>
         <!-- Handle skipText PIs -->
         <xsl:variable name="skipNoRequestTextN">
             <xsl:call-template name="makeBoolean">
                 <xsl:with-param name="boolValue">
                     <xsl:call-template name="pi-attribute">
-                        <xsl:with-param name="pis" select="ancestor-or-self::processing-instruction('rax-wadl')"/>
+                        <xsl:with-param name="pis" select="$resourceLink/wadl:method[contains(@href,$id)]/ancestor-or-self::*/processing-instruction('rax-wadl')"/>
                         <xsl:with-param name="attribute" select="'skipNoRequestText'"/>
                     </xsl:call-template>
                 </xsl:with-param>
@@ -195,13 +198,24 @@
             <xsl:call-template name="makeBoolean">
                 <xsl:with-param name="boolValue">
                     <xsl:call-template name="pi-attribute">
-                        <xsl:with-param name="pis" select="ancestor-or-self::processing-instruction('rax-wadl')"/>
+                        <xsl:with-param name="pis" select="$resourceLink/wadl:method[contains(@href,$id)]/ancestor-or-self::*/processing-instruction('rax-wadl')"/>
                         <xsl:with-param name="attribute" select="'skipNoResponeText'"/>
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="skipNoResponseText" select="boolean(number($skipNoResponseTextN))"/>
+        <xsl:variable name="addMethodPageBreaksN">
+            <xsl:call-template name="makeBoolean">
+                <xsl:with-param name="boolValue">
+                    <xsl:call-template name="pi-attribute">
+                        <xsl:with-param name="pis" select="$resourceLink/wadl:method[contains(@href,$id)]/ancestor-or-self::*/processing-instruction('rax-wadl')"/>
+                        <xsl:with-param name="attribute" select="'addMethodPageBreaks'"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="addMethodPageBreaks" select="boolean(number($addMethodPageBreaksN))"/>
 		<xsl:variable name="replacechars">/{}</xsl:variable>
 		<xsl:variable name="method.title">
 				<xsl:choose>
@@ -218,6 +232,9 @@
 					</xsl:otherwise>
 				</xsl:choose>
 		</xsl:variable>
+        <xsl:if test="$addMethodPageBreaks">
+            <xsl:processing-instruction name="hard-pagebreak"/>
+        </xsl:if>
 		<section xml:id="{concat(@name,'_',@rax:id,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)}">
 			<title><xsl:value-of select="$method.title"/></title>
 			<informaltable rules="all">
