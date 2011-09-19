@@ -8,6 +8,8 @@
 	<!-- <xsl:output indent="yes"/>    -->
 
 	<xsl:param name="project.build.directory">../../target</xsl:param>
+    <xsl:param name="wadl.norequest.msg"><para>This operation does not require a request body.</para></xsl:param>
+    <xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
 	<xsl:param name="project.directory" select="substring-before($project.build.directory,'/target')"/>
 	<xsl:param name="source.directory"/>
 	<xsl:param name="docbook.partial.path" select="concat(substring-after($source.directory,$project.directory),'/')"/>
@@ -79,14 +81,20 @@
 	<!-- </xsl:template> -->
 
 	<xsl:template match="wadl:resources" name="wadl-resources" mode="preprocess">
-		<!-- Make a summary table then apply templates to wadl:resource/wadl:method (from wadl) -->
-		<xsl:variable name="skipSummary">
-			<xsl:call-template name="pi-attribute">
-				<xsl:with-param name="pis" select="processing-instruction('rax-wadl')"/>
-				<xsl:with-param name="attribute" select="'skipSummary'"/>
-			</xsl:call-template>
+        <!-- Handle skipSummary PI -->
+		<xsl:variable name="skipSummaryN">
+            <xsl:call-template name="makeBoolean">
+                <xsl:with-param name="boolValue">
+                    <xsl:call-template name="pi-attribute">
+                        <xsl:with-param name="pis" select="processing-instruction('rax-wadl')"/>
+                        <xsl:with-param name="attribute" select="'skipSummary'"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
 		</xsl:variable>
-		<xsl:if test="$skipSummary = '' or $skipSummary='false' or $skipSummary='no'">
+        <xsl:variable name="skipSummary" select="boolean(number($skipSummaryN))"/>
+		<!-- Make a summary table then apply templates to wadl:resource/wadl:method (from wadl) -->
+		<xsl:if test="not($skipSummary)">
 			<informaltable rules="all">
 				<col width="10%"/>
 				<col width="40%"/>
@@ -170,6 +178,29 @@
 
 	<xsl:template match="wadl:method" mode="preprocess">
 		<xsl:param name="sectionId"/>
+        <!-- Handle skipText PIs -->
+        <xsl:variable name="skipNoRequestTextN">
+            <xsl:call-template name="makeBoolean">
+                <xsl:with-param name="boolValue">
+                    <xsl:call-template name="pi-attribute">
+                        <xsl:with-param name="pis" select="ancestor-or-self::processing-instruction('rax-wadl')"/>
+                        <xsl:with-param name="attribute" select="'skipNoRequestText'"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="skipNoRequestText" select="boolean(number($skipNoRequestTextN))"/>
+        <xsl:variable name="skipNoResponseTextN">
+            <xsl:call-template name="makeBoolean">
+                <xsl:with-param name="boolValue">
+                    <xsl:call-template name="pi-attribute">
+                        <xsl:with-param name="pis" select="ancestor-or-self::processing-instruction('rax-wadl')"/>
+                        <xsl:with-param name="attribute" select="'skipNoResponeText'"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="skipNoResponseText" select="boolean(number($skipNoResponseTextN))"/>
 		<xsl:variable name="replacechars">/{}</xsl:variable>
 		<xsl:variable name="method.title">
 				<xsl:choose>
@@ -244,6 +275,9 @@
             </xsl:if>
 
 			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+            <xsl:if test="not($skipNoRequestText) and not(wadl:request)">
+                <xsl:copy-of select="$wadl.norequest.msg"/>
+            </xsl:if>
 
             <!-- About the response -->
 
@@ -253,8 +287,10 @@
                     <xsl:with-param name="method.title" select="$method.title"/>
                 </xsl:call-template>
             </xsl:if>
-			
 			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+            <xsl:if test="not($skipNoResponseText) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
+                <xsl:copy-of select="$wadl.noresponse.msg"/>
+            </xsl:if>
 		</section>
 	</xsl:template>
 
@@ -609,6 +645,27 @@
                     <xsl:value-of select='$code'/>
                 </returnvalue>
             </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <!--
+        Converts boolValue string 'false' and 'no' to 0
+        Empty strings '' get default (which can be 0 or 1)
+        All other strings are 1
+
+       You can convert this to an xpath boolean value by saying:
+       boolean(number($val)).
+
+       Not sure if there's an easier way of doing this in XSL 1.0.
+    -->
+    <xsl:template name="makeBoolean">
+        <xsl:param name="boolValue" select="'no'"/>
+        <xsl:param name="default" select="0"/>
+        <xsl:choose>
+            <xsl:when test="string-length($boolValue) = 0">
+                <xsl:value-of select="$default"/>
+            </xsl:when>
+            <xsl:when test="$boolValue = 'false' or $boolValue = 'no'"><xsl:value-of select="0"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="1"/></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 	<!-- DWC: This template comes from the DocBook xsls (MIT-style license) -->
