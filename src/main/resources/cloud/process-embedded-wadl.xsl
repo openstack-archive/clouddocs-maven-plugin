@@ -10,6 +10,7 @@
 	<xsl:param name="project.build.directory">../../target</xsl:param>
     <xsl:param name="wadl.norequest.msg"><para>This operation does not require a request body.</para></xsl:param>
     <xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
+    <xsl:param name="wadl.noreqresp.msg"><para>This operation does not require a request body and does not return a response body.</para></xsl:param>
 	<xsl:param name="project.directory" select="substring-before($project.build.directory,'/target')"/>
 	<xsl:param name="source.directory"/>
 	<xsl:param name="docbook.partial.path" select="concat(substring-after($source.directory,$project.directory),'/')"/>
@@ -275,8 +276,12 @@
             </xsl:if>
 
 			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+            <!-- we allow no request text and there is no request ... -->
             <xsl:if test="not($skipNoRequestText) and not(wadl:request)">
-                <xsl:copy-of select="$wadl.norequest.msg"/>
+                <!-- ...and we have a valid response OR we are skipping response text -->
+                <xsl:if test="wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation or $skipNoResponseText">
+                    <xsl:copy-of select="$wadl.norequest.msg"/>
+                </xsl:if>
             </xsl:if>
 
             <!-- About the response -->
@@ -288,8 +293,19 @@
                 </xsl:call-template>
             </xsl:if>
 			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+            <!-- we allow no response text and we dont have a 200 level response with a representation -->
             <xsl:if test="not($skipNoResponseText) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
-                <xsl:copy-of select="$wadl.noresponse.msg"/>
+                <!-- if we are also missing request text and it's not
+                     supressed then output the noreqresp message,
+                     otherwise output the noresponse message -->
+                <xsl:choose>
+                    <xsl:when test="not($skipNoRequestText) and not(wadl:request)">
+                        <xsl:copy-of select="$wadl.noreqresp.msg"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:copy-of select="$wadl.noresponse.msg"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
 		</section>
 	</xsl:template>
