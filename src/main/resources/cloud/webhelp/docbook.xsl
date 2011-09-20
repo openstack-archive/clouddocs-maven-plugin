@@ -435,16 +435,16 @@ set       toc,title
         <xsl:variable name="definition"><xsl:value-of select="normalize-space(//d:glossentry[d:glossterm=$term]/d:glossdef)"/></xsl:variable>
         <xsl:variable name="displayDefinition">
           <xsl:choose>
-            <xsl:when test="$definition=''">No definition found. </xsl:when>
+            <xsl:when test="$definition=''"><strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text> No definition found. </xsl:when>
             <xsl:otherwise>
-                   <xsl:value-of select="$definition"/>
+                   <strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text> <xsl:value-of select="$definition"/>
             </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
              <script>
              $(document).ready(function(){
                $("a.gloss#<xsl:value-of select="$term"/>").qtip({
-               content: '<xsl:value-of select='$displayDefinition'/>',
+               content: '<xsl:copy-of select='$displayDefinition'/>',
                show: {event:'mouseover',delay:500},
                hide: {event:'mouseout',delay:500, fixed:true},
                style: { 
@@ -452,7 +452,7 @@ set       toc,title
                         padding: 5,
                         background: '#FFFFCC',
                         color: 'black',
-                        textAlign: 'center',
+                        textAlign: 'left',
                         border: {
                                     width: 1,
                                     radius: 4,
