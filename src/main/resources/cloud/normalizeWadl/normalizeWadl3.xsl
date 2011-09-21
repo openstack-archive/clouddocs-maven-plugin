@@ -8,7 +8,7 @@ This XSLT flattens or expands the path in the path attributes of the resource el
 
     <xsl:output indent="yes"/>
 
-    <xsl:param name="format">path-format</xsl:param>
+    <xsl:param name="format">-format</xsl:param>
     <!-- path or tree -->
     
     <xsl:variable name="paths-tokenized">
