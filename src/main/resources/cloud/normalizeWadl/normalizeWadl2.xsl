@@ -5,6 +5,8 @@ Resolves hrefs on method and resource_type elements.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns="http://wadl.dev.java.net/2009/02" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rax="http://docs.rackspace.com/api" exclude-result-prefixes="xs wadl" version="2.0">
 
+  <xsl:param name="wadl2docbook">0</xsl:param>
+
 	<xsl:variable name="normalizeWadl2">
 		<xsl:choose>
 			<xsl:when test="$strip-ids != 0">
@@ -37,6 +39,41 @@ Resolves hrefs on method and resource_type elements.
 	<xsl:template match="/">
 		<xsl:copy-of select="$normalizeWadl2"/>
 	</xsl:template>-->
+
+    <xsl:template match="wadl:application" mode="normalizeWadl2">
+      <xsl:choose>
+	<xsl:when test="$wadl2docbook != 0">
+	<application>
+	  <xsl:apply-templates select="@*" mode="normalizeWadl2"/>
+	  <xsl:comment>
+	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    ! This is a representation of the resources tree           !
+	    ! for use in generating a reference directly from the wadl.!
+	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	  </xsl:comment>
+	  <xsl:apply-templates select="//wadl:resources" mode="store-tree"/>	 
+	  <xsl:apply-templates select="node()" mode="normalizeWadl2"/>
+	</application>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:copy>
+	    <xsl:apply-templates select="node() | @*" mode="normalizeWadl2"/>
+	  </xsl:copy>		
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="wadl:resources" mode="store-tree">
+      <rax:resources>
+	<xsl:apply-templates select="wadl:resource" mode="store-tree"/>
+      </rax:resources>
+    </xsl:template>
+
+    <xsl:template match="wadl:resource[./wadl:method]" mode="store-tree">
+      <rax:resource rax:id="{@id}" >
+	<xsl:apply-templates select="wadl:resource" mode="store-tree"/>
+      </rax:resource>
+    </xsl:template>
 
 	<xsl:template match="node() | @*" mode="strip-ids">
 		<xsl:copy>

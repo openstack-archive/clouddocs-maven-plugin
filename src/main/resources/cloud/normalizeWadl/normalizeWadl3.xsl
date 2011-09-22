@@ -89,7 +89,6 @@ This XSLT flattens or expands the path in the path attributes of the resource el
 
     <xsl:template match="wadl:tokens" mode="tree-format"/>
 
-    <!--  Tokenize paths  -->
     <xsl:template match="node() | @*" mode="tokenize-paths">
         <xsl:copy>
             <xsl:apply-templates select="node() | @*" mode="tokenize-paths"/>

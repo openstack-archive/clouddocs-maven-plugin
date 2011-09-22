@@ -14,4 +14,6 @@
 
     <xsl:param name="xsd.output.path">target/generated-resources/xml/xslt/</xsl:param>
 
+    <xsl:param name="wadl2docbook">1</xsl:param>
+
 </xsl:stylesheet>
