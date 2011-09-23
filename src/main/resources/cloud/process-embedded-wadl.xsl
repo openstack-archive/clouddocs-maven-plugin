@@ -185,6 +185,14 @@
 		<xsl:variable name="href" select="wadl:method/@href"/>
 
 		<xsl:choose>
+			<xsl:when test="@href and not(./wadl:method)">
+				<xsl:apply-templates
+					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method"
+					mode="method-rows">
+					<xsl:with-param name="wadl.path" select="$wadl.path"/>
+			    	<xsl:with-param name="resourceId" select="substring-after(current()/@href,'#')"/>
+				</xsl:apply-templates>   <!--[@rax:id = $href]-->
+			</xsl:when>
 			<xsl:when test="@href">
 			  <xsl:apply-templates mode="method-rows">
 			    <xsl:with-param name="wadl.path" select="$wadl.path"/>
@@ -219,6 +227,14 @@
 		</xsl:variable>
 
 		<xsl:choose>
+			<xsl:when test="@href and not(./wadl:method)">
+				<xsl:apply-templates
+					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method"
+					mode="preprocess">
+					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
+                    <xsl:with-param name="resourceLink" select="."/>
+				</xsl:apply-templates>				
+			</xsl:when>
 			<xsl:when test="@href">
 				<xsl:apply-templates
 					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method[@rax:id = current()/wadl:method/@href]"
