@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns="http://docbook.org/ns/docbook" xmlns:wadl="http://wadl.dev.java.net/2009/02"       xmlns:xhtml="http://www.w3.org/1999/xhtml"
-	xmlns:d="http://docbook.org/ns/docbook" xmlns:rax="http://docs.rackspace.com/api"
-	exclude-result-prefixes="wadl rax d" version="1.0">
+	xmlns:d="http://docbook.org/ns/docbook" xmlns:rax="http://docs.rackspace.com/api" xmlns:exsl="http://exslt.org/common"
+	exclude-result-prefixes="wadl rax d exsl xhtml" version="1.1">
 	
 	<!-- For readability while testing -->
 	<!-- <xsl:output indent="yes"/>    -->
@@ -30,10 +30,54 @@
 			<xsl:apply-templates select="@*|node()" mode="preprocess"/>
 		</xsl:copy>
 	</xsl:template>
+	
+	<xsl:template match="wadl:resources[@href]" mode="preprocess" priority="10">
+		<xsl:variable name="wadl.path">
+			<xsl:call-template name="wadlPath">
+				<xsl:with-param name="path" select="@href"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="generated-reference-section">
+			<xsl:apply-templates select="document(concat('file:///', $wadl.path))//rax:resources" mode="generate-reference-section"/>
+		</xsl:variable>
+		<xsl:apply-templates select="$generated-reference-section/*" mode="preprocess"/>
+	</xsl:template>
+
+	<xsl:template match="rax:resources" mode="generate-reference-section">
+		<xsl:apply-templates select="rax:resource" mode="generate-reference-section"/>
+	</xsl:template>
+
+	<xsl:template match="rax:resource" mode="generate-reference-section">
+		<section xml:id="{generate-id()}">
+			<title>
+				<xsl:choose>
+					<xsl:when test="//wadl:resource[@id = current()/@rax:id]/wadl:doc/@title">
+						<xsl:value-of select=".//wadl:resource[@id = current()/@rax:id]/wadl:doc/@title"/>
+					</xsl:when>
+					<xsl:when test="//wadl:resource[@id = current()/@rax:id]">
+						<xsl:value-of select="//wadl:resource[@id = current()/@rax:id]/@path"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:message terminate="no">
+							ERROR: Could not determine what title to use for <xsl:copy-of select="."/>
+						</xsl:message>
+					</xsl:otherwise>
+				</xsl:choose>
+			</title>
+			<wadl:resources>
+				<wadl:resource path="{//wadl:resource[@id = current()/@rax:id]/@path}">
+					<xsl:copy-of select="//wadl:resource[@id = current()/@rax:id]/wadl:method"/>
+				</wadl:resource>
+			</wadl:resources>
+			<xsl:apply-templates  mode="generate-reference-section"/>			
+		</section>
+	</xsl:template>
 
 	<xsl:template match="d:*[@role = 'api-reference']" mode="preprocess">
+		
 		<xsl:element name="{name(.)}">
 			<xsl:copy-of select="@*"/>
+			
 			<xsl:apply-templates select="d:*[not(local-name() = 'section')]" mode="preprocess"/>
 			<!-- 
 			 Here we build a summary template for whole reference. 
@@ -55,16 +99,17 @@
 				</tbody>
 			</informaltable>
 
-			<xsl:apply-templates select="d:section" mode="preprocess"/>
+			<xsl:apply-templates select="wadl:resources[@href]|d:section" mode="preprocess"/>
 		</xsl:element>
 	</xsl:template>
+
 
 	<!-- ======================================== -->
 	<!-- Here we resolve an wadl stuff we find    -->
 	<!-- ======================================== -->
 
 
-	<xsl:template match="wadl:resources" mode="cheat-sheet">
+	<xsl:template match="wadl:resources[not(@href)]" mode="cheat-sheet">
 		<tr>
 			<th colspan="3" align="center">
 				<xsl:value-of select="parent::d:section/d:title"/>
@@ -72,6 +117,18 @@
 		</tr>
 		<xsl:apply-templates select="wadl:resource" mode="method-rows"/>
 
+	</xsl:template>
+	
+	<xsl:template match="wadl:resources[@href]" mode="cheat-sheet">
+		<xsl:variable name="wadl.path">
+			<xsl:call-template name="wadlPath">
+				<xsl:with-param name="path" select="@href"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="generated-reference-section">
+			<xsl:apply-templates select="document(concat('file:///', $wadl.path))//rax:resources" mode="generate-reference-section"/>
+		</xsl:variable>
+		<xsl:apply-templates select="$generated-reference-section//wadl:resources" mode="cheat-sheet"/>
 	</xsl:template>
 
 	<!-- <xsl:template match="wadl:resources[wadl:resource[not(./wadl:method)]]" mode="preprocess"> -->
@@ -86,11 +143,14 @@
 		<xsl:variable name="skipSummaryN">
             <xsl:call-template name="makeBoolean">
                 <xsl:with-param name="boolValue">
+				<xsl:if test="processing-instruction('rax-wadl')">
                     <xsl:call-template name="pi-attribute">
                         <xsl:with-param name="pis" select="processing-instruction('rax-wadl')"/>
                         <xsl:with-param name="attribute" select="'skipSummary'"/>
                     </xsl:call-template>
+					</xsl:if>
                 </xsl:with-param>
+            	<xsl:with-param name="default" select="'0'"/>
             </xsl:call-template>
 		</xsl:variable>
         <xsl:variable name="skipSummary" select="boolean(number($skipSummaryN))"/>
@@ -186,10 +246,12 @@
         <xsl:variable name="skipNoRequestTextN">
             <xsl:call-template name="makeBoolean">
                 <xsl:with-param name="boolValue">
+				<xsl:if test="$resourceLink or processing-instruction('rax-wadl')">
                     <xsl:call-template name="pi-attribute">
-                        <xsl:with-param name="pis" select="$resourceLink/wadl:method[contains(@href,$id)]/ancestor-or-self::*/processing-instruction('rax-wadl')"/>
+                        <xsl:with-param name="pis" select="$resourceLink/wadl:method[contains(@href,$id)]/ancestor-or-self::*/processing-instruction('rax-wadl')|processing-instruction('rax-wadl')"/>
                         <xsl:with-param name="attribute" select="'skipNoRequestText'"/>
                     </xsl:call-template>
+					</xsl:if>
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:variable>
@@ -197,10 +259,12 @@
         <xsl:variable name="skipNoResponseTextN">
             <xsl:call-template name="makeBoolean">
                 <xsl:with-param name="boolValue">
+                					<xsl:if test="$resourceLink or processing-instruction('rax-wadl')">
                     <xsl:call-template name="pi-attribute">
-                        <xsl:with-param name="pis" select="$resourceLink/wadl:method[contains(@href,$id)]/ancestor-or-self::*/processing-instruction('rax-wadl')"/>
+                        <xsl:with-param name="pis" select="$resourceLink/wadl:method[contains(@href,$id)]/ancestor-or-self::*/processing-instruction('rax-wadl')|processing-instruction('rax-wadl')"/>
                         <xsl:with-param name="attribute" select="'skipNoResponeText'"/>
                     </xsl:call-template>
+                						</xsl:if>
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:variable>
@@ -208,11 +272,14 @@
         <xsl:variable name="addMethodPageBreaksN">
             <xsl:call-template name="makeBoolean">
                 <xsl:with-param name="boolValue">
+                <xsl:if test="$resourceLink or processing-instruction('rax-wadl')">
                     <xsl:call-template name="pi-attribute">
-                        <xsl:with-param name="pis" select="$resourceLink/wadl:method[contains(@href,$id)]/ancestor-or-self::*/processing-instruction('rax-wadl')"/>
+                        <xsl:with-param name="pis" select="$resourceLink/wadl:method[contains(@href,$id)]/ancestor-or-self::*/processing-instruction('rax-wadl')|processing-instruction('rax-wadl')"/>
                         <xsl:with-param name="attribute" select="'addMethodPageBreaks'"/>
                     </xsl:call-template>
+                </xsl:if>
                 </xsl:with-param>
+            	<xsl:with-param name="default" select="'1'"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="addMethodPageBreaks" select="boolean(number($addMethodPageBreaksN))"/>
