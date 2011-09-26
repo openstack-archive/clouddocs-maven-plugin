@@ -101,6 +101,7 @@ set       toc,title
       <xsl:when test="$branding = 'test'">jonathan-test-dns</xsl:when>
       <xsl:when test="$branding = 'rackspace'">rc-api-docs</xsl:when>
       <xsl:when test="$branding = 'openstack'">openstackdocs</xsl:when>
+      <xsl:when test="$branding = 'openstackextension'">openstackdocs</xsl:when>
     </xsl:choose>
       
   </xsl:param>
@@ -108,12 +109,14 @@ set       toc,title
   <xsl:param name="brandname">
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">OpenStack</xsl:when>
+      <xsl:when test="$branding = 'openstackextension'">OpenStack Extension</xsl:when>
       <xsl:otherwise>Rackspace</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <xsl:param name="main.docs.url">
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">http://docs.openstack.org/</xsl:when>
+      <xsl:when test="$branding = 'openstackextension'">http://docs-beta.rackspace.com/test/jonathan/OpenstackExtDocs/</xsl:when>
       <xsl:otherwise>http://docs.rackspace.com/api/</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
@@ -194,14 +197,20 @@ set       toc,title
         <div id="header">
 	  <a onclick="_gaq.push(['_trackEvent', 'Header', 'logo', 'click', 1]);" target="_blank">
 	    <xsl:attribute name="href">
-	      <xsl:choose>
+	    <xsl:choose>
 		<xsl:when test="$branding = 'openstack'">http://www.openstack.org</xsl:when>
+	    <xsl:when test="$branding = 'openstackextension'">http://docs-beta.rackspace.com/test/jonathan/OpenStackExtDocs/</xsl:when>
 		<xsl:otherwise>http://www.rackspace.com</xsl:otherwise>
 	      </xsl:choose>
 	    </xsl:attribute>
 	    <img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" />
 	  </a>
 	  <xsl:if test="$branding = 'openstack'">
+	    <xsl:call-template name="breadcrumbs">
+	      <xsl:with-param name="home" select="$home"/>
+	    </xsl:call-template>
+	  </xsl:if>
+	  <xsl:if test="$branding = 'openstackextension'">
 	    <xsl:call-template name="breadcrumbs">
 	      <xsl:with-param name="home" select="$home"/>
 	    </xsl:call-template>
@@ -295,7 +304,15 @@ set       toc,title
 	    </div>
 	  </div>
 	</xsl:if>
-
+	<xsl:if test="$branding = 'openstackextension'">
+	  <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+	    <div id="toolbar-left">
+	      <xsl:call-template name="breadcrumbs">
+		<xsl:with-param name="home" select="$home"/>
+	      </xsl:call-template>
+	    </div>
+	  </div>
+	</xsl:if>
     </xsl:template>
     
     <xsl:template name="webhelptoc">
