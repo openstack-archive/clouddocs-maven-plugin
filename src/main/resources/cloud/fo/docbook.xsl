@@ -8,7 +8,7 @@
                 xmlns:d="http://docbook.org/ns/docbook"
 		xmlns:exslt="http://exslt.org/common" 
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                version="1.0">
+                version="1.1">
 
   <xsl:import href="urn:docbkx:stylesheet-orig/profile-docbook.xsl" />
   <xsl:import href="urn:docbkx:stylesheet-orig/highlight.xsl" />

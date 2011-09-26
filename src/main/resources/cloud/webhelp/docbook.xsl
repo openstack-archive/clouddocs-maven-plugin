@@ -3,7 +3,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://docbook.org/ns/docbook"
 		xmlns="http://www.w3.org/1999/xhtml"
-                version="1.0">
+                version="1.1">
 
   <!-- <xsl:import href="urn:docbkx:stylesheet-orig/xsl/webhelp.xsl" /> -->
   <xsl:import href="webhelp.xsl" />
