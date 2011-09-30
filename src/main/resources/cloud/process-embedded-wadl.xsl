@@ -52,7 +52,7 @@
 			<title>
 				<xsl:choose>
 					<xsl:when test="//wadl:resource[@id = current()/@rax:id]/wadl:doc/@title">
-						<xsl:value-of select=".//wadl:resource[@id = current()/@rax:id]/wadl:doc/@title"/>
+						<xsl:value-of select="//wadl:resource[@id = current()/@rax:id]/wadl:doc/@title"/>
 					</xsl:when>
 					<xsl:when test="//wadl:resource[@id = current()/@rax:id]">
 						<xsl:value-of select="//wadl:resource[@id = current()/@rax:id]/@path"/>
