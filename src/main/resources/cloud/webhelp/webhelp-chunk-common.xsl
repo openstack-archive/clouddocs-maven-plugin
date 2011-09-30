@@ -50,6 +50,11 @@
                 </div>
 
                 <xsl:call-template name="user.footer.navigation"/>
+                <script type="text/javascript" src="../common/jquery/jquery.qtip-1.0.0-rc3/jquery.qtip-1.0.0-rc3.min.js">
+                   <xsl:comment>jQuery plugin for glossary popups. </xsl:comment>
+                   $('a[title]').qtip({ style: { name: 'cream', tip: true } })
+                </script>
+
             </body>
         </html>
         <xsl:value-of select="$chunk.append"/>

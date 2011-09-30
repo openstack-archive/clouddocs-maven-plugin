@@ -101,6 +101,7 @@ set       toc,title
       <xsl:when test="$branding = 'test'">jonathan-test-dns</xsl:when>
       <xsl:when test="$branding = 'rackspace'">rc-api-docs</xsl:when>
       <xsl:when test="$branding = 'openstack'">openstackdocs</xsl:when>
+      <xsl:when test="$branding = 'openstackextension'">openstackdocs</xsl:when>
     </xsl:choose>
       
   </xsl:param>
@@ -108,12 +109,14 @@ set       toc,title
   <xsl:param name="brandname">
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">OpenStack</xsl:when>
+      <xsl:when test="$branding = 'openstackextension'">OpenStack Extension</xsl:when>
       <xsl:otherwise>Rackspace</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <xsl:param name="main.docs.url">
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">http://docs.openstack.org/</xsl:when>
+      <xsl:when test="$branding = 'openstackextension'">http://docs-beta.rackspace.com/test/jonathan/OpenstackExtDocs/</xsl:when>
       <xsl:otherwise>http://docs.rackspace.com/api/</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
@@ -129,8 +132,9 @@ set       toc,title
     </xsl:variable>
     
     <xsl:param name="use.disqus.id">1</xsl:param>
- 
     
+    <xsl:param name="glossary.uri">http://docs-beta.rackspace.com/test/jonathan/glossary</xsl:param>
+    <xsl:param name="glossary.xml.uri"><xsl:value-of select="$glossary.uri"/>/glossary.xml</xsl:param>
     <xsl:template name="user.footer.content">
         <xsl:if test="$enable.disqus!='0' and (//d:section[not(@xml:id)] or //d:chapter[not(@xml:id)] or //d:part[not(@xml:id)] or //d:appendix[not(@xml:id)] or //d:preface[not(@xml:id)] or /*[not(@xml:id)])">
             <xsl:message terminate="yes"> 
@@ -194,14 +198,20 @@ set       toc,title
         <div id="header">
 	  <a onclick="_gaq.push(['_trackEvent', 'Header', 'logo', 'click', 1]);" target="_blank">
 	    <xsl:attribute name="href">
-	      <xsl:choose>
+	    <xsl:choose>
 		<xsl:when test="$branding = 'openstack'">http://www.openstack.org</xsl:when>
+	    <xsl:when test="$branding = 'openstackextension'">http://docs-beta.rackspace.com/test/jonathan/OpenStackExtDocs/</xsl:when>
 		<xsl:otherwise>http://www.rackspace.com</xsl:otherwise>
 	      </xsl:choose>
 	    </xsl:attribute>
 	    <img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" />
 	  </a>
 	  <xsl:if test="$branding = 'openstack'">
+	    <xsl:call-template name="breadcrumbs">
+	      <xsl:with-param name="home" select="$home"/>
+	    </xsl:call-template>
+	  </xsl:if>
+	  <xsl:if test="$branding = 'openstackextension'">
 	    <xsl:call-template name="breadcrumbs">
 	      <xsl:with-param name="home" select="$home"/>
 	    </xsl:call-template>
@@ -295,7 +305,15 @@ set       toc,title
 	    </div>
 	  </div>
 	</xsl:if>
-
+	<xsl:if test="$branding = 'openstackextension'">
+	  <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+	    <div id="toolbar-left">
+	      <xsl:call-template name="breadcrumbs">
+		<xsl:with-param name="home" select="$home"/>
+	      </xsl:call-template>
+	    </div>
+	  </div>
+	</xsl:if>
     </xsl:template>
     
     <xsl:template name="webhelptoc">
@@ -429,7 +447,52 @@ set       toc,title
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
+    <xsl:template match="//d:para/d:glossterm">
+        <xsl:variable name="term"><xsl:value-of select="."/></xsl:variable>
+        <xsl:variable name="definition"><xsl:value-of select="normalize-space(//d:glossentry[d:glossterm=$term]/d:glossdef)"/></xsl:variable>
+        <xsl:variable name="displayDefinition">
+          <xsl:choose>
+            <xsl:when test="$definition=''"><strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text> No definition found. </xsl:when>
+            <xsl:otherwise>
+                   <strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text> <xsl:value-of select="$definition"/>
+            </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+             <script>
+             $(document).ready(function(){
+               $("a.gloss#<xsl:value-of select="$term"/>").qtip({
+               content: '<xsl:copy-of select='$displayDefinition'/>',
+               show: {event:'mouseover',delay:500},
+               hide: {event:'mouseout',delay:500, fixed:true},
+               style: { 
+                        width: 200,
+                        padding: 5,
+                        background: '#FFFFCC',
+                        color: 'black',
+                        textAlign: 'left',
+                        border: {
+                                    width: 1,
+                                    radius: 4,
+                                    color: '#EEEEBB'
+                        },
+                        tip: true,
+                        name: 'cream' // Inherit the rest of the attributes from the preset cream style
+                },
+                position: {
+                    corner: {
+                            target: 'topMiddle',
+                            tooltip: 'bottomLeft'
+                    }
+                }
+               });
+             });
+             </script>
+    
+        <a class="gloss" href="#"><xsl:attribute name="id"><xsl:value-of select="$term"></xsl:value-of></xsl:attribute> <xsl:value-of select="."/></a>
+    </xsl:template>
+    
+    
     <!-- The following templates change the color of text flagged as reviewer, internal, or writeronly -->    
     <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';internal;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';internal;') ]"><span class="internal"><xsl:apply-imports/></span></xsl:template>
     <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') ]"><span class="writeronly"><xsl:apply-imports/></span></xsl:template>
