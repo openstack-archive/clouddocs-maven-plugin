@@ -363,7 +363,7 @@
 			    <!-- Suppress because everything will be in the table -->
 			  </xsl:otherwise>
 			</xsl:choose>
-            <xsl:copy-of select="wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+            <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')]"   xmlns:db="http://docbook.org/ns/docbook" />
 
             <!-- About the request -->
 
