@@ -244,7 +244,9 @@
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:apply-templates select="wadl:method" mode="preprocess"/>
+				<xsl:apply-templates select="wadl:method" mode="preprocess">
+                    <xsl:with-param name="resourceLink" select="."/>
+                </xsl:apply-templates>
 			</xsl:otherwise>
 		</xsl:choose>
 
