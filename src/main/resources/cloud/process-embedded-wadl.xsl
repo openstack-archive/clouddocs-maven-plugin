@@ -558,18 +558,21 @@
 		<xsl:variable name="type"><xsl:value-of select="substring-after(@type,':')"/></xsl:variable>
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
-			<td>
+			<td align="center">
 				<code><xsl:value-of select="@name"/></code>
 			</td>
-			<td>
+			<td align="center">
 				<xsl:value-of select="@style"/>
 			</td>
+            <td align="center">
+                <xsl:value-of
+                    select="concat(translate(substring($type,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($type,2))"
+					/>
+            </td>
 			<td>
 				<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
 				<para>
-					<xsl:value-of
-						select="concat(translate(substring($type,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($type,2))"
-					/>. <xsl:if test="wadl:option"> Possible values: <xsl:for-each
+                    <xsl:if test="wadl:option"> Possible values: <xsl:for-each
 							select="wadl:option">
 							<xsl:value-of select="@value"/><xsl:choose>
 								<xsl:when test="position() = last()">. </xsl:when>
@@ -588,8 +591,8 @@
                             <xsl:otherwise>Optional. </xsl:otherwise>
                         </xsl:choose>
                     </xsl:if>
-				</para>
-			</td>
+                </para>
+            </td>
 		</tr>
 	</xsl:template>
 
@@ -704,13 +707,15 @@
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
                 <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
-                <col width="25%"/>
-                <col width="15%"/>
-                <col width="60%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+                <col width="70%"/>
                 <thead>
                     <tr>
                         <th align="center">Name</th>
                         <th align="center">Style</th>
+                        <th align="center">Type</th>
                         <th align="center">Description</th>
                     </tr>
                 </thead>
