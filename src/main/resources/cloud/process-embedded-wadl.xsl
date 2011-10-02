@@ -604,7 +604,7 @@
 
 	<xsl:template match="wadl:response" mode="preprocess-faults">
 		<xsl:if
-			test="(not(@status) or not(starts-with(normalize-space(@status),'2'))) and wadl:representation/@element">
+			test="(not(@status) or not(starts-with(normalize-space(@status),'2')))">
             <xsl:variable name="codes">
                 <xsl:choose>
                     <xsl:when test="@status">
@@ -615,13 +615,23 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
-            <xsl:text> (</xsl:text>
-            <xsl:call-template name="statusCodeList">
-                <xsl:with-param name="codes" select="$codes"/>
-                <xsl:with-param name="inError" select="true()"/>
-            </xsl:call-template>
-            <xsl:text>)</xsl:text>
+            <xsl:choose>
+                <xsl:when test="wadl:representation/@element">
+                    <xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
+                    <xsl:text> (</xsl:text>
+                    <xsl:call-template name="statusCodeList">
+                        <xsl:with-param name="codes" select="$codes"/>
+                        <xsl:with-param name="inError" select="true()"/>
+                    </xsl:call-template>
+                    <xsl:text>)</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="statusCodeList">
+                        <xsl:with-param name="codes" select="$codes"/>
+                        <xsl:with-param name="inError" select="true()"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:choose>
                 <xsl:when test="following-sibling::wadl:response">
                     <xsl:text>,&#x0a;            </xsl:text>
