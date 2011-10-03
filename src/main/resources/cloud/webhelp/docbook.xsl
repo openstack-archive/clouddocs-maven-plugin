@@ -448,15 +448,32 @@ set       toc,title
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template match="//d:para/d:glossterm">
+      <xsl:template match="d:glossterm[not(parent::d:glossentry)]">
         <xsl:variable name="term"><xsl:value-of select="."/></xsl:variable>
-        <xsl:variable name="definition"><xsl:value-of select="normalize-space(//d:glossentry[d:glossterm=$term]/d:glossdef)"/></xsl:variable>
+        <xsl:variable name="definition">
+            <xsl:choose>
+                <xsl:when test="//d:glossentry[@xml:id = current()/@linkend]">
+                    <xsl:apply-templates select="//d:glossentry[@xml:id = current()/@linkend]/d:glossdef" mode="make-definition"/>    
+                </xsl:when>
+                <xsl:when test="//d:glossentry[d:glossterm = $term]">
+                    <xsl:apply-templates select="//d:glossentry[d:glossterm = $term]/d:glossdef" mode="make-definition"/>    
+                </xsl:when>
+                <xsl:when test="//d:glossentry[d:glossterm = current()/@baseform]">
+                    <xsl:apply-templates select="//d:glossentry[d:glossterm = current()/@baseform]/d:glossdef" mode="make-definition"/>    
+                </xsl:when>
+            </xsl:choose>
+            <xsl:copy-of select="//d:glossentry[d:glossterm=$term]/d:glossdef"/></xsl:variable>
         <xsl:variable name="displayDefinition">
-          <xsl:choose>
-            <xsl:when test="$definition=''"><strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text> No definition found. </xsl:when>
-            <xsl:otherwise>
-                   <strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text> <xsl:value-of select="$definition"/>
-            </xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="$definition=''">
+                    <xsl:message>
+                        No definition found for <xsl:copy-of select="."/>                    
+                    </xsl:message>
+                </xsl:when>
+                <xsl:otherwise>
+                    <strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text>
+                    <xsl:apply-templates select="$definition" mode="make-definition"/>
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
              <script>
@@ -491,7 +508,15 @@ set       toc,title
     
         <a class="gloss" href="#"><xsl:attribute name="id"><xsl:value-of select="$term"></xsl:value-of></xsl:attribute> <xsl:value-of select="."/></a>
     </xsl:template>
+      <xsl:template match="* | comment() | processing-instruction() | @*" mode="make-definition">
+        <xsl:copy>
+            <xsl:apply-templates select="node() | @*" mode="make-definition"/>
+        </xsl:copy>
+    </xsl:template>
     
+    <xsl:template match="text()" mode="make-definition">
+        <xsl:value-of select="translate(.,'&#xa;',' ')"/>
+    </xsl:template>
     
     <!-- The following templates change the color of text flagged as reviewer, internal, or writeronly -->    
     <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';internal;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';internal;') ]"><span class="internal"><xsl:apply-imports/></span></xsl:template>
