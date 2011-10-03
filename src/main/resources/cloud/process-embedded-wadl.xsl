@@ -52,7 +52,7 @@
 			<title>
 				<xsl:choose>
 					<xsl:when test="//wadl:resource[@id = current()/@rax:id]/wadl:doc/@title">
-						<xsl:value-of select=".//wadl:resource[@id = current()/@rax:id]/wadl:doc/@title"/>
+						<xsl:value-of select="//wadl:resource[@id = current()/@rax:id]/wadl:doc/@title"/>
 					</xsl:when>
 					<xsl:when test="//wadl:resource[@id = current()/@rax:id]">
 						<xsl:value-of select="//wadl:resource[@id = current()/@rax:id]/@path"/>
@@ -244,7 +244,9 @@
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:apply-templates select="wadl:method" mode="preprocess"/>
+				<xsl:apply-templates select="wadl:method" mode="preprocess">
+                    <xsl:with-param name="resourceLink" select="."/>
+                </xsl:apply-templates>
 			</xsl:otherwise>
 		</xsl:choose>
 
@@ -363,7 +365,7 @@
 			    <!-- Suppress because everything will be in the table -->
 			  </xsl:otherwise>
 			</xsl:choose>
-            <xsl:copy-of select="wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+            <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
 
             <!-- About the request -->
 
@@ -374,7 +376,7 @@
                 </xsl:call-template>
             </xsl:if>
 
-			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:* | wadl:request/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
             <xsl:if test="wadl:request/wadl:representation/wadl:doc//xhtml:*">
                 <xsl:apply-templates select="wadl:request/wadl:representation/wadl:doc//xhtml:*" mode="process-xhtml"/>
             </xsl:if>
@@ -394,7 +396,7 @@
                     <xsl:with-param name="method.title" select="$method.title"/>
                 </xsl:call-template>
             </xsl:if>
-			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:*"   xmlns:db="http://docbook.org/ns/docbook" />
+			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:* | wadl:response/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
             <xsl:if test="wadl:response/wadl:representation/wadl:doc//xhtml:*">
                 <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc//xhtml:*" mode="process-xhtml"/>
             </xsl:if>
@@ -556,18 +558,21 @@
 		<xsl:variable name="type"><xsl:value-of select="substring-after(@type,':')"/></xsl:variable>
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
-			<td>
+			<td align="center">
 				<code><xsl:value-of select="@name"/></code>
 			</td>
-			<td>
+			<td align="center">
 				<xsl:value-of select="@style"/>
 			</td>
+            <td align="center">
+                <xsl:value-of
+                    select="concat(translate(substring($type,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($type,2))"
+					/>
+            </td>
 			<td>
 				<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
 				<para>
-					<xsl:value-of
-						select="concat(translate(substring($type,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($type,2))"
-					/>. <xsl:if test="wadl:option"> Possible values: <xsl:for-each
+                    <xsl:if test="wadl:option"> Possible values: <xsl:for-each
 							select="wadl:option">
 							<xsl:value-of select="@value"/><xsl:choose>
 								<xsl:when test="position() = last()">. </xsl:when>
@@ -586,8 +591,8 @@
                             <xsl:otherwise>Optional. </xsl:otherwise>
                         </xsl:choose>
                     </xsl:if>
-				</para>
-			</td>
+                </para>
+            </td>
 		</tr>
 	</xsl:template>
 
@@ -602,7 +607,7 @@
 
 	<xsl:template match="wadl:response" mode="preprocess-faults">
 		<xsl:if
-			test="(not(@status) or not(starts-with(normalize-space(@status),'2'))) and wadl:representation/@element">
+			test="(not(@status) or not(starts-with(normalize-space(@status),'2')))">
             <xsl:variable name="codes">
                 <xsl:choose>
                     <xsl:when test="@status">
@@ -613,13 +618,23 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
-            <xsl:text> (</xsl:text>
-            <xsl:call-template name="statusCodeList">
-                <xsl:with-param name="codes" select="$codes"/>
-                <xsl:with-param name="inError" select="true()"/>
-            </xsl:call-template>
-            <xsl:text>)</xsl:text>
+            <xsl:choose>
+                <xsl:when test="wadl:representation/@element">
+                    <xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
+                    <xsl:text> (</xsl:text>
+                    <xsl:call-template name="statusCodeList">
+                        <xsl:with-param name="codes" select="$codes"/>
+                        <xsl:with-param name="inError" select="true()"/>
+                    </xsl:call-template>
+                    <xsl:text>)</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="statusCodeList">
+                        <xsl:with-param name="codes" select="$codes"/>
+                        <xsl:with-param name="inError" select="true()"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:choose>
                 <xsl:when test="following-sibling::wadl:response">
                     <xsl:text>,&#x0a;            </xsl:text>
@@ -692,13 +707,15 @@
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
                 <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
-                <col width="25%"/>
-                <col width="15%"/>
-                <col width="60%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+                <col width="70%"/>
                 <thead>
                     <tr>
                         <th align="center">Name</th>
                         <th align="center">Style</th>
+                        <th align="center">Type</th>
                         <th align="center">Description</th>
                     </tr>
                 </thead>

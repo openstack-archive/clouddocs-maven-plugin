@@ -4,7 +4,8 @@
 
     <xsl:import href="normalizeWadl2.xsl"/>
     <xsl:import href="normalizeWadl3.xsl"/>
-
+    <xsl:import href="normalizeWadl4.xsl"/>
+    
     <!-- This xslt lists and flattens xsds -->
 
     <xsl:output indent="yes"/>
@@ -48,6 +49,21 @@
             </xsl:for-each-group>
         </xsl:if>
     </xsl:variable>
+    
+    <xsl:variable name="xsds">
+       <xsl:for-each select="$catalog/xsd">
+           <rax:xsd xmlns:rax="http://docs.rackspace.com/api"
+               location="{@location}"
+               name="{@name}">
+                 <xsd:schema>
+                    <xsl:copy-of select="document(@location,.)/xsd:schema/@*"/>
+                    <xsl:apply-templates select="document(@location,.)" mode="flatten-xsd">
+                        <xsl:with-param name="stack" select="@location"/>
+                    </xsl:apply-templates>
+                </xsd:schema>
+           </rax:xsd>         
+       </xsl:for-each>
+    </xsl:variable>
 
     <xsl:variable name="normalizeWadl2.xsl">
         <!-- Here we store the base-uri of this file so we can use it to find files relative to this file later -->
@@ -79,6 +95,17 @@
     <!--    <xsl:variable name="normalizeWadl3.xsl">
         <xsl:apply-templates select="$normalizeWadl2.xsl" mode="normalizeWadl3"/>
         </xsl:variable>-->
+
+    <xsl:variable name="normalizeWadl4.xsl">
+        <xsl:choose>
+            <xsl:when test="$wadl2docbook != 0">
+                <xsl:apply-templates select="$normalizeWadl3.xsl" mode="normalizeWadl4"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$normalizeWadl3.xsl"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
 
     <xsl:template match="rax:examples|xsdxt:samples" 
         xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" 
@@ -160,29 +187,23 @@
                 <xsl:when test="@language = 'xml'">: XML</xsl:when>
                 <xsl:when test="@language = 'javascript'">: JSON</xsl:when>                
             </xsl:choose></title><programlisting language="{@language}" xmlns="http://docbook.org/ns/docbook"><xsl:copy-of select="unparsed-text(concat($samples.path, '/',@href))"/></programlisting></example></xsl:template>
+
+
     <xsl:template match="/">
         <xsl:if test="$flattenXsds = 'false'">
-	<xsl:message>[INFO] Not flattening xsds. You must copy xsds into place manually.</xsl:message>
+	       <xsl:message>[INFO] Not flattening xsds. You must copy xsds into place manually.</xsl:message>
         </xsl:if>
 
-        <xsl:for-each select="$catalog/xsd">
-            <xsl:message>[INFO] Writing: <xsl:value-of select="@location"/> as <xsl:value-of select="@name"/></xsl:message>
-
-            <xsl:variable name="contents">
-                <xsl:comment>Original xsd: <xsl:value-of select="@location"/></xsl:comment>
-                <xsd:schema>
-                    <xsl:copy-of select="document(@location,.)/xsd:schema/@*"/>
-                    <xsl:apply-templates select="document(@location,.)" mode="flatten-xsd">
-                        <xsl:with-param name="stack" select="@location"/>
-                    </xsl:apply-templates>
-                </xsd:schema>
-            </xsl:variable>
+        <xsl:for-each select="$xsds/rax:xsd" xmlns:rax="http://docs.rackspace.com/api">
 
             <xsl:variable name="prune-imports">
-                <xsl:apply-templates select="$contents" mode="prune-imports"/>
+                <xsl:apply-templates select="xsd:schema" mode="prune-imports"/>
             </xsl:variable>
 
             <xsl:result-document href="{concat($xsd.output.path,@name)}">
+                <xsl:comment>
+                    Flattened from: <xsl:value-of select="@location"/>
+                </xsl:comment>
                 <xsl:apply-templates select="$prune-imports" mode="sort-schema"/>
             </xsl:result-document>
         </xsl:for-each>
@@ -200,8 +221,8 @@
 
         </xsl:if>
 
+        <xsl:copy-of select="$normalizeWadl4.xsl"/>
 
-        <xsl:copy-of select="$normalizeWadl3.xsl"/>
     </xsl:template>
 
     <!-- Sort the declarations in the flattened schema -->
