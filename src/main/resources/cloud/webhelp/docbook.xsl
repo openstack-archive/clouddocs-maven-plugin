@@ -462,7 +462,7 @@ set       toc,title
                     <xsl:apply-templates select="//d:glossentry[d:glossterm = current()/@baseform]/d:glossdef" mode="make-definition"/>    
                 </xsl:when>
             </xsl:choose>
-            <xsl:copy-of select="//d:glossentry[d:glossterm=$term]/d:glossdef"/></xsl:variable>
+            </xsl:variable>
         <xsl:variable name="displayDefinition">
             <xsl:choose>
                 <xsl:when test="$definition=''">
@@ -508,7 +508,8 @@ set       toc,title
     
         <a class="gloss" href="#"><xsl:attribute name="id"><xsl:value-of select="$term"></xsl:value-of></xsl:attribute> <xsl:value-of select="."/></a>
     </xsl:template>
-      <xsl:template match="* | comment() | processing-instruction() | @*" mode="make-definition">
+    
+    <xsl:template match="* | comment() | processing-instruction() | @*" mode="make-definition">
         <xsl:copy>
             <xsl:apply-templates select="node() | @*" mode="make-definition"/>
         </xsl:copy>
