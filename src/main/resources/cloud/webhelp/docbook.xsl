@@ -451,6 +451,7 @@ set       toc,title
       <xsl:template match="d:glossterm[not(parent::d:glossentry)]">
         <xsl:variable name="term"><xsl:value-of select="."/></xsl:variable>
         <xsl:variable name="definition">
+	  <strong><xsl:value-of select="$term"/>: </strong>
             <xsl:choose>
                 <xsl:when test="//d:glossentry[@xml:id = current()/@linkend]">
                     <xsl:apply-templates select="//d:glossentry[@xml:id = current()/@linkend]/d:glossdef" mode="make-definition"/>    
@@ -461,23 +462,16 @@ set       toc,title
                 <xsl:when test="//d:glossentry[d:glossterm = current()/@baseform]">
                     <xsl:apply-templates select="//d:glossentry[d:glossterm = current()/@baseform]/d:glossdef" mode="make-definition"/>    
                 </xsl:when>
-            </xsl:choose>
-            </xsl:variable>
-        <xsl:variable name="strippedDefinition">
-            <xsl:choose>
-                <xsl:when test="$definition=''">
+		<xsl:otherwise>
                     <xsl:message>
                         No definition found for <xsl:copy-of select="."/>                    
-                    </xsl:message>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="$definition" mode="make-definition"/>
-                </xsl:otherwise>
+                    </xsl:message>		    
+		</xsl:otherwise>
             </xsl:choose>
-        </xsl:variable>
+            </xsl:variable>
         <xsl:variable name="displayDefinition">
 	  <strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text>
-	  <xsl:apply-templates select="$strippedDefinition/d:glossdef/*"/>
+	  <xsl:apply-templates select="$definition/d:glossdef/*"/>
         </xsl:variable>
              <script>
              $(document).ready(function(){
