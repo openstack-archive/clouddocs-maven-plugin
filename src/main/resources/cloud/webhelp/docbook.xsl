@@ -518,8 +518,41 @@ set       toc,title
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="text()" mode="make-definition">
-        <xsl:value-of select="translate(.,'&#xa;',' ')"/>
+    <xsl:template match="text()" name="escape-javascript" mode="make-definition">
+        <xsl:param name="string" select="."/>
+        <xsl:choose>
+            <xsl:when test='contains($string, "&apos;")'>
+                <xsl:call-template name="escape-javascript">
+                    <xsl:with-param name="string"
+                        select='substring-before($string, "&apos;")' />
+                </xsl:call-template>
+                <xsl:text>\'</xsl:text>
+                <xsl:call-template name="escape-javascript">
+                    <xsl:with-param name="string"
+                        select='substring-after($string, "&apos;")' />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="contains($string, '&#xA;')">
+                <xsl:call-template name="escape-javascript">
+                    <xsl:with-param name="string"
+                        select="substring-before($string, '&#xA;')" />
+                </xsl:call-template>
+                <xsl:text> </xsl:text>
+                <xsl:call-template name="escape-javascript">
+                    <xsl:with-param name="string"
+                        select="substring-after($string, '&#xA;')" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="contains($string, '\')">
+                <xsl:value-of select="substring-before($string, '\')" />
+                <xsl:text>\\</xsl:text>
+                <xsl:call-template name="escape-javascript">
+                    <xsl:with-param name="string"
+                        select="substring-after($string, '\')" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise><xsl:value-of select="$string" /></xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <!-- The following templates change the color of text flagged as reviewer, internal, or writeronly -->    
