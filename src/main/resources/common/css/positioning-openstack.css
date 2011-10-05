@@ -277,7 +277,7 @@ tr th, tr th .internal, tr th .added, tr th .changed
     }
 
 
-div.note *, div.caution *, div.important *, div.tip *, div.warning * {
+div.note *, div.caution *, div.important *, div.tip *, div.warning *, div.calloutlist * {
     background: inherit !important;
     color: inherit !important;
     border: inherit  !important;    
