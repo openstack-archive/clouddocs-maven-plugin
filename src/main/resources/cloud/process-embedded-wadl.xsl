@@ -44,7 +44,20 @@
 	</xsl:template>
 
 	<xsl:template match="rax:resources" mode="generate-reference-section">
-		<xsl:apply-templates select="rax:resource" mode="generate-reference-section"/>
+		<xsl:choose>
+			<xsl:when test=".//processing-instruction('rax') = 'start-sections'">
+				<xsl:apply-templates select="rax:resource" mode="generate-reference-section"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<wadl:resources>
+					<wadl:resource path="{//wadl:resource[@id = current()/@rax:id]/@path}">
+						<xsl:copy-of select="//wadl:resource[@id = current()/@rax:id]/wadl:method"/>
+					</wadl:resource>
+					<xsl:apply-templates select="rax:resource" mode="copy-resources"/>
+				</wadl:resources>
+				<xsl:apply-templates  mode="generate-reference-section"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="rax:resource" mode="copy-resources">
