@@ -63,17 +63,27 @@ Resolves hrefs on method and resource_type elements.
       </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="wadl:resources" mode="store-tree">
+    <xsl:template match="wadl:resources|processing-instruction('rax')" mode="store-tree">
       <rax:resources>
-	<xsl:apply-templates select="wadl:resource" mode="store-tree"/>
+		<xsl:apply-templates select="wadl:resource|processing-instruction('rax')" mode="store-tree"/>
       </rax:resources>
     </xsl:template>
 
     <xsl:template match="wadl:resource[./wadl:method]" mode="store-tree">
-      <rax:resource rax:id="{@id}" >
-	<xsl:apply-templates select="wadl:resource" mode="store-tree"/>
+      <rax:resource>
+      	<xsl:attribute name="rax:id">
+      		<xsl:choose>
+      			<xsl:when test="@id"><xsl:value-of select="@id"/></xsl:when>
+      			<xsl:otherwise><xsl:value-of select="generate-id()"/></xsl:otherwise>
+      		</xsl:choose>
+      	</xsl:attribute>
+		<xsl:apply-templates select="wadl:resource|processing-instruction('rax')" mode="store-tree"/>
       </rax:resource>
     </xsl:template>
+	
+	<xsl:template match="processing-instruction('rax')" mode="store-tree">
+		<xsl:copy-of select="."/>
+	</xsl:template>
 
 	<xsl:template match="node() | @*" mode="strip-ids">
 		<xsl:copy>

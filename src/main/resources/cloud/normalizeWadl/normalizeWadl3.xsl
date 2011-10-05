@@ -139,6 +139,12 @@ This XSLT flattens or expands the path in the path attributes of the resource el
                     <xsl:if test="not(position() = last())">/</xsl:if>
                 </xsl:for-each>
             </xsl:attribute>
+            <xsl:attribute name="id">
+      		    <xsl:choose>
+      			   <xsl:when test="@id"><xsl:value-of select="@id"/></xsl:when>
+      			   <xsl:otherwise><xsl:value-of select="generate-id()"/></xsl:otherwise>
+      		    </xsl:choose>
+      	    </xsl:attribute>
             <xsl:apply-templates select="wadl:doc" mode="copy"/>
             <xsl:apply-templates select="ancestor-or-self::wadl:resource/wadl:param[@style = 'template' or @style = 'header' ]" mode="copy"/>
             <xsl:apply-templates select="wadl:method" mode="copy"/>
