@@ -463,7 +463,7 @@ set       toc,title
                 </xsl:when>
             </xsl:choose>
             </xsl:variable>
-        <xsl:variable name="displayDefinition">
+        <xsl:variable name="strippedDefinition">
             <xsl:choose>
                 <xsl:when test="$definition=''">
                     <xsl:message>
@@ -471,10 +471,13 @@ set       toc,title
                     </xsl:message>
                 </xsl:when>
                 <xsl:otherwise>
-                    <strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text>
                     <xsl:apply-templates select="$definition" mode="make-definition"/>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="displayDefinition">
+	  <strong><xsl:value-of select="$term"/>:</strong><xsl:text> </xsl:text>
+	  <xsl:apply-templates select="$strippedDefinition/d:glossdef/*"/>
         </xsl:variable>
              <script>
              $(document).ready(function(){
@@ -511,7 +514,7 @@ set       toc,title
     
     <xsl:template match="* | comment() | processing-instruction() | @*" mode="make-definition">
         <xsl:copy>
-            <xsl:apply-templates select="node() | @*" mode="make-definition"/>
+	  <xsl:apply-templates select="node() | @*" mode="make-definition"/>
         </xsl:copy>
     </xsl:template>
     
