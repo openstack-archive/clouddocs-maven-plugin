@@ -584,7 +584,7 @@
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
 			<td align="center">
-				<code><xsl:value-of select="@name"/></code>
+				<code role="hyphenate-true"><xsl:value-of select="@name"/></code>
 			</td>
 			<td align="center">
 				<xsl:value-of select="@style"/>
@@ -732,10 +732,10 @@
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
                 <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
+                <col width="20%"/>
                 <col width="10%"/>
                 <col width="10%"/>
-                <col width="10%"/>
-                <col width="70%"/>
+                <col width="60%"/>
                 <thead>
                     <tr>
                         <th align="center">Name</th>
@@ -759,8 +759,9 @@
                                 mode="preprocess"/>
                         </xsl:when>
                         <xsl:otherwise>
+                        	<xsl:message>This should never happen.</xsl:message>
                             <tr>
-                                <td>WTF? <xsl:value-of select="$mode"/></td>
+                                <td><xsl:value-of select="$mode"/></td>
                             </tr>
                         </xsl:otherwise>
                     </xsl:choose>

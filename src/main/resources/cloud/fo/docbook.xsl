@@ -836,5 +836,9 @@
 	  </xsl:attribute>
 	</xsl:if>{<xsl:copy-of select="$content"/>}</fo:inline>
     </xsl:template>
-    
+
+<xsl:template match="*[@role = 'hyphenate-true']">
+    <fo:inline hyphenate="true"><xsl:apply-imports/></fo:inline>
+</xsl:template>
+
 </xsl:stylesheet>
