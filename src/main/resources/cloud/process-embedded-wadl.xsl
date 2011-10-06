@@ -88,6 +88,7 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</title>
+			<xsl:apply-templates select="//wadl:resource[@id = current()/@rax:id]/wadl:doc/xhtml:*|//wadl:resource[@id = current()/@rax:id]/wadl:doc/d:*" mode="process-xhtml"/>
 			<wadl:resources>
 				<wadl:resource path="{//wadl:resource[@id = current()/@rax:id]/@path}">
 					<xsl:copy-of select="//wadl:resource[@id = current()/@rax:id]/wadl:method"/>
