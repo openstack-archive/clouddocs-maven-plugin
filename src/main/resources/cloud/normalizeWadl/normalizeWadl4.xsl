@@ -91,11 +91,11 @@
   <!-- ================================ -->
   
   <xsl:template match="wadl:response" mode="collect-faults">
-    <xsl:variable name="prefix" select="substring-before(wadl:representation/@element,':')"/>
+    <xsl:variable name="prefix" select="substring-before(wadl:representation[@mediaType='application/xml']/@element,':')"/>
     <xsl:variable name="namespace-uri" select="namespace-uri-for-prefix($prefix,.)"/>
-    <xsl:variable name="name" select="substring-after(wadl:representation/@element,':')"/>
+    <xsl:variable name="name" select="substring-after(wadl:representation[@mediaType='application/xml']/@element,':')"/>
    
-    <xsl:if test="not($namespace-uri = 'http://www.w3.org/2001/XMLSchema')">
+    wadl<xsl:if test="not($namespace-uri = 'http://www.w3.org/2001/XMLSchema')">
       <rax:response status="{@status}" prefix="{$prefix}" namespace="{$namespace-uri}" name="{$name}">
         <para>
           <xsl:apply-templates select="$xsds/rax:xsd/xsd:schema[@targetNamespace = $namespace-uri]//*[self::xsd:element[parent::xsd:schema] and @name = $name]" mode="collect-faults"/>
