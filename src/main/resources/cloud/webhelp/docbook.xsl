@@ -27,8 +27,8 @@
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="section.autolabel" select="1"/>
   <xsl:param name="chapter.autolabel" select="1"/>
-  <xsl:param name="appendix.autolabel" select="1"/>
-  <xsl:param name="part.autolabel" select="1"/>
+  <xsl:param name="appendix.autolabel" select="'A'"/>
+  <xsl:param name="part.autolabel" select="'I'"/>
   <xsl:param name="reference.autolabel" select="1"/>
   <xsl:param name="qandadiv.autolabel" select="1"/>
   <xsl:param name="webhelp.autolabel" select="1"/>
