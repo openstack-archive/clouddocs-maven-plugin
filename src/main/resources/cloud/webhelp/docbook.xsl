@@ -151,24 +151,26 @@ set       toc,title
 	
 	<xsl:if test="$enable.disqus != '0'">
 	  <hr />
+	      <xsl:choose>
+		<xsl:when test="$enable.disqus = 'intranet'">
+		  <script language="JavaScript" src="/comments.php" type="text/javascript"><xsl:comment/></script>
+		  <noscript>You must have JavaScript enabled to view and post comments.</noscript>
+		</xsl:when>
+		<xsl:otherwise>
+
 	  <div id="disqus_thread">
 	    <script type="text/javascript">
-	      <xsl:if test="$enable.disqus = 'intranet'">
-              var disqus_developer = 1;
-	      </xsl:if>
 	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>';
-	        <xsl:if test="$use.disqus.id != '0'">
+	      <xsl:if test="$use.disqus.id != '0'">
 	      var disqus_identifier = '<xsl:value-of select="/*/@xml:id"/><xsl:value-of select="$version.for.disqus"/><xsl:value-of select="@xml:id"/>';
-	        </xsl:if>
+	      </xsl:if>
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-	    <script type="text/javascript" src="../common/comments.js">
-	      <xsl:comment></xsl:comment>
-	    </script>
-	  </div>
-	</xsl:if>    
-
+	    <script type="text/javascript" src="../common/comments.js"><xsl:comment/></script>
+	  </div>	  
+		</xsl:otherwise>
+	      </xsl:choose>
+	</xsl:if>
 	<hr/>
 	<div class="legal"><a href="index.html">Legal notices</a></div>
 
