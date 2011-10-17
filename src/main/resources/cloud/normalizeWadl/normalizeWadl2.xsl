@@ -63,7 +63,7 @@ Resolves hrefs on method and resource_type elements.
       </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="wadl:resources|processing-instruction('rax')" mode="store-tree">
+    <xsl:template match="wadl:resources" mode="store-tree">
       <rax:resources>
 		<xsl:apply-templates select="wadl:resource|processing-instruction('rax')" mode="store-tree"/>
       </rax:resources>
