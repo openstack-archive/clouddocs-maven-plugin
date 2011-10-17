@@ -6,7 +6,8 @@
 	
 	<!-- For readability while testing -->
 	<!-- <xsl:output indent="yes"/>    -->
-
+	<xsl:import href="date.xsl"/>
+	
 	<xsl:param name="project.build.directory">../../target</xsl:param>
     <xsl:param name="wadl.norequest.msg"><para>This operation does not require a request body.</para></xsl:param>
     <xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
@@ -104,7 +105,7 @@
 		<xsl:element name="{name(.)}">
 			<xsl:copy-of select="@*"/>
 			
-			<xsl:apply-templates select="d:*[not(local-name() = 'section')]" mode="preprocess"/>
+			<xsl:apply-templates select="d:*[not(local-name() = 'section')]|processing-instruction()" mode="preprocess"/>
 			<!-- 
 			 Here we build a summary template for whole reference. 
   			 Combine the tables for a section into one big table
@@ -868,4 +869,38 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
+	<xsl:template match="processing-instruction('rax')[normalize-space(.) = 'revhistory']" mode="preprocess">
+		<xsl:if test="//d:revhistory[1]/d:revision">
+			<informaltable rules="all">
+				<col width="20%"/>
+				<col width="80%"/>
+				<thead>
+					<tr>
+						<td align="center">Revision Date</td>
+						<td align="center">Summary of Changes</td>
+					</tr>
+				</thead>
+				<tbody>
+					<xsl:apply-templates select="//d:revhistory[1]/d:revision" mode="revhistory"/>        	
+				</tbody>
+			</informaltable>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="d:revision" mode="revhistory">
+		<tr>
+			<td>
+				<para>
+					<xsl:call-template name="shortDate">
+						<xsl:with-param name="in"  select="d:date"/>
+					</xsl:call-template>
+				</para>
+			</td>
+			<td>
+				<xsl:copy-of select="d:revdescription/*"/>
+			</td>
+		</tr>
+	</xsl:template>
+	
 </xsl:stylesheet>
