@@ -272,6 +272,7 @@
 			<xsl:otherwise>
 				<xsl:apply-templates select="wadl:method" mode="preprocess">
                     <xsl:with-param name="resourceLink" select="."/>
+					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
                 </xsl:apply-templates>
 			</xsl:otherwise>
 		</xsl:choose>
