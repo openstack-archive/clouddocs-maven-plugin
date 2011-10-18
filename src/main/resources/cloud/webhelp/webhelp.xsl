@@ -687,4 +687,6 @@ These problems go away when you add this IE=7 mode meta tag.
         </xsl:call-template>
     </xsl:template>
 
+    <xsl:include href="revhistory2atom.xsl"/>
+
 </xsl:stylesheet> 
