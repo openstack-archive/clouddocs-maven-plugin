@@ -255,7 +255,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
    }
 
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
-        return super.createTransformerBuilder (new DocBookResolver (resolver, getType()));
+        return super.createTransformerBuilder (new GlossaryResolver(new DocBookResolver (resolver, getType()), getType()));
     }
 
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
