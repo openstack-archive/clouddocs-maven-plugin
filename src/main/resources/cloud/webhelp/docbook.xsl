@@ -187,6 +187,9 @@ set       toc,title
       <xsl:if test="normalize-space($pdf.url) != ''">
 	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
       </xsl:if>
+      &#160;
+      <a href="../atom.xml"><img src="../common/images/feed-icon.png"/></a>
+
     </xsl:template>
 
       <xsl:template name="webhelpheader">

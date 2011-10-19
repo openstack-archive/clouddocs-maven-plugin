@@ -214,7 +214,8 @@ These problems go away when you add this IE=7 mode meta tag.
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" href="../common/css/positioning.css"/>
     <link rel="stylesheet" type="text/css" href="../common/css/custom.css"/>
-    
+    <link href="../atom.xml" type="application/atom+xml" rel="alternate" title="Document ATOM Feed" />
+
 	<xsl:comment><xsl:text>[if IE]>
 	&lt;link rel="stylesheet" type="text/css" href="../common/css/ie.css"/>
 	&lt;![endif]</xsl:text></xsl:comment>
