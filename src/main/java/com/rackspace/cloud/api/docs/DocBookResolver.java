@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 /**
-   We are adding a customization layer ontop of the docbook one, so we
+   We are adding a customization layer on top of the docbook one, so we
    need to distinguish when we wish to visit the original docbook
    entries or our entries.
 
