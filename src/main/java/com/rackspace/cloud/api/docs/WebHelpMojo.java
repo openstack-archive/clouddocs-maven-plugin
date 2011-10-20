@@ -11,6 +11,21 @@ import java.util.*;
 import java.util.zip.ZipInputStream;
 
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import java.io.StringReader;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import com.agilejava.docbkx.maven.AbstractWebhelpMojo;
@@ -32,6 +47,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     private File sourceDirectory;
     private File sourceDocBook;
+    private File atomFeed;
+    private File atomFeedClean;
+    private static final String COPY_XSL = "cloud/webhelp/copy.xsl";
 
     /**
      * @parameter expression="${project.build.directory}"
@@ -103,6 +121,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String pdfUrl;
 
     /**
+     * A parameter used to specify the path to the pdf for download in webhelp.
+     *
+     * @parameter expression="${generate-webhelp.canonical.url.base}" default-value=""
+     */
+    private String canonicalUrlBase;
+
+    /**
      * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
      *
      * @parameter expression="${generate-webhelp.security}" default-value=""
@@ -162,6 +187,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     if(pdfUrl != null){
 	transformer.setParameter("pdf.url",pdfUrl);
     }
+
+    if(pdfUrl != null){
+	transformer.setParameter("canonical.url.base",canonicalUrlBase);
+    }
+
     if(security != null){
 	transformer.setParameter("security",security);
     }
@@ -190,14 +220,17 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     }
     
     public void postProcessResult(File result) throws MojoExecutionException {
+	
 	super.postProcessResult(result);
 	
 	copyTemplate(result);	
+
+	transformFeed(result);
     }
 
     protected void copyTemplate(File result) throws MojoExecutionException {
 
-	final File targetDirectory = result.getParentFile();
+ 	final File targetDirectory = result.getParentFile();
 
 	com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("content",WebHelpMojo.class,targetDirectory);
 	com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("common",WebHelpMojo.class,targetDirectory);
@@ -206,5 +239,58 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	com.agilejava.docbkx.maven.FileUtils.copyFile(new File(targetDirectory,"common/main-" + branding + ".js"), new File(targetDirectory,"common/main.js"));
     }
 
+
+    protected void transformFeed(File result) throws MojoExecutionException {
+        try {
+            ClassLoader classLoader = Thread.currentThread()
+                .getContextClassLoader();
+
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer = factory.newTransformer(new StreamSource(classLoader.getResourceAsStream(COPY_XSL)));
+
+	    atomFeedClean = new File (result.getParentFile(),"atom.xml");
+
+	    DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+	    dbfactory.setValidating(false);
+	    DocumentBuilder builder = dbfactory.newDocumentBuilder();
+	    builder.setEntityResolver(new EntityResolver() {
+		    @Override
+			public InputSource resolveEntity(String publicId, String systemId)
+			throws SAXException, IOException {
+			return new InputSource(new StringReader(""));
+		    }
+		});
+
+	    atomFeed = new File (result.getParentFile(),"atom-doctype.xml");
+	    Document xmlDocument = builder.parse(atomFeed);
+	    DOMSource source = new DOMSource(xmlDocument);
+
+            transformer.transform (source, new StreamResult(atomFeedClean));
+
+	    atomFeed.deleteOnExit();
+
+        }
+        catch (TransformerConfigurationException e)
+            {
+                throw new MojoExecutionException("Failed to load JAXP configuration", e);
+            }
+	catch (javax.xml.parsers.ParserConfigurationException e)
+	    {
+		throw new MojoExecutionException("Failed to configure parser", e);
+	    }
+	catch (org.xml.sax.SAXException e)
+	    {
+		throw new MojoExecutionException("Sax exception", e);
+	    }
+	catch(java.io.IOException e)
+	    {
+		throw new MojoExecutionException("IO Exception", e);
+	    }
+        catch (TransformerException e)
+            {
+                throw new MojoExecutionException("Failed to transform to atom feed", e);
+            }
+
+    }
 
 }
