@@ -27,8 +27,8 @@
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="section.autolabel" select="1"/>
   <xsl:param name="chapter.autolabel" select="1"/>
-  <xsl:param name="appendix.autolabel" select="1"/>
-  <xsl:param name="part.autolabel" select="1"/>
+  <xsl:param name="appendix.autolabel" select="'A'"/>
+  <xsl:param name="part.autolabel" select="'I'"/>
   <xsl:param name="reference.autolabel" select="1"/>
   <xsl:param name="qandadiv.autolabel" select="1"/>
   <xsl:param name="webhelp.autolabel" select="1"/>
@@ -151,24 +151,26 @@ set       toc,title
 	
 	<xsl:if test="$enable.disqus != '0'">
 	  <hr />
+	      <xsl:choose>
+		<xsl:when test="$enable.disqus = 'intranet'">
+		  <script language="JavaScript" src="/comments.php" type="text/javascript"><xsl:comment/></script>
+		  <noscript>You must have JavaScript enabled to view and post comments.</noscript>
+		</xsl:when>
+		<xsl:otherwise>
+
 	  <div id="disqus_thread">
 	    <script type="text/javascript">
-	      <xsl:if test="$enable.disqus = 'intranet'">
-              var disqus_developer = 1;
-	      </xsl:if>
 	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>';
-	        <xsl:if test="$use.disqus.id != '0'">
+	      <xsl:if test="$use.disqus.id != '0'">
 	      var disqus_identifier = '<xsl:value-of select="/*/@xml:id"/><xsl:value-of select="$version.for.disqus"/><xsl:value-of select="@xml:id"/>';
-	        </xsl:if>
+	      </xsl:if>
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-	    <script type="text/javascript" src="../common/comments.js">
-	      <xsl:comment></xsl:comment>
-	    </script>
-	  </div>
-	</xsl:if>    
-
+	    <script type="text/javascript" src="../common/comments.js"><xsl:comment/></script>
+	  </div>	  
+		</xsl:otherwise>
+	      </xsl:choose>
+	</xsl:if>
 	<hr/>
 	<div class="legal"><a href="index.html">Legal notices</a></div>
 
@@ -185,6 +187,9 @@ set       toc,title
       <xsl:if test="normalize-space($pdf.url) != ''">
 	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
       </xsl:if>
+      <!-- &#160; -->
+      <!-- <a href="../atom.xml"><img src="../common/images/feed-icon.png"/></a> -->
+
     </xsl:template>
 
       <xsl:template name="webhelpheader">

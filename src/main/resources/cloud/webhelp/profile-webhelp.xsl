@@ -288,6 +288,7 @@ Processing legalnotice: <xsl:value-of select="@role"/>
   </xsl:choose>
   
   <xsl:call-template name="index.html"/>
+  <xsl:call-template name="revhistory2atom"/>
 
 </xsl:template>
 

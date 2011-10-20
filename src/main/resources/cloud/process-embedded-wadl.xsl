@@ -6,7 +6,8 @@
 	
 	<!-- For readability while testing -->
 	<!-- <xsl:output indent="yes"/>    -->
-
+	<xsl:import href="date.xsl"/>
+	
 	<xsl:param name="project.build.directory">../../target</xsl:param>
     <xsl:param name="wadl.norequest.msg"><para>This operation does not require a request body.</para></xsl:param>
     <xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
@@ -29,6 +30,16 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*|node()" mode="preprocess"/>
 		</xsl:copy>
+	</xsl:template>
+
+	<xsl:template match="processing-instruction('rax')[ . = 'glossary']" mode="preprocess">
+	  <xsl:message>
+	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    Here's the glossary:
+	    <xsl:copy-of select="document('urn:rackspace-glossary.xml')/*"/>
+	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	  </xsl:message>
+	  <xsl:apply-templates select="document('urn:rackspace-glossary.xml')/*" mode="preprocess"/>
 	</xsl:template>
 	
 	<xsl:template match="wadl:resources[@href]" mode="preprocess" priority="10">
@@ -88,6 +99,7 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</title>
+			<xsl:apply-templates select="//wadl:resource[@id = current()/@rax:id]/wadl:doc/xhtml:*|//wadl:resource[@id = current()/@rax:id]/wadl:doc/d:*" mode="process-xhtml"/>
 			<wadl:resources>
 				<wadl:resource path="{//wadl:resource[@id = current()/@rax:id]/@path}">
 					<xsl:copy-of select="//wadl:resource[@id = current()/@rax:id]/wadl:method"/>
@@ -103,7 +115,7 @@
 		<xsl:element name="{name(.)}">
 			<xsl:copy-of select="@*"/>
 			
-			<xsl:apply-templates select="d:*[not(local-name() = 'section')]" mode="preprocess"/>
+			<xsl:apply-templates select="d:*[not(local-name() = 'section')]|processing-instruction()" mode="preprocess"/>
 			<!-- 
 			 Here we build a summary template for whole reference. 
   			 Combine the tables for a section into one big table
@@ -271,6 +283,7 @@
 			<xsl:otherwise>
 				<xsl:apply-templates select="wadl:method" mode="preprocess">
                     <xsl:with-param name="resourceLink" select="."/>
+					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
                 </xsl:apply-templates>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -584,7 +597,7 @@
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
 			<td align="center">
-				<code><xsl:value-of select="@name"/></code>
+				<code role="hyphenate-true"><xsl:value-of select="@name"/></code>
 			</td>
 			<td align="center">
 				<xsl:value-of select="@style"/>
@@ -732,10 +745,10 @@
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
                 <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
+                <col width="20%"/>
                 <col width="10%"/>
                 <col width="10%"/>
-                <col width="10%"/>
-                <col width="70%"/>
+                <col width="60%"/>
                 <thead>
                     <tr>
                         <th align="center">Name</th>
@@ -759,8 +772,9 @@
                                 mode="preprocess"/>
                         </xsl:when>
                         <xsl:otherwise>
+                        	<xsl:message>This should never happen.</xsl:message>
                             <tr>
-                                <td>WTF? <xsl:value-of select="$mode"/></td>
+                                <td><xsl:value-of select="$mode"/></td>
                             </tr>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -865,4 +879,38 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	
+	<xsl:template match="processing-instruction('rax')[normalize-space(.) = 'revhistory']" mode="preprocess">
+		<xsl:if test="//d:revhistory[1]/d:revision">
+			<informaltable rules="all">
+				<col width="20%"/>
+				<col width="80%"/>
+				<thead>
+					<tr>
+						<td align="center">Revision Date</td>
+						<td align="center">Summary of Changes</td>
+					</tr>
+				</thead>
+				<tbody>
+					<xsl:apply-templates select="//d:revhistory[1]/d:revision" mode="revhistory"/>        	
+				</tbody>
+			</informaltable>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="d:revision" mode="revhistory">
+		<tr>
+			<td>
+				<para>
+					<xsl:call-template name="shortDate">
+						<xsl:with-param name="in"  select="d:date"/>
+					</xsl:call-template>
+				</para>
+			</td>
+			<td>
+				<xsl:copy-of select="d:revdescription/*"/>
+			</td>
+		</tr>
+	</xsl:template>
+	
 </xsl:stylesheet>

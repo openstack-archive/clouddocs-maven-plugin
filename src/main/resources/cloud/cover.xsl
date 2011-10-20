@@ -10,7 +10,7 @@
     <xsl:output method="xml" encoding="UTF-8" media-type="image/svg+xml" standalone="no"/>
     
     <xsl:param name="docbook.infile" select="'/Users/jorgew/projects/cloud-files-api-docs/src/docbkx/cfdevguide_d5.xml'"/>
-    <xsl:variable name="docbook" select="document(concat('file://',$docbook.infile))"/>
+    <xsl:variable name="docbook" select="document(concat('file:///',$docbook.infile))"/>
 
   <xsl:variable name="rackspace.status.pi">
     <xsl:call-template name="pi-attribute">
