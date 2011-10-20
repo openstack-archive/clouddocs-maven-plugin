@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -27,6 +28,19 @@
             <artifactId>glossary</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.5</version>
         </dependency>
 
         <dependency>
@@ -191,7 +205,8 @@
                             <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
                             <outputDir>target/generated-resources/cloud/fo</outputDir>
                             <fileMappers>
-                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                <fileMapper
+                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                     <targetExtension>.xsl</targetExtension>
                                 </fileMapper>
                             </fileMappers>
@@ -201,7 +216,8 @@
                             <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
                             <outputDir>target/generated-resources/cloud/webhelp</outputDir>
                             <fileMappers>
-                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                <fileMapper
+                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                     <targetExtension>.xsl</targetExtension>
                                 </fileMapper>
                             </fileMappers>
@@ -257,38 +273,42 @@
                             <type>webhelp</type>
                             <stylesheetPath>webhelp/xsl/webhelp.xsl</stylesheetPath>
                             <superClassName>com.rackspace.cloud.api.docs.WebHelpMojo</superClassName>
-                            <excludedProperties>${excluded.properties},root.filename,base.dir,webhelp.base.dir,manifest.in.base.dir</excludedProperties>
-			    <useStandardOutput>false</useStandardOutput>
+                            <excludedProperties>
+                                ${excluded.properties},root.filename,base.dir,webhelp.base.dir,manifest.in.base.dir
+                            </excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
                         </configuration>
                     </execution>
 
-          <execution>
-            <id>generate-eclipse</id>
-            <goals>
-              <goal>build</goal>
-            </goals>
-            <configuration>
-              <type>eclipse</type>
-              <stylesheetPath>eclipse/eclipse.xsl</stylesheetPath>
-              <superClassName>com.rackspace.cloud.api.docs.EclipseMojo</superClassName>
-              <excludedProperties>${excluded.properties},root.filename,base.dir,manifest.in.base.dir
-              </excludedProperties>
-	      <useStandardOutput>false</useStandardOutput>
-            </configuration>
-          </execution>
+                    <execution>
+                        <id>generate-eclipse</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <type>eclipse</type>
+                            <stylesheetPath>eclipse/eclipse.xsl</stylesheetPath>
+                            <superClassName>com.rackspace.cloud.api.docs.EclipseMojo</superClassName>
+                            <excludedProperties>${excluded.properties},root.filename,base.dir,manifest.in.base.dir
+                            </excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
+                        </configuration>
+                    </execution>
 
-            <execution>
-              <id>generate-epub</id>
-              <goals>
-                <goal>build</goal>
-	      </goals>
-	      <configuration>
-                <type>epub</type>
-		<superClassName>com.rackspace.cloud.api.docs.EpubMojo</superClassName>
-		<excludedProperties>${excluded.properties},root.filename,base.dir,epub.oebps.dir,epub.metainf.dir,manifest.in.base.dir,epub.opf.filename</excludedProperties>
-		<useStandardOutput>false</useStandardOutput>
-	      </configuration>
-	    </execution>
+                    <execution>
+                        <id>generate-epub</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <type>epub</type>
+                            <superClassName>com.rackspace.cloud.api.docs.EpubMojo</superClassName>
+                            <excludedProperties>
+                                ${excluded.properties},root.filename,base.dir,epub.oebps.dir,epub.metainf.dir,manifest.in.base.dir,epub.opf.filename
+                            </excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
+                        </configuration>
+                    </execution>
 
                 </executions>
 
