@@ -7,10 +7,10 @@
     xmlns="http://www.w3.org/2005/Atom" 
     version="1.0">
     
-    <xsl:param name="canonical.url.base">http://docs.rackspace.com/product/api/v1.0</xsl:param>
-
+    <xsl:param name="canonical.url.base"/>
+    
     <xsl:template name="revhistory2atom">
-        <xsl:if test="//db:revhistory/db:revision">
+        <xsl:if test="//db:revhistory/db:revision and $canonical.url.base != ''">
           <xsl:call-template name="write.chunk">
             <xsl:with-param name="filename"><xsl:value-of select="concat($webhelp.base.dir,'/','atom-doctype.xml')"/></xsl:with-param>
             <xsl:with-param name="method" select="'xml'"/>
