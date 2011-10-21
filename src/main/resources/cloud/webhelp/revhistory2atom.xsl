@@ -16,8 +16,6 @@
             <xsl:with-param name="method" select="'xml'"/>
             <xsl:with-param name="encoding" select="'utf-8'"/>
             <xsl:with-param name="indent" select="'yes'"/>
-            <xsl:with-param name="doctype-public" select="''"/> <!-- intentionally blank --> 
-            <xsl:with-param name="doctype-system" select="''"/> <!-- intentionally blank -->
             <xsl:with-param name="content">
                  <xsl:apply-templates select="//db:revhistory[1]"/>
             </xsl:with-param>
