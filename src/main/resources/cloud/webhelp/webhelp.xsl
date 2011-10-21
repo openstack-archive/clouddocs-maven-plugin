@@ -214,8 +214,10 @@ These problems go away when you add this IE=7 mode meta tag.
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" href="../common/css/positioning.css"/>
     <link rel="stylesheet" type="text/css" href="../common/css/custom.css"/>
-    <xsl:if test="$canonical.url.base != ''">
+    <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
         <link href="../atom.xml" type="application/atom+xml" rel="alternate" title="Document ATOM Feed" />
+    </xsl:if>
+    <xsl:if test="$canonical.url.base != ''">
         <link rel="canonical" >
             <xsl:attribute name="href"><xsl:value-of select="$canonical.url.base"/>/<xsl:apply-templates select="." mode="chunk-filename"/></xsl:attribute>
         </link>

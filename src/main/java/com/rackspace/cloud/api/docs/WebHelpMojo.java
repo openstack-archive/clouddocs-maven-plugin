@@ -188,7 +188,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	transformer.setParameter("pdf.url",pdfUrl);
     }
 
-    if(pdfUrl != null){
+    if(canonicalUrlBase != null){
 	transformer.setParameter("canonical.url.base",canonicalUrlBase);
     }
 
