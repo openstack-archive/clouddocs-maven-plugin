@@ -242,13 +242,18 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     protected void transformFeed(File result) throws MojoExecutionException {
         try {
+	    atomFeed = new File (result.getParentFile(),"atom-doctype.xml");
+	    atomFeedClean = new File (result.getParentFile(),"atom.xml");
+
+	    if(!atomFeed.isFile()){
+		return;
+	    }
+
             ClassLoader classLoader = Thread.currentThread()
                 .getContextClassLoader();
 
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer(new StreamSource(classLoader.getResourceAsStream(COPY_XSL)));
-
-	    atomFeedClean = new File (result.getParentFile(),"atom.xml");
 
 	    DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
 	    dbfactory.setValidating(false);
@@ -261,7 +266,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 		    }
 		});
 
-	    atomFeed = new File (result.getParentFile(),"atom-doctype.xml");
+
 	    Document xmlDocument = builder.parse(atomFeed);
 	    DOMSource source = new DOMSource(xmlDocument);
 
