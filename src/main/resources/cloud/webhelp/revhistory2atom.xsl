@@ -5,7 +5,7 @@
     xmlns:db="http://docbook.org/ns/docbook" 
     exclude-result-prefixes="date db"
     xmlns="http://www.w3.org/2005/Atom" 
-    version="1.0">
+    version="1.1">
     
     <xsl:param name="canonical.url.base"/>
     
@@ -20,15 +20,15 @@
                  <xsl:apply-templates select="//db:revhistory[1]"/>
             </xsl:with-param>
           </xsl:call-template>
-            </xsl:if>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="db:revhistory">
         <xsl:variable name="escapechars"> &amp;"'&lt;?</xsl:variable>
-        <feed>
+        <feed xmlns="http://www.w3.org/2005/Atom">
             <title><xsl:value-of select="//db:title[1]"/> revision history</title>
-            <link href="{$canonical.url.base}/atom.xml" rel="self"/>
-            <link href="{$canonical.url.base}/content/index.html"/>
+            <link href="{substring-before($canonical.url.base,'/content')}/atom.xml" rel="self"/>
+            <link href="{$canonical.url.base}/index.html"/>
             <id>
                 <xsl:choose>
                     <xsl:when test="/*/@xml:id"><xsl:value-of select="/*/@xml:id"/></xsl:when>
@@ -56,7 +56,7 @@
                     <xsl:otherwise><xsl:value-of select="db:date"/></xsl:otherwise>
                 </xsl:choose>
             </title>
-            <link type="text/html" href="{$canonical.url.base}/content/index.html"/>
+            <link type="text/html" href="{$canonical.url.base}/index.html"/>
             <id><xsl:value-of select="concat(/*/@xml:id,'-',db:date)"/></id>
             <updated><xsl:value-of select="db:date"/></updated>
             <content type="xhtml"><xsl:apply-templates select="db:revdescription|db:revremark"/></content>
@@ -64,9 +64,29 @@
     </xsl:template>
 
     <xsl:template match="db:revdescription">
-        <div xmlns="http://www.w3.org/1999/xhtml">
+        <xsl:variable name="xhtml">
             <xsl:apply-templates/>
+        </xsl:variable>
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <xsl:apply-templates select="$xhtml" mode="fix-xrefs"/>
         </div>
     </xsl:template>
+    
+    <xsl:template match="html:a[@class = 'xref']" xmlns:html="http://www.w3.org/1999/xhtml" mode="fix-xrefs">
+        <a xmlns="http://www.w3.org/1999/xhtml"> 
+           <xsl:copy-of select="@*"/>
+           <xsl:attribute name="href">
+                <xsl:value-of select="concat('content/',@href)"/>
+           </xsl:attribute>
+            <xsl:apply-templates select="node()" mode="fix-xrefs"/>
+        </a>
+    </xsl:template>
 
+    <xsl:template match="node() | @*" mode="fix-xrefs">
+        <xsl:copy>
+            <xsl:apply-templates select="node() | @*" mode="fix-xrefs"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    
 </xsl:stylesheet>
