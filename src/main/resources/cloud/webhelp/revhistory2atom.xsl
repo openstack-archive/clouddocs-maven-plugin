@@ -26,7 +26,7 @@
     <xsl:template match="db:revhistory">
         <xsl:variable name="escapechars"> &amp;"'&lt;?</xsl:variable>
         <feed>
-            <title>Revision history for <xsl:value-of select="//db:title[1]"/></title>
+            <title><xsl:value-of select="//db:title[1]"/> revision history</title>
             <link href="{$canonical.url.base}/atom.xml" rel="self"/>
             <link href="{$canonical.url.base}/content/index.html"/>
             <id>
