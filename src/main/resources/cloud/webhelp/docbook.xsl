@@ -185,11 +185,11 @@ set       toc,title
       </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a> 
       </p> 
       <xsl:if test="normalize-space($pdf.url) != ''">
-	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
+	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
       </xsl:if>
     <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
       &#160;
-      <a href="../atom.xml"><img src="../common/images/feed-icon.png"/></a>
+      <a href="../atom.xml"><img alt="Atom feed of this document" src="../common/images/feed-icon.png"/></a>
     </xsl:if>
     </xsl:template>
 
