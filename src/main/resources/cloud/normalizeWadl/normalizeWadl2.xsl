@@ -7,6 +7,8 @@ Resolves hrefs on method and resource_type elements.
 
   <xsl:param name="wadl2docbook">0</xsl:param>
 
+	<!-- Delcaring this to avoid errors in Oxygen while editing. This actually comes from normalizeWadl1.xsl -->
+	<xsl:param name="xsds"/>
 	<xsl:variable name="normalizeWadl2">
 		<xsl:choose>
 			<xsl:when test="$strip-ids != 0">
