@@ -54,9 +54,19 @@
   </xsl:template>
 
   <xsl:template match="wadl:param" mode="collect-types">
-    <xsl:variable name="prefix" select="substring-before(@type,':')"/>
+    <xsl:variable name="prefix">
+      <xsl:choose>
+        <xsl:when test="@rax:type"><xsl:value-of select="substring-before(@rax:type,':')"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="substring-before(@type,':')"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:variable name="namespace-uri" select="namespace-uri-for-prefix($prefix,.)"/>
-    <xsl:variable name="name" select="substring-after(@type,':')"/>
+    <xsl:variable name="name">
+      <xsl:choose>
+        <xsl:when test="@rax:type"><xsl:value-of select="substring-after(@rax:type,':')"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="substring-after(@type,':')"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     
     <xsl:if test="not($namespace-uri = 'http://www.w3.org/2001/XMLSchema')">
       <rax:type prefix="{$prefix}" namespace="{$namespace-uri}" name="{$name}">
@@ -91,14 +101,14 @@
   <!-- ================================ -->
   
   <xsl:template match="wadl:response" mode="collect-faults">
-    <xsl:variable name="prefix" select="substring-before(wadl:representation[@mediaType='application/xml']/@element,':')"/>
+    <xsl:variable name="prefix" select="substring-before(wadl:representation[@mediaType='application/xml'][1]/@element,':')"/>
     <xsl:variable name="namespace-uri" select="namespace-uri-for-prefix($prefix,.)"/>
-    <xsl:variable name="name" select="substring-after(wadl:representation[@mediaType='application/xml']/@element,':')"/>
+    <xsl:variable name="name" select="substring-after(wadl:representation[@mediaType='application/xml'][1]/@element,':')"/>
    
-    wadl<xsl:if test="not($namespace-uri = 'http://www.w3.org/2001/XMLSchema')">
+    <xsl:if test="not($namespace-uri = 'http://www.w3.org/2001/XMLSchema')">
       <rax:response status="{@status}" prefix="{$prefix}" namespace="{$namespace-uri}" name="{$name}">
         <para>
-          <xsl:apply-templates select="$xsds/rax:xsd/xsd:schema[@targetNamespace = $namespace-uri]//*[self::xsd:element[parent::xsd:schema] and @name = $name]" mode="collect-faults"/>
+          <xsl:apply-templates select="$xsds/rax:xsd[1]/xsd:schema[@targetNamespace = $namespace-uri]//*[self::xsd:element[parent::xsd:schema] and @name = $name]" mode="collect-faults"/>
         </para>
       </rax:response>
     </xsl:if>

@@ -152,7 +152,7 @@ Resolves hrefs on method and resource_type elements.
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="wadl:method|wadl:param|wadl:representation" mode="copy-nw2">
+	<xsl:template match="wadl:method|wadl:representation" mode="copy-nw2">
 		<xsl:param name="generated-id"/>
 		<xsl:copy>
 			<xsl:copy-of select="@*[not(local-name() = 'id')]"/>
@@ -162,6 +162,41 @@ Resolves hrefs on method and resource_type elements.
 			<!-- </xsl:attribute> -->
 			<xsl:apply-templates select="*|comment()|processing-instruction()|text()"  mode="normalizeWadl2"/>
 		</xsl:copy>
+	</xsl:template>
+	
+	<xsl:template match="wadl:param" mode="copy-nw2 normalizeWadl2">
+		<xsl:param name="generated-id"/>
+		<xsl:variable name="type-nsuri" select="namespace-uri-for-prefix(substring-before(@type,':'),.)"/>
+		<xsl:variable name="type" select="substring-after(@type,':')"/>
+		<xsl:choose>
+			<xsl:when test="@default and $xsds/*/xsd:schema[@targetNamespace = $type-nsuri]/xsd:simpleType[@name = $type]/xsd:restriction[@base = 'xsd:string']/xsd:enumeration">
+				<xsl:copy>
+					<xsl:copy-of select="@*[not(local-name() = 'id') and not(local-name() = 'type')]"/>
+					<xsl:attribute name="rax:id">
+						<xsl:choose>
+							<xsl:when test="@id"><xsl:value-of select="@id"/></xsl:when>
+							<xsl:otherwise><xsl:value-of select="generate-id()"/></xsl:otherwise>
+						</xsl:choose>
+					</xsl:attribute>
+					<xsl:attribute name="type">xsd:string</xsl:attribute>
+					<!-- Explicitly adding xsd namespaced to ensure that xsd is the right prefix -->
+					<xsl:namespace name="xsd" select="'http://www.w3.org/2001/XMLSchema'"/>
+					<xsl:attribute name="rax:type"><xsl:value-of select="@type"/></xsl:attribute>
+					<xsl:apply-templates select="*|comment()|processing-instruction()|text()"  mode="normalizeWadl2"/>
+					<!-- Resolve enumerated values from xsd -->
+					<xsl:for-each select="$xsds/*/xsd:schema[@targetNamespace = $type-nsuri]/xsd:simpleType[@name = $type]/xsd:restriction[@base = 'xsd:string']/xsd:enumeration">
+						<option value="{@value}"/> <!-- Can I put docs in here? Should I? -->
+					</xsl:for-each>
+				</xsl:copy>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:copy>
+					<xsl:copy-of select="@*[not(local-name() = 'id')]"/>
+					<xsl:attribute name="rax:id" select="@id"/>
+					<xsl:apply-templates select="*|comment()|processing-instruction()|text()"  mode="normalizeWadl2"/>
+				</xsl:copy>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[@type]" mode="normalizeWadl2">
