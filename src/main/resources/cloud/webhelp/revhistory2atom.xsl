@@ -7,7 +7,12 @@
     xmlns="http://www.w3.org/2005/Atom" 
     version="1.1">
     
-    <xsl:param name="canonical.url.base"/>
+  <xsl:param name="canonical.url.base">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
+      <xsl:with-param name="attribute" select="'canonical.url.base'"/>
+    </xsl:call-template>
+  </xsl:param>
     
     <xsl:template name="revhistory2atom">
         <xsl:if test="//db:revhistory/db:revision and $canonical.url.base != ''">
