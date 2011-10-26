@@ -17,6 +17,13 @@
   <xsl:param name="use.extensions">1</xsl:param>
   <xsl:param name="callouts.extension">1</xsl:param>
 
+  <xsl:param name="feedback.email">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
+      <xsl:with-param name="attribute" select="'feedback.email'"/>
+    </xsl:call-template>
+  </xsl:param>
+
   <xsl:param name="pdf.url">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
@@ -153,7 +160,12 @@ set       toc,title
 	  <hr />
 	      <xsl:choose>
 		<xsl:when test="$enable.disqus = 'intranet'">
-		  <script language="JavaScript" src="/comments.php" type="text/javascript"><xsl:comment/></script>
+          <xsl:if test="$feedback.email =''">
+              <xsl:message terminate="yes">
+ERROR: Feedback email not set but internal comments are enabled.
+              </xsl:message>
+          </xsl:if>
+		  <script language="JavaScript" src="/comments.php?email={$feedback.email}" type="text/javascript"><xsl:comment/></script>
 		  <noscript>You must have JavaScript enabled to view and post comments.</noscript>
 		</xsl:when>
 		<xsl:otherwise>

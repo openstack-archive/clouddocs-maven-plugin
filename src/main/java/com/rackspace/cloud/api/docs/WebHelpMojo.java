@@ -151,6 +151,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String computeWadlPathFromDocbookPath;
 
+     /**
+      * Sets the email for TildeHash (internal) comments. Note that this
+      * doesn't affect Disqus comments.
+      *
+      * @parameter expression="${generate-webhelp.feedback.email}" default-value=""
+      */
+    private String feedbackEmail;
+
 
   /**
    * DOCUMENT ME!
@@ -163,8 +171,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     super.adjustTransformer(transformer, sourceFilename, targetFile);
 
     if(glossaryUri != null){
-	transformer.setParameter("glossary.uri", glossaryUri);
+	  transformer.setParameter("glossary.uri", glossaryUri);
     }
+
+    if(feedbackEmail != null){
+      transformer.setParameter("feedback.email", feedbackEmail);
+    }
+
+
     if(useDisqusId != null){
 	transformer.setParameter("use.disqus.id", useDisqusId);
     }
