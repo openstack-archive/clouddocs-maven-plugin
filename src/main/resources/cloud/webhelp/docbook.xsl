@@ -584,5 +584,26 @@ ERROR: Feedback email not set but internal comments are enabled.
       </xsl:param>
       <em><xsl:call-template name="common.html.attributes"/><code><xsl:call-template name="generate.html.title"/><xsl:call-template name="dir"/>{<xsl:copy-of select="$content"/>}<xsl:call-template name="apply-annotations"/></code></em>
     </xsl:template>
+
+<!-- The following two templates are from the svn trunk (html.xsl) -->
+<!-- Remove them once we've upgraded to use a version -->
+<!-- of the base xsls that is greater than 1.76.1 -->
+<xsl:template match="*" mode="common.html.attributes">
+  <xsl:param name="class" select="local-name(.)"/>
+  <xsl:param name="inherit" select="0"/>
+  <xsl:call-template name="generate.html.lang"/>
+  <xsl:call-template name="dir">
+    <xsl:with-param name="inherit" select="$inherit"/>
+  </xsl:call-template>
+  <xsl:apply-templates select="." mode="class.attribute">
+    <xsl:with-param name="class" select="$class"/>
+  </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="*" mode="locale.html.attributes">
+  <xsl:call-template name="generate.html.lang"/>
+  <xsl:call-template name="dir"/>
+</xsl:template>
+<!-- End stuff from svn trunk -->
     
 </xsl:stylesheet>
