@@ -10,6 +10,7 @@
 
     <xsl:output indent="yes"/>
 
+    <xsl:param name="wadl2docbook">0</xsl:param>
     <xsl:param name="xsdVersion" select="xs:decimal(1.1)"/>
 
     <xsl:param name="flattenXsds">true</xsl:param>
@@ -50,6 +51,11 @@
         </xsl:if>
     </xsl:variable>
     
+    <!-- 
+        This variable contains ALL the flattened xsds rooted at rax:xsd. 
+        We can use this to analyze all the xsds, e.g. looking for a 
+        particular type. 
+    -->
     <xsl:variable name="xsds">
        <xsl:for-each select="$catalog/xsd">
            <rax:xsd xmlns:rax="http://docs.rackspace.com/api"

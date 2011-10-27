@@ -17,6 +17,13 @@
   <xsl:param name="use.extensions">1</xsl:param>
   <xsl:param name="callouts.extension">1</xsl:param>
 
+  <xsl:param name="feedback.email">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
+      <xsl:with-param name="attribute" select="'feedback.email'"/>
+    </xsl:call-template>
+  </xsl:param>
+
   <xsl:param name="pdf.url">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
@@ -153,7 +160,12 @@ set       toc,title
 	  <hr />
 	      <xsl:choose>
 		<xsl:when test="$enable.disqus = 'intranet'">
-		  <script language="JavaScript" src="/comments.php" type="text/javascript"><xsl:comment/></script>
+          <xsl:if test="$feedback.email =''">
+              <xsl:message terminate="yes">
+ERROR: Feedback email not set but internal comments are enabled.
+              </xsl:message>
+          </xsl:if>
+		  <script language="JavaScript" src="/comments.php?email={$feedback.email}" type="text/javascript"><xsl:comment/></script>
 		  <noscript>You must have JavaScript enabled to view and post comments.</noscript>
 		</xsl:when>
 		<xsl:otherwise>
@@ -185,11 +197,12 @@ set       toc,title
       </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a> 
       </p> 
       <xsl:if test="normalize-space($pdf.url) != ''">
-	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
+	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
       </xsl:if>
+    <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
       &#160;
-      <a href="../atom.xml"><img src="../common/images/feed-icon.png"/></a>
-
+      <a href="../atom.xml"><img alt="Atom feed of this document" src="../common/images/feed-icon.png"/></a>
+    </xsl:if>
     </xsl:template>
 
       <xsl:template name="webhelpheader">
@@ -571,5 +584,26 @@ set       toc,title
       </xsl:param>
       <em><xsl:call-template name="common.html.attributes"/><code><xsl:call-template name="generate.html.title"/><xsl:call-template name="dir"/>{<xsl:copy-of select="$content"/>}<xsl:call-template name="apply-annotations"/></code></em>
     </xsl:template>
+
+<!-- The following two templates are from the svn trunk (html.xsl) -->
+<!-- Remove them once we've upgraded to use a version -->
+<!-- of the base xsls that is greater than 1.76.1 -->
+<xsl:template match="*" mode="common.html.attributes">
+  <xsl:param name="class" select="local-name(.)"/>
+  <xsl:param name="inherit" select="0"/>
+  <xsl:call-template name="generate.html.lang"/>
+  <xsl:call-template name="dir">
+    <xsl:with-param name="inherit" select="$inherit"/>
+  </xsl:call-template>
+  <xsl:apply-templates select="." mode="class.attribute">
+    <xsl:with-param name="class" select="$class"/>
+  </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="*" mode="locale.html.attributes">
+  <xsl:call-template name="generate.html.lang"/>
+  <xsl:call-template name="dir"/>
+</xsl:template>
+<!-- End stuff from svn trunk -->
     
 </xsl:stylesheet>

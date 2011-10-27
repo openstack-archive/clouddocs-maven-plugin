@@ -157,6 +157,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String computeWadlPathFromDocbookPath;
 
+    /**
+     * Sets the email for TildeHash (internal) comments. Note that this
+     * doesn't affect Disqus comments.
+     *
+     * @parameter expression="${generate-webhelp.feedback.email}" default-value=""
+     */
+    private String feedbackEmail;
+
 
     /**
      * DOCUMENT ME!
@@ -171,6 +179,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         if (glossaryUri != null) {
             transformer.setParameter("glossary.uri", glossaryUri);
         }
+
+        if (feedbackEmail != null) {
+            transformer.setParameter("feedback.email", feedbackEmail);
+        }
+
         if (useDisqusId != null) {
             transformer.setParameter("use.disqus.id", useDisqusId);
         }
@@ -178,32 +191,39 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         if (useVersionForDisqus != null) {
             transformer.setParameter("use.version.for.disqus", useVersionForDisqus);
         }
+
         transformer.setParameter("project.build.directory", projectBuildDirectory);
         transformer.setParameter("branding", branding);
         transformer.setParameter("enable.disqus", enableDisqus);
+
         if (disqusShortname != null) {
             transformer.setParameter("disqus.shortname", disqusShortname);
         }
+
         if (enableGoogleAnalytics != null) {
             transformer.setParameter("enable.google.analytics", enableGoogleAnalytics);
         }
+
         if (googleAnalyticsId != null) {
             transformer.setParameter("google.analytics.id", googleAnalyticsId);
         }
+
         if (pdfUrl != null) {
             transformer.setParameter("pdf.url", pdfUrl);
         }
 
-        if (pdfUrl != null) {
+        if (canonicalUrlBase != null) {
             transformer.setParameter("canonical.url.base", canonicalUrlBase);
         }
 
         if (security != null) {
             transformer.setParameter("security", security);
         }
+
         if (showChangebars != null) {
             transformer.setParameter("show.changebars", showChangebars);
         }
+        
         if (trimWadlUriCount != null) {
             transformer.setParameter("trim.wadl.uri.count", trimWadlUriCount);
         }
@@ -248,13 +268,18 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     protected void transformFeed(File result) throws MojoExecutionException {
         try {
+            atomFeed = new File(result.getParentFile(), "atom-doctype.xml");
+            atomFeedClean = new File(result.getParentFile(), "atom.xml");
+
+            if (!atomFeed.isFile()) {
+                return;
+            }
+
             ClassLoader classLoader = Thread.currentThread()
                                             .getContextClassLoader();
 
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer(new StreamSource(classLoader.getResourceAsStream(COPY_XSL)));
-
-            atomFeedClean = new File(result.getParentFile(), "atom.xml");
 
             DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
             dbfactory.setValidating(false);
@@ -267,7 +292,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
                 }
             });
 
-            atomFeed = new File(result.getParentFile(), "atom-doctype.xml");
+
             Document xmlDocument = builder.parse(atomFeed);
             DOMSource source = new DOMSource(xmlDocument);
 

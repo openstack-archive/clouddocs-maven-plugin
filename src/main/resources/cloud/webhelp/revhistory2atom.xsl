@@ -5,32 +5,35 @@
     xmlns:db="http://docbook.org/ns/docbook" 
     exclude-result-prefixes="date db"
     xmlns="http://www.w3.org/2005/Atom" 
-    version="1.0">
+    version="1.1">
     
-    <xsl:param name="canonical.url.base">http://docs.rackspace.com/product/api/v1.0</xsl:param>
-
+  <xsl:param name="canonical.url.base">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
+      <xsl:with-param name="attribute" select="'canonical.url.base'"/>
+    </xsl:call-template>
+  </xsl:param>
+    
     <xsl:template name="revhistory2atom">
-        <xsl:if test="//db:revhistory/db:revision">
+        <xsl:if test="//db:revhistory/db:revision and $canonical.url.base != ''">
           <xsl:call-template name="write.chunk">
             <xsl:with-param name="filename"><xsl:value-of select="concat($webhelp.base.dir,'/','atom-doctype.xml')"/></xsl:with-param>
             <xsl:with-param name="method" select="'xml'"/>
             <xsl:with-param name="encoding" select="'utf-8'"/>
             <xsl:with-param name="indent" select="'yes'"/>
-            <xsl:with-param name="doctype-public" select="''"/> <!-- intentionally blank --> 
-            <xsl:with-param name="doctype-system" select="''"/> <!-- intentionally blank -->
             <xsl:with-param name="content">
                  <xsl:apply-templates select="//db:revhistory[1]"/>
             </xsl:with-param>
           </xsl:call-template>
-            </xsl:if>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="db:revhistory">
         <xsl:variable name="escapechars"> &amp;"'&lt;?</xsl:variable>
-        <feed>
-            <title>Revision history for <xsl:value-of select="//db:title[1]"/></title>
-            <link href="{$canonical.url.base}/atom.xml" rel="self"/>
-            <link href="{$canonical.url.base}/content/index.html"/>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+            <title><xsl:value-of select="//db:title[1]"/> revision history</title>
+            <link href="{substring-before($canonical.url.base,'/content')}/atom.xml" rel="self"/>
+            <link href="{$canonical.url.base}/index.html"/>
             <id>
                 <xsl:choose>
                     <xsl:when test="/*/@xml:id"><xsl:value-of select="/*/@xml:id"/></xsl:when>
@@ -58,7 +61,7 @@
                     <xsl:otherwise><xsl:value-of select="db:date"/></xsl:otherwise>
                 </xsl:choose>
             </title>
-            <link type="text/html" href="{$canonical.url.base}/content/index.html"/>
+            <link type="text/html" href="{$canonical.url.base}/index.html"/>
             <id><xsl:value-of select="concat(/*/@xml:id,'-',db:date)"/></id>
             <updated><xsl:value-of select="db:date"/></updated>
             <content type="xhtml"><xsl:apply-templates select="db:revdescription|db:revremark"/></content>
@@ -66,9 +69,29 @@
     </xsl:template>
 
     <xsl:template match="db:revdescription">
-        <div xmlns="http://www.w3.org/1999/xhtml">
+        <xsl:variable name="xhtml">
             <xsl:apply-templates/>
+        </xsl:variable>
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <xsl:apply-templates select="$xhtml" mode="fix-xrefs"/>
         </div>
     </xsl:template>
+    
+    <xsl:template match="html:a[@class = 'xref']" xmlns:html="http://www.w3.org/1999/xhtml" mode="fix-xrefs">
+        <a xmlns="http://www.w3.org/1999/xhtml"> 
+           <xsl:copy-of select="@*"/>
+           <xsl:attribute name="href">
+                <xsl:value-of select="concat('content/',@href)"/>
+           </xsl:attribute>
+            <xsl:apply-templates select="node()" mode="fix-xrefs"/>
+        </a>
+    </xsl:template>
 
+    <xsl:template match="node() | @*" mode="fix-xrefs">
+        <xsl:copy>
+            <xsl:apply-templates select="node() | @*" mode="fix-xrefs"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    
 </xsl:stylesheet>
