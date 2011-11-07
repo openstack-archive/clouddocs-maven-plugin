@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" exclude-result-prefixes="xs wadl xsd xsdxt" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" xmlns:db="http://docbook.org/ns/docbook" exclude-result-prefixes="xs wadl xsd xsdxt" version="2.0">
 
     <xsl:import href="normalizeWadl2.xsl"/>
     <xsl:import href="normalizeWadl3.xsl"/>
@@ -127,6 +127,47 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+
+    <xsl:template match="xsdxt:transitions" mode="normalizeWadl2">
+        <db:informaltable frame="void">
+            <db:tbody>
+                <xsl:apply-templates mode="transition"/>
+            </db:tbody>
+        </db:informaltable>
+    </xsl:template>
+
+    <xsl:template match="xsdxt:transition" mode="transition">
+        <db:tr>
+            <db:td colspan="1">
+                <xsl:if test="not(preceding-sibling::xsdxt:transition)">
+                    <xsl:text>Status Transition:</xsl:text>
+                </xsl:if>
+            </db:td>
+            <db:td colspan="3">
+                <xsl:apply-templates mode="transition"/>
+                <xsl:if test="xsd:boolean(@onError)">
+                    <xsl:text> (on error)</xsl:text>
+                </xsl:if>
+            </db:td>
+        </db:tr>
+    </xsl:template>
+
+    <xsl:template match="xsdxt:step" mode="transition">
+        <db:code><xsl:value-of select="@name"/></db:code>
+        <xsl:if test="following-sibling::xsdxt:step">
+            <!-- This is nasty, find a better way of sepecifinig an arrow -->
+            <db:inlinemediaobject>
+                 <db:imageobject role="fo">
+                     <db:imagedata fileref="img/Arrow_east.svg"
+                                format="SVG" scale="60"/>
+                 </db:imageobject>
+                 <db:imageobject role="html">
+                  <db:imagedata fileref="img/Arrow_east.png"
+                                format="PNG" />
+                </db:imageobject>
+            </db:inlinemediaobject>
+        </xsl:if>
+    </xsl:template>
 
     <xsl:template match="rax:examples|xsdxt:samples" 
         xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" 
