@@ -592,7 +592,7 @@
 		</xsl:element>
 	</xsl:template>
 
-	<xsl:template match="wadl:param" mode="preprocess">
+	<xsl:template match="wadl:param[@style != 'plain']" mode="preprocess">
 		<xsl:variable name="type"><xsl:value-of select="substring-after(@type,':')"/></xsl:variable>
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
