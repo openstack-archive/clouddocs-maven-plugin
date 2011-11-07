@@ -747,8 +747,8 @@
                 <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
                 <col width="20%"/>
                 <col width="10%"/>
-                <col width="10%"/>
-                <col width="60%"/>
+                <col width="20%"/>
+                <col width="40%"/>
                 <thead>
                     <tr>
                         <th align="center">Name</th>
