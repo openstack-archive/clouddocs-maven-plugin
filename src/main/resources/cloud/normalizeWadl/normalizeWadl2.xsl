@@ -133,9 +133,23 @@ Resolves hrefs on method and resource_type elements.
 	<xsl:template match="@rax:id" mode="strip-ids"/>
 
 	<xsl:template match="node() | @*" mode="normalizeWadl2">
-		<xsl:copy>
-			<xsl:apply-templates select="node() | @*" mode="normalizeWadl2"/>
-		</xsl:copy>
+        <xsl:param name="baseID" select="''"/>
+        <xsl:choose>
+            <!--
+                Rename a resource id in a resource_type, by appending
+                the id of the implementing resource.
+            -->
+            <xsl:when test="local-name(.) = 'id' and local-name(..) = 'resource' and $baseID and $baseID != ''">
+                <xsl:attribute name="id" select="concat($baseID,'_',.)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy>
+                    <xsl:apply-templates select="node() | @*" mode="normalizeWadl2">
+                        <xsl:with-param name="baseID" select="$baseID"/>
+                    </xsl:apply-templates>
+                </xsl:copy>
+            </xsl:otherwise>
+        </xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="wadl:method[@href]|wadl:param[@href]|wadl:representation[@href]" mode="normalizeWadl2">
@@ -215,6 +229,17 @@ Resolves hrefs on method and resource_type elements.
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[@type]" mode="normalizeWadl2">
+        <xsl:param name="baseID" select="@id"/>
+        <xsl:variable name="realBase">
+            <xsl:choose>
+                <xsl:when test="@id and not($baseID)">
+                    <xsl:value-of select="@id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$baseID"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
 		<xsl:variable name="content">
 			<xsl:for-each select="tokenize(normalize-space(@type),' ')">
 				<xsl:variable name="id" select="substring-after(normalize-space(.),'#')"/>
@@ -231,14 +256,18 @@ Resolves hrefs on method and resource_type elements.
 				<xsl:choose>
 					<xsl:when test="starts-with(normalize-space(.),'#')">
 						<xsl:for-each select="$root/*[1]">
-							<xsl:apply-templates select="key('ids',$id)/*" mode="normalizeWadl2"/>
+							<xsl:apply-templates select="key('ids',$id)/*" mode="normalizeWadl2">
+                                <xsl:with-param name="baseID" select="$realBase"/>
+                            </xsl:apply-templates>
 						</xsl:for-each>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:variable name="included-wadl">
 							<xsl:apply-templates select="document($doc,$root)/*" mode="normalizeWadl2"/>
 						</xsl:variable>
-						<xsl:apply-templates select="$included-wadl//*[@id = $id]/*" mode="normalizeWadl2"/>
+						<xsl:apply-templates select="$included-wadl//*[@id = $id]/*" mode="normalizeWadl2">
+                                <xsl:with-param name="baseID" select="$realBase"/>
+                        </xsl:apply-templates>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:for-each>
@@ -246,7 +275,15 @@ Resolves hrefs on method and resource_type elements.
 		</xsl:variable>
 
 		<resource>
-			<xsl:copy-of select="@*[name() != 'type']"/>
+			<xsl:copy-of select="@*[(name() != 'type') and (name() != 'id')]"/>
+            <xsl:choose>
+                <xsl:when test="$baseID != $realBase">
+                    <xsl:attribute name="id" select="concat($baseID,'_',$realBase)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="id" select="$baseID"/>
+                </xsl:otherwise>
+            </xsl:choose>
 			<!-- Since we've combined resource types, we need to sort the
 	     elements to keep things valid against the schema -->
 			<xsl:copy-of select="$content/wadl:doc"/>
