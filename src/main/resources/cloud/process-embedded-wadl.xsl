@@ -609,6 +609,7 @@
             </td>
 			<td>
 				<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
+                <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
 				<para>
                     <xsl:if test="wadl:option"> Possible values: <xsl:for-each
 							select="wadl:option">
