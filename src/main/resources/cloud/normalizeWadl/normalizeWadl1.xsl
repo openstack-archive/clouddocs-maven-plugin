@@ -232,7 +232,7 @@
                 </xsl:choose>
             </title>
             <!-- Try to keep an example together if possible -->
-            <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction>
+            <xsl:processing-instruction name="dbfo">keep-together="auto"</xsl:processing-instruction>
             <programlisting xmlns="http://docbook.org/ns/docbook">
                 <xsl:attribute name="language">
                     <xsl:choose>
