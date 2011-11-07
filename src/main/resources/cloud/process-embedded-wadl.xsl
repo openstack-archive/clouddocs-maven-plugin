@@ -625,8 +625,8 @@
                     -->
                     <xsl:if test="@style != 'template'">
                         <xsl:choose>
-                            <xsl:when test="@required = 'true'">Required. </xsl:when>
-                            <xsl:otherwise>Optional. </xsl:otherwise>
+                            <xsl:when test="@required = 'true'">This parameter is required. </xsl:when>
+                            <xsl:otherwise>This parameter is optional. </xsl:otherwise>
                         </xsl:choose>
                     </xsl:if>
                 </para>
@@ -744,6 +744,7 @@
     	<xsl:param name="method.title"/>
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
+                <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction> 
                 <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
                 <col width="20%"/>
                 <col width="10%"/>
