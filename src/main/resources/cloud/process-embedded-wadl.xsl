@@ -594,6 +594,12 @@
 
 	<xsl:template match="wadl:param[@style != 'plain']" mode="preprocess">
 		<xsl:variable name="type"><xsl:value-of select="substring-after(@type,':')"/></xsl:variable>
+        <xsl:variable name="param">
+            <xsl:choose>
+                <xsl:when test="@style='header'"> header </xsl:when>
+                <xsl:otherwise> parameter </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
 			<td align="center">
@@ -625,8 +631,9 @@
                     -->
                     <xsl:if test="@style != 'template'">
                         <xsl:choose>
-                            <xsl:when test="@required = 'true'">This parameter is required. </xsl:when>
-                            <xsl:otherwise>This parameter is optional. </xsl:otherwise>
+                            <xsl:when test="@required = 'true'">The <code role="hyphenate-true"><xsl:value-of select="@name"/></code>
+                            <xsl:value-of select="$param"/> should always be supplied. </xsl:when>
+                            <xsl:otherwise>The <code role="hyphenate-true"><xsl:value-of select="@name"/></code> <xsl:value-of select="$param"/> is optional. </xsl:otherwise>
                         </xsl:choose>
                     </xsl:if>
                 </para>
