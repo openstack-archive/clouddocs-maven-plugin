@@ -275,15 +275,7 @@ Resolves hrefs on method and resource_type elements.
 		</xsl:variable>
 
 		<resource>
-			<xsl:copy-of select="@*[(name() != 'type') and (name() != 'id')]"/>
-            <xsl:choose>
-                <xsl:when test="$baseID != $realBase">
-                    <xsl:attribute name="id" select="concat($baseID,'_',$realBase)"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:attribute name="id" select="$baseID"/>
-                </xsl:otherwise>
-            </xsl:choose>
+			<xsl:copy-of select="@*[name() != 'type']"/>
 			<!-- Since we've combined resource types, we need to sort the
 	     elements to keep things valid against the schema -->
 			<xsl:copy-of select="$content/wadl:doc"/>
