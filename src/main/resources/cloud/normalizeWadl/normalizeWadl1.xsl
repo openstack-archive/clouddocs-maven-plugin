@@ -155,16 +155,30 @@
     <xsl:template match="xsdxt:step" mode="transition">
         <db:code><xsl:value-of select="@name"/></db:code>
         <xsl:if test="following-sibling::xsdxt:step">
-            <!-- This is nasty, find a better way of sepecifinig an arrow -->
             <db:inlinemediaobject>
                  <db:imageobject role="fo">
-                     <db:imagedata fileref="img/Arrow_east.svg"
-                                format="SVG" scale="60"/>
+                     <!-- An Arrow -->
+                     <svg
+                         xmlns:svg="http://www.w3.org/2000/svg"
+                         xmlns="http://www.w3.org/2000/svg"
+                         version="1.0"
+                         width="6.9400001"
+                         height="3.1700001"
+                         viewBox="0 0 6.9399998 3.1700001"
+                         id="arrow"
+                         xml:space="preserve">
+                         <g
+                             transform="matrix(-0.00770052,0,0,-0.00870534,6.9477981,3.1700001)"
+                             id="Ebene_1">
+                             <polygon
+                                 points="902.25049,222.98633 233.17773,222.98633 233.17773,364.71875 0,182.35938 233.17773,0 233.17773,141.73242 902.25049,141.73242 902.25049,222.98633 "
+                                 id="path2050" />
+                         </g>
+                     </svg>
                  </db:imageobject>
-                 <db:imageobject role="html">
-                  <db:imagedata fileref="img/Arrow_east.png"
-                                format="PNG" />
-                </db:imageobject>
+                 <db:textobject role="html">
+                     <db:phrase>→</db:phrase>
+                 </db:textobject>
             </db:inlinemediaobject>
         </xsl:if>
     </xsl:template>
