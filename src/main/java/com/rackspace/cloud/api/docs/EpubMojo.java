@@ -1,9 +1,17 @@
 package com.rackspace.cloud.api.docs;
 
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.Transformer;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.maven.plugin.MojoExecutionException;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Properties;
 import org.apache.maven.project.MavenProject;
@@ -28,6 +36,17 @@ import java.net.URL;
 public abstract class EpubMojo
   extends com.agilejava.docbkx.maven.AbstractEpubMojo
 {
+
+    private File imageDirectory;
+    private File sourceDocBook;
+
+    private File coverImageTemplate;
+    private File coverImage;
+
+    private static final String COVER_IMAGE_TEMPLATE_NAME = "cover.st";
+    private static final String COVER_IMAGE_NAME = "cover.svg";
+
+    private static final String COVER_XSL = "cloud/cover.xsl";
 
     /**
      * The plugin dependencies.
@@ -2855,6 +2874,14 @@ public abstract class EpubMojo
      */  
     protected String blurbOnTitlepageEnabled;
 
+    public File getImageDirectory() {
+        return imageDirectory;
+    }
+
+    public void setImageDirectory(File imageDirectory) {
+        this.imageDirectory = imageDirectory;
+    }
+
     protected void configure(Transformer transformer) {
         getLog().debug("Configure the transformer.");
         if (chunkQuietly != null) {
@@ -4312,7 +4339,11 @@ public abstract class EpubMojo
 
   public void postProcessResult(File result) throws MojoExecutionException {
  
- getLog().debug("Did I get here? 0");
+    getLog().debug("Did I get here? 0");
+
+    // First transform the cover page
+        transformCover();
+        rasterize();
 
     final File targetDirectory = result.getParentFile();
     try {
@@ -4347,6 +4378,159 @@ public abstract class EpubMojo
       throw new MojoExecutionException("Unable to zip epub file", e);
     }
   }
- 
+
+
+      /**
+     * The greeting to display.
+     *
+     * @parameter expression="${generate-pdf.branding}" default-value="rackspace"
+     */
+    private String branding;
+
+    /**
+     * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
+     *
+     * @parameter expression="${generate-pdf.security}" default-value=""
+     */
+    private String security;
+
+
+     /**
+     * A parameter used to configure how many elements to trim from the URI in the documentation for a wadl method.
+     *
+     * @parameter expression="${generate-pdf.trim.wadl.uri.count}" default-value=""
+     */
+    private String trimWadlUriCount;
+
+    /**
+     * @parameter expression="${project.build.directory}"
+     */
+    private String projectBuildDirectory;
+
+    /**
+     * Controls how the path to the wadl is calculated. If 0 or not set, then
+     * The xslts look for the normalized wadl in /generated-resources/xml/xslt/.
+     * Otherwise, in /generated-resources/xml/xslt/path/to/docbook-src, e.g.
+     * /generated-resources/xml/xslt/src/docbkx/foo.wadl
+     *
+     * @parameter expression="${generate-pdf.compute.wadl.path.from.docbook.path}" default-value="0"
+     */
+    private String computeWadlPathFromDocbookPath;
+
+  public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
+        super.adjustTransformer(transformer, sourceFilename, targetFile);
+
+	transformer.setParameter("branding", branding);
+	transformer.setParameter("project.build.directory", projectBuildDirectory);
+
+	if(security != null){
+	    transformer.setParameter("security",security);
+	}
+
+   if(trimWadlUriCount != null){
+	transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);
+    }
+
+        //
+        //  Setup graphics paths
+        //
+        sourceDocBook = new File(sourceFilename);
+        sourceDirectory = sourceDocBook.getParentFile();
+        File imageDirectory = getImageDirectory();
+        File calloutDirectory = new File (imageDirectory, "callouts");
+
+	transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
+	transformer.setParameter("source.directory",sourceDirectory);
+	transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
+
+        transformer.setParameter ("admon.graphics.path", imageDirectory.getAbsolutePath()+File.separator);
+        transformer.setParameter ("callout.graphics.path", calloutDirectory.getAbsolutePath()+File.separator);
+
+        //
+        //  Setup the background image file
+        //
+        File cloudSub = new File (imageDirectory, "cloud");
+        File ccSub    = new File (imageDirectory, "cc");
+        coverImage = new File (cloudSub, COVER_IMAGE_NAME);
+        coverImageTemplate = new File (cloudSub, COVER_IMAGE_TEMPLATE_NAME);
+
+	coverImageTemplate = new File (cloudSub, branding + "-cover.st");
+
+        transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
+        transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
+    }
+  protected void transformCover() throws MojoExecutionException {
+        try {
+            ClassLoader classLoader = Thread.currentThread()
+                .getContextClassLoader();
+
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer = factory.newTransformer(new StreamSource(classLoader.getResourceAsStream(COVER_XSL)));
+
+            transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
+            transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
+        }
+        catch (TransformerConfigurationException e)
+            {
+                throw new MojoExecutionException("Failed to load JAXP configuration", e);
+            }
+        catch (TransformerException e)
+            {
+                throw new MojoExecutionException("Failed to transform to cover", e);
+            }
+    }
+
+  public void preProcess() throws MojoExecutionException {
+        super.preProcess();
+
+        final File targetDirectory = getTargetDirectory();
+        File imageParentDirectory  = targetDirectory.getParentFile();
+
+        if (!targetDirectory.exists()) {
+            com.rackspace.cloud.api.docs.FileUtils.mkdir(targetDirectory);
+        }
+
+        //
+        // Extract all images into the image directory.
+        //
+        com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("images", PDFMojo.class, imageParentDirectory);
+        setImageDirectory (new File (imageParentDirectory, "images"));
+
+        //
+        // Extract all fonts into fonts directory
+        //
+        com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("fonts", PDFMojo.class, imageParentDirectory);
+    }
+
+
+    public void rasterize() throws RuntimeException{
+        try{
+        // Create a JPEG transcoder
+        PNGTranscoder t = new PNGTranscoder();
+
+        // Set the transcoding hints.
+       // t.addTranscodingHint(PNGTranscoder.KEY_QUALITY,
+         //                    new Float(.8));
+
+        // Create the transcoder input.
+        String svgURI = new File("/Users/nare4013/epub/rackspace-template/rackspace-template/target/docbkx/images/cloud/cover.svg").toURL().toString();
+        TranscoderInput input = new TranscoderInput(svgURI);
+
+        // Create the transcoder output.
+        OutputStream ostream = new FileOutputStream("/Users/nare4013/epub/rackspace-template/rackspace-template/target/docbkx/images/cloud/cover.png");
+        TranscoderOutput output = new TranscoderOutput(ostream);
+
+        // Save the image.
+        t.transcode(input, output);
+
+        // Flush and close the stream.
+        ostream.flush();
+        ostream.close();
+        }
+        catch(Exception e){
+            throw new RuntimeException("Could not able to rasterize the svg", e);
+        }
    
+}
+
 }
