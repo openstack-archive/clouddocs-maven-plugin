@@ -224,16 +224,11 @@ ERROR: Feedback email not set but internal comments are enabled.
 	    </xsl:attribute>
 	    <img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" />
 	  </a>
-	  <xsl:if test="$branding = 'openstack'">
-	    <xsl:call-template name="breadcrumbs">
-	      <xsl:with-param name="home" select="$home"/>
-	    </xsl:call-template>
-	  </xsl:if>
-	  <xsl:if test="$branding = 'openstackextension'">
-	    <xsl:call-template name="breadcrumbs">
-	      <xsl:with-param name="home" select="$home"/>
-	    </xsl:call-template>
-	  </xsl:if>
+	  <!-- <xsl:if test="$branding = 'openstack' or $branding = 'openstackextension'"> -->
+	  <!--   <xsl:call-template name="breadcrumbs"> -->
+	  <!--     <xsl:with-param name="home" select="$home"/> -->
+	  <!--   </xsl:call-template> -->
+	  <!-- </xsl:if> -->
             <!-- Display the page title and the main heading(parent) of it-->
             <h1>
                 <xsl:apply-templates select="." mode="object.title.markup"/>
@@ -314,7 +309,7 @@ ERROR: Feedback email not set but internal comments are enabled.
             </div>            
         </div>
 
-	<xsl:if test="$branding = 'rackspace'">
+	<!-- <xsl:if test="$branding = 'rackspace'"> -->
 	  <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 	    <div id="toolbar-left">
 	      <xsl:call-template name="breadcrumbs">
@@ -322,16 +317,16 @@ ERROR: Feedback email not set but internal comments are enabled.
 	      </xsl:call-template>
 	    </div>
 	  </div>
-	</xsl:if>
-	<xsl:if test="$branding = 'openstackextension'">
-	  <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-	    <div id="toolbar-left">
-	      <xsl:call-template name="breadcrumbs">
-		<xsl:with-param name="home" select="$home"/>
-	      </xsl:call-template>
-	    </div>
-	  </div>
-	</xsl:if>
+	<!-- </xsl:if> -->
+	<!-- <xsl:if test="$branding = 'openstackextension'"> -->
+	<!--   <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"> -->
+	<!--     <div id="toolbar-left"> -->
+	<!--       <xsl:call-template name="breadcrumbs"> -->
+	<!-- 	<xsl:with-param name="home" select="$home"/> -->
+	<!--       </xsl:call-template> -->
+	<!--     </div> -->
+	<!--   </div> -->
+	<!-- </xsl:if> -->
     </xsl:template>
     
     <xsl:template name="webhelptoc">
