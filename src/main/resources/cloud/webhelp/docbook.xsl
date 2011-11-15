@@ -39,7 +39,7 @@
   <xsl:param name="reference.autolabel" select="1"/>
   <xsl:param name="qandadiv.autolabel" select="1"/>
   <xsl:param name="webhelp.autolabel" select="1"/>
-  <xsl:param name="section.autolabel.max.depth" select="3"/>
+  <xsl:param name="section.autolabel.max.depth" select="100"/>
   <xsl:param name="section.label.includes.component.label" select="1"/>
   <xsl:param name="component.label.includes.part.label" select="1"/>
   <xsl:param name="ignore.image.scaling" select="1"/>
