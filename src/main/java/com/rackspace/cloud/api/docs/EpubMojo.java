@@ -4339,11 +4339,9 @@ public abstract class EpubMojo
 
   public void postProcessResult(File result) throws MojoExecutionException {
  
-    getLog().debug("Did I get here? 0");
-
     // First transform the cover page
         transformCover();
-        rasterize();
+        //rasterize();
 
     final File targetDirectory = result.getParentFile();
     try {
@@ -4352,9 +4350,6 @@ public abstract class EpubMojo
     } catch (IOException e) {
       throw new MojoExecutionException("Unable to copy hardcoded container.xml file", e);
     }
-
-    getLog().debug("Did I get here? .5");
-
 
     // copy mimetype file
     try {
@@ -4365,9 +4360,7 @@ public abstract class EpubMojo
     }
 
     try {
-      getLog().debug("Did I get here? 1");
       ZipArchiver zipArchiver = new ZipArchiver();
-      getLog().debug("Did I get here? 2");
       zipArchiver.addDirectory(targetDirectory);
       zipArchiver.setCompress(true); // seems to not be a problem to have mimetype compressed
       zipArchiver.setDestFile(new File(targetDirectory.getParentFile(), result.getName())); // copy it to parent dir
