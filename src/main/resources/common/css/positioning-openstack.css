@@ -354,7 +354,6 @@ body #content {
     position: fixed;
     top: 35px;
     left: -15px;
-    color: white!important;
 }
 
 body.sidebar #toolbar{
