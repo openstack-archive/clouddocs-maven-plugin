@@ -32,6 +32,14 @@
 		</xsl:copy>
 	</xsl:template>
 
+	<xsl:template match="processing-instruction('rax')[normalize-space(.) = 'fail']">
+	  <xsl:message terminate="yes">
+	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    &lt;?rax fail?> found in the document.
+	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	  </xsl:message>
+	</xsl:template>
+
 	<xsl:template match="processing-instruction('rax')[ . = 'glossary']" mode="preprocess">
 	  <xsl:message>
 	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
