@@ -8,7 +8,7 @@
     xmlns:rax="http://docs.rackspace.com/api" 
     xmlns="http://www.w3.org/1999/xhtml" 
     version="1.0" 
-    exclude-result-prefixes="exslt">
+    exclude-result-prefixes="exslt d wadl rax xlink">
 
   <!-- First import the non-chunking templates that format elements
        within each chunk file. In a customization, you should

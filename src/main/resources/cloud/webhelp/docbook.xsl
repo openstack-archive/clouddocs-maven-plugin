@@ -24,6 +24,8 @@
     </xsl:call-template>
   </xsl:param>
 
+  <xsl:param name="glossary.collection" select="concat($project.build.directory,'/mvn/com.rackspace.cloud.api/glossary/glossary.xml')"/>
+
   <xsl:param name="pdf.url">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
@@ -466,14 +468,23 @@ ERROR: Feedback email not set but internal comments are enabled.
         <xsl:variable name="definition">
 	  <strong><xsl:value-of select="$term"/>: </strong>
             <xsl:choose>
-                <xsl:when test="//d:glossentry[@xml:id = current()/@linkend]">
+                <xsl:when test="@linkend and //d:glossentry[@xml:id = current()/@linkend]">
                     <xsl:apply-templates select="//d:glossentry[@xml:id = current()/@linkend]/d:glossdef" mode="make-definition"/>    
                 </xsl:when>
+		<xsl:when test="@linkend and not($glossary.collection = '') and document($glossary.collection,.)//d:glossentry[@xml:id = current()/@linkend]">
+                    <xsl:apply-templates select="document($glossary.collection,.)//d:glossentry[@xml:id = current()/@linkend]/d:glossdef" mode="make-definition"/>    
+		</xsl:when>
                 <xsl:when test="//d:glossentry[d:glossterm = $term]">
                     <xsl:apply-templates select="//d:glossentry[d:glossterm = $term]/d:glossdef" mode="make-definition"/>    
                 </xsl:when>
+		<xsl:when test="not($glossary.collection = '') and document($glossary.collection,.)//d:glossentry[d:glossterm = $term]">
+                    <xsl:apply-templates select="document($glossary.collection,.)//d:glossentry[d:glossterm = $term]/d:glossdef" mode="make-definition"/>    
+		</xsl:when>
                 <xsl:when test="//d:glossentry[d:glossterm = current()/@baseform]">
                     <xsl:apply-templates select="//d:glossentry[d:glossterm = current()/@baseform]/d:glossdef" mode="make-definition"/>    
+                </xsl:when>
+                <xsl:when test="not($glossary.collection = '') and document($glossary.collection,.)//d:glossentry[d:glossterm = current()/@baseform]">
+                    <xsl:apply-templates select="document($glossary.collection,.)//d:glossentry[d:glossterm = current()/@baseform]/d:glossdef" mode="make-definition"/>    
                 </xsl:when>
 		<xsl:otherwise>
                     <xsl:message>
