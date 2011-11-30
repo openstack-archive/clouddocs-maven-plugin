@@ -31,7 +31,7 @@
     <xsl:template match="db:revhistory">
         <xsl:variable name="escapechars"> &amp;"'&lt;?</xsl:variable>
         <feed xmlns="http://www.w3.org/2005/Atom">
-            <title><xsl:value-of select="//db:title[1]"/> revision history</title>
+            <title><xsl:value-of select="concat(/*/db:title[1],' ', /*/db:info/db:releaseinfo[1])"/> revision history</title>
             <link href="{substring-before($canonical.url.base,'/content')}/atom.xml" rel="self"/>
             <link href="{$canonical.url.base}/index.html"/>
             <id>
