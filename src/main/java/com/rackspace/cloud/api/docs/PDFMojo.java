@@ -1,28 +1,15 @@
 package com.rackspace.cloud.api.docs;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
-import java.net.MalformedURLException;
-
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.apache.maven.plugin.MojoExecutionException;
+import com.agilejava.docbkx.maven.AbstractFoMojo;
+import com.agilejava.docbkx.maven.PreprocessingFilter;
+import com.agilejava.docbkx.maven.TransformerBuilder;
+import nu.xom.Builder;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
+import nu.xom.xinclude.XIncludeException;
+import nu.xom.xinclude.XIncluder;
+import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
@@ -32,20 +19,30 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
-
-import com.agilejava.docbkx.maven.TransformerBuilder;
-import com.agilejava.docbkx.maven.AbstractFoMojo;
-
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
-
+import org.apache.maven.plugin.MojoExecutionException;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.rackspace.cloud.api.docs.FileUtils;
-import com.rackspace.cloud.api.docs.DocBookResolver;
-
-import com.agilejava.docbkx.maven.Parameter;
-import java.util.Iterator;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
 
 public abstract class PDFMojo extends AbstractFoMojo {
     private File imageDirectory;
@@ -320,5 +317,34 @@ public abstract class PDFMojo extends AbstractFoMojo {
             {
                 throw new MojoExecutionException("Failed to transform to cover", e);
             }
+    }
+
+    @Override
+    protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
+            throws MojoExecutionException {
+        // if both properties are set, XOM is used for a better XInclude support.
+        if (getXIncludeSupported() && getGeneratedSourceDirectory() != null) {
+            getLog().debug("Advanced XInclude mode entered");
+            final Builder xomBuilder = new Builder();
+            try {
+                final nu.xom.Document doc = xomBuilder.build(sourceFile);
+                XIncluder.resolveInPlace(doc);
+                // TODO also dump PIs computed and Entities included
+                final File dump = dumpResolvedXML(inputFilename, doc);
+                return new SAXSource(filter, new InputSource(dump.getAbsolutePath()));
+            } catch (ValidityException e) {
+                throw new MojoExecutionException("Failed to validate source", e);
+            } catch (ParsingException e) {
+                throw new MojoExecutionException("Failed to parse source", e);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Failed to read source", e);
+            } catch (XIncludeException e) {
+                throw new MojoExecutionException("Failed to process XInclude", e);
+            }
+        } else { // else fallback on Xerces XInclude support.
+            getLog().debug("Xerces XInclude mode entered");
+            final InputSource inputSource = new InputSource(sourceFile.getAbsolutePath());
+            return new SAXSource(filter, inputSource);
+        }
     }
 }
