@@ -2,6 +2,21 @@
 <!--
 Resolves hrefs on method and resource_type elements. 
 -->
+<!--
+   Copyright 2011 Rackspace US, Inc.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns="http://wadl.dev.java.net/2009/02" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rax="http://docs.rackspace.com/api" exclude-result-prefixes="xs wadl" version="2.0">
 
@@ -118,9 +133,23 @@ Resolves hrefs on method and resource_type elements.
 	<xsl:template match="@rax:id" mode="strip-ids"/>
 
 	<xsl:template match="node() | @*" mode="normalizeWadl2">
-		<xsl:copy>
-			<xsl:apply-templates select="node() | @*" mode="normalizeWadl2"/>
-		</xsl:copy>
+        <xsl:param name="baseID" select="''"/>
+        <xsl:choose>
+            <!--
+                Rename a resource id in a resource_type, by appending
+                the id of the implementing resource.
+            -->
+            <xsl:when test="local-name(.) = 'id' and local-name(..) = 'resource' and $baseID and $baseID != ''">
+                <xsl:attribute name="id" select="concat($baseID,'_',.)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy>
+                    <xsl:apply-templates select="node() | @*" mode="normalizeWadl2">
+                        <xsl:with-param name="baseID" select="$baseID"/>
+                    </xsl:apply-templates>
+                </xsl:copy>
+            </xsl:otherwise>
+        </xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="wadl:method[@href]|wadl:param[@href]|wadl:representation[@href]" mode="normalizeWadl2">
@@ -200,6 +229,17 @@ Resolves hrefs on method and resource_type elements.
 	</xsl:template>
 
 	<xsl:template match="wadl:resource[@type]" mode="normalizeWadl2">
+        <xsl:param name="baseID" select="@id"/>
+        <xsl:variable name="realBase">
+            <xsl:choose>
+                <xsl:when test="@id and not($baseID)">
+                    <xsl:value-of select="@id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$baseID"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
 		<xsl:variable name="content">
 			<xsl:for-each select="tokenize(normalize-space(@type),' ')">
 				<xsl:variable name="id" select="substring-after(normalize-space(.),'#')"/>
@@ -216,14 +256,18 @@ Resolves hrefs on method and resource_type elements.
 				<xsl:choose>
 					<xsl:when test="starts-with(normalize-space(.),'#')">
 						<xsl:for-each select="$root/*[1]">
-							<xsl:apply-templates select="key('ids',$id)/*" mode="normalizeWadl2"/>
+							<xsl:apply-templates select="key('ids',$id)/*" mode="normalizeWadl2">
+                                <xsl:with-param name="baseID" select="$realBase"/>
+                            </xsl:apply-templates>
 						</xsl:for-each>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:variable name="included-wadl">
 							<xsl:apply-templates select="document($doc,$root)/*" mode="normalizeWadl2"/>
 						</xsl:variable>
-						<xsl:apply-templates select="$included-wadl//*[@id = $id]/*" mode="normalizeWadl2"/>
+						<xsl:apply-templates select="$included-wadl//*[@id = $id]/*" mode="normalizeWadl2">
+                                <xsl:with-param name="baseID" select="$realBase"/>
+                        </xsl:apply-templates>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:for-each>

@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This XSLT flattens the xsds associated with the wadl.  -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" exclude-result-prefixes="xs wadl xsd xsdxt" version="2.0">
+<!--
+   Copyright 2011 Rackspace US, Inc.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" xmlns:db="http://docbook.org/ns/docbook" exclude-result-prefixes="xs wadl xsd xsdxt" version="2.0">
 
     <xsl:import href="normalizeWadl2.xsl"/>
     <xsl:import href="normalizeWadl3.xsl"/>
@@ -113,6 +128,61 @@
         </xsl:choose>
     </xsl:variable>
 
+    <xsl:template match="xsdxt:transitions" mode="normalizeWadl2">
+        <db:informaltable frame="void">
+            <db:tbody>
+                <xsl:apply-templates mode="transition"/>
+            </db:tbody>
+        </db:informaltable>
+    </xsl:template>
+
+    <xsl:template match="xsdxt:transition" mode="transition">
+        <db:tr>
+            <db:td colspan="1">
+                <xsl:if test="not(preceding-sibling::xsdxt:transition)">
+                    <xsl:text>Status Transition:</xsl:text>
+                </xsl:if>
+            </db:td>
+            <db:td colspan="3">
+                <xsl:apply-templates mode="transition"/>
+                <xsl:if test="xsd:boolean(@onError)">
+                    <xsl:text> (on error)</xsl:text>
+                </xsl:if>
+            </db:td>
+        </db:tr>
+    </xsl:template>
+
+    <xsl:template match="xsdxt:step" mode="transition">
+        <db:code><xsl:value-of select="@name"/></db:code>
+        <xsl:if test="following-sibling::xsdxt:step">
+            <db:inlinemediaobject>
+                 <db:imageobject role="fo">
+                     <!-- An Arrow -->
+                     <svg
+                         xmlns:svg="http://www.w3.org/2000/svg"
+                         xmlns="http://www.w3.org/2000/svg"
+                         version="1.0"
+                         width="6.9400001"
+                         height="3.1700001"
+                         viewBox="0 0 6.9399998 3.1700001"
+                         id="arrow"
+                         xml:space="preserve">
+                         <g
+                             transform="matrix(-0.00770052,0,0,-0.00870534,6.9477981,3.1700001)"
+                             id="Ebene_1">
+                             <polygon
+                                 points="902.25049,222.98633 233.17773,222.98633 233.17773,364.71875 0,182.35938 233.17773,0 233.17773,141.73242 902.25049,141.73242 902.25049,222.98633 "
+                                 id="path2050" />
+                         </g>
+                     </svg>
+                 </db:imageobject>
+                 <db:textobject role="html">
+                     <db:phrase>→</db:phrase>
+                 </db:textobject>
+            </db:inlinemediaobject>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template match="rax:examples|xsdxt:samples" 
         xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" 
         xmlns:rax="http://docs.rackspace.com/api" mode="normalizeWadl2" priority="11">  
@@ -175,6 +245,8 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </title>
+            <!-- Try to keep an example together if possible -->
+            <xsl:processing-instruction name="dbfo">keep-together="auto"</xsl:processing-instruction>
             <programlisting xmlns="http://docbook.org/ns/docbook">
                 <xsl:attribute name="language">
                     <xsl:choose>

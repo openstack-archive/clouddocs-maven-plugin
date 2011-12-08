@@ -9,7 +9,7 @@
   <xsl:import href="webhelp.xsl" />
   <xsl:import href="titlepage.templates.xsl"/>
   <xsl:import href="changebars.xsl"/>
-
+  <xsl:import href="graphics.xsl"/>
   <xsl:param name="admon.graphics" select="1"></xsl:param>
   <xsl:param name="admon.graphics.path">../common/images/admon/</xsl:param>
   <xsl:param name="callout.graphics.path">../common/images/callouts/</xsl:param>
@@ -23,6 +23,8 @@
       <xsl:with-param name="attribute" select="'feedback.email'"/>
     </xsl:call-template>
   </xsl:param>
+
+  <xsl:param name="glossary.collection" select="concat($project.build.directory,'/mvn/com.rackspace.cloud.api/glossary/glossary.xml')"/>
 
   <xsl:param name="pdf.url">
     <xsl:call-template name="pi-attribute">
@@ -39,7 +41,7 @@
   <xsl:param name="reference.autolabel" select="1"/>
   <xsl:param name="qandadiv.autolabel" select="1"/>
   <xsl:param name="webhelp.autolabel" select="1"/>
-  <xsl:param name="section.autolabel.max.depth" select="3"/>
+  <xsl:param name="section.autolabel.max.depth" select="100"/>
   <xsl:param name="section.label.includes.component.label" select="1"/>
   <xsl:param name="component.label.includes.part.label" select="1"/>
   <xsl:param name="ignore.image.scaling" select="1"/>
@@ -224,16 +226,11 @@ ERROR: Feedback email not set but internal comments are enabled.
 	    </xsl:attribute>
 	    <img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" />
 	  </a>
-	  <xsl:if test="$branding = 'openstack'">
-	    <xsl:call-template name="breadcrumbs">
-	      <xsl:with-param name="home" select="$home"/>
-	    </xsl:call-template>
-	  </xsl:if>
-	  <xsl:if test="$branding = 'openstackextension'">
-	    <xsl:call-template name="breadcrumbs">
-	      <xsl:with-param name="home" select="$home"/>
-	    </xsl:call-template>
-	  </xsl:if>
+	  <!-- <xsl:if test="$branding = 'openstack' or $branding = 'openstackextension'"> -->
+	  <!--   <xsl:call-template name="breadcrumbs"> -->
+	  <!--     <xsl:with-param name="home" select="$home"/> -->
+	  <!--   </xsl:call-template> -->
+	  <!-- </xsl:if> -->
             <!-- Display the page title and the main heading(parent) of it-->
             <h1>
                 <xsl:apply-templates select="." mode="object.title.markup"/>
@@ -314,7 +311,7 @@ ERROR: Feedback email not set but internal comments are enabled.
             </div>            
         </div>
 
-	<xsl:if test="$branding = 'rackspace'">
+	<!-- <xsl:if test="$branding = 'rackspace'"> -->
 	  <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 	    <div id="toolbar-left">
 	      <xsl:call-template name="breadcrumbs">
@@ -322,16 +319,16 @@ ERROR: Feedback email not set but internal comments are enabled.
 	      </xsl:call-template>
 	    </div>
 	  </div>
-	</xsl:if>
-	<xsl:if test="$branding = 'openstackextension'">
-	  <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-	    <div id="toolbar-left">
-	      <xsl:call-template name="breadcrumbs">
-		<xsl:with-param name="home" select="$home"/>
-	      </xsl:call-template>
-	    </div>
-	  </div>
-	</xsl:if>
+	<!-- </xsl:if> -->
+	<!-- <xsl:if test="$branding = 'openstackextension'"> -->
+	<!--   <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"> -->
+	<!--     <div id="toolbar-left"> -->
+	<!--       <xsl:call-template name="breadcrumbs"> -->
+	<!-- 	<xsl:with-param name="home" select="$home"/> -->
+	<!--       </xsl:call-template> -->
+	<!--     </div> -->
+	<!--   </div> -->
+	<!-- </xsl:if> -->
     </xsl:template>
     
     <xsl:template name="webhelptoc">
@@ -471,14 +468,23 @@ ERROR: Feedback email not set but internal comments are enabled.
         <xsl:variable name="definition">
 	  <strong><xsl:value-of select="$term"/>: </strong>
             <xsl:choose>
-                <xsl:when test="//d:glossentry[@xml:id = current()/@linkend]">
+                <xsl:when test="@linkend and //d:glossentry[@xml:id = current()/@linkend]">
                     <xsl:apply-templates select="//d:glossentry[@xml:id = current()/@linkend]/d:glossdef" mode="make-definition"/>    
                 </xsl:when>
+		<xsl:when test="@linkend and not($glossary.collection = '') and document($glossary.collection,.)//d:glossentry[@xml:id = current()/@linkend]">
+                    <xsl:apply-templates select="document($glossary.collection,.)//d:glossentry[@xml:id = current()/@linkend]/d:glossdef" mode="make-definition"/>    
+		</xsl:when>
                 <xsl:when test="//d:glossentry[d:glossterm = $term]">
                     <xsl:apply-templates select="//d:glossentry[d:glossterm = $term]/d:glossdef" mode="make-definition"/>    
                 </xsl:when>
+		<xsl:when test="not($glossary.collection = '') and document($glossary.collection,.)//d:glossentry[d:glossterm = $term]">
+                    <xsl:apply-templates select="document($glossary.collection,.)//d:glossentry[d:glossterm = $term]/d:glossdef" mode="make-definition"/>    
+		</xsl:when>
                 <xsl:when test="//d:glossentry[d:glossterm = current()/@baseform]">
                     <xsl:apply-templates select="//d:glossentry[d:glossterm = current()/@baseform]/d:glossdef" mode="make-definition"/>    
+                </xsl:when>
+                <xsl:when test="not($glossary.collection = '') and document($glossary.collection,.)//d:glossentry[d:glossterm = current()/@baseform]">
+                    <xsl:apply-templates select="document($glossary.collection,.)//d:glossentry[d:glossterm = current()/@baseform]/d:glossdef" mode="make-definition"/>    
                 </xsl:when>
 		<xsl:otherwise>
                     <xsl:message>

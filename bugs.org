@@ -1,0 +1,19 @@
+* Bugs!!
+1. When embeding a WADL in a docbook, the order of the methods should
+   appear as they are listed in the DocBook document.  For example:
+   
+   <resource href="os-bs.wadl#VolumeInstance">
+     <method href="updateVolume"/>
+     <method href="getVolume"/>
+     <method href="deleteVolume"/>
+   </resource>
+
+   Here, updateVolume method should be documented before the getVolume
+   method and that should come before the deleteVolume method.
+   Currently the source WADL (os-bs.wadl) order is used which is
+   wrong.
+2. Samples should be relative to the document where they are placed.
+   For example if wadl1 loads wadl2 and wadl2 is in a seperate
+   directory relative sample paths should be rosolved from wadl2 if
+   they are listed in that wadl.
+

@@ -800,6 +800,7 @@
 
 <xsl:attribute-set name="table.table.properties">
   <xsl:attribute name="font-size">8pt</xsl:attribute>
+  <xsl:attribute name="table-layout">fixed</xsl:attribute>
 </xsl:attribute-set>
 
 <!-- The following templates change the color of text flagged as reviewer, internal, or writeronly -->

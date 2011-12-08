@@ -32,6 +32,14 @@
 		</xsl:copy>
 	</xsl:template>
 
+	<xsl:template match="processing-instruction('rax')[normalize-space(.) = 'fail']">
+	  <xsl:message terminate="yes">
+	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    &lt;?rax fail?> found in the document.
+	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	  </xsl:message>
+	</xsl:template>
+
 	<xsl:template match="processing-instruction('rax')[ . = 'glossary']" mode="preprocess">
 	  <xsl:message>
 	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -592,8 +600,14 @@
 		</xsl:element>
 	</xsl:template>
 
-	<xsl:template match="wadl:param" mode="preprocess">
+	<xsl:template match="wadl:param[@style != 'plain']" mode="preprocess">
 		<xsl:variable name="type"><xsl:value-of select="substring-after(@type,':')"/></xsl:variable>
+        <xsl:variable name="param">
+            <xsl:choose>
+                <xsl:when test="@style='header'"> header </xsl:when>
+                <xsl:otherwise> parameter </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
 			<td align="center">
@@ -625,8 +639,9 @@
                     -->
                     <xsl:if test="@style != 'template'">
                         <xsl:choose>
-                            <xsl:when test="@required = 'true'">Required. </xsl:when>
-                            <xsl:otherwise>Optional. </xsl:otherwise>
+                            <xsl:when test="@required = 'true'">The <code role="hyphenate-true"><xsl:value-of select="@name"/></code>
+                            <xsl:value-of select="$param"/> should always be supplied. </xsl:when>
+                            <xsl:otherwise>The <code role="hyphenate-true"><xsl:value-of select="@name"/></code> <xsl:value-of select="$param"/> is optional. </xsl:otherwise>
                         </xsl:choose>
                     </xsl:if>
                 </para>
@@ -744,11 +759,12 @@
     	<xsl:param name="method.title"/>
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
+                <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction> 
                 <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
                 <col width="20%"/>
                 <col width="10%"/>
-                <col width="10%"/>
-                <col width="60%"/>
+                <col width="20%"/>
+                <col width="40%"/>
                 <thead>
                     <tr>
                         <th align="center">Name</th>
