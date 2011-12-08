@@ -16,6 +16,32 @@
         Generates a XHTML and API documents.
     </description>
 
+    <repositories>
+        <repository>
+            <id>public.maven.research.rackspace.com</id>
+            <name>Rackspace Research</name>
+            <url>http://maven.research.rackspacecloud.com/content/groups/aggregate</url>
+        </repository>
+
+        <repository>
+            <id>releases.maven.research.rackspace.com</id>
+            <name>Rackspace Research Releases</name>
+            <url>http://maven.research.rackspacecloud.com/content/repositories/releases</url>
+        </repository>
+
+        <repository>
+            <id>trancecode.org</id>
+            <name>Trance Code Release Repo</name>
+            <url>http://maven.trancecode.org/releases/</url>
+        </repository>
+
+        <repository>
+            <id>snapshots.trancecode.org</id>
+            <name>Trance Code Snapshot Repo</name>
+            <url>http://maven.trancecode.org/snapshots/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.agilejava.docbkx</groupId>
@@ -24,9 +50,57 @@
         </dependency>
 
         <dependency>
+            <groupId>com.rackspace.papi.components</groupId>
+            <artifactId>translation</artifactId>
+            <version>1.0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.rackspace.cloud.api</groupId>
             <artifactId>glossary</artifactId>
             <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xmlcalabash</groupId>
+            <artifactId>calabash</artifactId>
+            <version>0.9.38</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+            <version>9.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.0-alpha4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging-api</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thaiopensource</groupId>
+            <artifactId>jing</artifactId>
+            <version>20091111</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ccil.cowan.tagsoup</groupId>
+            <artifactId>tagsoup</artifactId>
+            <version>1.2.1</version>
         </dependency>
 
         <dependency>
