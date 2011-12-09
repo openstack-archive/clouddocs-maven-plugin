@@ -916,7 +916,7 @@
 	
 	<xsl:template match="d:revision" mode="revhistory">
 		<tr>
-			<td>
+			<td valign="top">
 				<para>
 					<xsl:call-template name="shortDate">
 						<xsl:with-param name="in"  select="d:date"/>
