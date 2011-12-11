@@ -15,6 +15,7 @@
   <xsl:import href="titlepage.templates.xsl"/>
   <xsl:import href="fop1.xsl"/>
   <xsl:import href="../date.xsl"/>
+  <xsl:import href="../this.xsl"/>
   <xsl:include href="../process-embedded-wadl.xsl"/>
 
   <xsl:variable name="preprocessed-nodes">
@@ -838,8 +839,11 @@
 	</xsl:if>{<xsl:copy-of select="$content"/>}</fo:inline>
     </xsl:template>
 
-<xsl:template match="*[@role = 'hyphenate-true']">
-    <fo:inline hyphenate="true"><xsl:apply-imports/></fo:inline>
-</xsl:template>
+    <xsl:template match="*[@role = 'hyphenate-true']">
+        <fo:inline hyphenate="true"><xsl:apply-imports/></fo:inline>
+    </xsl:template>
 
+    <xsl:template name="badMatch">
+        <fo:inline color="red">this?</fo:inline>
+    </xsl:template>
 </xsl:stylesheet>
