@@ -380,7 +380,9 @@
 					</tr>
 				</thead>
 				<tbody>
-					<xsl:call-template name="method-row"/>
+					<xsl:call-template name="method-row">
+					  <xsl:with-param name="context">reference-page</xsl:with-param>
+					</xsl:call-template>
 				</tbody>
 			</informaltable>
 
@@ -464,6 +466,7 @@
 	</xsl:template>
 
 	<xsl:template name="method-row">
+	  <xsl:param name="context"/>
 		<tr>
 			<td>
 				<command>
@@ -489,12 +492,14 @@
 							<xsl:value-of select="parent::wadl:resource/@path"/>
 						</xsl:otherwise>
 					</xsl:choose>
+					<xsl:if test="$context = 'reference-page'">
 					<xsl:for-each select="wadl:request/wadl:param[@style = 'query']">
 						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1"
 							>?</xsl:if><xsl:value-of select="@name"/>=<replaceable><xsl:value-of
 								select="substring-after(@type,':')"/></replaceable><xsl:if
 							test="not(position() = last())">&amp;</xsl:if>
 					</xsl:for-each>
+					</xsl:if>
 				</code>
 			</td>
 			<td>
