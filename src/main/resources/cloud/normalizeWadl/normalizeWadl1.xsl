@@ -240,6 +240,7 @@
                         <xsl:choose>
                             <xsl:when test="$type = 'application/xml'">: XML</xsl:when>
                             <xsl:when test="$type = 'application/json'">: JSON</xsl:when>
+                            <xsl:when test="$type = 'application/atom+xml'">: ATOM</xsl:when>
                             <xsl:otherwise>: <xsl:value-of select="$type"/></xsl:otherwise>
                         </xsl:choose>
                     </xsl:otherwise>
