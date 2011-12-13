@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * User: sbrayman
  * Date: 10/19/11
  */
-public class ResourceResolver implements URIResolver {
+public class ResourceResolver implements URIResolver {  //TODO: Kill this class?
 
     private URIResolver originalResolver;
     private String type;
@@ -34,7 +34,7 @@ public class ResourceResolver implements URIResolver {
             try {
                 return new StreamSource(url.openStream(), url.toExternalForm());
             } catch (IOException ioe) {
-                throw new TransformerException("Can't resolve glossary link: " + href + "->" + filePath + ". Glossary missing in classpath?", ioe);
+                throw new TransformerException("Can't resolve path: " + href + "->" + filePath + ". Resource missing in classpath?", ioe);
             }
         }
         System.err.println("This failed to match. " + href);

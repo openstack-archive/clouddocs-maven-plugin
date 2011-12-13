@@ -3,11 +3,6 @@ package com.rackspace.cloud.api.docs;
 import com.agilejava.docbkx.maven.AbstractFoMojo;
 import com.agilejava.docbkx.maven.PreprocessingFilter;
 import com.agilejava.docbkx.maven.TransformerBuilder;
-import nu.xom.Builder;
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
-import nu.xom.xinclude.XIncludeException;
-import nu.xom.xinclude.XIncluder;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -20,7 +15,6 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.transform.Result;
@@ -322,29 +316,20 @@ public abstract class PDFMojo extends AbstractFoMojo {
     @Override
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
             throws MojoExecutionException {
-        // if both properties are set, XOM is used for a better XInclude support.
-        if (getXIncludeSupported() && getGeneratedSourceDirectory() != null) {
-            getLog().debug("Advanced XInclude mode entered");
-            final Builder xomBuilder = new Builder();
-            try {
-                final nu.xom.Document doc = xomBuilder.build(sourceFile);
-                XIncluder.resolveInPlace(doc);
-                // TODO also dump PIs computed and Entities included
-                final File dump = dumpResolvedXML(inputFilename, doc);
-                return new SAXSource(filter, new InputSource(dump.getAbsolutePath()));
-            } catch (ValidityException e) {
-                throw new MojoExecutionException("Failed to validate source", e);
-            } catch (ParsingException e) {
-                throw new MojoExecutionException("Failed to parse source", e);
-            } catch (IOException e) {
-                throw new MojoExecutionException("Failed to read source", e);
-            } catch (XIncludeException e) {
-                throw new MojoExecutionException("Failed to process XInclude", e);
+
+        Source source = super.createSource(inputFilename, sourceFile, filter);
+
+        String pipelineURI = "/Users/sbrayman/Documents/workspace/rc-maven-cloud-docs/src/main/resources/test.xpl"; //TODO: Pull this out to someplace better.
+
+        try {
+            if (!(source instanceof SAXSource)) {
+                throw new MojoExecutionException("Expecting a SAXSource");
             }
-        } else { // else fallback on Xerces XInclude support.
-            getLog().debug("Xerces XInclude mode entered");
-            final InputSource inputSource = new InputSource(sourceFile.getAbsolutePath());
-            return new SAXSource(filter, inputSource);
+            SAXSource saxSource = (SAXSource) source;
+
+            return CalabashHelper.run(pipelineURI, saxSource.getInputSource());
+        } catch (FileNotFoundException e) {
+            throw new MojoExecutionException("Failed to find source.", e);
         }
     }
 }
