@@ -10,6 +10,7 @@
   <xsl:import href="titlepage.templates.xsl"/>
   <xsl:import href="changebars.xsl"/>
   <xsl:import href="graphics.xsl"/>
+  <xsl:import href="../this.xsl"/>
   <xsl:param name="admon.graphics" select="1"></xsl:param>
   <xsl:param name="admon.graphics.path">../common/images/admon/</xsl:param>
   <xsl:param name="callout.graphics.path">../common/images/callouts/</xsl:param>
@@ -611,5 +612,9 @@ ERROR: Feedback email not set but internal comments are enabled.
   <xsl:call-template name="dir"/>
 </xsl:template>
 <!-- End stuff from svn trunk -->
-    
+
+  <xsl:template name="badMatch">
+    <span style="color: red">this?</span>
+  </xsl:template>
+
 </xsl:stylesheet>

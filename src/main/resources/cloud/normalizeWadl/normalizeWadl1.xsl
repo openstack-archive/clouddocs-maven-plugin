@@ -15,17 +15,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" xmlns:db="http://docbook.org/ns/docbook" exclude-result-prefixes="xs wadl xsd xsdxt" version="2.0">
 
     <xsl:import href="normalizeWadl2.xsl"/>
     <xsl:import href="normalizeWadl3.xsl"/>
     <xsl:import href="normalizeWadl4.xsl"/>
-    
+
     <!-- This xslt lists and flattens xsds -->
 
     <xsl:output indent="yes"/>
-
+    
     <xsl:param name="wadl2docbook">0</xsl:param>
+
     <xsl:param name="xsdVersion" select="xs:decimal(1.1)"/>
 
     <xsl:param name="flattenXsds">true</xsl:param>
@@ -65,7 +67,7 @@
             </xsl:for-each-group>
         </xsl:if>
     </xsl:variable>
-    
+
     <!-- 
         This variable contains ALL the flattened xsds rooted at rax:xsd. 
         We can use this to analyze all the xsds, e.g. looking for a 
@@ -85,7 +87,7 @@
            </rax:xsd>         
        </xsl:for-each>
     </xsl:variable>
-
+    
     <xsl:variable name="normalizeWadl2.xsl">
         <!-- Here we store the base-uri of this file so we can use it to find files relative to this file later -->
         <xsl:processing-instruction name="base-uri">
@@ -116,7 +118,6 @@
     <!--    <xsl:variable name="normalizeWadl3.xsl">
         <xsl:apply-templates select="$normalizeWadl2.xsl" mode="normalizeWadl3"/>
         </xsl:variable>-->
-
     <xsl:variable name="normalizeWadl4.xsl">
         <xsl:choose>
             <xsl:when test="$wadl2docbook != 0">
@@ -182,7 +183,6 @@
             </db:inlinemediaobject>
         </xsl:if>
     </xsl:template>
-
     <xsl:template match="rax:examples|xsdxt:samples" 
         xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0" 
         xmlns:rax="http://docs.rackspace.com/api" mode="normalizeWadl2" priority="11">  
@@ -240,6 +240,7 @@
                         <xsl:choose>
                             <xsl:when test="$type = 'application/xml'">: XML</xsl:when>
                             <xsl:when test="$type = 'application/json'">: JSON</xsl:when>
+                            <xsl:when test="$type = 'application/atom+xml'">: ATOM</xsl:when>
                             <xsl:otherwise>: <xsl:value-of select="$type"/></xsl:otherwise>
                         </xsl:choose>
                     </xsl:otherwise>
@@ -265,11 +266,9 @@
                 <xsl:when test="@language = 'xml'">: XML</xsl:when>
                 <xsl:when test="@language = 'javascript'">: JSON</xsl:when>                
             </xsl:choose></title><programlisting language="{@language}" xmlns="http://docbook.org/ns/docbook"><xsl:copy-of select="unparsed-text(concat($samples.path, '/',@href))"/></programlisting></example></xsl:template>
-
-
     <xsl:template match="/">
         <xsl:if test="$flattenXsds = 'false'">
-	       <xsl:message>[INFO] Not flattening xsds. You must copy xsds into place manually.</xsl:message>
+	<xsl:message>[INFO] Not flattening xsds. Adjusting paths to xsds.</xsl:message>
         </xsl:if>
 
         <xsl:for-each select="$xsds/rax:xsd" xmlns:rax="http://docs.rackspace.com/api">
@@ -350,7 +349,7 @@
 		 xmlns:auth="http://foo" and xmlns:auth="http://bar",
 		 in the same set of xsds, then this fails.		 
 	    -->
-	    <xsl:for-each-group select="//namespace::node()[not(name(.) = 'xml') and not(name(.) = '')]" group-by=".">
+	    <xsl:for-each-group select="//namespace::node()[not(name(.) = 'xml') and not(name(.) = '')]" group-by="name(.)">
                 <xsl:copy-of select="."/>
             </xsl:for-each-group>
             <xsl:for-each select="xsd:import[not(@schemaLocation = preceding::xsd:import/@schemaLocation)]">
@@ -384,6 +383,8 @@
 
 
     <xsl:template match="wadl:grammars" mode="normalizeWadl2">
+      <xsl:choose>
+	<xsl:when test="$flattenXsds != 'false'">
         <wadl:grammars>
             <xsl:for-each select="$catalog-wadl-xsds//xsd">
                 <xsl:comment>Original xsd: <xsl:value-of select="@location"/></xsl:comment>
@@ -394,6 +395,25 @@
                 </wadl:include>
             </xsl:for-each>
         </wadl:grammars>
+	</xsl:when>
+	<xsl:otherwise>
+	    <xsl:copy>
+	        <xsl:copy-of select="@*"/>
+	  <xsl:apply-templates mode="adjust-xsd-path"/>
+	    </xsl:copy>
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="wadl:include" mode="adjust-xsd-path">
+      <xsl:copy>
+    	<xsl:attribute name="href">
+	  <xsl:choose>
+	    <xsl:when test="not(contains(@href,':/')) and not(starts-with(@href,'/'))"><xsl:value-of select="concat('../',@href)"/></xsl:when>
+	    <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
+	  </xsl:choose>
+	</xsl:attribute>
+      </xsl:copy>
     </xsl:template>
 
     <!-- Flatten xsds -->

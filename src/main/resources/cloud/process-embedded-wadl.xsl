@@ -380,7 +380,9 @@
 					</tr>
 				</thead>
 				<tbody>
-					<xsl:call-template name="method-row"/>
+					<xsl:call-template name="method-row">
+					  <xsl:with-param name="context">reference-page</xsl:with-param>
+					</xsl:call-template>
 				</tbody>
 			</informaltable>
 
@@ -464,6 +466,7 @@
 	</xsl:template>
 
 	<xsl:template name="method-row">
+	  <xsl:param name="context"/>
 		<tr>
 			<td>
 				<command>
@@ -489,12 +492,14 @@
 							<xsl:value-of select="parent::wadl:resource/@path"/>
 						</xsl:otherwise>
 					</xsl:choose>
+					<xsl:if test="$context = 'reference-page'">
 					<xsl:for-each select="wadl:request/wadl:param[@style = 'query']">
 						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1"
 							>?</xsl:if><xsl:value-of select="@name"/>=<replaceable><xsl:value-of
 								select="substring-after(@type,':')"/></replaceable><xsl:if
 							test="not(position() = last())">&amp;</xsl:if>
 					</xsl:for-each>
+					</xsl:if>
 				</code>
 			</td>
 			<td>
@@ -601,7 +606,9 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:param[@style != 'plain']" mode="preprocess">
-		<xsl:variable name="type"><xsl:value-of select="substring-after(@type,':')"/></xsl:variable>
+	  <xsl:variable name="type">
+	    <xsl:value-of select="substring-after(@type,':')"/>
+	  </xsl:variable>
         <xsl:variable name="param">
             <xsl:choose>
                 <xsl:when test="@style='header'"> header </xsl:when>
@@ -617,9 +624,13 @@
 				<xsl:value-of select="@style"/>
 			</td>
             <td align="center">
+	    <xsl:call-template name="hyphenate.camelcase">
+	      <xsl:with-param name="content">
                 <xsl:value-of
                     select="concat(translate(substring($type,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($type,2))"
 					/>
+	      </xsl:with-param>
+	    </xsl:call-template>
             </td>
 			<td>
 				<xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
@@ -761,9 +772,9 @@
             <table rules="all">
                 <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction> 
                 <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
-                <col width="20%"/>
+                <col width="30%"/>
                 <col width="10%"/>
-                <col width="20%"/>
+                <col width="10%"/>
                 <col width="40%"/>
                 <thead>
                     <tr>
@@ -916,7 +927,7 @@
 	
 	<xsl:template match="d:revision" mode="revhistory">
 		<tr>
-			<td>
+			<td valign="top">
 				<para>
 					<xsl:call-template name="shortDate">
 						<xsl:with-param name="in"  select="d:date"/>
@@ -928,5 +939,24 @@
 			</td>
 		</tr>
 	</xsl:template>
+
+<xsl:template name="hyphenate.camelcase">
+  <xsl:param name="content"/>
+  <xsl:variable name="head" select="substring($content, 1, 1)"/>
+  <xsl:variable name="tail" select="substring($content, 2)"/>
+  <xsl:choose>
+    <xsl:when test="translate($head, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '') = '' and not($tail = '')">
+      <xsl:text>&#x200B;</xsl:text><xsl:value-of select="$head"/>      
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$head"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:if test="$tail">
+    <xsl:call-template name="hyphenate.camelcase">
+      <xsl:with-param name="content" select="$tail"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
 	
 </xsl:stylesheet>
