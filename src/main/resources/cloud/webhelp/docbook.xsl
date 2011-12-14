@@ -207,7 +207,7 @@ ERROR: Feedback email not set but internal comments are enabled.
       &#160;
       <a href="../atom.xml"><img alt="Atom feed of this document" src="../common/images/feed-icon.png"/></a>
 <!--social buttons-->
-<div id="fb-root"></div>
+<div id="fb-root">.</div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
@@ -228,7 +228,7 @@ ERROR: Feedback email not set but internal comments are enabled.
     margin-left: -250px;
 }
 </style>
-<div class="fb-like" data-send="true" data-width="50" data-show-faces="false" data-layout="button_count" data-font="arial" style="vertical-align:text-top;position:absolute;top:.5em;right:420px">.</div>      
+<div class="fb-like" data-send="true" data-width="50" data-show-faces="false" data-layout="button_count" data-font="arial" style="vertical-align:text-top;position:absolute;top:.5em;right:420px"> &#160; </div>      
 <!-- Place this tag where you want the +1 button to render -->
 <div style="display:inline;position:absolute;right:330px;top:.5em">
 <g:plusone size="medium" annotation="none"></g:plusone>

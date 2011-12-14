@@ -103,11 +103,11 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
     position: relative;
     top: 90px; /* left: 240px;*/
     right: auto; /*  bottom: 20px;  */
-    margin: 0px 0px 0px 20px;
+    margin: 0px 0px 0px 280px;
     width: auto;
     height: inherit;
     padding-top: 10px;
-    padding-left: 0px;
+    padding-left: 30px;
     padding-right: 30px;
     color: #000000;
     /*border-left: 2px solid #cccccc; overflow :scroll;*/
@@ -352,7 +352,7 @@ body p.breadcrumbs {
 
 body #content {
 	position: static;
-	margin-top: 0px;
+	margin-top: 126px;
 	top: 0px;
 }
 
