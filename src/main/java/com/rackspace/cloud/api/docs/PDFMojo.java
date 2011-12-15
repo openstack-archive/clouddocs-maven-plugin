@@ -25,7 +25,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedOutputStream;
@@ -319,17 +318,6 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        String pipelineURI = "/Users/sbrayman/Documents/workspace/rc-maven-cloud-docs/src/main/resources/test.xpl"; //TODO: Pull this out to someplace better.
-
-        try {
-            if (!(source instanceof SAXSource)) {
-                throw new MojoExecutionException("Expecting a SAXSource");
-            }
-            SAXSource saxSource = (SAXSource) source;
-
-            return CalabashHelper.run(pipelineURI, saxSource.getInputSource());
-        } catch (FileNotFoundException e) {
-            throw new MojoExecutionException("Failed to find source.", e);
-        }
+        return CalabashHelper.createSource(source);
     }
 }
