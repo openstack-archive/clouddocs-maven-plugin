@@ -2,7 +2,8 @@
 <xsl:stylesheet exclude-result-prefixes="d"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://docbook.org/ns/docbook"
-		xmlns="http://www.w3.org/1999/xhtml"
+		            xmlns="http://www.w3.org/1999/xhtml"
+								xmlns:g="http://www.google.com"
                 version="1.1">
 
   <!-- <xsl:import href="urn:docbkx:stylesheet-orig/xsl/webhelp.xsl" /> -->
@@ -145,6 +146,9 @@ set       toc,title
     
     <xsl:param name="glossary.uri">http://docs-beta.rackspace.com/test/jonathan/glossary</xsl:param>
     <xsl:param name="glossary.xml.uri"><xsl:value-of select="$glossary.uri"/>/glossary.xml</xsl:param>
+		
+		<xsl:param name="social.icons">0</xsl:param>
+
     <xsl:template name="user.footer.content">
         <xsl:if test="$enable.disqus!='0' and (//d:section[not(@xml:id)] or //d:chapter[not(@xml:id)] or //d:part[not(@xml:id)] or //d:appendix[not(@xml:id)] or //d:preface[not(@xml:id)] or /*[not(@xml:id)])">
             <xsl:message terminate="yes"> 
@@ -205,6 +209,39 @@ ERROR: Feedback email not set but internal comments are enabled.
     <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
       &#160;
       <a href="../atom.xml"><img alt="Atom feed of this document" src="../common/images/feed-icon.png"/></a>
+	      <xsl:if test="$social.icons != '0'">
+<!--social buttons-->
+<div id="fb-root">.</div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- Place this render call where appropriate  for google +1 button-->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+<style>
+.fb_edge_comment_widget {
+    margin-left: -250px;
+}
+</style>
+<div class="fb-like" data-send="true" data-width="50" data-show-faces="false" data-layout="button_count" data-font="arial" style="vertical-align:text-top;position:absolute;top:.5em;right:420px"> &#160; </div>      
+<!-- Place this tag where you want the +1 button to render -->
+<div id="gplusone" >
+<g:plusone size="medium" annotation="none"></g:plusone>
+</div>
+<div id="rstwitter">
+<a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out this Rackspace documentation page:" data-lang="en" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>      
+</div> <!--end social buttons -->
+    </xsl:if>
     </xsl:if>
     </xsl:template>
 
