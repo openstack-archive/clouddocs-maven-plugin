@@ -234,10 +234,10 @@ ERROR: Feedback email not set but internal comments are enabled.
 </style>
 <div class="fb-like" data-send="true" data-width="50" data-show-faces="false" data-layout="button_count" data-font="arial" style="vertical-align:text-top;position:absolute;top:.5em;right:420px"> &#160; </div>      
 <!-- Place this tag where you want the +1 button to render -->
-<div style="display:inline;position:absolute;right:330px;top:.5em">
+<div id="gplusone" >
 <g:plusone size="medium" annotation="none"></g:plusone>
 </div>
-<div style="vertical-align:text-top;display:inline;position:absolute;right:370px;top:.5em">
+<div id="rstwitter">
 <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out this Rackspace documentation page:" data-lang="en" data-count="none">Tweet</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>      
 </div> <!--end social buttons -->
