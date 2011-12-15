@@ -159,6 +159,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
       */
     private String feedbackEmail;
 
+     /**
+      * Controls whether or not the social icons are displayed.
+      *
+      * @parameter expression="${generate-webhelp.social.icons}" default-value="0"
+      */
+    private String socialIcons;
 
   /**
    * DOCUMENT ME!
@@ -215,6 +221,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
    if(trimWadlUriCount != null){
 	transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);
     }
+
+	transformer.setParameter("social.icons",socialIcons);
 
    sourceDocBook = new File(sourceFilename);
    sourceDirectory = sourceDocBook.getParentFile();
