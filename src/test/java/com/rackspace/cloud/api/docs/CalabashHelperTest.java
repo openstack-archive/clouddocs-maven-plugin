@@ -1,7 +1,7 @@
 package com.rackspace.cloud.api.docs;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -10,7 +10,6 @@ import org.xml.sax.InputSource;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -23,19 +22,19 @@ public class CalabashHelperTest {
     public static class whenUsingCalabashHelper {
 
         String pipelineURI = null;
-        SAXSource source = null;
         InputSource inputSource = null;
+        Source source = null;
 
         @Before
         public void setUp() throws Exception {
             pipelineURI = "/Users/sbrayman/Documents/workspace/rc-maven-cloud-docs/src/main/resources/test.xpl";
-            source = new SAXSource(mock(InputSource.class));
+            inputSource = mock(InputSource.class);
+            source = mock(Source.class);
         }
 
-        @Ignore  //ugh
-        @Test
-        public void shouldReturnSource() throws Exception {
-            assertTrue("This should return an object of type Source", CalabashHelper.createSource(source) instanceof Source);
+        @Test (expected=MojoExecutionException.class)
+        public void shouldThrowSAXSourceError() throws Exception {
+            CalabashHelper.createSource(source);
         }
     }
 }
