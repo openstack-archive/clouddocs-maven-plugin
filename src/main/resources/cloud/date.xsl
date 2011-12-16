@@ -58,7 +58,13 @@
                       <xsl:text>December</xsl:text>
                   </xsl:when>
                   <xsl:otherwise>
-                      <xsl:message terminate="yes">Bad Month value <xsl:value-of select="$month"/></xsl:message>
+                      <xsl:message terminate="yes">
+		      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		      Bad Month value in "<xsl:value-of select="$in"/>"
+		      Please use the format 2011-12-31 for
+		      dates.
+		      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		      </xsl:message>
                   </xsl:otherwise>
               </xsl:choose>
               <xsl:text> </xsl:text>
@@ -123,7 +129,13 @@
                       <xsl:text>Dec</xsl:text>
                   </xsl:when>
                   <xsl:otherwise>
-                      <xsl:message terminate="yes">Bad Month value <xsl:value-of select="$month"/></xsl:message>
+                      <xsl:message terminate="yes">
+		      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		      Bad Month value in "<xsl:value-of select="$in"/>"
+		      Please use the format 2011-12-31 for
+		      dates.
+		      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		      </xsl:message>
                   </xsl:otherwise>
               </xsl:choose>
               <xsl:text> </xsl:text>
