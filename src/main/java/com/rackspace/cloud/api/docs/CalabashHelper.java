@@ -27,10 +27,8 @@ public class CalabashHelper {
         return sources.get(0);
     }
 
-    public static Source createSource(Source source)
+    public static Source createSource(Source source, String pipelineURI)
             throws MojoExecutionException {
-
-        String pipelineURI = "/Users/sbrayman/Documents/workspace/rc-maven-cloud-docs/src/main/resources/test.xpl"; //TODO: Pull this out to someplace better?
 
         try {
             if (!(source instanceof SAXSource)) {
