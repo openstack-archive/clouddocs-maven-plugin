@@ -43,7 +43,7 @@ public class GlossaryResolver implements URIResolver {
                 throw new TransformerException("Can't resolve glossary link: " + href + "->" + filePath + ". Glossary missing in classpath?");
             }
         } else if (originalResolver != null) {          //  We can't resolve, maybe the next resolver in the chain can.
-            System.err.println("This failed to match. " + href);
+            //System.err.println("This failed to match. " + href);
             return originalResolver.resolve(href, base);
         }
         return null;

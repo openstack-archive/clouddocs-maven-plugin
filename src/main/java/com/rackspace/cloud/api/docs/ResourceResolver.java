@@ -37,7 +37,7 @@ public class ResourceResolver implements URIResolver {  //TODO: Kill this class?
                 throw new TransformerException("Can't resolve path: " + href + "->" + filePath + ". Resource missing in classpath?", ioe);
             }
         }
-        System.err.println("This failed to match. " + href);
+        //System.err.println("This failed to match. " + href);
         return originalResolver.resolve(href, base);
     }
 }
