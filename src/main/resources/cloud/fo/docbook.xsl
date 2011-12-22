@@ -16,6 +16,7 @@
   <xsl:import href="fop1.xsl"/>
   <xsl:import href="../date.xsl"/>
   <xsl:import href="../this.xsl"/>
+  <xsl:include href="../inline.xsl"/>
   <xsl:include href="../process-embedded-wadl.xsl"/>
 
   <xsl:variable name="preprocessed-nodes">

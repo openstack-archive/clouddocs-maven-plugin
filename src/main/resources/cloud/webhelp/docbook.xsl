@@ -149,6 +149,8 @@ set       toc,title
 		
 		<xsl:param name="social.icons">0</xsl:param>
 
+		<xsl:include href="../inline.xsl"/>
+
     <xsl:template name="user.footer.content">
         <xsl:if test="$enable.disqus!='0' and (//d:section[not(@xml:id)] or //d:chapter[not(@xml:id)] or //d:part[not(@xml:id)] or //d:appendix[not(@xml:id)] or //d:preface[not(@xml:id)] or /*[not(@xml:id)])">
             <xsl:message terminate="yes"> 
