@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns:s="http://www.ascc.net/xml/schematron" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	<start>
+		<element name="root">
+			<element name="exporttree">
+				<text/>
+			</element>
+			<element name="destination">
+				<text/>
+			</element>
+			<element name="modulename">
+				<text/>
+			</element>
+			<element name="longmodulename">
+				<text/>
+			</element>
+			<element name="moduleversion">
+				<text/>
+			</element>
+			<element name="emails">
+				<oneOrMore>
+					<element name="email">
+						<text/>
+					</element>
+				</oneOrMore>
+			</element>
+			<element name="description">
+				<text/>
+			</element>
+			<element name="url">
+				<text/>
+			</element>
+			<element name="doctools-version">
+				<text/>
+			</element>
+			<element name="glossary-version">
+				<text/>
+			</element>
+			<element name="infocenter">
+				<text/>
+			</element>
+			<element name="sources">
+				<attribute name="branding"/>
+				<oneOrMore>
+					<element name="source">
+						<attribute name="dir"/>
+						<attribute name="file"/>
+						<attribute name="targetname"/>
+						<optional>
+							<attribute name="imagedir"/>
+						</optional>
+						<optional>
+							<attribute name="is_library">
+								<choice>
+									<value>yes</value>
+									<value>no</value>
+								</choice>
+							</attribute>
+						</optional>
+						<empty/>
+					</element>
+				</oneOrMore>
+			</element>
+		</element>
+	</start>
+	<s:pattern name="No paths should end with a /">
+		<s:rule context="//*">
+			<s:assert test="not(substring(., string-length(.), 1 ) = '/')">Paths should not end with a / character.</s:assert>
+		</s:rule>
+	</s:pattern>
+	<s:pattern name="No paths should end with a /">
+		<s:rule context="//*">
+			<s:assert test="not(substring(@imagedir, string-length(@imagedir), 1 ) = '/')">Paths should not end with a / character.</s:assert>
+			<s:assert test="not(substring(@dir, string-length(@dir), 1 ) = '/')">Paths should not end with a / character.</s:assert>
+		</s:rule>
+	</s:pattern>
+	<s:pattern name="Paths should not contain spaces">
+		<s:rule context="/root/exporttree|/root/destination|/root/modulename|/root/emails/email|/root/url|/root/infocenter|/root/sources/source">
+			<s:assert test="not(contains(.,' ' ))">This element's content should not contain spaces.</s:assert>
+			<s:assert test="not(contains(@dir,' ' ))">This attribute value should not contain spaces.</s:assert>
+			<s:assert test="not(contains(@file,' ' ))">This attribute value should not contain spaces.</s:assert>
+			<s:assert test="not(contains(@targetname,' ' ))">This attribute value should not contain spaces.</s:assert>
+			<s:assert test="not(contains(@imagedir,' ' ))">This attribute value should not contain spaces.</s:assert>
+		</s:rule>
+	</s:pattern>
+</grammar>

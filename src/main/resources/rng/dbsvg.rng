@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+    
+    <include href="docbook.rng">
+        <define name="db._any.svg">
+            <externalRef href="../../../svg/rng/svg11.rng"/>
+        </define>        
+        <define name="db._any">
+            <element>
+                <anyName>
+                    <except>
+                        <nsName ns="http://docbook.org/ns/docbook"/>
+                        <nsName ns="http://www.w3.org/1999/xhtml"/>
+                        <nsName ns="http://www.w3.org/2000/svg"/>
+                    </except>
+                </anyName>
+                <zeroOrMore>
+                    <choice>
+                        <attribute>
+                            <anyName/>
+                        </attribute>
+                        <text/>
+                        <ref name="db._any"/>
+                    </choice>
+                </zeroOrMore>
+            </element>
+        </define>
+    </include>
+    
+</grammar>
