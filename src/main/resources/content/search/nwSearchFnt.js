@@ -69,8 +69,16 @@ function Effectuer_recherche(expressionInput) {
 
 
     /*nqu: expressionInput, la recherche est lower cased, plus remplacement des char speciaux*/
-    searchFor = expressionInput.toLowerCase().replace(/<\//g, "_st_").replace(/\$_/g, "_di_").replace(/\.|%2C|%3B|%21|%3A|@|\/|\*/g, " ").replace(/(%20)+/g, " ").replace(/_st_/g, "</").replace(/_di_/g, "%24_");
-
+    //The original replacement expression is: 
+    //searchFor = expressionInput.toLowerCase().replace(/<\//g, "_st_").replace(/\$_/g, "_di_").replace(/\.|%2C|%3B|%21|%3A|@|\/|\*/g, " ").replace(/(%20)+/g, " ").replace(/_st_/g, "</").replace(/_di_/g, "%24_");
+    //The above expression was error prone because it did not deal with words that have a . as part of the word correctly, for example, document.txt
+    
+    //Do not automatically replace a . with a space
+    searchFor = expressionInput.toLowerCase().replace(/<\//g, "_st_").replace(/\$_/g, "_di_").replace(/%2C|%3B|%21|%3A|@|\/|\*/g, " ").replace(/(%20)+/g, " ").replace(/_st_/g, "</").replace(/_di_/g, "%24_");
+    
+    //If it ends with a period, replace it with a space
+    searchFor = searchFor.replace(/[.]$/,"");
+    
     searchFor = searchFor.replace(/  +/g, " ");
     searchFor = searchFor.replace(/ $/, "").replace(/^ /, "");
 
@@ -100,15 +108,26 @@ function Effectuer_recherche(expressionInput) {
      * Compare with the indexed words (in the w[] array), and push words that are in it to tempTab.
      */
     var tempTab = new Array();
-    for (var t in finalWordsList) {
-        if (w[finalWordsList[t].toString()] == undefined) {
-            txt_wordsnotfound += finalWordsList[t] + " ";
-        } else {
-            tempTab.push(finalWordsList[t]);
+
+    //Do not use associative array in for loop, for example:
+    //for(var t in finalWordsList)
+    //it causes errors when finalWordList contains 
+    //stemmed words such as: kei from the stemmed word: key
+    for(var t=0;t<finalWordsList.length;++t){
+        var aWord=finalWordsList[t];
+        //w is a Map like Object, use the current word in finalWordList as the key
+        if(w[aWord] == undefined){
+            txt_wordsnotfound += aWord + " ";
+        }
+        else{
+            tempTab.push(aWord);
         }
     }
+    
     finalWordsList = tempTab;
-
+    //Check all the inputs to see if the root words are in the finalWordsList, if not add them there
+    var inputs = expressionInput.split(' ');
+    
     if (finalWordsList.length) {
 
         //search 'and' and 'or' one time
@@ -163,16 +182,30 @@ function Effectuer_recherche(expressionInput) {
 function tokenize(wordsList){
     var stemmedWordsList = new Array(); // Array with the words to look for after removing spaces
     var cleanwordsList = new Array(); // Array with the words to look for
-    for(var j in wordsList){
+    
+
+    for(var j=0;j<wordsList.length;++j){
         var word = wordsList[j];
+        var originalWord=word;
         if(typeof stemmer != "undefined" ){
-            stemQueryMap[stemmer(word)] = word;
+            var stemmedWord=stemmer(word);
+            if(w[stemmedWord]!=undefined){
+                stemQueryMap[stemmer(word)] = word;
+            }
+            else{
+                stemQueryMap[originalWord]=originalWord;
+            }
         } else {
-            stemQueryMap[word] = word;
+            if(w[word]!=undefined){
+                stemQueryMap[word] = word;
+            }
+            else{
+                stemQueryMap[originalWord]=originalWord;
+            }
         }
     } 
      //stemmedWordsList is the stemmed list of words separated by spaces.
-    for (var t in wordsList) {
+    for (var t=0;t<wordsList.length;++t) {
         wordsList[t] = wordsList[t].replace(/(%22)|^-/g, "");
         if (wordsList[t] != "%20") {
             scriptLetterTab.add(wordsList[t].charAt(0));
@@ -184,7 +217,12 @@ function tokenize(wordsList){
         //Do the stemming using Porter's stemming algorithm
         for (var i = 0; i < cleanwordsList.length; i++) {
             var stemWord = stemmer(cleanwordsList[i]);
-            stemmedWordsList.push(stemWord);
+            if(w[stemWord]!=undefined){
+                stemmedWordsList.push(stemWord);
+            }
+            else{
+                stemmedWordsList.push(cleanwordsList[i]);               
+            }
         }
     } else {
         stemmedWordsList = cleanwordsList;
