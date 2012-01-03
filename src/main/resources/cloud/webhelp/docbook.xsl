@@ -211,7 +211,8 @@ ERROR: Feedback email not set but internal comments are enabled.
     <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
       &#160;
       <a href="../atom.xml"><img alt="Atom feed of this document" src="../common/images/feed-icon.png"/></a>
-	      <xsl:if test="$social.icons != '0'">
+    </xsl:if>
+    <xsl:if test="$social.icons != '0'">
 <!--social buttons-->
 <div id="fb-root">&#160;</div>
 <script>(function(d, s, id) {
@@ -233,8 +234,17 @@ ERROR: Feedback email not set but internal comments are enabled.
 .fb_edge_comment_widget {
     margin-left: -250px;
 }
+.fb-like{vertical-align:text-top;position:absolute;top:.5em;right:311px}
+#gplusone{display:inline;position:absolute;right:410px;top:.5em}
+#rstwitter{vertical-align:text-top;display:inline;position:absolute;right:450px;top:.5em}
 </style>
-<div class="fb-like" data-send="true" data-width="50" data-show-faces="false" data-layout="button_count" data-font="arial" style="vertical-align:text-top;position:absolute;top:.5em;right:412px"> &#160; </div>      
+ <xsl:comment><xsl:text>[if IE]>
+	&lt;style>
+#gplusone{top:0em}
+#rstwitter{top:-.15em}
+.fb-like{top:-.5em}
+&lt;/style>&lt;![endif]</xsl:text></xsl:comment>
+<div class="fb-like" data-send="false" data-width="50" data-show-faces="false" data-layout="button_count" data-font="arial" > &#160; </div>      
 <!-- Place this tag where you want the +1 button to render -->
 <div id="gplusone" >
 <g:plusone size="medium" annotation="none"></g:plusone>
@@ -243,7 +253,6 @@ ERROR: Feedback email not set but internal comments are enabled.
 <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out this Rackspace documentation page:" data-lang="en" data-count="none">Tweet</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>      
 </div> <!--end social buttons -->
-    </xsl:if>
     </xsl:if>
     </xsl:template>
 
