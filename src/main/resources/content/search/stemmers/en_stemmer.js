@@ -105,12 +105,10 @@ var stemmer = (function(){
 		}
 
 		// Step 1c
-	        re = new RegExp("^(.+?" + C + ")y$");
-		if (re.test(w) && w != "say") {
-			var fp = re.exec(w);
-			stem = fp[1];
-			//re = new RegExp(s_v);
-			//if (re.test(stem)) { w = stem + "i"; }
+	        re = new RegExp("^(.+" + c + ")y$");
+		    if (re.test(w) && w != "sky") {
+		    var fp = re.exec(w);
+		    stem = fp[1];
 		    w = stem + "i";
 		}
 
@@ -182,7 +180,6 @@ var stemmer = (function(){
 		if (firstch == "y") {
 			w = firstch.toLowerCase() + w.substr(1);
 		}
-
 		return w;
 	}
 })();
