@@ -232,7 +232,7 @@ ERROR: Feedback email not set but internal comments are enabled.
 </script>
 <style>
 .fb_edge_comment_widget {
-    margin-left: -250px;
+    margin-left: -280px;
 }
 .fb-like{vertical-align:text-top;position:absolute;top:.5em;right:311px}
 #gplusone{display:inline;position:absolute;right:410px;top:.5em}
