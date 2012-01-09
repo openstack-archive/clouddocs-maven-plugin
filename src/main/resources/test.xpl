@@ -54,7 +54,12 @@
               
               <xsl:template match="node()|@*">
                 <xsl:message terminate="{$failonerror}">
+		  @@@@@@@@@@@@@@@@@@@@@
+		  DANGER WILL ROBINSON!
+		  !!!!!!!!!!!!!!!!!!!!!
                   <xsl:copy-of select="."/>
+		  !!!!!!!!!!!!!!!!!!!!!
+		  @@@@@@@@@@@@@@@@@@@@@
                 </xsl:message>    
                 <xsl:copy>
                   <xsl:apply-templates select="node() | @*"/>
