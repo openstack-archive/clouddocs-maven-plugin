@@ -6,11 +6,12 @@
 //
 // see also http://www.tartarus.org/~martin/PorterStemmer
 
-// Release 1 be 'andargor', Jul 2004
-// Release 2 (substantially revised) by Christopher McKenzie, Aug 2009
+// Release 1
+// Derived from (http://tartarus.org/~martin/PorterStemmer/js.txt) - cjm (iizuu) Aug 24, 2009
 
 
 var stemmer = (function(){
+    
 	var step2list = {
 			"ational" : "ate",
 			"tional" : "tion",
@@ -181,43 +182,34 @@ var stemmer = (function(){
 			w = firstch.toLowerCase() + w.substr(1);
 		}
 
-	    // ===============================================================
 	    // See http://snowball.tartarus.org/algorithms/english/stemmer.html
 	    // "Exceptional forms in general"
-	    if (!Array.prototype.indexOf) {
-		Array.prototype.indexOf = function(item) {
-		    var i = this.length;
-		    while (i--) {
-			if (this[i] === item) return i;
-		    }
-		}
-	    }
-
-	    specialWords = {
-		"skis" : "ski",
-		"skies" : "sky",
-		"dying" : "die",
-		"lying" : "lie",
-		"tying" : "tie",
-		"idly" : "idl",
-		"gently" : "gentl",
-		"ugly" : "ugli",
-		"early": "earli",
-		"only": "onli",
-		"singly": "singl",
-	    }
+	    var specialWords = {
+	    	"skis" : "ski",
+	    	"skies" : "sky",
+	    	"dying" : "die",
+	    	"lying" : "lie",
+	    	"tying" : "tie",
+	    	"idly" : "idl",
+	    	"gently" : "gentl",
+	    	"ugly" : "ugli",
+	    	"early": "earli",
+	    	"only": "onli",
+	    	"singly": "singl"
+	    };
 
 	    if(specialWords[origword]){
-		w = specialWords[origword];
+	    	w = specialWords[origword];
 	    }
 
-	    if( ["sky","news","howe","atlas","cosmos","bias",
-		 "andes","inning","outing","canning","herring",
-		 "earring","proceed","exceed","succeed"].indexOf(origword) != -1 ){
-		w = origword;
+	    if( "sky news howe atlas cosmos bias \
+	    	 andes inning outing canning herring \
+	    	 earring proceed exceed succeed".indexOf(origword) !== -1 ){
+	    	w = origword;
 	    }
 
 	    // These are all overstemmed as gener-
+	    // What about commun- words?
 	    re = /.*generate?s?d?(ing)?$/;
 	    if( re.test(origword) ){
 		w = w + 'at';
@@ -239,7 +231,6 @@ var stemmer = (function(){
 	    if( re.test(origword) ){
 		w = w + 'iti';
 	    }
-	    // ================================================================
 
 	    return w;
 	}
