@@ -9,7 +9,7 @@
 
     <name>Cloud API Docs Plugin</name>
 
-    <version>1.0.9-SNAPSHOT</version>
+    <version>1.0.10-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <description>
