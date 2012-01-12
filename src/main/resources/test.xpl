@@ -3,10 +3,13 @@
 <p:declare-step version="1.0"
   xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:l="http://xproc.org/library"
+  xmlns:cx="http://xmlcalabash.com/ns/extensions"
   name="main">
   
   <p:input port="source" /> <!--sequence="false" primary="true"-->
   <p:output port="result"/>
+  
+  <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   
 <!--  <p:import href="validate-transform.xpl"/>-->
   <p:declare-step version="1.0"
@@ -127,12 +130,26 @@
     
   </p:declare-step>
   
+  <cx:message>
+    <p:with-option name="message" select="'Entering xproc pipeline'"/>
+  </cx:message>
+  
+  <l:validate-transform name="validate-pre-xinclude">
+    <p:input port="schema" sequence="true" >
+      <p:document  href="http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
+    </p:input>
+  </l:validate-transform>
+ 
   <p:xinclude/>
   
-  <l:validate-transform name="validate">
+  <l:validate-transform name="validate-post-xinclude">
     <p:input port="schema" sequence="true" >
       <p:document  href="http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
     </p:input>
   </l:validate-transform>
 
+  <cx:message>
+    <p:with-option name="message" select="'Exiting xproc pipeline'"/>
+  </cx:message>
+  
 </p:declare-step>
