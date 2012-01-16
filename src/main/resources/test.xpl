@@ -20,7 +20,7 @@
     
     <p:input port="source" /> <!--sequence="false" primary="true"-->
     <p:input port="schema" sequence="true" >
-      <p:document  href="http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
+      <p:document  href="rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
     </p:input>
 
     <p:output port="result" primary="true">  
@@ -69,12 +69,13 @@
                 
                 <xsl:template match="node()|@*">
                   <xsl:message terminate="{$failonerror}">
-                    @@@@@@@@@@@@@@@@@@@@@
-                    DANGER WILL ROBINSON!
-                    !!!!!!!!!!!!!!!!!!!!!
+                    @@@@@@@@@@@@@@@@@@@@@@
+                    !!!VALIDATION ERROR!!!
+                    !!!!!!!!!!!!!!!!!!!!!!
                     <xsl:copy-of select="."/>
-                    !!!!!!!!!!!!!!!!!!!!!
-                    @@@@@@@@@@@@@@@@@@@@@
+                    !!!!!!!!!!!!!!!!!!!!!!
+                    !!!VALIDATION ERROR!!!                    
+                    @@@@@@@@@@@@@@@@@@@@@@
                   </xsl:message>    
                   <xsl:copy>
                     <xsl:apply-templates select="node() | @*"/>
@@ -141,7 +142,7 @@
             <xsl:copy>
               <xsl:apply-templates select="@*"/>
               <xsl:if test="count(tokenize(.,'&#xA;')) &lt; $max">
-                <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction>
+                <xsl:processing-instruction name="rax-fo">keep-together</xsl:processing-instruction>
                 <xsl:comment>linefeeds: <xsl:value-of select="count(tokenize(.,'&#xA;'))"/></xsl:comment>
               </xsl:if>
               <xsl:apply-templates select="node()"/>
