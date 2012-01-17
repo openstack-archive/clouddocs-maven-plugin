@@ -39,16 +39,6 @@
 	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	  </xsl:message>
 	</xsl:template>
-
-	<xsl:template match="processing-instruction('rax')[ . = 'glossary']" mode="preprocess">
-	  <xsl:message>
-	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	    Here's the glossary:
-	    <xsl:copy-of select="document('urn:rackspace-glossary.xml')/*"/>
-	    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	  </xsl:message>
-	  <xsl:apply-templates select="document('urn:rackspace-glossary.xml')/*" mode="preprocess"/>
-	</xsl:template>
 	
 	<xsl:template match="wadl:resources[@href]" mode="preprocess" priority="10">
 		<xsl:variable name="wadl.path">
