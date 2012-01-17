@@ -548,7 +548,7 @@ ERROR: Feedback email not set but internal comments are enabled.
         </xsl:variable>
              <script>
              $(document).ready(function(){
-               $("a.gloss#<xsl:value-of select="$term"/>").qtip({
+               $("a.gloss#<xsl:value-of select="translate($term,' ','_')"/>").qtip({
                content: '<xsl:copy-of select='$displayDefinition'/>',
                show: {event:'mouseover',delay:500},
                hide: {event:'mouseout',delay:500, fixed:true},
@@ -576,7 +576,7 @@ ERROR: Feedback email not set but internal comments are enabled.
              });
              </script>
     
-        <a class="gloss" href="#"><xsl:attribute name="id"><xsl:value-of select="$term"></xsl:value-of></xsl:attribute> <xsl:value-of select="."/></a>
+        <a class="gloss" href="#"><xsl:attribute name="id"><xsl:value-of select="translate($term,' ','_')"></xsl:value-of></xsl:attribute> <xsl:value-of select="."/></a>
     </xsl:template>
     
     <xsl:template match="* | comment() | processing-instruction() | @*" mode="make-definition">
