@@ -20,7 +20,7 @@
     
     <p:input port="source" /> <!--sequence="false" primary="true"-->
     <p:input port="schema" sequence="true" >
-      <p:document  href="rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
+      <p:document  href="classpath:/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
     </p:input>
 
     <p:output port="result" primary="true">  
@@ -100,7 +100,7 @@
   
   <l:validate-transform name="validate-pre-xinclude">
     <p:input port="schema" sequence="true" >
-      <p:document  href="http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
+      <p:document  href="classpath:/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
     </p:input>
   </l:validate-transform>
  
@@ -116,7 +116,7 @@
   
   <l:validate-transform name="validate-post-xinclude">
     <p:input port="schema" sequence="true" >
-      <p:document  href="http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
+      <p:document  href="classpath:/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
     </p:input>
   </l:validate-transform>
 
