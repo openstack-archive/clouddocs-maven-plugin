@@ -16,6 +16,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.Source;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,7 +36,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import com.agilejava.docbkx.maven.AbstractWebhelpMojo;
 
 import com.agilejava.docbkx.maven.TransformerBuilder;
-
+import com.agilejava.docbkx.maven.PreprocessingFilter;
 import javax.xml.transform.URIResolver;
 
 import com.rackspace.cloud.api.docs.DocBookResolver;
@@ -325,6 +326,16 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             throw new MojoExecutionException("Failed to transform to atom feed", e);
         }
 
+    }
+
+    @Override
+    protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
+            throws MojoExecutionException {
+
+        String pathToPipelineFile = "classpath:/test.xpl"; //use "classpath:/path" for this to work
+        Source source = super.createSource(inputFilename, sourceFile, filter);
+
+        return CalabashHelper.createSource(source, pathToPipelineFile);
     }
 
 }
