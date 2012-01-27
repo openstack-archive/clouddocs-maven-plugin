@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:exslt="http://exslt.org/common" 
     xmlns:date="http://exslt.org/dates-and-times" 
     xmlns:db="http://docbook.org/ns/docbook" 
-    exclude-result-prefixes="date db"
+    exclude-result-prefixes="date db exslt"
     xmlns="http://www.w3.org/2005/Atom" 
     version="1.1">
     
@@ -15,14 +16,14 @@
   </xsl:param>
     
     <xsl:template name="revhistory2atom">
-        <xsl:if test="//db:revhistory/db:revision and $canonical.url.base != ''">
+        <xsl:if test="exslt:node-set($profiled-nodes)//db:revhistory/db:revision and $canonical.url.base != ''">
           <xsl:call-template name="write.chunk">
             <xsl:with-param name="filename"><xsl:value-of select="concat($webhelp.base.dir,'/','atom-doctype.xml')"/></xsl:with-param>
             <xsl:with-param name="method" select="'xml'"/>
             <xsl:with-param name="encoding" select="'utf-8'"/>
             <xsl:with-param name="indent" select="'yes'"/>
             <xsl:with-param name="content">
-                 <xsl:apply-templates select="//db:revhistory[1]"/>
+                 <xsl:apply-templates select="exslt:node-set($profiled-nodes)//db:revhistory[1]"/>
             </xsl:with-param>
           </xsl:call-template>
         </xsl:if>
@@ -31,13 +32,13 @@
     <xsl:template match="db:revhistory">
         <xsl:variable name="escapechars"> &amp;"'&lt;?</xsl:variable>
         <feed xmlns="http://www.w3.org/2005/Atom">
-            <title><xsl:value-of select="concat(/*/db:title[1],' ', /*/db:info/db:releaseinfo[1])"/> revision history</title>
+            <title><xsl:value-of select="concat(exslt:node-set($profiled-nodes)/*/db:title[1],' ', exslt:node-set($profiled-nodes)/*/db:info/db:releaseinfo[1])"/> revision history</title>
             <link href="{substring-before($canonical.url.base,'/content')}/atom.xml" rel="self"/>
             <link href="{$canonical.url.base}/index.html"/>
             <id>
                 <xsl:choose>
                     <xsl:when test="/*/@xml:id"><xsl:value-of select="/*/@xml:id"/></xsl:when>
-                    <xsl:otherwise><xsl:value-of select="translate(//title[1],$escapechars,'_')"/></xsl:otherwise>
+                    <xsl:otherwise><xsl:value-of select="translate(exslt:node-set($profiled-nodes)//title[1],$escapechars,'_')"/></xsl:otherwise>
                 </xsl:choose>
                 </id>
             <updated>
