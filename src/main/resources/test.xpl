@@ -11,7 +11,7 @@
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   
-<!--  <p:import href="validate-transform.xpl"/>-->
+  <!--  <p:import href="validate-transform.xpl"/>-->
   <p:declare-step version="1.0"
     xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:l="http://xproc.org/library"
@@ -24,7 +24,7 @@
     </p:input>
 
     <p:output port="result" primary="true">  
-<!--      <p:pipe step="programlisting-keep-together-xslt" port="result"/> -->
+      <!--      <p:pipe step="programlisting-keep-together-xslt" port="result"/> -->
       <p:pipe step="tryvalidation" port="result"/>  
     </p:output>  
     <p:output port="report" sequence="true">  
@@ -85,7 +85,7 @@
               </xsl:stylesheet>
             </p:inline>
           </p:input>
-          <p:input port="parameters" sequence="true">
+          <p:input port="parameters" >
             <p:empty/>
           </p:input>
         </p:xslt>
@@ -149,11 +149,52 @@
             </xsl:copy>
           </xsl:template>
           
+          <xsl:template match="processing-instruction('rax')[normalize-space(.) = 'fail']">
+            <xsl:message terminate="yes">
+              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              &lt;?rax fail?> found in the document.
+              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            </xsl:message>
+          </xsl:template>
+          
         </xsl:stylesheet>
       </p:inline>
       <!--<p:document href="cloud/code-listing-keep-together.xsl"/>-->
     </p:input>
-    <p:input port="parameters" sequence="true">
+    <p:input port="parameters" >
+      <p:empty/>
+    </p:input>
+  </p:xslt>
+  
+  <p:xslt name="process-embedded-wadl">
+    <p:input port="source"> 
+      <p:pipe step="programlisting-keep-together-xslt" port="result"/> 
+    </p:input> 
+    <p:input port="stylesheet">
+      <p:inline>
+        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+          xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:db="http://docbook.org/ns/docbook"
+          exclude-result-prefixes="xs" version="2.0">
+          
+          <xsl:template match="node() | @*">
+            <xsl:copy>
+              <xsl:apply-templates select="node() | @*"/>
+            </xsl:copy>
+          </xsl:template>
+          
+          <xsl:template match="/">
+            <xsl:apply-templates/>
+            <xsl:message>
+              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              THIS WORKS!!!!!!!!!!!!!!!!!!!
+              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            </xsl:message>
+          </xsl:template>
+        </xsl:stylesheet>
+      </p:inline>
+      <!--<p:document href="cloud/process-embedded-wadl.xsl"/>-->
+    </p:input>
+    <p:input port="parameters" >
       <p:empty/>
     </p:input>
   </p:xslt>

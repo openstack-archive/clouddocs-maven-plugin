@@ -432,15 +432,15 @@
 
                 <executions>
                     <execution>
-                        <id>generate-xhtml</id>
+                        <id>generate-html</id>
 
                         <goals>
                             <goal>build</goal>
                         </goals>
 
                         <configuration>
-                            <type>xhtml</type>
-                            <superClassName>com.rackspace.cloud.api.docs.HTMLMojo</superClassName>
+                            <type>html</type>
+                            <superClassName>com.rackspace.cloud.api.docs.ApiRefMojo</superClassName>
                             <excludedProperties>${excluded.properties},root.filename,base.dir</excludedProperties>
                         </configuration>
                     </execution>
