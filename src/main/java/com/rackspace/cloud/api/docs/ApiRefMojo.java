@@ -8,7 +8,7 @@ import java.io.File;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.Source;
 
-public abstract class HTMLMojo extends AbstractHtmlMojo {
+public abstract class ApiRefMojo extends AbstractHtmlMojo {
 
     protected String getNonDefaultStylesheetLocation() {
       return "cloud/apipage/apipage.xsl";
