@@ -15,11 +15,111 @@
         Generates a XHTML and API documents.
     </description>
 
+    <repositories>
+        <repository>
+            <id>public.maven.research.rackspace.com</id>
+            <name>Rackspace Research</name>
+            <url>http://maven.research.rackspacecloud.com/content/groups/aggregate</url>
+        </repository>
+
+        <repository>
+            <id>releases.maven.research.rackspace.com</id>
+            <name>Rackspace Research Releases</name>
+            <url>http://maven.research.rackspacecloud.com/content/repositories/releases</url>
+        </repository>
+
+        <repository>
+            <id>trancecode.org</id>
+            <name>Trance Code Release Repo</name>
+            <url>http://maven.trancecode.org/releases/</url>
+        </repository>
+
+        <repository>
+            <id>snapshots.trancecode.org</id>
+            <name>Trance Code Snapshot Repo</name>
+            <url>http://maven.trancecode.org/snapshots/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.agilejava.docbkx</groupId>
             <artifactId>docbkx-maven-plugin</artifactId>
             <version>2.0.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rackspace.papi.components</groupId>
+            <artifactId>translation</artifactId>
+            <version>1.0.6-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rackspace.cloud.api</groupId>
+            <artifactId>glossary</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xmlcalabash</groupId>
+            <artifactId>calabash</artifactId>
+            <version>0.9.38</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+            <version>9.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.0-alpha4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging-api</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thaiopensource</groupId>
+            <artifactId>jing</artifactId>
+            <version>20091111</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ccil.cowan.tagsoup</groupId>
+            <artifactId>tagsoup</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.3</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.5</version>
         </dependency>
 
         <dependency>
@@ -119,7 +219,16 @@
             <version>1.0-beta-1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.rackspace.cloud.api</groupId>
+            <artifactId>wadl-tools</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency> 
+        
     </dependencies>
+       
 
     <scm>
         <connection>scm:git:ssh://git@git-n01.rcloudtech.rackspacecloud.com/rc-maven-cloud-docs.git</connection>
@@ -182,6 +291,35 @@
                             </artifactItems>
                         </configuration>
                     </execution>
+                    
+                    <execution>
+                        <id>unpack</id>
+			<phase>initialize</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.rackspace.cloud.api</groupId>
+                                    <artifactId>wadl-tools</artifactId>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/classes/cloud/normalizeWadl</outputDirectory>
+                                    <destFileName></destFileName>
+                                    <includes>
+                                        **/normalizeWadl1.xsl,
+                                        **/normalizeWadl2.xsl,
+                                        **/normalizeWadl3.xsl,
+                                        **/normalizeWadl4.xsl
+                                    </includes>
+                                    <excludes>**/*.xml,**/*.xsd,**/*.dtd,**/*.sch,**/*.class,**/*.properties,**/*.MF</excludes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>                      
+                    
                 </executions>
             </plugin>
 
@@ -205,7 +343,8 @@
                             <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
                             <outputDir>target/generated-resources/cloud/fo</outputDir>
                             <fileMappers>
-                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                <fileMapper
+                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                     <targetExtension>.xsl</targetExtension>
                                 </fileMapper>
                             </fileMappers>
@@ -215,7 +354,8 @@
                             <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
                             <outputDir>target/generated-resources/cloud/webhelp</outputDir>
                             <fileMappers>
-                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                <fileMapper
+                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                     <targetExtension>.xsl</targetExtension>
                                 </fileMapper>
                             </fileMappers>
@@ -271,38 +411,42 @@
                             <type>webhelp</type>
                             <stylesheetPath>webhelp/xsl/webhelp.xsl</stylesheetPath>
                             <superClassName>com.rackspace.cloud.api.docs.WebHelpMojo</superClassName>
-                            <excludedProperties>${excluded.properties},root.filename,base.dir,webhelp.base.dir,manifest.in.base.dir</excludedProperties>
-			    <useStandardOutput>false</useStandardOutput>
+                            <excludedProperties>
+                                ${excluded.properties},root.filename,base.dir,webhelp.base.dir,manifest.in.base.dir
+                            </excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
                         </configuration>
                     </execution>
 
-          <execution>
-            <id>generate-eclipse</id>
-            <goals>
-              <goal>build</goal>
-            </goals>
-            <configuration>
-              <type>eclipse</type>
-              <stylesheetPath>eclipse/eclipse.xsl</stylesheetPath>
-              <superClassName>com.rackspace.cloud.api.docs.EclipseMojo</superClassName>
-              <excludedProperties>${excluded.properties},root.filename,base.dir,manifest.in.base.dir
-              </excludedProperties>
-	      <useStandardOutput>false</useStandardOutput>
-            </configuration>
-          </execution>
+                    <execution>
+                        <id>generate-eclipse</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <type>eclipse</type>
+                            <stylesheetPath>eclipse/eclipse.xsl</stylesheetPath>
+                            <superClassName>com.rackspace.cloud.api.docs.EclipseMojo</superClassName>
+                            <excludedProperties>${excluded.properties},root.filename,base.dir,manifest.in.base.dir
+                            </excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
+                        </configuration>
+                    </execution>
 
-            <execution>
-              <id>generate-epub</id>
-              <goals>
-                <goal>build</goal>
-	      </goals>
-	      <configuration>
-                <type>epub</type>
-		<superClassName>com.rackspace.cloud.api.docs.EpubMojo</superClassName>
-		<excludedProperties>${excluded.properties},root.filename,base.dir,epub.oebps.dir,epub.metainf.dir,manifest.in.base.dir,epub.opf.filename</excludedProperties>
-		<useStandardOutput>false</useStandardOutput>
-	      </configuration>
-	    </execution>
+                    <execution>
+                        <id>generate-epub</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <type>epub</type>
+                            <superClassName>com.rackspace.cloud.api.docs.EpubMojo</superClassName>
+                            <excludedProperties>
+                                ${excluded.properties},root.filename,base.dir,epub.oebps.dir,epub.metainf.dir,manifest.in.base.dir,epub.opf.filename
+                            </excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
+                        </configuration>
+                    </execution>
 
                 </executions>
 
