@@ -214,7 +214,7 @@ ERROR: Feedback email not set but internal comments are enabled.
     </xsl:if>
     <xsl:if test="$social.icons != '0'">
 <!--social buttons-->
-<div id="fb-root">&#160;</div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1">
+<div id="fb-root">&#160;</div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"><xsl:comment> </xsl:comment></script>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
