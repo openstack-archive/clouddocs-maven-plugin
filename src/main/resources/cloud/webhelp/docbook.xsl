@@ -243,7 +243,7 @@ ERROR: Feedback email not set but internal comments are enabled.
 #gplusone{top:0em}
 #rstwitter{top:-.15em}
 .fb-like{top:-.5em}
-&lt;/style>&lt;![endif]</xsl:text></xsl:comment>
+&lt;/style>&lt;![endif]</xsl:text></xsl:comment><script type="text/javascript">_ga.trackFacebook();</script>
 <div class="fb-like" data-send="false" data-width="50" data-show-faces="false" data-layout="button_count" data-font="arial" > &#160; </div>      
 <!-- Place this tag where you want the +1 button to render -->
 <div id="gplusone" >

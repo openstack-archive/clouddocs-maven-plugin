@@ -4,6 +4,7 @@
 	xmlns:exsl="http://exslt.org/common"
         xmlns:ng="http://docbook.org/docbook-ng" 
         xmlns:db="http://docbook.org/ns/docbook"
+        xmlns:fb="http://ogp.me/ns/fb#"
         version="1.0" xmlns="http://www.w3.org/1999/xhtml">
   
   <xsl:import href="urn:docbkx:stylesheet-base/xhtml/chunk-common.xsl" />

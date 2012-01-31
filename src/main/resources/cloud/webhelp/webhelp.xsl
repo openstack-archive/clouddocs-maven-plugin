@@ -294,6 +294,21 @@ These problems go away when you add this IE=7 mode meta tag.
 	  <script type="text/javascript" src="../common/ga.js">
 	    <xsl:comment></xsl:comment>
 	  </script>
+        <!-- Google Analytics Social Button Tracking -->
+	  <script type="text/javascript" src="http://www.tabpress.com/_js/ga_social_tracking.js">
+	      <xsl:comment></xsl:comment>
+	  </script>
+	    <!-- Load Twitter JS-API asynchronously -->
+	  <script>
+	    (function(){var twitterWidgets = document.createElement('script');
+        twitterWidgets.type = 'text/javascript';
+        twitterWidgets.async = true;
+        twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+        // Setup a callback to track once the script loads.
+        twitterWidgets.onload = _ga.trackTwitter;
+        document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+        })();
+      </script>
 	</xsl:if>
 		
     </xsl:template>
