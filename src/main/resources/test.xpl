@@ -166,7 +166,7 @@
     </p:input>
   </p:xslt>
   
-  <p:xslt name="process-embedded-wadl">
+<!--  <p:xslt name="process-embedded-wadl">
     <p:input port="source"> 
       <p:pipe step="programlisting-keep-together-xslt" port="result"/> 
     </p:input> 
@@ -192,12 +192,11 @@
           </xsl:template>
         </xsl:stylesheet>
       </p:inline>
-      <!--<p:document href="cloud/process-embedded-wadl.xsl"/>-->
     </p:input>
     <p:input port="parameters" >
       <p:empty/>
     </p:input>
-  </p:xslt>
+  </p:xslt>-->
   
   <cx:message>
     <p:with-option name="message" select="'Exiting xproc pipeline'"/>
