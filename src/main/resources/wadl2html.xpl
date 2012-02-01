@@ -240,9 +240,9 @@
                 <title>OpenStack API Documentation</title>
                 <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css"/>
                 <!-- OpenStack Specific CSS -->
-                <link rel="stylesheet" href="css/bootstrap-screen.css" type="text/css" media="screen, projection"/>
-                <link rel="stylesheet" href="css/main.css" type="text/css" media="screen, projection, print"/>
-                <script type="text/javascript" src="js/main.js"><xsl:comment/></script>
+                <link rel="stylesheet" href="apiref/css/bootstrap-screen.css" type="text/css" media="screen, projection"/>
+                <link rel="stylesheet" href="apiref/css/main.css" type="text/css" media="screen, projection, print"/>
+                <script type="text/javascript" src="apiref/js/main.js"><xsl:comment/></script>
                 <script type="text/javascript">
                   <!-- TODO: Write out vars from main here -->
 
