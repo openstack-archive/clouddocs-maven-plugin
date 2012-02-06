@@ -342,7 +342,25 @@ function showSelected(selectorId, optionId){
                 <xsl:value-of select="ancestor::wadl:resource/@path"/>
               </div>
               <div class="span6">
-                <xsl:value-of select="wadl:doc/para[@role='shortdesc']|wadl:docs/d:para/*[@role = 'shortdesc']"/>
+                <xsl:choose>
+                  <xsl:when test="wadl:doc//d:*[@role = 'shortdesc'] or wadl:doc//xhtml:*[@class = 'shortdesc']">
+                    <xsl:value-of select="
+                      wadl:doc/xhtml:p[@class='shortdesc']|
+                      wadl:doc/d:para[@role = 'shortdesc']|
+                      wadl:doc//xhtml:span[@class='shortdesc']|
+                      wadl:doc//d:phrase[@role = 'shortdesc']            
+                      "/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="
+                      wadl:doc/xhtml:p|
+                      wadl:doc/d:para|
+                      wadl:doc//xhtml:span|
+                      wadl:doc//d:phrase            
+                      "/>
+                  </xsl:otherwise>
+                </xsl:choose>
+&#160;
               </div>
               <div class="span1">
                 <a href="#" class="btn small info" id="{$id}_btn" onclick="toggleDetailsBtn(event,'{$id}_btn','{$id}','{$id}');">detail</a> 
@@ -462,6 +480,8 @@ function showSelected(selectorId, optionId){
           <xsl:template match="wadl:doc|wadl:resource|wadl:link">
             <xsl:apply-templates/>
           </xsl:template>
+          
+          <xsl:template match="wadl:doc[parent::wadl:resource]"/>
           
           <xsl:template match="d:para">
             <p><xsl:apply-templates/></p>
