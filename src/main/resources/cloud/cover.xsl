@@ -118,7 +118,7 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="text()">
+    <xsl:template match="text()" priority="10">
         <xsl:variable name="textWithTitle">
             <xsl:call-template name="replaceText">
                 <xsl:with-param name="text" select="."/>
