@@ -344,7 +344,7 @@ function showSelected(selectorId, optionId){
               <div class="span6">
                 <xsl:choose>
                   <xsl:when test="wadl:doc//d:*[@role = 'shortdesc'] or wadl:doc//xhtml:*[@class = 'shortdesc']">
-                    <xsl:value-of select="
+                    <xsl:apply-templates select="
                       wadl:doc/xhtml:p[@class='shortdesc']|
                       wadl:doc/d:para[@role = 'shortdesc']|
                       wadl:doc//xhtml:span[@class='shortdesc']|
@@ -352,15 +352,12 @@ function showSelected(selectorId, optionId){
                       "/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="
-                      wadl:doc/xhtml:p|
-                      wadl:doc/d:para|
-                      wadl:doc//xhtml:span|
-                      wadl:doc//d:phrase            
+                    <xsl:apply-templates select="
+                      wadl:doc/xhtml:*|
+                      wadl:doc/d:*            
                       "/>
                   </xsl:otherwise>
-                </xsl:choose>
-&#160;
+                </xsl:choose>&#160;
               </div>
               <div class="span1">
                 <a href="#" class="btn small info" id="{$id}_btn" onclick="toggleDetailsBtn(event,'{$id}_btn','{$id}','{$id}');">detail</a> 
@@ -374,13 +371,15 @@ function showSelected(selectorId, optionId){
             </xsl:text>
               <div class="row">
                 <!-- Description of method -->
-                <xsl:apply-templates
-                  select="wadl:doc/*[not(@role = 'shortdesc')]"/>
+                <xsl:if test="wadl:doc//d:*[@role = 'shortdesc'] or wadl:doc//xhtml:*[@class='shortdesc']">
+                 <xsl:apply-templates
+                    select="wadl:doc/d:*[not(@role = 'shortdesc')]|wadl:doc/xhtml:*[not(@role = 'shortdesc')]"/>
+                </xsl:if>
               </div>
               <div class="row">
                 <div class="span16">
                   <!-- Don't output if there are no params -->
-                  <xsl:if test=".//wadl:param">
+                  <xsl:if test=".//wadl:param or parent::wadl:resource/wadl:param">
                     <table class="zebra-striped">
                       <thead>
                         <tr>
@@ -389,7 +388,7 @@ function showSelected(selectorId, optionId){
                         </tr>
                       </thead>
                       <tbody>
-                        <xsl:apply-templates select=".//wadl:param" mode="param2tr">
+                        <xsl:apply-templates select=".//wadl:param|parent::wadl:resource/wadl:param" mode="param2tr">
                           <!-- Add templates to handle wadl:params -->
                           <xsl:with-param name="id" select="$id"/>
                         </xsl:apply-templates>
@@ -508,7 +507,7 @@ function showSelected(selectorId, optionId){
           
           <xsl:template match="wadl:param" mode="param2tr">
             <tr>
-              <td><xsl:value-of select="@name"/><xsl:if test="not(@required = 'true')"> (Optional)</xsl:if></td>
+              <td><xsl:value-of select="@name"/><xsl:if test="not(@required = 'true') and not(@style = 'template') and not(@style = 'matrix')"> (Optional)</xsl:if></td>
               <td><xsl:apply-templates select="./wadl:doc/*"/></td>
             </tr>
           </xsl:template>
