@@ -128,6 +128,12 @@ Resolves hrefs on method and resource_type elements.
 
 	<xsl:template match="@rax:id" mode="strip-ids"/>
 
+	<xsl:template match="wadl:resource[ancestor::resource_type]" mode="normalizeWadl2">
+	  <xsl:copy>
+	    <xsl:apply-templates select="@*[not(name() != 'id')]|node()" mode="normalizeWadl2"/>
+	  </xsl:copy>
+	</xsl:template>
+
 	<xsl:template match="node() | @*" mode="normalizeWadl2">
         <xsl:param name="baseID" select="''"/>
         <xsl:choose>

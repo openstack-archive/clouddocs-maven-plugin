@@ -24,6 +24,8 @@ This XSLT flattens or expands the path in the path attributes of the resource el
 
     <xsl:output indent="yes"/>
 
+    <xsl:param name="resource_types">keep</xsl:param>
+
     <xsl:param name="format">-format</xsl:param>
     <!-- path or tree -->
     
@@ -38,12 +40,24 @@ This XSLT flattens or expands the path in the path attributes of the resource el
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match="@path[starts-with(.,'/')]" mode="keep-format">
+      <xsl:attribute name="path"><xsl:value-of select="substring-after(.,'/')"/></xsl:attribute>
+    </xsl:template>
+
     <!--  prune-params mode: one final pass in tree-format mode where we prune redundant params  -->
     <xsl:template match="node() | @*" mode="prune-params">
         <xsl:copy>
             <xsl:apply-templates select="node() | @*" mode="prune-params"/>
         </xsl:copy>
     </xsl:template>
+
+    <xsl:template match="wadl:resource_type|wadl:link[@resource_type]" mode="keep-format tree-format path-format">
+      <xsl:if test="$resource_types = 'keep'">
+	<xsl:copy>
+	  <xsl:apply-templates select="@*|node()" mode="#current"/>
+	</xsl:copy>      
+      </xsl:if>
+    </xsl:template>    
 
     <xsl:template 
         match="wadl:param" 
@@ -113,7 +127,8 @@ This XSLT flattens or expands the path in the path attributes of the resource el
         <xsl:param name="resources"/>
         <xsl:for-each-group select="$resources" group-by="wadl:tokens/wadl:token[$token-number]">
             <resource path="{current-grouping-key()}">
-	      <xsl:apply-templates select="wadl:param[@style = 'template']" mode="tree-format">
+	      <xsl:copy-of select="self::wadl:resource/@*[not(local-name(.) = 'path')]"/>
+	      <xsl:apply-templates select="wadl:param[@style = 'template']|*[not(namespace-uri() = 'http://wadl.dev.java.net/2009/02')]" mode="tree-format">
 		<xsl:with-param name="path" select="current-grouping-key()"/>
 	      </xsl:apply-templates>	      
 	      <xsl:if test="count(wadl:tokens/wadl:token) = $token-number">
@@ -152,7 +167,7 @@ This XSLT flattens or expands the path in the path attributes of the resource el
         <resource>
             <xsl:copy-of select="@*"/>
             <tokens>
-                <xsl:for-each select="tokenize(replace(@path,'(.*)/$','$1'),'/')">
+                <xsl:for-each select="tokenize(replace(@path,'^/?(.+)/?$','$1'),'/')">
                     <token>
                         <xsl:value-of select="."/>
                     </token>
@@ -188,7 +203,7 @@ This XSLT flattens or expands the path in the path attributes of the resource el
             <xsl:attribute name="path">
                 <xsl:for-each select="ancestor-or-self::wadl:resource">
                     <xsl:sort order="ascending" select="position()"/>
-                    <xsl:value-of select="replace(@path,'(.*)/$','$1')"/>
+                    <xsl:value-of select="replace(@path,'^/(.+)/?$','$1')"/>
                     <xsl:if test="not(position() = last())">/</xsl:if>
                 </xsl:for-each>
             </xsl:attribute>
@@ -199,7 +214,7 @@ This XSLT flattens or expands the path in the path attributes of the resource el
       		    </xsl:choose>
             </xsl:attribute>
             <xsl:apply-templates select="wadl:doc" mode="copy"/>
-            <xsl:apply-templates select="ancestor-or-self::wadl:resource/wadl:param[@style = 'template' or @style = 'header' ]" mode="copy"/>
+            <xsl:apply-templates select="ancestor-or-self::wadl:resource/wadl:param[@style = 'template' or @style = 'header' or @style='query' or @style='plain']" mode="copy"/>
             <xsl:apply-templates select="wadl:method" mode="copy"/>
         </resource>
         <xsl:apply-templates mode="path-format"/>
