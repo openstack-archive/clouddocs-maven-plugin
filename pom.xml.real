@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.rackspace.cloud.api</groupId>
+    <artifactId>clouddocs-maven-plugin</artifactId>
+
+    <name>Cloud API Docs Plugin</name>
+
+    <version>1.0.10-SNAPSHOT</version>
+    <packaging>maven-plugin</packaging>
+
+    <properties>
+      <wadl.tools.version>1.0.0</wadl.tools.version>
+    </properties>
+
+    <description>
+        Generates a XHTML and API documents.
+    </description>
+
+    <repositories>
+        <repository>
+            <id>public.maven.research.rackspace.com</id>
+            <name>Rackspace Research</name>
+            <url>http://maven.research.rackspacecloud.com/content/groups/aggregate</url>
+        </repository>
+
+        <repository>
+            <id>releases.maven.research.rackspace.com</id>
+            <name>Rackspace Research Releases</name>
+            <url>http://maven.research.rackspacecloud.com/content/repositories/releases</url>
+        </repository>
+
+        <repository>
+            <id>trancecode.org</id>
+            <name>Trance Code Release Repo</name>
+            <url>http://maven.trancecode.org/releases/</url>
+        </repository>
+
+        <repository>
+            <id>snapshots.trancecode.org</id>
+            <name>Trance Code Snapshot Repo</name>
+            <url>http://maven.trancecode.org/snapshots/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.agilejava.docbkx</groupId>
+            <artifactId>docbkx-maven-plugin</artifactId>
+            <version>2.0.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rackspace.papi.components</groupId>
+            <artifactId>translation</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xmlcalabash</groupId>
+            <artifactId>calabash</artifactId>
+            <version>0.9.38</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+            <version>9.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.0-alpha4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging-api</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thaiopensource</groupId>
+            <artifactId>jing</artifactId>
+            <version>20091111</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ccil.cowan.tagsoup</groupId>
+            <artifactId>tagsoup</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.3</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.docbook</groupId>
+            <artifactId>docbook-xsl</artifactId>
+            <version>1.76.1</version>
+            <type>zip</type>
+            <classifier>ns-resources</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.8.0</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xmlParserAPIs</artifactId>
+            <version>2.6.2</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.avalon.framework</groupId>
+            <artifactId>avalon-framework-impl</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.agilejava.docbkx</groupId>
+            <artifactId>docbkx-maven-base</artifactId>
+            <version>2.0.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.xslthl</groupId>
+            <artifactId>xslthl</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.docbook</groupId>
+            <artifactId>docbook-xsl-saxon</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>fop</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis-ext</artifactId>
+            <version>1.3.04</version>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.3.04</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-rasterizer</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-swing</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version>1.0-beta-1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rackspace.cloud.api</groupId>
+            <artifactId>wadl-tools</artifactId>
+            <version>${wadl.tools.version}</version>
+            <scope>provided</scope>
+        </dependency> 
+        
+    </dependencies>
+       
+
+    <scm>
+        <connection>scm:git:ssh://git@git-n01.rcloudtech.rackspacecloud.com/rc-maven-cloud-docs.git</connection>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>releases.maven.research.rackspacecloud.com</id>
+
+            <name>Rackspace Cloud Research Releases</name>
+            <url>http://maven.research.rackspacecloud.com/content/repositories/releases/</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>snapshots.maven.research.rackspacecloud.com</id>
+
+            <name>Rackspace Cloud Research Snapshots</name>
+            <url>http://maven.research.rackspacecloud.com/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+
+            <resource>
+                <directory>target/generated-resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.2</version>
+
+                <executions>
+                    <execution>
+                        <id>copy</id>
+
+                        <phase>generate-sources</phase>
+
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>net.sf.docbook</groupId>
+                                    <artifactId>docbook-xsl</artifactId>
+                                    <version>1.76.1</version>
+                                    <type>zip</type>
+                                    <classifier>ns-resources</classifier>
+                                    <outputDirectory>target</outputDirectory>
+                                    <includes>docbook/template/*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    
+                    <execution>
+                        <id>unpack</id>
+			<phase>initialize</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.rackspace.cloud.api</groupId>
+                                    <artifactId>wadl-tools</artifactId>
+                                    <version>${wadl.tools.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/classes/cloud/normalizeWadl</outputDirectory>
+                                    <destFileName></destFileName>
+                                    <includes>
+                                        **/normalizeWadl1.xsl,
+                                        **/normalizeWadl2.xsl,
+                                        **/normalizeWadl3.xsl,
+                                        **/normalizeWadl4.xsl
+                                    </includes>
+                                    <excludes>**/*.xml,**/*.xsd,**/*.dtd,**/*.sch,**/*.class,**/*.properties,**/*.MF</excludes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>                      
+                    
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+                <version>1.0</version>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>transform</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <transformationSets>
+                        <transformationSet>
+                            <dir>src/main/resources/cloud/fo/titlepage</dir>
+                            <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
+                            <outputDir>target/generated-resources/cloud/fo</outputDir>
+                            <fileMappers>
+                                <fileMapper
+                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                    <targetExtension>.xsl</targetExtension>
+                                </fileMapper>
+                            </fileMappers>
+                        </transformationSet>
+                        <transformationSet>
+                            <dir>src/main/resources/cloud/webhelp/titlepage</dir>
+                            <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
+                            <outputDir>target/generated-resources/cloud/webhelp</outputDir>
+                            <fileMappers>
+                                <fileMapper
+                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                    <targetExtension>.xsl</targetExtension>
+                                </fileMapper>
+                            </fileMappers>
+                        </transformationSet>
+                    </transformationSets>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-builder-maven-plugin</artifactId>
+                <version>2.0.13</version>
+
+                <executions>
+                    <execution>
+                        <id>generate-xhtml</id>
+
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+
+                        <configuration>
+                            <type>xhtml</type>
+                            <superClassName>com.rackspace.cloud.api.docs.HTMLMojo</superClassName>
+                            <excludedProperties>${excluded.properties},root.filename,base.dir</excludedProperties>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-pdf</id>
+
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+
+                        <configuration>
+                            <type>fo</type>
+                            <superClassName>com.rackspace.cloud.api.docs.PDFMojo</superClassName>
+                            <className>DocbkxPdfMojo</className>
+                            <pluginSuffix>pdf</pluginSuffix>
+                            <excludedProperties>${excluded.properties}</excludedProperties>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-webhelp</id>
+
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+
+                        <configuration>
+                            <type>webhelp</type>
+                            <stylesheetPath>webhelp/xsl/webhelp.xsl</stylesheetPath>
+                            <superClassName>com.rackspace.cloud.api.docs.WebHelpMojo</superClassName>
+                            <excludedProperties>
+                                ${excluded.properties},root.filename,base.dir,webhelp.base.dir,manifest.in.base.dir
+                            </excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-eclipse</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <type>eclipse</type>
+                            <stylesheetPath>eclipse/eclipse.xsl</stylesheetPath>
+                            <superClassName>com.rackspace.cloud.api.docs.EclipseMojo</superClassName>
+                            <excludedProperties>${excluded.properties},root.filename,base.dir,manifest.in.base.dir
+                            </excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-epub</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <type>epub</type>
+                            <superClassName>com.rackspace.cloud.api.docs.EpubMojo</superClassName>
+                            <excludedProperties>
+                                ${excluded.properties},root.filename,base.dir,epub.oebps.dir,epub.metainf.dir,manifest.in.base.dir,epub.opf.filename
+                            </excludedProperties>
+                            <useStandardOutput>false</useStandardOutput>
+                        </configuration>
+                    </execution>
+
+                </executions>
+
+                <configuration>
+                    <packageName>com.agilejava.docbkx.maven</packageName>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
