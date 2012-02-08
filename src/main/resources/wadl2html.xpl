@@ -179,6 +179,10 @@
              use-character-maps="comment"
           indent="no"/>
           
+          <xsl:param name="wadl.norequest.msg"><xhtml:p>This operation does not require a request body.</xhtml:p></xsl:param>
+          <xsl:param name="wadl.noresponse.msg"><xhtml:p>This operation does not return a response body.</xhtml:p></xsl:param>
+          <xsl:param name="wadl.noreqresp.msg"><xhtml:p>This operation does not require a request body and does not return a response body.</xhtml:p></xsl:param>
+          
           <xsl:template match="node() | @*">
             <xsl:copy>
               <xsl:apply-templates select="node() | @*"/>
@@ -294,9 +298,10 @@ function showSelected(selectorId, optionId){
                       </div>
                       <div id="thebottom">&#x200B;</div>
                     </div>
-                  </div>                  
+                 
                   <div id="rightColumn">
                     <div id="pageSearcher">&#160;</div>
+                  </div>
                   </div>
                   <div class="clear">&#160;</div>
                 </form>
@@ -334,6 +339,10 @@ function showSelected(selectorId, optionId){
           
           <xsl:template match="wadl:method">
             <xsl:variable name="id"><xsl:value-of select="generate-id()"/></xsl:variable>
+            <xsl:variable name="skipNoRequestTextN">0</xsl:variable>
+            <xsl:variable name="skipNoRequestText" select="boolean(number($skipNoRequestTextN))"/>
+            <xsl:variable name="skipNoResponseTextN">0</xsl:variable>
+            <xsl:variable name="skipNoResponseText" select="boolean(number($skipNoResponseTextN))"/>
             <div class="row {$id}">
               <div class="span1">
                 <span class="label success"><xsl:value-of select="@name"/></span>
@@ -354,7 +363,8 @@ function showSelected(selectorId, optionId){
                   <xsl:otherwise>
                     <xsl:apply-templates select="
                       wadl:doc/xhtml:*|
-                      wadl:doc/d:*            
+                      wadl:doc/d:*|
+                      wadl:doc/text()            
                       "/>
                   </xsl:otherwise>
                 </xsl:choose>&#160;
@@ -470,7 +480,21 @@ function showSelected(selectorId, optionId){
                 <xsl:otherwise> 
                   <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc/d:example"/>
                 </xsl:otherwise>
-              </xsl:choose>              
+              </xsl:choose>      
+              
+               <!-- we allow no response text and we dont have a 200 level response with a representation -->
+                <xsl:choose>
+                  <xsl:when test="not(wadl:request) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
+                    <xsl:copy-of select="$wadl.noreqresp.msg"/>
+                  </xsl:when>
+                  <xsl:when test="not(wadl:request)">
+                    <xsl:copy-of select="$wadl.norequest.msg"/>
+                  </xsl:when>
+                  <xsl:when test="not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
+                    <xsl:copy-of select="$wadl.noresponse.msg"/>
+                  </xsl:when>
+                </xsl:choose>
+                
             </div>
             <xsl:comment><xsl:value-of select="concat($id,'_btn_section END')"/></xsl:comment>
             <xsl:comment> Do not edit or remove the previous comment </xsl:comment>
@@ -508,7 +532,7 @@ function showSelected(selectorId, optionId){
           <xsl:template match="wadl:param" mode="param2tr">
             <tr>
               <td><xsl:value-of select="@name"/><xsl:if test="not(@required = 'true') and not(@style = 'template') and not(@style = 'matrix')"> (Optional)</xsl:if></td>
-              <td><xsl:apply-templates select="./wadl:doc/*"/></td>
+              <td><xsl:apply-templates select="./wadl:doc/*|./wadl:doc/text()"/></td>
             </tr>
           </xsl:template>
           
