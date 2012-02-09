@@ -8,7 +8,7 @@
 
     <name>Cloud API Docs Plugin</name>
 
-    <version>1.0.10-SNAPSHOT</version>
+    <version>1.0.10</version>
     <packaging>maven-plugin</packaging>
 
     <properties>
@@ -305,7 +305,7 @@
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>target/classes/cloud/normalizeWadl</outputDirectory>
-                                    <destFileName></destFileName>
+                                    <destFileName />
                                     <includes>
                                         **/normalizeWadl1.xsl,
                                         **/normalizeWadl2.xsl,
@@ -341,8 +341,7 @@
                             <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
                             <outputDir>target/generated-resources/cloud/fo</outputDir>
                             <fileMappers>
-                                <fileMapper
-                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                     <targetExtension>.xsl</targetExtension>
                                 </fileMapper>
                             </fileMappers>
@@ -352,8 +351,7 @@
                             <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
                             <outputDir>target/generated-resources/cloud/webhelp</outputDir>
                             <fileMappers>
-                                <fileMapper
-                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                     <targetExtension>.xsl</targetExtension>
                                 </fileMapper>
                             </fileMappers>
