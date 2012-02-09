@@ -63,6 +63,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String showChangebars;
 
+    /**
+     * Controls whether output is colorized based on revisionflag attributes.
+     *
+     * @parameter expression="${generate-webhelp.meta.robots}" 
+     */
+    private String metaRobots;
 
     /**
      * Controls whether the version string is used as part of the Disqus identifier.
@@ -217,6 +223,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     }
    if(showChangebars != null){
 	transformer.setParameter("show.changebars",showChangebars);
+    }
+   if(metaRobots != null){
+	transformer.setParameter("meta.robots",metaRobots);
     }
    if(trimWadlUriCount != null){
 	transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);

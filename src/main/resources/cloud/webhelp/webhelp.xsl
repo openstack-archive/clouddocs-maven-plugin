@@ -19,7 +19,16 @@ xmlns:exsl="http://exslt.org/common"
             method="html"
             encoding="utf-8"
             cdata-section-elements=""/>
-    
+
+    <xsl:param name="meta.robots"/>
+    <xsl:param name="meta.robots.calculated">
+      <xsl:choose>
+	<xsl:when test="$meta.robots = '1'">NOINDEX, NOFOLLOW</xsl:when>
+	<xsl:when test="$meta.robots = '0' or $meta.robots = ''"/>
+	<xsl:otherwise><xsl:value-of select="$meta.robots"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
+
         <xsl:variable name="default.topic">
             <xsl:choose>
                 <xsl:when test="$webhelp.default.topic != ''">
@@ -170,6 +179,10 @@ These problems go away when you add this IE=7 mode meta tag.
             webhelp.tree.cookie.id = <xsl:value-of select="$webhelp.tree.cookie.id"/> +++ <xsl:value-of select="count(//node())"/>
             $webhelp.indexer.language = <xsl:value-of select="$webhelp.indexer.language"/> +++ <xsl:value-of select="count(//node())"/>
         </xsl:message>-->
+	
+	<xsl:if test="$meta.robots.calculated != ''">
+	  <meta name="robots" value="{$meta.robots.calculated}"/>
+	</xsl:if>
         <script type="text/javascript">
             //The id for tree cookie
             var treeCookieId = "<xsl:value-of select="$webhelp.tree.cookie.id"/>";
