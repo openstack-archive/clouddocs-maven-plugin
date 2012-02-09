@@ -181,7 +181,7 @@ These problems go away when you add this IE=7 mode meta tag.
         </xsl:message>-->
 	
 	<xsl:if test="$meta.robots.calculated != ''">
-	  <meta name="robots" value="{$meta.robots.calculated}"/>
+	  <meta name="robots" content="{$meta.robots.calculated}"/>
 	</xsl:if>
         <script type="text/javascript">
             //The id for tree cookie
