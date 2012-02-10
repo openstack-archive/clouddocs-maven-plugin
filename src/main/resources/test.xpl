@@ -65,7 +65,7 @@
             <p:inline>
               <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
                 
-                <xsl:param name="failonerror">yes</xsl:param>
+                <xsl:param name="failonerror">no</xsl:param>
                 
                 <xsl:template match="node()|@*">
                   <xsl:message terminate="{$failonerror}">
