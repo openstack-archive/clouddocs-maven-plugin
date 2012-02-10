@@ -293,7 +293,6 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer(new StreamSource(classLoader.getResourceAsStream(COPY_XSL)));
 
-            atomFeedClean = new File(result.getParentFile(), "atom.xml");
 
             DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
             dbfactory.setValidating(false);
@@ -306,7 +305,6 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
                 }
             });
 
-            atomFeed = new File(result.getParentFile(), "atom-doctype.xml");
             Document xmlDocument = builder.parse(atomFeed);
             DOMSource source = new DOMSource(xmlDocument);
 
@@ -314,28 +312,28 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
             atomFeed.deleteOnExit();
 
-        } catch (TransformerConfigurationException e) {
+        }
+        catch (TransformerConfigurationException e)
+            {
             throw new MojoExecutionException("Failed to load JAXP configuration", e);
-        } catch (javax.xml.parsers.ParserConfigurationException e) {
+            }
+	catch (javax.xml.parsers.ParserConfigurationException e)
+	    {
             throw new MojoExecutionException("Failed to configure parser", e);
-        } catch (org.xml.sax.SAXException e) {
+	    }
+	catch (org.xml.sax.SAXException e)
+	    {
             throw new MojoExecutionException("Sax exception", e);
-        } catch (java.io.IOException e) {
+	    }
+	catch(java.io.IOException e)
+	    {
             throw new MojoExecutionException("IO Exception", e);
-        } catch (TransformerException e) {
+	    }
+        catch (TransformerException e)
+            {
             throw new MojoExecutionException("Failed to transform to atom feed", e);
         }
 
-    }
-
-    @Override
-    protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
-            throws MojoExecutionException {
-
-        String pathToPipelineFile = "classpath:/test.xpl"; //use "classpath:/path" for this to work
-        Source source = super.createSource(inputFilename, sourceFile, filter);
-
-        return CalabashHelper.createSource(source, pathToPipelineFile);
     }
 
     @Override
