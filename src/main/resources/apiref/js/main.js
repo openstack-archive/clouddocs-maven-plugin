@@ -160,8 +160,13 @@ function toggleDetailsBtn(event, btnId, toggleId, focusId){
     event.preventDefault();
     if($("#"+toggleId).is(":visible")){
         $("#"+focusId).focus();
+        $("#"+btnId).html("close");
+        $("#"+btnId).attr("class","btn2 small info");
+        $("#"+btnId).attr("style","text-decoration:none;");
     }
     else{
         $('#'+btnId).focus();
+        $("#"+btnId).html("detail");
+        $("#"+btnId).attr("class","btn small info");
     }   
 }
