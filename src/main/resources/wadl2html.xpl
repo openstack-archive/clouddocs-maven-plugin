@@ -262,7 +262,7 @@ function showSelected(selectorId, optionId){
   <xsl:apply-templates select="//wadl:method" mode="showSelected"/>
 }                
                 </script>
-                <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.2.6.min.js"><xsl:comment/></script>
+                <script type="text/javascript" src="apiref/js/jquery-1.2.6.min.js"><xsl:comment/></script>
               </head>
               <body>
                 <form action="#">
