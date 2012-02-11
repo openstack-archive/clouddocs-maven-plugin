@@ -246,6 +246,17 @@
                 <!-- OpenStack Specific CSS -->
                 <link rel="stylesheet" href="apiref/css/bootstrap-screen.css" type="text/css" media="screen, projection"/>
                 <link rel="stylesheet" href="apiref/css/main.css" type="text/css" media="screen, projection, print"/>
+                <script  type="text/javascript">
+                  var _gaq = _gaq || [];
+                  _gaq.push(['_setAccount', 'UA-17511903-8']);
+                  _gaq.push(['_trackPageview']);
+                  
+                  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+                </script>
                 <script type="text/javascript" src="apiref/js/main.js"><xsl:comment/></script>
                 <script type="text/javascript">
                   <!-- TODO: Write out vars from main here -->
@@ -305,7 +316,7 @@ function showSelected(selectorId, optionId){
                   </div>
                   <div class="clear">&#160;</div>
                 </form>
-                <script type="text/javascript">
+                 <script type="text/javascript">
                   jQuery.extend(
                   jQuery.expr[':'], { Contains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0" 
                   });
@@ -370,7 +381,7 @@ function showSelected(selectorId, optionId){
                 </xsl:choose>&#160;
               </div>
               <div class="span1">
-                <a href="#" class="btn small info" id="{$id}_btn" onclick="toggleDetailsBtn(event,'{$id}_btn','{$id}','{$id}');">detail</a> 
+                <a href="#" class="btn small info" id="{$id}_btn" onclick="toggleDetailsBtn(event,'{$id}_btn','{$id}','{$id}', '{concat(ancestor::wadl:resource/@path,'-',@name)}');">detail</a> 
               </div>              
             </div><xsl:comment> row </xsl:comment><xsl:text>
             </xsl:text>

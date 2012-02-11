@@ -152,10 +152,11 @@ function processSelection(theText, commentStart, commentEnd, parentId, selection
 function toggleSelection(selectedId){
     var optionId =  $('#'+selectedId+ ' :selected').val();
     showSelected(selectedId,optionId);
+    _gaq.push(['_trackEvent', selectedId, 'toggleSelection', 'click', 1]);
 }
 
   
-function toggleDetailsBtn(event, btnId, toggleId, focusId){
+function toggleDetailsBtn(event, btnId, toggleId, focusId, context){
     $("#"+toggleId).toggle();
     event.preventDefault();
     if($("#"+toggleId).is(":visible")){
@@ -163,23 +164,13 @@ function toggleDetailsBtn(event, btnId, toggleId, focusId){
         $("#"+btnId).html("close");
         $("#"+btnId).attr("class","btn2 small info");
         $("#"+btnId).attr("style","text-decoration:none;");
-        onclick="_gaq.push(['_trackEvent', 'Detail', 'close', 'click', 1]);"
+        _gaq.push(['_trackEvent', context, 'DetailOpen', 'click', 1]);
     }
     else{
         $('#'+btnId).focus();
         $("#"+btnId).html("detail");
         $("#"+btnId).attr("class","btn small info");
-        onclick="_gaq.push(['_trackEvent', 'Detail', 'open', 'click', 1]);"
+        _gaq.push(['_trackEvent', context, 'DetailClose', 'click', 1]);
     }   
 }
 
-
-// Google Analytics
-(function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-17511903-8']);
