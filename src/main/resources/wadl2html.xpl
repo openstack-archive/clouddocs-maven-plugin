@@ -511,7 +511,7 @@ function showSelected(selectorId, optionId){
           </xsl:template>
           
           <xsl:template match="d:link" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <a href="{xlink:href}"><xsl:apply-templates/></a>
+            <a href="{@xlink:href}"><xsl:apply-templates/></a>
           </xsl:template>
           <xsl:template match="d:programlisting">
             <pre><xsl:apply-templates/></pre>
