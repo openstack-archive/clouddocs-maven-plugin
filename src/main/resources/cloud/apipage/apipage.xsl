@@ -6,26 +6,24 @@
     xmlns:l="http://xproc.org/library" 
     xmlns:rax="http://docs.rackspace.com/api" 
     xmlns:wadl="http://wadl.dev.java.net/2009/02"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
     exclude-result-prefixes="classpath cx d l rax wadl"
     version="1.0">
-
-    <xsl:import href="urn:docbkx:stylesheet-base/xhtml/docbook.xsl" />
-
+    
     <xsl:output 
         method="html"
         indent="yes"
         doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" 
         doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
     
-
-    <xsl:template match="node() | @*" >
+    <xsl:template match="node()|@*" >
         <xsl:copy>
-            <xsl:apply-templates select="node() | @*"/>
+            <xsl:apply-templates select="node()|@*"/>
         </xsl:copy>
     </xsl:template>
         
-<!--        
-    <xsl:template match="*">
+   
+    <xsl:template match="*" priority="1">
         <xsl:element name="{name()}" namespace="{namespace-uri()}">
             <xsl:variable name="vtheElem" select="."/>
             
@@ -47,5 +45,5 @@
             <xsl:apply-templates select="node()|@*"/>
         </xsl:element>
     </xsl:template>
-    -->
+    
 </xsl:stylesheet>
