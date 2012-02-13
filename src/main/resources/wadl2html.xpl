@@ -540,6 +540,24 @@ function showSelected(selectorId, optionId){
             </div>
           </xsl:template>
           
+          <xsl:template match="d:itemizedlist">
+            <ul>
+              <xsl:apply-templates/>
+            </ul>
+          </xsl:template>
+          
+          <xsl:template match="d:orderedlist">
+            <ol>
+              <xsl:apply-templates/>
+            </ol>
+          </xsl:template>
+          
+          <xsl:template match="d:listitem">
+            <li>
+              <xsl:apply-templates/>
+            </li>
+          </xsl:template>
+          
           <xsl:template match="wadl:param" mode="param2tr">
             <tr>
               <td><xsl:value-of select="@name"/><xsl:if test="not(@required = 'true') and not(@style = 'template') and not(@style = 'matrix')"> (Optional)</xsl:if></td>
