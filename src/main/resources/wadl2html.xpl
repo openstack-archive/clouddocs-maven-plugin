@@ -424,7 +424,7 @@ function showSelected(selectorId, optionId){
                   test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc/d:example 
                         and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
                   <select id="{$id}_req_select"
-                    onchange="toggleSelection('{$id}_req_select');">
+                    onchange="toggleSelection('{$id}_req_select','{concat(ancestor::wadl:resource/@path,'-',@name)}');">
                     <option value="xml" selected="selected">Request XML</option>
                     <option value="json">Request JSON</option>
                   </select><xsl:text>                    

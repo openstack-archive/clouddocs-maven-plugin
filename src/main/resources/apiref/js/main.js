@@ -149,10 +149,10 @@ function processSelection(theText, commentStart, commentEnd, parentId, selection
 }
 
 
-function toggleSelection(selectedId){
+function toggleSelection(selectedId, context){
     var optionId =  $('#'+selectedId+ ' :selected').val();
     showSelected(selectedId,optionId);
-    _gaq.push(['_trackEvent', selectedId, 'toggleSelection', 'click', 1]);
+    _gaq.push(['_trackEvent', context, optionId, 'select', 1]);
 }
 
   
