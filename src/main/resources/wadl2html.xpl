@@ -144,7 +144,7 @@
     </p:input>
   </p:xslt>
   
-  <l:xhtml2docbook name="xhtml2docbook"/>   
+<!--  <l:xhtml2docbook name="xhtml2docbook"/>   -->
   
  <!--
   <l:programlisting-keep-together name="programlisting-keep-together"/>
@@ -152,7 +152,7 @@
   
   <p:xslt name="docbook2apipage">
     <p:input port="source"> 
-      <p:pipe step="xhtml2docbook" port="result"/> 
+      <p:pipe step="process-embedded-wadl" port="result"/> 
     </p:input> 
     <p:input port="stylesheet">
       <p:inline>
@@ -548,7 +548,11 @@ function showSelected(selectorId, optionId){
           </xsl:template>
           
           <xsl:template match="d:code"><code><xsl:apply-templates/></code></xsl:template>
-          <xsl:template match="d:*"><xsl:apply-templates/></xsl:template>
+          <xsl:template match="d:*">
+            <xsl:copy>
+              <xsl:apply-templates select="@*|node()"/>
+            </xsl:copy>
+          </xsl:template>
           
         </xsl:stylesheet>
       </p:inline>
