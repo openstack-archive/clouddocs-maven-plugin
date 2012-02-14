@@ -298,7 +298,8 @@ function showSelected(selectorId, optionId){
                       </div>
                     </div>
                     <div id="body">
-                      
+                      <p>&#160;</p>
+                      <p>&#160;</p>
                       <xsl:apply-templates/>
                       
                       <div class="container">
