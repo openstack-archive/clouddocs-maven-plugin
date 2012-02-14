@@ -94,7 +94,7 @@
           
           <xsl:template match="wadl:method" mode="processDetailsBtn">
             <xsl:variable name="id" select="generate-id()"/>
-            processADetailBtn(theText,'\<xsl:comment><xsl:value-of select="$id"/>_btn_section START</xsl:comment>','\<xsl:comment><xsl:value-of select="$id"/>_btn_section END</xsl:comment>','<xsl:value-of select="$id"/>');           
+            processADetailBtn(theText,'<xsl:value-of select="$id"/>_btn','\<xsl:comment><xsl:value-of select="$id"/>_btn_section START</xsl:comment>','\<xsl:comment><xsl:value-of select="$id"/>_btn_section END</xsl:comment>','<xsl:value-of select="$id"/>');           
             <xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc/d:example and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
               processSelection(theText,'\<xsl:comment><xsl:value-of select="$id"/>_req_xml_selection START</xsl:comment>','\<xsl:comment><xsl:value-of select="$id"/>_req_xml_selection END</xsl:comment>','<xsl:value-of select="$id"/>','<xsl:value-of select="$id"/>_req_xml');
             </xsl:if>
