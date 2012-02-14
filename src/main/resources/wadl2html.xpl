@@ -179,9 +179,9 @@
              use-character-maps="comment"
           indent="no"/>
           
-          <xsl:param name="wadl.norequest.msg"><xhtml:p>This operation does not require a request body.</xhtml:p></xsl:param>
-          <xsl:param name="wadl.noresponse.msg"><xhtml:p>This operation does not return a response body.</xhtml:p></xsl:param>
-          <xsl:param name="wadl.noreqresp.msg"><xhtml:p>This operation does not require a request body and does not return a response body.</xhtml:p></xsl:param>
+          <xsl:param name="wadl.norequest.msg"><p class="nobody">This operation does not require a request body.</p></xsl:param>
+          <xsl:param name="wadl.noresponse.msg"><p class="nobody">This operation does not return a response body.</p></xsl:param>
+          <xsl:param name="wadl.noreqresp.msg"><p class="nobody">This operation does not require a request body and does not return a response body.</p></xsl:param>
           
           <xsl:template match="node() | @*">
             <xsl:copy>
