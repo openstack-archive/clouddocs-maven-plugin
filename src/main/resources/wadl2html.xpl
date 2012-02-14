@@ -108,12 +108,12 @@
             
             $("#<xsl:value-of select="$id"/>").hide();  
             <xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc/d:example and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
-            $("#<xsl:value-of select="$id"/>_resp_select").val("xml");
-            $("#<xsl:value-of select="$id"/>_resp_json").hide();
+            $("#<xsl:value-of select="$id"/>_resp_select").val("json");
+            $("#<xsl:value-of select="$id"/>_resp_xml").hide();
             </xsl:if>
             <xsl:if test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc/d:example and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
-            $("#<xsl:value-of select="$id"/>_req_select").val("xml");
-            $("#<xsl:value-of select="$id"/>_req_json").hide();
+            $("#<xsl:value-of select="$id"/>_req_select").val("json");
+            $("#<xsl:value-of select="$id"/>_req_xml").hide();
             </xsl:if>
           </xsl:template>
           
