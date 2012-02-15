@@ -189,10 +189,11 @@ function showSelected(selectorId, optionId){
                         <div class="span-19 last">
                           <div id="navigation">
                             <ul id="Menu1">					   		  
-                              <li><a href="/" title="Go to the Home page">Home</a></li>		  
-                              <li><a href="/projects/" title="Go to the OpenStack Projects page" class="link">Projects</a></li>		  
-                              <li><a href="/community/" title="Go to the Community page" class="link">Community</a></li>
-                              <li><a href="/blog/" title="Go to the OpenStack Blog">Blog</a></li>
+                              <li><a href="http://www.openstack.org" title="Go to the Home page">Home</a></li>		  
+                              <li><a href="http://www.openstack.org/projects" title="Go to the OpenStack Projects page" class="link">Projects</a></li>		  
+                              <li><a href="http://www.openstack.org/user-stories" title="Go to the OpenStack user stories page" class="link">User Stories</a></li>
+                              <li><a href="http://www.openstack.org/community" title="Go to the Community page" class="link">Community</a></li>
+                              <li><a href="http://www.openstack.org/blog" title="Go to the OpenStack Blog">Blog</a></li>
                               <li><a href="http://wiki.openstack.org/" title="Go to the OpenStack Wiki">Wiki</a></li>
                               <li><a href="http://docs.openstack.org/" title="Go to OpenStack Documentation"  class="current">Documentation</a></li>
                             </ul>
