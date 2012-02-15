@@ -305,7 +305,8 @@ function showSelected(selectorId, optionId){
               <div class="row">
                 <div class="span16">
                   <!-- Don't output if there are no params -->
-                  <xsl:if test=".//wadl:param or parent::wadl:resource/wadl:param">
+                  <xsl:if test="./wadl:request/wadl:response/wadl:param or parent::wadl:resource/wadl:param">
+                    <b>Request parameters</b>
                     <table class="zebra-striped">
                       <thead>
                         <tr>
@@ -314,13 +315,35 @@ function showSelected(selectorId, optionId){
                         </tr>
                       </thead>
                       <tbody>
-                        <xsl:apply-templates select=".//wadl:param|parent::wadl:resource/wadl:param" mode="param2tr">
+                        <xsl:apply-templates select="./wadl:request/wadl:response/wadl:param|parent::wadl:resource/wadl:param" mode="param2tr">
                           <!-- Add templates to handle wadl:params -->
                           <xsl:with-param name="id" select="$id"/>
                         </xsl:apply-templates>
                       </tbody>
                     </table>
                   </xsl:if>
+                  
+                  
+                  <!-- Don't output if there are no params -->
+                  <xsl:if test="./wadl:response/wadl:representation/wadl:param">
+                    <b>Response parameters</b>
+                    <table class="zebra-striped">
+                      <thead>
+                        <tr>
+                          <th>Parameter</th>
+                          <th>Description</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <xsl:apply-templates select="./wadl:response/wadl:representation/wadl:param" mode="param2tr">
+                          <!-- Add templates to handle wadl:params -->
+                          <xsl:with-param name="id" select="$id"/>
+                        </xsl:apply-templates>
+                      </tbody>
+                    </table>
+                  </xsl:if>
+                  
+
                 </div>
               </div>
               <!-- Examples -->
