@@ -1,3 +1,15 @@
+ function StringBuffer() { 
+   this.buffer = []; 
+ } 
+
+ StringBuffer.prototype.append = function append(string) { 
+   this.buffer.push(string); 
+   return this; 
+ }; 
+
+ StringBuffer.prototype.toString = function toString() { 
+   return this.buffer.join(""); 
+ }; 
 
   var Searcher = {};
   Searcher.SearchPage = function() {
@@ -8,10 +20,6 @@
     this.searchBoxWrapper = "#pageSearcher";
     this.searchBoxId = "pageSearcherTextBox";
     this.activeCssClass = "active";
-    this.highlightCssClass = "highlight";
-    
-    // --- prive variables
-    var originalText = "";
     
     // --- public methods
     this.getOriginalText = function() {
@@ -20,10 +28,9 @@
     
     this.init = function() {
     var instance = this;
-    oText=$("#body").html();
       
-      $(this.searchBoxWrapper).html('<input type="text" id="' + this.searchBoxId + '"/>');
-      originalText = $(this.textWrapper).html();
+      oText=document.getElementById('body').innerHTML;
+      $(this.searchBoxWrapper).html('<span style="white-space: nowrap; "><input type="text" id="' + this.searchBoxId + '"/> <a id="searchid" class="btn info" onclick="searchText(document.getElementById(\'pageSearcherTextBox\'));" href="#">Search</a></span>');
       var searchBox = "#" + this.searchBoxId;
       
       $(searchBox).attr("value", this.searchDefaultText)
@@ -38,48 +45,17 @@
           $(this).removeClass(instance.activeCssClass);
           this.value = instance.searchDefaultText;
         }
-      }).
-      keyup(function() {
-   
-        if (this.value.length >= instance.startSearchingLength) {  
-          //make sure that all div's are expanded/hidden accordingly
-          setSectionsNSelections();      
-          var sText = escape(this.value);
-          searchText(sText);
-          //processDetailsBtn($("#body").html());     
+  
+      });
         }
         
-      })
-    }
-  } 
 
-function searchText(sText){
-
-    $("#body").html(oText);
-    //make sure that all div's are expanded/hidden accordingly
-    setSectionsNSelections(); 
-    //var enterTime=new Date().getTime();
-    var theText=escape(sText);
-    // Starting node, parent to all nodes you want to search
-    var textContainerNode = document.getElementById("body");
-    
-    // The regex is the secret, it prevents text within tag declarations to be affected
-    var regex = new RegExp(">([^<]*)?("+theText+")([^>]*)?<","ig");
-    highlightTextNodes(textContainerNode, regex);    
-    processDetailsBtn($("#body").html());
-    //console.log("searchText() done in: " + ((new Date().getTime())-enterTime)+"ms");
-}  
-
-function highlightTextNodes(element, regex) {
-  var tempinnerHTML = element.innerHTML;
-  // Do regex replace
-  // Inject span with class of 'highlighted termX' for google style highlighting
-  element.innerHTML = tempinnerHTML.replace(regex,'>$1<span class="highlight">$2</span>$3<');
 }
 
  //Get the text between commentStart and CommentEnd and see if there is at least one highlighted text
  //If there is, make sure that the area in sectionId is expanded 
 function processADetailBtn(theText, btnId, commentStart, commentEnd, sectionId){
+    //var enterTime=new Date().getTime();
     var start_index=theText.indexOf(commentStart);
     var end_index=-1;
     var theSubstr='';
@@ -99,17 +75,20 @@ function processADetailBtn(theText, btnId, commentStart, commentEnd, sectionId){
             }                        
         }
     }    
+    //console.log("processADetailBtn: time in function: "+((new Date().getTime())-enterTime));   
     return false;
 }
 
 //Get the text between commentStart and commentEnd and see if there is at least one highlighted text
 //If there is, then make sure that the are in the selectionId is expanded
 function processSelection(theText, commentStart, commentEnd, parentId, selectionId){
+    var enterTime=new Date().getTime();
     var retVal=processADetailBtn(theText,commentStart,commentEnd,selectionId);
     if(retVal==true){
         $("#"+parentId).show();
         $("#"+selectionId).show();
     }  
+    console.log("processSelection: time in function: "+((new Date().getTime())-enterTime));  
 }
 
 
@@ -133,4 +112,27 @@ function toggleDetailsBtn(event, btnId, toggleId, focusId){
         $("#"+btnId).html("detail");
         $("#"+btnId).attr("class","btn small info");
     }   
+}
+function highlightTextNodes(element, regex) {
+  var tempinnerHTML = element.innerHTML;
+  // Do regex replace
+  // Inject span with class of 'highlighted termX' for google style highlighting
+  element.innerHTML = tempinnerHTML.replace(regex,'>$1<span class="highlight">$2</span>$3<');
+}
+
+function searchText(searchText){
+
+    $("#body").html(oText);
+    //make sure that all div's are expanded/hidden accordingly
+    setSectionsNSelections(); 
+    var enterTime=new Date().getTime();
+    var theText=searchText.value;
+    // Starting node, parent to all nodes you want to search
+    var textContainerNode = document.getElementById("body");
+    
+    // The regex is the secret, it prevents text within tag declarations to be affected
+    var regex = new RegExp(">([^<]*)?("+theText+")([^>]*)?<","ig");
+    highlightTextNodes(textContainerNode, regex);    
+    processDetailsBtn($("#body").html());
+    console.log("searchText() done in: " + ((new Date().getTime())-enterTime)+"ms");
 }

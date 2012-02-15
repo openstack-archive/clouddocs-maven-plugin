@@ -230,7 +230,8 @@ function showSelected(selectorId, optionId){
                   var pageSearcher = new Searcher.SearchPage();
                   pageSearcher.startSearchingLength = 3; 
                   pageSearcher.init();
-                  setSectionsNSelections();                           
+                  setSectionsNSelections();     
+                  
                   });
                 </script>
               </body>
