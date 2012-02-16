@@ -100,7 +100,13 @@ function toggleSelection(selectedId){
   
 function toggleDetailsBtn(event, btnId, toggleId, focusId){
     $("#"+toggleId).toggle();
-    event.preventDefault();
+    //IE Browser does not support event.preventDefault, so check to make sure the browser supports it first
+    if(event.preventDefault){
+        event.preventDefault();
+    }
+    else{
+        event.returnValue=false;
+    }
     if($("#"+toggleId).is(":visible")){
         $("#"+focusId).focus();
         $("#"+btnId).html("close");
