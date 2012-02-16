@@ -306,7 +306,7 @@ function showSelected(selectorId, optionId){
               <div class="row">
                 <div class="span16">
                   <!-- Don't output if there are no params -->
-                  <xsl:if test="./wadl:request/wadl:response/wadl:param or parent::wadl:resource/wadl:param">
+                  <xsl:if test="./wadl:request//wadl:param or parent::wadl:resource/wadl:param">
                     <b>Request parameters</b>
                     <table class="zebra-striped">
                       <thead>
@@ -316,7 +316,7 @@ function showSelected(selectorId, optionId){
                         </tr>
                       </thead>
                       <tbody>
-                        <xsl:apply-templates select="./wadl:request/wadl:response/wadl:param|parent::wadl:resource/wadl:param" mode="param2tr">
+                        <xsl:apply-templates select="./wadl:request//wadl:param|parent::wadl:resource/wadl:param" mode="param2tr">
                           <!-- Add templates to handle wadl:params -->
                           <xsl:with-param name="id" select="$id"/>
                         </xsl:apply-templates>
@@ -326,7 +326,7 @@ function showSelected(selectorId, optionId){
                   
                   
                   <!-- Don't output if there are no params -->
-                  <xsl:if test="./wadl:response/wadl:representation/wadl:param">
+                  <xsl:if test="./wadl:response//wadl:param">
                     <b>Response parameters</b>
                     <table class="zebra-striped">
                       <thead>
@@ -336,7 +336,7 @@ function showSelected(selectorId, optionId){
                         </tr>
                       </thead>
                       <tbody>
-                        <xsl:apply-templates select="./wadl:response/wadl:representation/wadl:param" mode="param2tr">
+                        <xsl:apply-templates select="./wadl:response//wadl:param" mode="param2tr">
                           <!-- Add templates to handle wadl:params -->
                           <xsl:with-param name="id" select="$id"/>
                         </xsl:apply-templates>
