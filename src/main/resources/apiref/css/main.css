@@ -31,14 +31,14 @@
 }
 
 #body {
- width: 45em;
+ width: 50em;
  float:left;
 }
 
 #rightColumn {
-    float:right;
+    float:left;
     position: relative;
-    width: 10em;
+    width: 1em;
 }
 #searchOnThisPage{
     float:right;

@@ -221,20 +221,7 @@ function showSelected(selectorId, optionId){
                   </div>
                   <div class="clear">&#160;</div>
                 </form>
-                 <script type="text/javascript">
-                  jQuery.extend(
-                  jQuery.expr[':'], { Contains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0" 
-                  });
-                </script>
-                <script type="text/javascript">
-                  $(document).ready(function() {
-                  var pageSearcher = new Searcher.SearchPage();
-                  pageSearcher.startSearchingLength = 3; 
-                  pageSearcher.init();
-                  setSectionsNSelections();     
-                  
-                  });
-                </script>
+                 <script type="text/javascript" src="apiref/js/end.js">&#160;</script>
               </body>
             </html>
           </xsl:template>
