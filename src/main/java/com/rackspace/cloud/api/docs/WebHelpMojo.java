@@ -134,16 +134,26 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String pdfUrl;
 
     /**
-     * A parameter used to specify the path to the pdf for download in webhelp.
-     *
-     * @parameter expression="${generate-webhelp.canonical.url.base}" default-value=""
+     * @parameter 
+     *     expression="${generate-pdf.canonicalUrlBase}"
+     *     default-value=""
      */
     private String canonicalUrlBase;
 
     /**
+     * 
+     * @param 
+     *     expression="${generate-pdf.failOnValidationError}"
+     *     default-value="0"
+     */
+    private String failOnValidationError;
+    
+    /**
      * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
      *
-     * @parameter expression="${generate-webhelp.security}" default-value=""
+     * @parameter 
+     *     expression="${generate-pdf.security}" 
+     *     default-value=""
      */
     private String security;
 
@@ -343,7 +353,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         String pathToPipelineFile = "classpath:/test.xpl"; //use "classpath:/path" for this to work
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        return CalabashHelper.createSource(source, pathToPipelineFile);
+        Map map=new HashMap<String, String>();
+        
+        map.put("security", security);
+        map.put("canonicalUrlBase", canonicalUrlBase);
+        map.put("failOnValidationError", failOnValidationError);
+        
+        return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
 
 }

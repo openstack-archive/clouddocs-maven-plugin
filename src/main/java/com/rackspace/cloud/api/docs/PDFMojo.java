@@ -3,6 +3,10 @@ package com.rackspace.cloud.api.docs;
 import com.agilejava.docbkx.maven.AbstractFoMojo;
 import com.agilejava.docbkx.maven.PreprocessingFilter;
 import com.agilejava.docbkx.maven.TransformerBuilder;
+import com.rackspace.cloud.api.docs.CalabashHelper;
+import com.rackspace.cloud.api.docs.FileUtils;
+import com.rackspace.cloud.api.docs.GlossaryResolver;
+
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -36,6 +40,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class PDFMojo extends AbstractFoMojo {
     private File imageDirectory;
@@ -69,12 +78,6 @@ public abstract class PDFMojo extends AbstractFoMojo {
      */
     private String variablelistAsBlocks;
 
-    /**
-     * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
-     *
-     * @parameter expression="${generate-pdf.security}" default-value=""
-     */
-    private String security;
     
     /**
      * A parameter used to configure how many elements to trim from the URI in the documentation for a wadl method.
@@ -93,7 +96,31 @@ public abstract class PDFMojo extends AbstractFoMojo {
      */
     private String computeWadlPathFromDocbookPath;
 
+    /**
+     * @parameter 
+     *     expression="${generate-pdf.canonicalUrlBase}"
+     *     default-value=""
+     */
+    private String canonicalUrlBase;
 
+    /**
+     * 
+     * @param 
+     *     expression="${generate-pdf.failOnValidationError}"
+     *     default-value="0"
+     */
+    private String failOnValidationError;
+    
+    /**
+     * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
+     *
+     * @parameter 
+     *     expression="${generate-pdf.security}" 
+     *     default-value=""
+     */
+    private String security;
+    
+    
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
     }
@@ -311,7 +338,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
                 throw new MojoExecutionException("Failed to transform to cover", e);
             }
     }
-
+    
+    
+    
     @Override
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
             throws MojoExecutionException {
@@ -319,6 +348,12 @@ public abstract class PDFMojo extends AbstractFoMojo {
         String pathToPipelineFile = "classpath:/test.xpl"; //use "classpath:/path" for this to work
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        return CalabashHelper.createSource(source, pathToPipelineFile);
+        Map map=new HashMap<String, String>();
+        
+        map.put("security", security);
+        map.put("canonicalUrlBase", canonicalUrlBase);
+        map.put("failOnValidationError", failOnValidationError);
+        
+        return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
 }
