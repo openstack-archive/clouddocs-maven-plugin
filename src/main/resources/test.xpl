@@ -7,6 +7,7 @@
   name="main">
   
   <p:input port="source" /> 
+  <p:input port="parameters" kind="parameter"/>
   <p:output port="result"/>
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
@@ -130,6 +131,19 @@
           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:db="http://docbook.org/ns/docbook"
           exclude-result-prefixes="xs" version="2.0">
           
+          <xsl:param name="security"/>
+          
+          <xsl:template match="/">
+            <xsl:message>
+              ########################################
+              ########################################
+              # security="<xsl:value-of select="$security"/>"
+              ########################################
+              ########################################
+            </xsl:message>
+            <xsl:apply-templates/>
+          </xsl:template>
+          
           <xsl:template match="node() | @*">
             <xsl:copy>
               <xsl:apply-templates select="node() | @*"/>
@@ -162,7 +176,7 @@
       <!--<p:document href="cloud/code-listing-keep-together.xsl"/>-->
     </p:input>
     <p:input port="parameters" >
-      <p:empty/>
+      <p:pipe step="main" port="parameters"/>
     </p:input>
   </p:xslt>
   
