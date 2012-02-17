@@ -23,6 +23,7 @@
     <p:input port="schema" sequence="true" >
       <p:document  href="classpath:/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
     </p:input>
+    <p:input port="parameters" kind="parameter"/>
 
     <p:output port="result" primary="true">  
       <!--      <p:pipe step="programlisting-keep-together-xslt" port="result"/> -->
@@ -66,10 +67,11 @@
             <p:inline>
               <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
                 
-                <xsl:param name="failonerror">no</xsl:param>
+                <xsl:param name="failOnValidationError">yes</xsl:param>
+                <xsl:param name="security"/>
                 
                 <xsl:template match="node()|@*">
-                  <xsl:message terminate="{$failonerror}">
+                  <xsl:message terminate="{$failOnValidationError}">
                     @@@@@@@@@@@@@@@@@@@@@@
                     !!!VALIDATION ERROR!!!
                     !!!!!!!!!!!!!!!!!!!!!!
@@ -87,7 +89,7 @@
             </p:inline>
           </p:input>
           <p:input port="parameters" >
-            <p:empty/>
+            <p:pipe step="main" port="parameters"/>
           </p:input>
         </p:xslt>
       </p:catch>  
@@ -131,18 +133,8 @@
           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:db="http://docbook.org/ns/docbook"
           exclude-result-prefixes="xs" version="2.0">
           
+          <xsl:param name="failOnValidationError"/>
           <xsl:param name="security"/>
-          
-          <xsl:template match="/">
-            <xsl:message>
-              ########################################
-              ########################################
-              # security="<xsl:value-of select="$security"/>"
-              ########################################
-              ########################################
-            </xsl:message>
-            <xsl:apply-templates/>
-          </xsl:template>
           
           <xsl:template match="node() | @*">
             <xsl:copy>
