@@ -8,6 +8,7 @@
   name="main">
   
   <p:input port="source"/> 
+  <p:input port="parameters" kind="parameter"/>
   <p:output port="result"/>
 
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>

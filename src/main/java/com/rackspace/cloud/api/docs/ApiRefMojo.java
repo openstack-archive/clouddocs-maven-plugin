@@ -23,7 +23,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
 
     /**
      * 
-     * @param 
+     * @parameter 
      *     expression="${generate-pdf.failOnValidationError}"
      *     default-value="0"
      */

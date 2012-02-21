@@ -142,7 +142,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     /**
      * 
-     * @param 
+     * @parameter 
      *     expression="${generate-pdf.failOnValidationError}"
      *     default-value="0"
      */
