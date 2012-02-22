@@ -454,3 +454,7 @@ form td, form table{
    -webkit-border-radius: 4px;
    border-radius: 4px;
 }
+
+span.italic, span.italics{
+    font-style: italic;
+}
