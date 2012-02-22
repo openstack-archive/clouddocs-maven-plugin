@@ -59,6 +59,8 @@
     </xsl:choose>
   </xsl:param>
 
+  <xsl:param name="insert.xref.page.number">yes</xsl:param>
+
   <xsl:param name="rackspace.status.pi">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
@@ -184,6 +186,22 @@
       <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
       <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
   </xsl:attribute-set>
+
+
+<!-- Black and white links -->
+<xsl:param name="bw" select="0"/>
+
+<xsl:attribute-set name="xref.properties">
+  <xsl:attribute name="color">
+    <xsl:choose>
+      <xsl:when test="ancestor-or-self::*/@security = 'internal'">red</xsl:when>
+      <xsl:when test="$bw = 0">blue</xsl:when>
+      <xsl:otherwise>black</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="font-style">normal</xsl:attribute>
+</xsl:attribute-set>
+
 
   <xsl:param name="local.l10n.xml" select="document('gentex_mods.xml')"/>
 
