@@ -665,4 +665,9 @@ ERROR: Feedback email not set but internal comments are enabled.
     <span style="color: red">this?</span>
   </xsl:template>
 
+
+<xsl:template match="d:sidebar/d:title">
+  <b><xsl:apply-templates/></b>
+</xsl:template>
+
 </xsl:stylesheet>

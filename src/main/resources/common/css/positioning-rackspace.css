@@ -458,3 +458,9 @@ form td, form table{
 span.italic, span.italics{
     font-style: italic;
 }
+
+div.sidebar{
+    background-color: silver;
+    border: 1px solid black;
+    padding: 10px 10px 10px 10px;
+}

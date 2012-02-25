@@ -447,3 +447,9 @@ form td, form table{
    -webkit-border-radius: 4px;
    border-radius: 4px;
 }
+
+div.sidebar{
+    background-color: silver;
+    border: 1px solid black;
+    padding: 10px 10px 10px 10px;
+}
