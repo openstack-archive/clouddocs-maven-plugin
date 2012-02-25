@@ -81,6 +81,10 @@
     <xsl:attribute name="keep-together.within-column">auto</xsl:attribute>
   </xsl:attribute-set>
 
+  <xsl:attribute-set name="sidebar.properties">
+    <xsl:attribute name="keep-together.within-column">auto</xsl:attribute>
+  </xsl:attribute-set>
+
   <xsl:variable name="plaintitle">
       <xsl:choose>
           <xsl:when test="/*/d:title">
