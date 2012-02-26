@@ -70,6 +70,14 @@ public abstract class PDFMojo extends AbstractFoMojo {
      * @parameter expression="${generate-pdf.branding}" default-value="rackspace"
      */
     private String branding;
+
+
+    /**
+     * The greeting to display.
+     *
+     * @parameter expression="${generate-pdf.builtForOpenStack}" default-value="0"
+     */
+    private String builtForOpenStack;
     
     /**
      * The greeting to display.
@@ -277,6 +285,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
         super.adjustTransformer(transformer, sourceFilename, targetFile);
 
 	transformer.setParameter("branding", branding);
+	transformer.setParameter("builtForOpenStack", builtForOpenStack);
 	transformer.setParameter("project.build.directory", projectBuildDirectory);
 
 	if(security != null){

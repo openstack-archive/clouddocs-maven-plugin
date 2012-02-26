@@ -869,4 +869,22 @@
     <xsl:template name="badMatch">
         <fo:inline color="red">this?</fo:inline>
     </xsl:template>
+
+    <xsl:param name="builtForOpenStack">0</xsl:param>
+
+    <xsl:template name="book.titlepage.recto">
+      <xsl:if test="$builtForOpenStack != 0">
+	<fo:block-container absolute-position="fixed" left="1in" top="8in">
+	  <fo:block>
+	    <fo:external-graphic>
+	      <xsl:attribute name="src">
+		<xsl:value-of select="concat('url(',$cloud.api.cc.image.dir,'/../built-for-openstack.svg)')"/>
+	      </xsl:attribute>
+	    </fo:external-graphic>
+	  </fo:block>
+	</fo:block-container>
+      </xsl:if>
+    </xsl:template>
+
+
 </xsl:stylesheet>
