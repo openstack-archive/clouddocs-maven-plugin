@@ -46,6 +46,7 @@
 
   <xsl:include href="../process-embedded-wadl.xsl"/>
 
+  <xsl:param name="builtForOpenStack">0</xsl:param>
   <!-- ======================================== -->
 
   <xsl:variable name="preprocessed-nodes">
@@ -71,7 +72,21 @@ Processing legalnotice: <xsl:value-of select="@role"/>
 	  <xsl:call-template name="Apache2LegalNotice"/>
 	</xsl:when>
       </xsl:choose>
+      
+      <xsl:if test="$builtForOpenStack != 0 and not(preceding-sibling::d:legalnotice)">
+        <d:link xlink:href="http://www.openstack.org">
+          <d:informalfigure>
+            <d:mediaobject>
+              <d:imageobject>
+                <d:imagedata fileref="../common/images/built-for-openstack.png"/>
+              </d:imageobject>
+            </d:mediaobject>
+          </d:informalfigure>
+        </d:link>
+      </xsl:if>
+      
     </d:legalnotice>	  
+
   </xsl:template>
 
   <!--

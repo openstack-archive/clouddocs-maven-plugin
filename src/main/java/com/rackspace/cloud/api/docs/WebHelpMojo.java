@@ -69,6 +69,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.show.changebars}"
      */
     private String showChangebars;
+    
+     /**
+     * Display built for OpenStack logo?
+     *
+     * @parameter expression="${generate-webhelp.builtForOpenStack}" default-value="0"
+     */
+    private String builtForOpenStack;
 
     /**
      * Controls whether output is colorized based on revisionflag attributes.
@@ -217,6 +224,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         }
         transformer.setParameter("project.build.directory", projectBuildDirectory);
         transformer.setParameter("branding", branding);
+        transformer.setParameter("builtForOpenStack", builtForOpenStack);
         transformer.setParameter("enable.disqus", enableDisqus);
         if (disqusShortname != null) {
             transformer.setParameter("disqus.shortname", disqusShortname);
