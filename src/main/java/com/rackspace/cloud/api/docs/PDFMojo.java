@@ -73,12 +73,49 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
 
     /**
-     * The greeting to display.
+     * Display built for OpenStack logo?
      *
      * @parameter expression="${generate-pdf.builtForOpenStack}" default-value="0"
      */
     private String builtForOpenStack;
-    
+
+    /**
+     * Path to an alternative cover logo.
+     *
+     * @parameter expression="${generate-pdf.coverLogoPath}" default-value=""
+     */
+    private String coverLogoPath;
+
+    /**
+     * Distance from the left edge of the page at which the 
+     * cover logo is displayed. 
+     *
+     * @parameter expression="${generate-pdf.coverLogoLeft}" default-value=""
+     */
+    private String coverLogoLeft;
+
+    /**
+     * Distance from the top of the page at which teh 
+     * cover logo is displayed.
+     *
+     * @parameter expression="${generate-pdf.coverLogoTop}" default-value=""
+     */
+    private String coverLogoTop;
+
+    /**
+     * url to display under the cover logo. 
+     *
+     * @parameter expression="${generate-pdf.coverUrl}" default-value=""
+     */
+    private String coverUrl;
+
+    /**
+     * The color to use for the polygon on the cover
+     *
+     * @parameter expression="${generate-pdf.coverColor}" default-value=""
+     */
+    private String coverColor;
+
     /**
      * The greeting to display.
      *
@@ -286,6 +323,12 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
 	transformer.setParameter("branding", branding);
 	transformer.setParameter("builtForOpenStack", builtForOpenStack);
+	transformer.setParameter("coverLogoPath", coverLogoPath);
+	transformer.setParameter("coverLogoLeft", coverLogoLeft);
+	transformer.setParameter("coverLogoTop", coverLogoTop);
+	transformer.setParameter("coverUrl", coverUrl);
+	transformer.setParameter("coverColor", coverColor);
+
 	transformer.setParameter("project.build.directory", projectBuildDirectory);
 
 	if(security != null){
@@ -319,7 +362,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
         coverImage = new File (cloudSub, COVER_IMAGE_NAME);
         coverImageTemplate = new File (cloudSub, COVER_IMAGE_TEMPLATE_NAME);
 
-	coverImageTemplate = new File (cloudSub, branding + "-cover.st");
+	coverImageTemplate = new File (cloudSub, "rackspace-cover.st");
 
         transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
         transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
@@ -332,6 +375,8 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer(new StreamSource(classLoader.getResourceAsStream(COVER_XSL)));
+	    transformer.setParameter("coverColor", coverColor);
+	    transformer.setParameter("branding", branding);
 
             transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
             transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));

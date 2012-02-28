@@ -30,6 +30,10 @@
   <xsl:param name="cloud.api.cc.image.dir" select="'images/cc/'"/>
 
   <xsl:param name="branding"/>
+  <xsl:param name="coverLogoPath"/>
+  <xsl:param name="coverLogoLeft"/>
+  <xsl:param name="coverLogoTop"/>
+  <xsl:param name="coverUrl"/>
   
   <xsl:param name="draft.mode">no</xsl:param>
 
@@ -873,6 +877,14 @@
     <xsl:param name="builtForOpenStack">0</xsl:param>
 
     <xsl:template name="book.titlepage.recto">
+      <xsl:variable name="url">
+	  <xsl:choose>
+	    <xsl:when test="$coverUrl != ''"><xsl:value-of select="$coverUrl"/></xsl:when>
+	    <xsl:when test="$branding = 'rackspace'">docs.rackspace.com/api</xsl:when>
+	    <xsl:when test="$branding = 'openstack'">docs.openstack.org</xsl:when>
+	  </xsl:choose>
+      </xsl:variable>
+
       <xsl:if test="$builtForOpenStack != 0">
 	<fo:block-container absolute-position="fixed" left="1in" top="8in">
 	  <fo:block>
@@ -884,7 +896,41 @@
 	  </fo:block>
 	</fo:block-container>
       </xsl:if>
-    </xsl:template>
 
+      <fo:block-container absolute-position="fixed" 
+			  left="5.6in" top="9.28in" 
+			  width="2.25in"
+			  >				       <!--border="0.5pt solid red"-->
+	<xsl:attribute name="left">
+	  <xsl:choose>
+	    <xsl:when test="$coverLogoLeft != ''"><xsl:value-of select="$coverLogoLeft"/></xsl:when>
+	    <xsl:when test="$branding = 'rackspace'">5.6in</xsl:when>
+	    <xsl:when test="$branding = 'openstack'">5.2in</xsl:when>
+	  </xsl:choose>
+	</xsl:attribute>
+	<xsl:attribute name="top">
+	  <xsl:choose>
+	    <xsl:when test="$coverLogoTop != ''"><xsl:value-of select="$coverLogoTop"/></xsl:when>
+	    <xsl:when test="$branding = 'rackspace'">9.28in</xsl:when>
+	    <xsl:when test="$branding = 'openstack'">9.0in</xsl:when>
+	  </xsl:choose>
+	</xsl:attribute>
+	<fo:block>
+	  <fo:external-graphic>
+	    <xsl:attribute name="src">
+	      <xsl:choose>
+		<xsl:when test="$coverUrl != ''">url(<xsl:value-of select="$coverLogoPath"/>)</xsl:when>
+		<xsl:otherwise>
+		  <xsl:value-of select="concat('url(',$cloud.api.cc.image.dir,'/../',$branding,'-logo.svg)')"/>
+		</xsl:otherwise>
+	      </xsl:choose>
+	    </xsl:attribute>
+	  </fo:external-graphic>
+	</fo:block>
+	<fo:block text-align="center" font-size="9pt" font-family="sans-serif">
+	  <fo:basic-link external-destination="url(http://{$url})"><xsl:value-of select="$url"/></fo:basic-link>
+	</fo:block>
+      </fo:block-container>
+    </xsl:template>
 
 </xsl:stylesheet>
