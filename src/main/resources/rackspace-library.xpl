@@ -4,19 +4,19 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     version="1.0">
     
-    <p:declare-step type="l:validate-transform"
-        version="1.0"
+    <p:declare-step version="1.0"
         xmlns:p="http://www.w3.org/ns/xproc"
         xmlns:l="http://xproc.org/library"
+        type="l:validate-transform"
         name="main">
         
         <p:input port="source" /> <!--sequence="false" primary="true"-->
         <p:input port="schema" sequence="true" >
             <p:document  href="classpath:/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
         </p:input>
+        <p:input port="parameters" kind="parameter"/>
         
         <p:output port="result" primary="true">  
-            <!--      <p:pipe step="programlisting-keep-together-xslt" port="result"/> -->
             <p:pipe step="tryvalidation" port="result"/>  
         </p:output>  
         <p:output port="report" sequence="true">  
@@ -57,10 +57,11 @@
                         <p:inline>
                             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
                                 
-                                <xsl:param name="failonerror">no</xsl:param>
+                                <xsl:param name="failOnValidationError">yes</xsl:param>
+                                <xsl:param name="security"/>
                                 
                                 <xsl:template match="node()|@*">
-                                    <xsl:message terminate="{$failonerror}">
+                                    <xsl:message terminate="{$failOnValidationError}">
                                         @@@@@@@@@@@@@@@@@@@@@@
                                         !!!VALIDATION ERROR!!!
                                         !!!!!!!!!!!!!!!!!!!!!!
@@ -78,7 +79,7 @@
                         </p:inline>
                     </p:input>
                     <p:input port="parameters" >
-                        <p:empty/>
+                        <p:pipe step="main" port="parameters"/>
                     </p:input>
                 </p:xslt>
             </p:catch>  
@@ -91,7 +92,7 @@
         xmlns:l="http://xproc.org/library"
         type="l:programlisting-keep-together"
         xmlns:c="http://www.w3.org/ns/xproc-step" version="1.0"
-        name="main">
+        name="keep-together">
         
         <p:input port="source"/>
         <p:output port="result" primary="true">  
@@ -100,7 +101,7 @@
         
         <p:xslt name="programlisting-keep-together-xslt">
             <p:input port="source"> 
-                <p:pipe step="main" port="source"/> 
+                <p:pipe step="keep-together" port="source"/> 
             </p:input> 
             <p:input port="stylesheet">
                 <p:inline>
@@ -154,6 +155,7 @@
         name="main">
         
         <p:input port="source"/>
+        
         <p:output port="result" primary="true">  
             <p:pipe step="xhtml2docbook" port="result"/> 
         </p:output>  
@@ -249,6 +251,49 @@
                 <p:empty/>
             </p:input>
         </p:xslt>
+    </p:declare-step>
+    
+    
+    
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:extensions-info"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="extensions-info-step">
+        
+        <p:input port="source"/>
+        
+        <p:output port="secondary" primary="false" sequence="true"/>
+        <p:output port="result" primary="true" >
+            <p:pipe step="extensions-info-xslt" port="result"/> 
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="extensions-info-xslt">
+            <p:input port="source"> 
+                <p:pipe step="extensions-info-step" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="classpath:/cloud/extensions.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="extensions-info-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+        
+        <p:for-each>
+            <p:iteration-source>
+                <p:pipe step="extensions-info-xslt" port="secondary"/>
+            </p:iteration-source>
+            <p:store encoding="utf-8" indent="true"
+                omit-xml-declaration="false">
+                <p:with-option name="href" select="base-uri(/*)"/>
+            </p:store>
+        </p:for-each>
+        
     </p:declare-step>
     
 </p:library>

@@ -33,12 +33,16 @@ import org.xml.sax.SAXException;
 import java.io.StringReader;
 
 import org.apache.maven.plugin.MojoExecutionException;
+
+import scala.reflect.generic.Trees.This;
+
 import com.agilejava.docbkx.maven.AbstractWebhelpMojo;
 
 import com.agilejava.docbkx.maven.TransformerBuilder;
 import com.agilejava.docbkx.maven.PreprocessingFilter;
 import javax.xml.transform.URIResolver;
 
+import com.rackspace.cloud.api.docs.CalabashHelper;
 import com.rackspace.cloud.api.docs.DocBookResolver;
 
 import com.agilejava.docbkx.maven.Parameter;
@@ -142,7 +146,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     /**
      * @parameter 
-     *     expression="${generate-pdf.canonicalUrlBase}"
+     *     expression="${generate-webhelp.canonicalUrlBase}"
      *     default-value=""
      */
     private String canonicalUrlBase;
@@ -150,7 +154,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     /**
      * 
      * @parameter 
-     *     expression="${generate-pdf.failOnValidationError}"
+     *     expression="${generate-webhelp.failOnValidationError}"
      *     default-value="0"
      */
     private String failOnValidationError;
@@ -159,11 +163,27 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
      *
      * @parameter 
-     *     expression="${generate-pdf.security}" 
+     *     expression="${generate-webhelp.security}" 
      *     default-value=""
      */
     private String security;
+ 
+    /**
+     * 
+     *
+     * @parameter expression="${basedir}"
+     */
+    private File baseDir;
 
+    /**
+     * A parameter used to specify the presence of extensions metadata.
+     *
+     * @parameter 
+     *     expression="${generate-webhelp.includes}" 
+     *     default-value=""
+     */
+    private String transformDir;   
+    
     /**
      * A parameter used to configure how many elements to trim from the URI in the documentation for a wadl method.
      *
@@ -205,7 +225,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
         super.adjustTransformer(transformer, sourceFilename, targetFile);
-
+                    
     if(glossaryUri != null){
 	  transformer.setParameter("glossary.uri", glossaryUri);
     }
@@ -363,9 +383,41 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         Map map=new HashMap<String, String>();
         
-        map.put("security", security);
-        map.put("canonicalUrlBase", canonicalUrlBase);
-        map.put("failOnValidationError", failOnValidationError);
+        map.put("security", this.security);
+        map.put("canonicalUrlBase", this.canonicalUrlBase);
+        map.put("failOnValidationError", this.failOnValidationError);
+        
+        int lastSlash=inputFilename.lastIndexOf("/");
+        
+        //This is the case if the path includes a relative path
+        if(-1!=lastSlash){
+        	String theFileName=inputFilename.substring(lastSlash);
+        	String theDirName=inputFilename.substring(0,lastSlash);
+            
+        	int index = theFileName.indexOf('.');
+        	if(-1!=index){
+            	String targetFile="target/docbkx/webhelp/"+theDirName+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
+
+            	map.put("targetExtQueryFile", targetFile);        		
+        	}
+        	else{
+        		//getLog().info("~~~~~~~~theFileName file has incompatible format: "+theFileName);
+        	}
+
+        }
+        //This is the case when it's just a file name with no path information
+        else{
+        	String theFileName=inputFilename;
+        	int index = theFileName.indexOf('.');
+        	if(-1!=index){
+            	String targetFile="target/docbkx/webhelp/"+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
+            	map.put("targetExtQueryFile", targetFile);        		
+        	}
+        	else{
+        		//getLog().info("~~~~~~~~inputFilename file has incompatible format: "+inputFilename);
+        	}
+        }
+        map.put("webhelp", "true");
         
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }

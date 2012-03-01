@@ -16,7 +16,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
 
     /**
      * @parameter 
-     *     expression="${generate-pdf.canonicalUrlBase}"
+     *     expression="${generate-html.canonicalUrlBase}"
      *     default-value=""
      */
     private String canonicalUrlBase;
@@ -24,7 +24,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
     /**
      * 
      * @parameter 
-     *     expression="${generate-pdf.failOnValidationError}"
+     *     expression="${generate-html.failOnValidationError}"
      *     default-value="0"
      */
     private String failOnValidationError;
@@ -33,7 +33,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
      * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
      *
      * @parameter 
-     *     expression="${generate-pdf.security}" 
+     *     expression="${generate-html.security}" 
      *     default-value=""
      */
     private String security;

@@ -405,7 +405,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("failOnValidationError", failOnValidationError);
-        
+        String outputDir=System.getProperty("project.build.outputDirectory ");        
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
 }
