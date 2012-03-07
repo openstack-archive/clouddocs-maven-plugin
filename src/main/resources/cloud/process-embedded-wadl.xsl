@@ -71,7 +71,7 @@
 
 	<xsl:template match="rax:resource" mode="copy-resources">
 		<wadl:resource path="{//wadl:resource[@id = current()/@rax:id]/@path}">
-			<xsl:copy-of select="//wadl:resource[@id = current()/@rax:id]/wadl:method"/>
+			<xsl:copy-of select="//wadl:resource[@id = current()/@rax:id]/*"/>
 		</wadl:resource>
 		<xsl:apply-templates select="rax:resource" mode="copy-resources"/>
 	</xsl:template>
