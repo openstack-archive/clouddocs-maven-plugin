@@ -251,7 +251,12 @@
 	  
 	  <xsl:apply-templates
 	      select="document(concat('file:///', $wadl.path))//wadl:resource[@id = $resourceId]/wadl:method[@rax:id = current()/@href]"
-	      mode="method-rows"/>  
+	      mode="method-rows">
+	    <xsl:with-param name="local-content">
+	      <!-- Pass down content added in the DocBook doc -->
+	      <xsl:copy-of select="./*"/>
+	    </xsl:with-param>
+	  </xsl:apply-templates>  
 	</xsl:template>
 
 	<xsl:template match="wadl:resource" mode="preprocess">
@@ -262,6 +267,8 @@
 		</xsl:variable>
 
 		<xsl:choose>
+		  <!-- When the wadl;resource contains no wadl:method references, then fetch all of the 
+		       wadl:method elements from the wadl. -->
 			<xsl:when test="@href and not(./wadl:method)">
 				<xsl:apply-templates
 					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method"
@@ -270,6 +277,10 @@
                     <xsl:with-param name="resourceLink" select="."/>
 				</xsl:apply-templates>				
 			</xsl:when>
+			<!-- When the wadl:resource has an href AND child wadl:method elements
+			     then get each of those wadl:method elements from the target wadl -->
+			
+			<!-- TODO: apply-templates on the child methods in a new mode and pass down the included cods to wadl:method mode="preprocess" so you can add them to the method. -->
 			<xsl:when test="@href">
 				<xsl:apply-templates
 					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method[@rax:id = current()/wadl:method/@href]"
@@ -289,7 +300,10 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:method" mode="method-rows">
-		<xsl:call-template name="method-row"/>
+	  <xsl:param name="local-content"/>
+		<xsl:call-template name="method-row">
+		  <xsl:with-param name="local-content" select="$local-content"/>
+		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template match="wadl:method" mode="preprocess">
@@ -407,7 +421,7 @@
 
             <!-- About the request -->
 
-			<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param">
+			<xsl:if test="wadl:request/wadl:param[@style != 'plain']|ancestor::wadl:resource/wadl:param">
                 <xsl:call-template name="paramTable">
                     <xsl:with-param name="mode" select="'Request'"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
@@ -603,19 +617,21 @@
 	  </xsl:variable>
         <xsl:variable name="param">
             <xsl:choose>
-                <xsl:when test="@style='header'"> header </xsl:when>
-                <xsl:otherwise> parameter </xsl:otherwise>
+                <xsl:when test="@style='header'"> Header </xsl:when>
+                <xsl:otherwise> Parameter </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
-			<td align="center">
+			<td align="left">
 				<code role="hyphenate-true"><xsl:value-of select="@name"/></code>
 			</td>
-			<td align="center">
-				<xsl:value-of select="@style"/>
+			<td align="left">
+				<xsl:value-of
+					select="concat(translate(substring(@style,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring(@style,2))"
+				/>
 			</td>
-            <td align="center">
+            <td align="left">
 	    <xsl:call-template name="hyphenate.camelcase">
 	      <xsl:with-param name="content">
                 <xsl:value-of
