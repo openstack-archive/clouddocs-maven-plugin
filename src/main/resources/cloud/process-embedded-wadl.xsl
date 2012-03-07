@@ -410,7 +410,7 @@
 
             <!-- Method Docs -->
 			<xsl:choose>
-			  <xsl:when test="wadl:doc//xhtml:*">
+			  <xsl:when test="wadl:doc/xhtml:*">
 			    <xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
 			  </xsl:when>
 			  <xsl:otherwise>
@@ -430,7 +430,7 @@
 
 			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:* | wadl:request/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
             <xsl:if test="wadl:request/wadl:representation/wadl:doc//xhtml:*">
-                <xsl:apply-templates select="wadl:request/wadl:representation/wadl:doc//xhtml:*" mode="process-xhtml"/>
+                <xsl:apply-templates select="wadl:request/wadl:representation/wadl:doc/xhtml:*" mode="process-xhtml"/>
             </xsl:if>
             <!-- we allow no request text and there is no request... -->
 	    <!-- Note that wadl:request[@mediaType = 'application/xml' and not(@element)] is there to catch the situation where -->
@@ -451,8 +451,8 @@
                 </xsl:call-template>
             </xsl:if>
 			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:* | wadl:response/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
-            <xsl:if test="wadl:response/wadl:representation/wadl:doc//xhtml:*">
-                <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc//xhtml:*" mode="process-xhtml"/>
+            <xsl:if test="wadl:response/wadl:representation/wadl:doc/xhtml:*">
+                <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc/xhtml:*" mode="process-xhtml"/>
             </xsl:if>
             <!-- we allow no response text and we dont have a 200 level response with a representation -->
             <xsl:if test="not($skipNoResponseText) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
