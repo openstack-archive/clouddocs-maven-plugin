@@ -279,8 +279,7 @@
 			</xsl:when>
 			<!-- When the wadl:resource has an href AND child wadl:method elements
 			     then get each of those wadl:method elements from the target wadl -->
-			
-			<!-- TODO: apply-templates on the child methods in a new mode and pass down the included cods to wadl:method mode="preprocess" so you can add them to the method. -->
+			<!-- If there is a wadl:doc element in the wadl:method in DocBook, then copy it down into the imported method. -->
 			<xsl:when test="@href">
 				<xsl:variable name="combined-method">
 					<xsl:apply-templates match="wadl:method" mode="combine-method">
@@ -288,10 +287,14 @@
 						<xsl:with-param name="href" select="@href"/>
 					</xsl:apply-templates>
 				</xsl:variable>
-				<xsl:message>
-					<xsl:copy-of select="$combined-method"/>
-				</xsl:message>
-				<xsl:apply-templates select="$combined-method//wadl:method" mode="preprocess"/>
+<!--				<xsl:if test="$combined-method//wadl:method[@rax:id = 'authenticate']">
+					<xsl:message terminate="yes">
+						<xsl:copy-of select="$combined-method"/>
+					</xsl:message>
+				</xsl:if>-->
+				<xsl:apply-templates select="$combined-method//wadl:method" mode="preprocess">
+					<xsl:with-param name="resource-path" select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
+				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:apply-templates select="wadl:method" mode="preprocess">
@@ -308,11 +311,29 @@
 		<xsl:param name="href"/>
 		<wadl:method>
 			<xsl:copy-of select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/@*"/>
-			<xsl:copy-of select="wadl:doc"/>
-			<xsl:copy-of
-				select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/node()"
-				mode="preprocess"/>
+			<xsl:apply-templates 
+				select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/node()" 
+				mode="combine-method">
+				<xsl:with-param name="wadl-doc">
+					<xsl:copy-of select="wadl:doc/node()"/>
+				</xsl:with-param>
+			</xsl:apply-templates>
 		</wadl:method>
+	</xsl:template>
+	
+	<xsl:template match="wadl:doc" mode="combine-method">
+		<xsl:param name="wadl-doc"/>
+		<wadl:doc>
+			<xsl:apply-templates select="@*" mode="combine-method"/>
+			<xsl:copy-of select="$wadl-doc"/>
+			<xsl:apply-templates select="node()" mode="combine-method"/>
+		</wadl:doc>
+	</xsl:template>
+	
+	<xsl:template match="node() | @*" mode="combine-method">
+		<xsl:copy>
+			<xsl:apply-templates select="node() | @*" mode="combine-method"/>
+		</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="wadl:method" mode="method-rows">
@@ -323,6 +344,7 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:method" mode="preprocess">
+		<xsl:param name="resource-path"/>
 		<xsl:param name="sectionId"/>
         <xsl:param name="resourceLink"/>
         <xsl:variable name="id" select="@rax:id"/>
@@ -402,6 +424,7 @@
 				<tbody>
 					<xsl:call-template name="method-row">
 					  <xsl:with-param name="context">reference-page</xsl:with-param>
+					  <xsl:with-param name="resource-path" select="$resource-path"/>
 					</xsl:call-template>
 				</tbody>
 			</informaltable>
@@ -426,14 +449,14 @@
 
             <!-- Method Docs -->
 			<xsl:choose>
-			  <xsl:when test="wadl:doc/xhtml:*">
+				<xsl:when test="wadl:doc//xhtml:*[@class = 'shortdesc'] or wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
 			    <xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
 			  </xsl:when>
 			  <xsl:otherwise>
 			    <!-- Suppress because everything will be in the table -->
 			  </xsl:otherwise>
 			</xsl:choose>
-            <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
+        <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 
             <!-- About the request -->
 
@@ -488,6 +511,17 @@
 	</xsl:template>
 
 	<xsl:template name="method-row">
+	  <xsl:param name="resource-path"/>
+	  <xsl:param name="resource-path-computed">
+	  	<xsl:choose>
+	  		<xsl:when test="parent::wadl:resource/@path">
+	  			<xsl:value-of select="parent::wadl:resource/@path"/>
+	  		</xsl:when>
+	  		<xsl:otherwise>
+	  			<xsl:value-of select="$resource-path"/>
+	  		</xsl:otherwise>
+	  	</xsl:choose>
+	  </xsl:param>
 	  <xsl:param name="context"/>
 		<tr>
 			<td>
@@ -505,13 +539,11 @@
 						<xsl:when test="$trim.wadl.uri.count &gt; 0">
 							<xsl:call-template name="trimUri">
 								<xsl:with-param name="trimCount" select="$trim.wadl.uri.count"/>
-								<xsl:with-param name="uri">
-									<xsl:value-of select="parent::wadl:resource/@path"/>
-								</xsl:with-param>
+								<xsl:with-param name="uri" select="$resource-path-computed"/>
 							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="parent::wadl:resource/@path"/>
+							<xsl:value-of select="$resource-path-computed"/>
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:if test="$context = 'reference-page'">
