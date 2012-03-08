@@ -633,8 +633,8 @@
 	  </xsl:variable>
         <xsl:variable name="param">
             <xsl:choose>
-                <xsl:when test="@style='header'"> Header </xsl:when>
-                <xsl:otherwise> Parameter </xsl:otherwise>
+                <xsl:when test="@style='header'"> header </xsl:when>
+                <xsl:otherwise> parameter </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
 		<!-- TODO: Get more info from the xsd about these params-->
