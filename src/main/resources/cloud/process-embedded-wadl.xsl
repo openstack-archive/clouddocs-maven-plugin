@@ -282,12 +282,16 @@
 			
 			<!-- TODO: apply-templates on the child methods in a new mode and pass down the included cods to wadl:method mode="preprocess" so you can add them to the method. -->
 			<xsl:when test="@href">
-				<xsl:apply-templates
-					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method[@rax:id = current()/wadl:method/@href]"
-					mode="preprocess">
-					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
-                    <xsl:with-param name="resourceLink" select="."/>
-				</xsl:apply-templates>
+				<xsl:variable name="combined-method">
+					<xsl:apply-templates match="wadl:method" mode="combine-method">
+						<xsl:with-param name="wadl.path" select="$wadl.path"/>
+						<xsl:with-param name="href" select="@href"/>
+					</xsl:apply-templates>
+				</xsl:variable>
+				<xsl:message>
+					<xsl:copy-of select="$combined-method"/>
+				</xsl:message>
+				<xsl:apply-templates select="$combined-method//wadl:method" mode="preprocess"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:apply-templates select="wadl:method" mode="preprocess">
@@ -298,7 +302,19 @@
 		</xsl:choose>
 
 	</xsl:template>
-
+	
+	<xsl:template match="wadl:method" mode="combine-method">
+		<xsl:param name="wadl.path"/>
+		<xsl:param name="href"/>
+		<wadl:method>
+			<xsl:copy-of select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/@*"/>
+			<xsl:copy-of select="wadl:doc"/>
+			<xsl:copy-of
+				select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/node()"
+				mode="preprocess"/>
+		</wadl:method>
+	</xsl:template>
+	
 	<xsl:template match="wadl:method" mode="method-rows">
 	  <xsl:param name="local-content"/>
 		<xsl:call-template name="method-row">
