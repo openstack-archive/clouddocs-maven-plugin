@@ -136,7 +136,7 @@ set       toc,title
     <xsl:variable name="version.for.disqus">
         <xsl:choose>
             <xsl:when test="$use.version.for.disqus!='0'">
-              <xsl:value-of select="translate(//d:releaseinfo[1],' ','')"/>
+              <xsl:value-of select="translate(/*/d:info/d:releaseinfo[1],' ','')"/>
             </xsl:when>
         <xsl:otherwise></xsl:otherwise>
         </xsl:choose>       
@@ -203,7 +203,7 @@ ERROR: Feedback email not set but internal comments are enabled.
       <xsl:call-template name="href.target">
 	<xsl:with-param name="object" select="$home"/>
       </xsl:call-template>
-      </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="//d:releaseinfo[1]" mode="rackspace-title"/></a> 
+      </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="/*/d:info/d:releaseinfo[1]" mode="rackspace-title"/></a> 
       </p> 
       <xsl:if test="normalize-space($pdf.url) != ''">
 	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
@@ -664,5 +664,10 @@ ERROR: Feedback email not set but internal comments are enabled.
   <xsl:template name="badMatch">
     <span style="color: red">this?</span>
   </xsl:template>
+
+
+<xsl:template match="d:sidebar/d:title">
+  <b><xsl:apply-templates/></b>
+</xsl:template>
 
 </xsl:stylesheet>

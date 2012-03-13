@@ -8,8 +8,12 @@
 
     <name>Cloud API Docs Plugin</name>
 
-    <version>1.0.10-SNAPSHOT</version>
+    <version>1.0.12-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
+
+    <properties>
+      <wadl.tools.version>1.0.1</wadl.tools.version>
+    </properties>
 
     <description>
         Generates a XHTML and API documents.
@@ -45,19 +49,13 @@
         <dependency>
             <groupId>com.agilejava.docbkx</groupId>
             <artifactId>docbkx-maven-plugin</artifactId>
-            <version>2.0.13</version>
+            <version>2.0.14</version>
         </dependency>
 
         <dependency>
             <groupId>com.rackspace.papi.components</groupId>
             <artifactId>translation</artifactId>
-            <version>1.0.6-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.rackspace.cloud.api</groupId>
-            <artifactId>glossary</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.6</version>
         </dependency>
 
         <dependency>
@@ -171,7 +169,7 @@
         <dependency>
             <groupId>com.agilejava.docbkx</groupId>
             <artifactId>docbkx-maven-base</artifactId>
-            <version>2.0.13</version>
+            <version>2.0.14</version>
         </dependency>
 
         <dependency>
@@ -223,7 +221,7 @@
         <dependency>
             <groupId>com.rackspace.cloud.api</groupId>
             <artifactId>wadl-tools</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${wadl.tools.version}</version>
             <scope>provided</scope>
         </dependency> 
         
@@ -303,11 +301,11 @@
                                 <artifactItem>
                                     <groupId>com.rackspace.cloud.api</groupId>
                                     <artifactId>wadl-tools</artifactId>
-                                    <version>1.0.0-SNAPSHOT</version>
+                                    <version>${wadl.tools.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>target/classes/cloud/normalizeWadl</outputDirectory>
-                                    <destFileName></destFileName>
+                                    <destFileName />
                                     <includes>
                                         **/normalizeWadl1.xsl,
                                         **/normalizeWadl2.xsl,
@@ -343,8 +341,7 @@
                             <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
                             <outputDir>target/generated-resources/cloud/fo</outputDir>
                             <fileMappers>
-                                <fileMapper
-                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                     <targetExtension>.xsl</targetExtension>
                                 </fileMapper>
                             </fileMappers>
@@ -354,8 +351,7 @@
                             <stylesheet>target/docbook/template/titlepage.xsl</stylesheet>
                             <outputDir>target/generated-resources/cloud/webhelp</outputDir>
                             <fileMappers>
-                                <fileMapper
-                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                     <targetExtension>.xsl</targetExtension>
                                 </fileMapper>
                             </fileMappers>
@@ -367,19 +363,19 @@
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-builder-maven-plugin</artifactId>
-                <version>2.0.13</version>
+                <version>2.0.14</version>
 
                 <executions>
                     <execution>
-                        <id>generate-xhtml</id>
+                        <id>generate-html</id>
 
                         <goals>
                             <goal>build</goal>
                         </goals>
 
                         <configuration>
-                            <type>xhtml</type>
-                            <superClassName>com.rackspace.cloud.api.docs.HTMLMojo</superClassName>
+                            <type>html</type>
+                            <superClassName>com.rackspace.cloud.api.docs.ApiRefMojo</superClassName>
                             <excludedProperties>${excluded.properties},root.filename,base.dir</excludedProperties>
                         </configuration>
                     </execution>

@@ -10,6 +10,9 @@
     <xsl:output method="xml" encoding="UTF-8" media-type="image/svg+xml" standalone="no"/>
     
     <xsl:param name="docbook.infile" select="'/Users/jorgew/projects/cloud-files-api-docs/src/docbkx/cfdevguide_d5.xml'"/>
+    <xsl:param name="branding"/>
+    <xsl:param name="coverColor"/>
+
     <xsl:variable name="docbook" select="document(concat('file:///',$docbook.infile))"/>
 
   <xsl:variable name="rackspace.status.pi">
@@ -118,7 +121,7 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="text()">
+    <xsl:template match="text()" priority="10">
         <xsl:variable name="textWithTitle">
             <xsl:call-template name="replaceText">
                 <xsl:with-param name="text" select="."/>
@@ -297,4 +300,16 @@
     </xsl:template>
 
     
+    <xsl:template match="svg:polygon[@id='polygon2727']">
+      <xsl:copy>
+	<xsl:attribute name="style">
+	  <xsl:choose>
+	    <xsl:when test="$coverColor != ''">fill:#<xsl:value-of select="$coverColor"/>;fill-opacity:1</xsl:when>
+	    <xsl:when test="$branding = 'openstack'">fill:#ce3327;fill-opacity:1</xsl:when>
+	    <xsl:otherwise>fill:#c42126;fill-opacity:1</xsl:otherwise>
+	  </xsl:choose>
+	</xsl:attribute>
+	<xsl:apply-templates select="@points|@id"/>
+      </xsl:copy>
+    </xsl:template>
 </xsl:stylesheet>

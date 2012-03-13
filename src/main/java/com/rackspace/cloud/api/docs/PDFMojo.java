@@ -1,28 +1,14 @@
 package com.rackspace.cloud.api.docs;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import com.agilejava.docbkx.maven.AbstractFoMojo;
+import com.agilejava.docbkx.maven.PreprocessingFilter;
+import com.agilejava.docbkx.maven.TransformerBuilder;
+import com.rackspace.cloud.api.docs.CalabashHelper;
+import com.rackspace.cloud.api.docs.FileUtils;
+import com.rackspace.cloud.api.docs.GlossaryResolver;
 
-import java.net.MalformedURLException;
-
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.apache.maven.plugin.MojoExecutionException;
+import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
@@ -32,20 +18,33 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
-
-import com.agilejava.docbkx.maven.TransformerBuilder;
-import com.agilejava.docbkx.maven.AbstractFoMojo;
-
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
-
+import org.apache.maven.plugin.MojoExecutionException;
 import org.xml.sax.SAXException;
 
-import com.rackspace.cloud.api.docs.FileUtils;
-import com.rackspace.cloud.api.docs.DocBookResolver;
-
-import com.agilejava.docbkx.maven.Parameter;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class PDFMojo extends AbstractFoMojo {
     private File imageDirectory;
@@ -71,7 +70,52 @@ public abstract class PDFMojo extends AbstractFoMojo {
      * @parameter expression="${generate-pdf.branding}" default-value="rackspace"
      */
     private String branding;
-    
+
+
+    /**
+     * Display built for OpenStack logo?
+     *
+     * @parameter expression="${generate-pdf.builtForOpenStack}" default-value="0"
+     */
+    private String builtForOpenStack;
+
+    /**
+     * Path to an alternative cover logo.
+     *
+     * @parameter expression="${generate-pdf.coverLogoPath}" default-value=""
+     */
+    private String coverLogoPath;
+
+    /**
+     * Distance from the left edge of the page at which the 
+     * cover logo is displayed. 
+     *
+     * @parameter expression="${generate-pdf.coverLogoLeft}" default-value=""
+     */
+    private String coverLogoLeft;
+
+    /**
+     * Distance from the top of the page at which teh 
+     * cover logo is displayed.
+     *
+     * @parameter expression="${generate-pdf.coverLogoTop}" default-value=""
+     */
+    private String coverLogoTop;
+
+    /**
+     * url to display under the cover logo. 
+     *
+     * @parameter expression="${generate-pdf.coverUrl}" default-value=""
+     */
+    private String coverUrl;
+
+    /**
+     * The color to use for the polygon on the cover
+     *
+     * @parameter expression="${generate-pdf.coverColor}" default-value=""
+     */
+    private String coverColor;
+
     /**
      * The greeting to display.
      *
@@ -79,12 +123,6 @@ public abstract class PDFMojo extends AbstractFoMojo {
      */
     private String variablelistAsBlocks;
 
-    /**
-     * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
-     *
-     * @parameter expression="${generate-pdf.security}" default-value=""
-     */
-    private String security;
     
     /**
      * A parameter used to configure how many elements to trim from the URI in the documentation for a wadl method.
@@ -103,7 +141,29 @@ public abstract class PDFMojo extends AbstractFoMojo {
      */
     private String computeWadlPathFromDocbookPath;
 
+    /**
+     * @parameter 
+     *     expression="${generate-pdf.canonicalUrlBase}"
+     *     default-value=""
+     */
+    private String canonicalUrlBase;
 
+    /**
+     * 
+     * @parameter 
+     *     expression="${generate-pdf.failOnValidationError}"
+     */
+    private String failOnValidationError;
+    
+    /**
+     * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
+     *
+     * @parameter 
+     *     expression="${generate-pdf.security}" 
+     */
+    private String security;
+    
+    
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
     }
@@ -255,13 +315,20 @@ public abstract class PDFMojo extends AbstractFoMojo {
    }
 
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
-        return super.createTransformerBuilder (new DocBookResolver (resolver, getType()));
+        return super.createTransformerBuilder (new GlossaryResolver(new DocBookResolver (resolver, getType()), getType()));
     }
 
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
         super.adjustTransformer(transformer, sourceFilename, targetFile);
 
 	transformer.setParameter("branding", branding);
+	transformer.setParameter("builtForOpenStack", builtForOpenStack);
+	transformer.setParameter("coverLogoPath", coverLogoPath);
+	transformer.setParameter("coverLogoLeft", coverLogoLeft);
+	transformer.setParameter("coverLogoTop", coverLogoTop);
+	transformer.setParameter("coverUrl", coverUrl);
+	transformer.setParameter("coverColor", coverColor);
+
 	transformer.setParameter("project.build.directory", projectBuildDirectory);
 
 	if(security != null){
@@ -295,7 +362,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
         coverImage = new File (cloudSub, COVER_IMAGE_NAME);
         coverImageTemplate = new File (cloudSub, COVER_IMAGE_TEMPLATE_NAME);
 
-	coverImageTemplate = new File (cloudSub, branding + "-cover.st");
+	coverImageTemplate = new File (cloudSub, "rackspace-cover.st");
 
         transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
         transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
@@ -308,6 +375,8 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer(new StreamSource(classLoader.getResourceAsStream(COVER_XSL)));
+	    transformer.setParameter("coverColor", coverColor);
+	    transformer.setParameter("branding", branding);
 
             transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
             transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
@@ -320,5 +389,23 @@ public abstract class PDFMojo extends AbstractFoMojo {
             {
                 throw new MojoExecutionException("Failed to transform to cover", e);
             }
+    }
+    
+    
+    
+    @Override
+    protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
+            throws MojoExecutionException {
+
+        String pathToPipelineFile = "classpath:/test.xpl"; //use "classpath:/path" for this to work
+        Source source = super.createSource(inputFilename, sourceFile, filter);
+
+        Map map=new HashMap<String, String>();
+        
+        map.put("security", security);
+        map.put("canonicalUrlBase", canonicalUrlBase);
+        map.put("failOnValidationError", failOnValidationError);
+        String outputDir=System.getProperty("project.build.outputDirectory ");        
+        return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
 }

@@ -71,7 +71,7 @@
 
 	<xsl:template match="rax:resource" mode="copy-resources">
 		<wadl:resource path="{//wadl:resource[@id = current()/@rax:id]/@path}">
-			<xsl:copy-of select="//wadl:resource[@id = current()/@rax:id]/wadl:method"/>
+			<xsl:copy-of select="//wadl:resource[@id = current()/@rax:id]/*"/>
 		</wadl:resource>
 		<xsl:apply-templates select="rax:resource" mode="copy-resources"/>
 	</xsl:template>
@@ -251,7 +251,12 @@
 	  
 	  <xsl:apply-templates
 	      select="document(concat('file:///', $wadl.path))//wadl:resource[@id = $resourceId]/wadl:method[@rax:id = current()/@href]"
-	      mode="method-rows"/>  
+	      mode="method-rows">
+	    <xsl:with-param name="local-content">
+	      <!-- Pass down content added in the DocBook doc -->
+	      <xsl:copy-of select="./*"/>
+	    </xsl:with-param>
+	  </xsl:apply-templates>  
 	</xsl:template>
 
 	<xsl:template match="wadl:resource" mode="preprocess">
@@ -262,6 +267,8 @@
 		</xsl:variable>
 
 		<xsl:choose>
+		  <!-- When the wadl;resource contains no wadl:method references, then fetch all of the 
+		       wadl:method elements from the wadl. -->
 			<xsl:when test="@href and not(./wadl:method)">
 				<xsl:apply-templates
 					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method"
@@ -270,12 +277,23 @@
                     <xsl:with-param name="resourceLink" select="."/>
 				</xsl:apply-templates>				
 			</xsl:when>
+			<!-- When the wadl:resource has an href AND child wadl:method elements
+			     then get each of those wadl:method elements from the target wadl -->
+			<!-- If there is a wadl:doc element in the wadl:method in DocBook, then copy it down into the imported method. -->
 			<xsl:when test="@href">
-				<xsl:apply-templates
-					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method[@rax:id = current()/wadl:method/@href]"
-					mode="preprocess">
-					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
-                    <xsl:with-param name="resourceLink" select="."/>
+				<xsl:variable name="combined-method">
+					<xsl:apply-templates match="wadl:method" mode="combine-method">
+						<xsl:with-param name="wadl.path" select="$wadl.path"/>
+						<xsl:with-param name="href" select="@href"/>
+					</xsl:apply-templates>
+				</xsl:variable>
+<!--				<xsl:if test="$combined-method//wadl:method[@rax:id = 'authenticate']">
+					<xsl:message terminate="yes">
+						<xsl:copy-of select="$combined-method"/>
+					</xsl:message>
+				</xsl:if>-->
+				<xsl:apply-templates select="$combined-method//wadl:method" mode="preprocess">
+					<xsl:with-param name="resource-path" select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
@@ -287,12 +305,46 @@
 		</xsl:choose>
 
 	</xsl:template>
-
+	
+	<xsl:template match="wadl:method" mode="combine-method">
+		<xsl:param name="wadl.path"/>
+		<xsl:param name="href"/>
+		<wadl:method>
+			<xsl:copy-of select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/@*"/>
+			<xsl:apply-templates 
+				select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/node()" 
+				mode="combine-method">
+				<xsl:with-param name="wadl-doc">
+					<xsl:copy-of select="wadl:doc/node()"/>
+				</xsl:with-param>
+			</xsl:apply-templates>
+		</wadl:method>
+	</xsl:template>
+	
+	<xsl:template match="wadl:doc" mode="combine-method">
+		<xsl:param name="wadl-doc"/>
+		<wadl:doc>
+			<xsl:apply-templates select="@*" mode="combine-method"/>
+			<xsl:copy-of select="$wadl-doc"/>
+			<xsl:apply-templates select="node()" mode="combine-method"/>
+		</wadl:doc>
+	</xsl:template>
+	
+	<xsl:template match="node() | @*" mode="combine-method">
+		<xsl:copy>
+			<xsl:apply-templates select="node() | @*" mode="combine-method"/>
+		</xsl:copy>
+	</xsl:template>
+	
 	<xsl:template match="wadl:method" mode="method-rows">
-		<xsl:call-template name="method-row"/>
+	  <xsl:param name="local-content"/>
+		<xsl:call-template name="method-row">
+		  <xsl:with-param name="local-content" select="$local-content"/>
+		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template match="wadl:method" mode="preprocess">
+		<xsl:param name="resource-path"/>
 		<xsl:param name="sectionId"/>
         <xsl:param name="resourceLink"/>
         <xsl:variable name="id" select="@rax:id"/>
@@ -372,6 +424,7 @@
 				<tbody>
 					<xsl:call-template name="method-row">
 					  <xsl:with-param name="context">reference-page</xsl:with-param>
+					  <xsl:with-param name="resource-path" select="$resource-path"/>
 					</xsl:call-template>
 				</tbody>
 			</informaltable>
@@ -396,18 +449,18 @@
 
             <!-- Method Docs -->
 			<xsl:choose>
-			  <xsl:when test="wadl:doc//xhtml:*">
+				<xsl:when test="wadl:doc//xhtml:*[@class = 'shortdesc'] or wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
 			    <xsl:apply-templates select="wadl:doc" mode="process-xhtml"/>
 			  </xsl:when>
 			  <xsl:otherwise>
 			    <!-- Suppress because everything will be in the table -->
 			  </xsl:otherwise>
 			</xsl:choose>
-            <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
+        <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 
             <!-- About the request -->
 
-			<xsl:if test="wadl:request/wadl:param|ancestor::wadl:resource/wadl:param">
+			<xsl:if test="wadl:request/wadl:param[@style != 'plain']|ancestor::wadl:resource/wadl:param">
                 <xsl:call-template name="paramTable">
                     <xsl:with-param name="mode" select="'Request'"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
@@ -416,7 +469,7 @@
 
 			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:* | wadl:request/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
             <xsl:if test="wadl:request/wadl:representation/wadl:doc//xhtml:*">
-                <xsl:apply-templates select="wadl:request/wadl:representation/wadl:doc//xhtml:*" mode="process-xhtml"/>
+                <xsl:apply-templates select="wadl:request/wadl:representation/wadl:doc/xhtml:*" mode="process-xhtml"/>
             </xsl:if>
             <!-- we allow no request text and there is no request... -->
 	    <!-- Note that wadl:request[@mediaType = 'application/xml' and not(@element)] is there to catch the situation where -->
@@ -437,8 +490,8 @@
                 </xsl:call-template>
             </xsl:if>
 			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:* | wadl:response/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
-            <xsl:if test="wadl:response/wadl:representation/wadl:doc//xhtml:*">
-                <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc//xhtml:*" mode="process-xhtml"/>
+            <xsl:if test="wadl:response/wadl:representation/wadl:doc/xhtml:*">
+                <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc/xhtml:*" mode="process-xhtml"/>
             </xsl:if>
             <!-- we allow no response text and we dont have a 200 level response with a representation -->
             <xsl:if test="not($skipNoResponseText) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
@@ -458,6 +511,17 @@
 	</xsl:template>
 
 	<xsl:template name="method-row">
+	  <xsl:param name="resource-path"/>
+	  <xsl:param name="resource-path-computed">
+	  	<xsl:choose>
+	  		<xsl:when test="parent::wadl:resource/@path">
+	  			<xsl:value-of select="parent::wadl:resource/@path"/>
+	  		</xsl:when>
+	  		<xsl:otherwise>
+	  			<xsl:value-of select="$resource-path"/>
+	  		</xsl:otherwise>
+	  	</xsl:choose>
+	  </xsl:param>
 	  <xsl:param name="context"/>
 		<tr>
 			<td>
@@ -475,13 +539,11 @@
 						<xsl:when test="$trim.wadl.uri.count &gt; 0">
 							<xsl:call-template name="trimUri">
 								<xsl:with-param name="trimCount" select="$trim.wadl.uri.count"/>
-								<xsl:with-param name="uri">
-									<xsl:value-of select="parent::wadl:resource/@path"/>
-								</xsl:with-param>
+								<xsl:with-param name="uri" select="$resource-path-computed"/>
 							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="parent::wadl:resource/@path"/>
+							<xsl:value-of select="$resource-path-computed"/>
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:if test="$context = 'reference-page'">
@@ -609,13 +671,15 @@
         </xsl:variable>
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
-			<td align="center">
+			<td align="left">
 				<code role="hyphenate-true"><xsl:value-of select="@name"/></code>
 			</td>
-			<td align="center">
-				<xsl:value-of select="@style"/>
+			<td align="left">
+				<xsl:value-of
+					select="concat(translate(substring(@style,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring(@style,2))"
+				/>
 			</td>
-            <td align="center">
+            <td align="left">
 	    <xsl:call-template name="hyphenate.camelcase">
 	      <xsl:with-param name="content">
                 <xsl:value-of
