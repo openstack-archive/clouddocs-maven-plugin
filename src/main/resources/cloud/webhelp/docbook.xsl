@@ -147,9 +147,9 @@ set       toc,title
     <xsl:param name="glossary.uri">http://docs-beta.rackspace.com/test/jonathan/glossary</xsl:param>
     <xsl:param name="glossary.xml.uri"><xsl:value-of select="$glossary.uri"/>/glossary.xml</xsl:param>
 		
-		<xsl:param name="social.icons">0</xsl:param>
+	<xsl:param name="social.icons">0</xsl:param>
 
-		<xsl:include href="../inline.xsl"/>
+	<xsl:include href="../inline.xsl"/>
 
     <xsl:template name="user.footer.content">
         <xsl:if test="$enable.disqus!='0' and (//d:section[not(@xml:id)] or //d:chapter[not(@xml:id)] or //d:part[not(@xml:id)] or //d:appendix[not(@xml:id)] or //d:preface[not(@xml:id)] or /*[not(@xml:id)])">
@@ -212,7 +212,7 @@ ERROR: Feedback email not set but internal comments are enabled.
       &#160;
       <a href="../atom.xml"><img alt="Atom feed of this document" src="../common/images/feed-icon.png"/></a>
     </xsl:if>
-    <xsl:if test="$social.icons != '0'">
+    <xsl:if test="$social.icons != '0' and $security!='internal'">
 <!--social buttons-->
 <div id="fb-root">&#160;</div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"><xsl:comment> </xsl:comment></script>
 <script>(function(d, s, id) {
