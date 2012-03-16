@@ -21,7 +21,7 @@
     </p:input>
   </l:validate-transform>
 
-  <p:xinclude/>
+  <p:xinclude  fixup-xml-base="true"/>
 
   <l:validate-transform name="validate-post-xinclude">
     <p:input port="schema" sequence="true">
