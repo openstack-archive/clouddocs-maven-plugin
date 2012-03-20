@@ -168,6 +168,16 @@ This avoids two problems in IE 8. We should someday figure out why this is happe
 These problems go away when you add this IE=7 mode meta tag.
  -->
 	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+      
+    <link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/> 
+    <script type="text/javascript" src="scripts/shCore.js"><xsl:comment/></script>
+    <script type="text/javascript" src="scripts/shBrushXml.js"><xsl:comment/></script>  
+    <script type="text/javascript" src="scripts/shBrushJSON.js"><xsl:comment/></script>
+    <script type="text/javascript" src="scripts/shBrushJScript.js"><xsl:comment/></script>
+    <script type="text/javascript" src="scripts/shBrushScala.js"><xsl:comment/></script>
+    <script type="text/javascript" src="scripts/shBrushBash.js"><xsl:comment/></script> 
+    <script type="text/javascript">SyntaxHighlighter.all();</script>      
+      
 <xsl:text>
 </xsl:text>
   </xsl:template>
@@ -721,6 +731,36 @@ These problems go away when you add this IE=7 mode meta tag.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
+
+    <xsl:template match="db:programlisting[@language]">  
+        <xsl:variable name="lang" select="@language"/>
+        
+        <xsl:choose>
+            <xsl:when test="$lang='javascript'">
+                <pre class="programlisting brush: javascript"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>
+            <xsl:when test="$lang='xml'">
+                <pre class="programlisting brush: xml"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>                     
+            <xsl:when test="$lang='scala'">              
+                <pre class="programlisting brush:scala"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>   
+            <xsl:when test="$lang='json'">
+                <pre class="programlisting brush:json"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>          
+            <xsl:otherwise>
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>      
+    </xsl:template>    
 
     <xsl:include href="revhistory2atom.xsl"/>
 
