@@ -5,16 +5,24 @@ SyntaxHighlighter.brushes.Custom = function()
         
     this.regexList = [
         //has a double quote followed by any sequence of characters followed by a double quote followed by colon 
-        { regex: /.*\".*\"\:/g, css: 'keyword'},
+        { regex: /.*\"(.*)\"(\s)*\:/g, css: 'keyword'},
         //opposite the above
-        { regex: /[^(.*\".*\"\:)]/g, css: 'comments'},
+        { regex: /[^(.*\".*\"(\s)*\:)]/g, css: 'comments'},
 
          //has a single quote followed by any sequence of characters followed by a single quote followed by colon 
-        { regex: /.*\'.*\'\:/g, css: 'keyword'},
+        { regex: /.*\'.*\'(\s)*\:/g, css: 'keyword'},
         //opposite the above
-        { regex: /[^(.*\'.*\'\:)]/g, css: 'comments'}
+        { regex: /[^(.*\'.*\'(\s)*\:)]/g, css: 'comments'},
         
-        //{ regex: /.*[\{|\}|\[|\]].*/g, css: 'plain'}
+        //Handle commas
+        //a comma followed by 0 or 1 space
+        { regex: /\,(\s)?/g, css: 'string'},  
+        
+        //Handle the special characters  
+        //Any of the braces followed by 1 or 0 space  
+        { regex: /(\{|\}|\[|\])(\s)?/g, css: 'plain'},
+        //1 or 0 space followed by a } and followed by 1 or 0 space 
+        { regex: /(\s)?\}(\s)?/g, css: 'plain'}   
 
     ];
 };
