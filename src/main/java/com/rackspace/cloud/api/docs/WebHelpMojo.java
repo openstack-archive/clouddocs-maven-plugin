@@ -215,6 +215,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
       * @parameter expression="${generate-webhelp.social.icons}" default-value="0"
       */
     private String socialIcons;
+    /**
+     * A parameter used to specify the path to the lega notice in webhelp.
+     *
+     * @parameter expression="${generate-webhelp.legal.notice.url}" default-value="index.html"
+     */
+    private String legalNoticeUrl;
 
     /**
      * DOCUMENT ME!
@@ -257,6 +263,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         }
         if (pdfUrl != null) {
             transformer.setParameter("pdf.url", pdfUrl);
+        }
+        if (legalNoticeUrl != null) {
+            transformer.setParameter("legal.notice.url", legalNoticeUrl);
         }
 
     if(canonicalUrlBase != null){

@@ -131,7 +131,7 @@ set       toc,title
       <xsl:otherwise>http://docs.rackspace.com/api/</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
-    
+  
   <xsl:param name="use.version.for.disqus">0</xsl:param>
     <xsl:variable name="version.for.disqus">
         <xsl:choose>
@@ -148,7 +148,7 @@ set       toc,title
     <xsl:param name="glossary.xml.uri"><xsl:value-of select="$glossary.uri"/>/glossary.xml</xsl:param>
 		
 	<xsl:param name="social.icons">0</xsl:param>
-
+    <xsl:param name="legal.notice.url">index.html</xsl:param>
 	<xsl:include href="../inline.xsl"/>
 
     <xsl:template name="user.footer.content">
@@ -193,7 +193,7 @@ ERROR: Feedback email not set but internal comments are enabled.
 	      </xsl:choose>
 	</xsl:if>
 	<hr/>
-	<div class="legal"><a href="index.html">Legal notices</a></div>
+	<div class="legal"><a href="{$legal.notice.url}">Legal notices</a></div>
 
     </xsl:template>
 
