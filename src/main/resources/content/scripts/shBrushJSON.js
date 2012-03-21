@@ -2,7 +2,7 @@ SyntaxHighlighter.brushes.Custom = function()
 {
     var operators = '{ } [ ] : ,';
     
-        
+         
     this.regexList = [
         //has a double quote followed by any sequence of characters followed by a double quote followed by colon 
         { regex: /.*\"(.*)\"(\s)*\:/g, css: 'keyword'},
