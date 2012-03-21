@@ -174,7 +174,7 @@ These problems go away when you add this IE=7 mode meta tag.
     <script type="text/javascript" src="scripts/shBrushXml.js"><xsl:comment/></script>  
     <script type="text/javascript" src="scripts/shBrushJSON.js"><xsl:comment/></script>
     <script type="text/javascript" src="scripts/shBrushJScript.js"><xsl:comment/></script>
-    <script type="text/javascript" src="scripts/shBrushScala.js"><xsl:comment/></script>
+    <script type="text/javascript" src="scripts/shBrushPython.js"><xsl:comment/></script>
     <script type="text/javascript" src="scripts/shBrushBash.js"><xsl:comment/></script> 
     <script type="text/javascript">SyntaxHighlighter.all();</script>      
       
@@ -732,7 +732,7 @@ These problems go away when you add this IE=7 mode meta tag.
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="db:programlisting[@language]">  
+    <xsl:template match="db:programlisting[@language] | db:screen[@language] | db:literallayout[@language]">  
         <xsl:variable name="lang" select="@language"/>
         
         <xsl:choose>
