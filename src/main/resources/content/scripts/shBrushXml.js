@@ -53,6 +53,10 @@
 		}
 	
 		this.regexList = [
+            //Make sure the replacement for the callouts does not get highlighted
+            {regex: /@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g,css: 'removed'},		
+            {regex: /\w+?\=/g, css: 'color1'},
+            {regex: /\"[^\"]+\"/g, css: 'string'},		
 			{ regex: new XRegExp('(\\&lt;|<)\\!\\[[\\w\\s]*?\\[(.|\\s)*?\\]\\](\\&gt;|>)', 'gm'),			css: 'color2' },	// <![ ... [ ... ]]>
 			{ regex: SyntaxHighlighter.regexLib.xmlComments,												css: 'comments' },	// <!-- ... -->
 			{ regex: new XRegExp('(&lt;|<)[\\s\\/\\?]*(\\w+)(?<attributes>.*?)[\\s\\/\\?]*(&gt;|>)', 'sg'), func: process }
