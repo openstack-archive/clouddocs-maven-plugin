@@ -23,6 +23,8 @@
 						;
 
 		this.regexList = [	
+            //Make sure the replacement for the callouts does not get highlighted
+            {regex: /@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g, css: 'removed'},    		
 			{ regex: /^#!.*$/gm,											css: 'preprocessor bold' },
 			{ regex: /\/[\w-\/]+/gm,										css: 'plain' },
 			{ regex: SyntaxHighlighter.regexLib.singleLinePerlComments,		css: 'comments' },		// one line comments

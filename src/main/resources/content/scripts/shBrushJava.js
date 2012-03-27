@@ -13,7 +13,9 @@
 						'short static strictfp super switch synchronized this throw throws true ' +
 						'transient try void volatile while';
 
-		this.regexList = [		
+		this.regexList = [	
+			//Make sure the replacement for the callouts does not get highlighted
+            {regex: /@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g, css: 'removed'},    
 			{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },		// one line comments
 			{ regex: /\/\*([^\*][\s\S]*)?\*\//gm,						css: 'comments' },	 	// multiline comments
 			{ regex: /\/\*(?!\*\/)\*[\s\S]*?\*\//gm,					css: 'preprocessor' },	// documentation comments

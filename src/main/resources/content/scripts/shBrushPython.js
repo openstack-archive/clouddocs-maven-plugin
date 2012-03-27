@@ -22,7 +22,9 @@
 
 		var special =  'None True False self cls class_';
 
-		this.regexList = [		
+		this.regexList = [	
+			    //Make sure the replacement for the callouts does not get highlighted
+                {regex: /@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g, css: 'removed'},    
 				{ regex: SyntaxHighlighter.regexLib.singleLinePerlComments, css: 'comments' },
 				{ regex: /^\s*@\w+/gm, 										css: 'decorator' },
 				{ regex: /(['\"]{3})([^\1])*?\1/gm, 						css: 'comments' },

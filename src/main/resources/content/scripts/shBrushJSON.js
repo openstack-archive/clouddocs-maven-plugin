@@ -4,6 +4,8 @@ SyntaxHighlighter.brushes.Custom = function()
     
          
     this.regexList = [
+        //Make sure the replacement for the callouts does not get highlighted
+        {regex: /@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g, css: 'removed'},        
         //has a double quote followed by any sequence of characters followed by a double quote followed by colon 
         { regex: /.*\"(.*)\"(\s)*\:/g, css: 'keyword'},
         //opposite the above
