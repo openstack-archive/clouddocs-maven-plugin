@@ -36,7 +36,7 @@
 	}
 
 	Brush.prototype	= new SyntaxHighlighter.Highlighter();
-	Brush.aliases	= ['bash', 'shell', 'sh'];
+	Brush.aliases	= ['bash', 'shell', 'sh', 'curl'];
 
 	SyntaxHighlighter.brushes.Bash = Brush;
 
