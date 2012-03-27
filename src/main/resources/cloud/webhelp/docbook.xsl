@@ -212,7 +212,7 @@ ERROR: Feedback email not set but internal comments are enabled.
       &#160;
       <a href="../atom.xml"><img alt="Atom feed of this document" src="../common/images/feed-icon.png"/></a>
     </xsl:if>
-    <xsl:if test="$social.icons != '0' and $security!='internal'">
+    <xsl:if test="$social.icons != '0' and $security = 'external' ">
 <!--social buttons-->
 <div id="fb-root">&#160;</div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"><xsl:comment> </xsl:comment></script>
 <script>(function(d, s, id) {
