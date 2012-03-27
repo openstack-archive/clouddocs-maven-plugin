@@ -171,7 +171,8 @@ These problems go away when you add this IE=7 mode meta tag.
       
     <link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/> 
     <script type="text/javascript" src="scripts/shCore.js"><xsl:comment/></script>
-    <script type="text/javascript" src="scripts/shBrushXml.js"><xsl:comment/></script>  
+    <script type="text/javascript" src="scripts/shBrushXml.js"><xsl:comment/></script>
+    <script type="text/javascript" src="scripts/shBrushJava.js"><xsl:comment/></script>      
     <script type="text/javascript" src="scripts/shBrushJSON.js"><xsl:comment/></script>
     <script type="text/javascript" src="scripts/shBrushJScript.js"><xsl:comment/></script>
     <script type="text/javascript" src="scripts/shBrushPython.js"><xsl:comment/></script>
