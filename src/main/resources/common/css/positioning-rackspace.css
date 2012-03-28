@@ -134,7 +134,7 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
 #content pre.literallayout, #content pre.programlisting, #content pre.screen
 {
     -x-system-font: none;
-    background-color: silver;
+    //background-color: silver;
     border-bottom-color: #DEDEDE !important;
     border-bottom-style: solid !important;
     border-bottom-width: 1px !important;
