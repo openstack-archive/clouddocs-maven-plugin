@@ -160,7 +160,7 @@
                     <xsl:processing-instruction name="hard-pagebreak"/>
                     <example>
                         <title>Extension Query Response: XML</title>
-                        <programlisting language="XML"><xsl:processing-instruction name="db-font-size">95%</xsl:processing-instruction>
+                        <programlisting language="xml"><xsl:processing-instruction name="db-font-size">95%</xsl:processing-instruction>
                             <xsl:choose>
                                 <xsl:when test="//ext:extensions">
                                     <xsl:apply-templates select="//ext:extensions" mode="escape-xml"/>
@@ -174,7 +174,7 @@
                     <xsl:processing-instruction name="hard-pagebreak"/>
                     <example>
                         <title>Extension Query Response: JSON</title>
-                        <programlisting language="javascript"><xsl:processing-instruction name="db-font-size">95%</xsl:processing-instruction>
+                        <programlisting language="json"><xsl:processing-instruction name="db-font-size">95%</xsl:processing-instruction>
                             <xsl:choose>
                                 <xsl:when test="//ext:extensions">
                                     <xsl:apply-templates select="//ext:extensions" mode="xml2json"/>
@@ -207,21 +207,11 @@
     </xsl:template>
 
     <xsl:template match="*" mode="escape-xml">
-        <xsl:if test="parent::db:info">
-            <xsl:text>     </xsl:text>
-        </xsl:if>&lt;
-        <xsl:value-of select="local-name(.)"/>
+        <xsl:if test="parent::db:info"><xsl:text>     </xsl:text></xsl:if>&lt;<xsl:value-of select="local-name(.)"/>
         
         <xsl:apply-templates select="@*" mode="escape-xml"/>
- 
- 
-        <xsl:if test="self::ext:extensions or self::ext:extension[not(parent::ext:extensions)]">
-            xmlns="http://docs.openstack.org/common/api/v1.0"
-            xmlns:atom="http://www.w3.org/2005/Atom"
-        </xsl:if>
- 
-        <xsl:if test="not(./node())">/</xsl:if>&gt;
-        <xsl:apply-templates xml:space="default" mode="escape-xml"/>
+        <xsl:if test="self::ext:extensions or self::ext:extension[not(parent::ext:extensions)]"> xmlns="http://docs.openstack.org/common/api/v1.0" 
+            xmlns:atom="http://www.w3.org/2005/Atom"</xsl:if><xsl:if test="not(./node())">/</xsl:if>&gt;<xsl:apply-templates xml:space="default" mode="escape-xml"/>
         <xsl:if test="node()">&lt;/<xsl:value-of select="local-name(.)"/>&gt;</xsl:if>        
     </xsl:template>
 
