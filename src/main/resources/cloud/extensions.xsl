@@ -21,6 +21,7 @@
         -->
         <xsl:choose>
             <xsl:when test="$webhelp='true' and (/db:book/db:info/ext:extensions or /db:book/db:info/ext:extension)">
+        
                 <!-- debug only
                 <xsl:message>^^^^^^^webhelp is true and extensions exists^^^^^^^^^^</xsl:message>
                 -->
@@ -36,8 +37,7 @@
                         </xsl:result-document> 
                     </xsl:otherwise>
                 </xsl:choose>
- 
-
+                
             </xsl:when> 
             <xsl:otherwise>
                 <!-- Do nothing 
@@ -49,6 +49,7 @@
         <xsl:apply-templates/>
     </xsl:template>
     
+    
     <xsl:template match="node() | @*">
 
         <xsl:copy>
@@ -56,6 +57,7 @@
             </xsl:apply-templates>
         </xsl:copy>
     </xsl:template>
+    
     
     <xsl:template match="db:chapter[1]">
         <xsl:choose>
@@ -204,18 +206,80 @@
         
     </xsl:template>
 
-    <xsl:template match="*" mode="escape-xml"><xsl:if test="parent::db:info"><xsl:text>     </xsl:text></xsl:if>&lt;<xsl:value-of select="local-name(.)"/><xsl:apply-templates select="@*" mode="escape-xml"/><xsl:if test="not(./node())">/</xsl:if>&gt;<xsl:apply-templates xml:space="default" mode="escape-xml"/><xsl:if test="node()">&lt;/<xsl:value-of select="local-name(.)"/>&gt;</xsl:if>        </xsl:template>
+    <xsl:template match="*" mode="escape-xml">
+        <xsl:if test="parent::db:info">
+            <xsl:text>     </xsl:text>
+        </xsl:if>&lt;
+        <xsl:value-of select="local-name(.)"/>
+        
+        <xsl:apply-templates select="@*" mode="escape-xml"/>
+ 
+ 
+        <xsl:if test="self::ext:extensions or self::ext:extension[not(parent::ext:extensions)]">
+            xmlns="http://docs.openstack.org/common/api/v1.0"
+            xmlns:atom="http://www.w3.org/2005/Atom"
+        </xsl:if>
+ 
+        <xsl:if test="not(./node())">/</xsl:if>&gt;
+        <xsl:apply-templates xml:space="default" mode="escape-xml"/>
+        <xsl:if test="node()">&lt;/<xsl:value-of select="local-name(.)"/>&gt;</xsl:if>        
+    </xsl:template>
+
+
+    <xsl:template match="text()"  mode="escape-xml">
+        
+        <xsl:variable name="lessthan">&lt;</xsl:variable>
+        <xsl:variable name="amplessthan">&amp;lt;</xsl:variable>
+        <xsl:variable name="greaterthan">&gt;</xsl:variable>
+        <xsl:variable name="ampgreterthan">&amp;gt;</xsl:variable> 
+        <xsl:variable name="amp">&amp;</xsl:variable>
+        <xsl:variable name="ampamp">&amp;amp;</xsl:variable> 
+
+        <xsl:value-of select="replace(
+                                  replace(
+                                      replace(.,$amp,$ampamp),
+                                          $lessthan,$amplessthan),
+                                      $greaterthan,$ampgreterthan)"/>
+
+    </xsl:template>
     
-    <xsl:param name="singlequote">'</xsl:param>
-    
-    <xsl:template match="@*" mode="escape-xml"> <xsl:value-of select="concat(' ',local-name(.),'=',$singlequote,.,$singlequote)"/>
+    <xsl:template match="@*" mode="escape-xml">
+ 
+        <xsl:variable name="lessthan">&lt;</xsl:variable>
+        <xsl:variable name="amplessthan">&amp;lt;</xsl:variable>
+        <xsl:variable name="greaterthan">&gt;</xsl:variable>
+        <xsl:variable name="ampgreterthan">&amp;gt;</xsl:variable> 
+        <xsl:variable name="amp">&amp;</xsl:variable>
+        <xsl:variable name="ampamp">&amp;amp;</xsl:variable> 
+ 
+        <xsl:variable name="singlequote">&#39;</xsl:variable>
+        <xsl:variable name="ampsinglequote">&amp;#39;</xsl:variable>
+        
+        <xsl:variable name="doublequote">&#34;</xsl:variable>
+        <xsl:variable name="ampdoublequote">&amp;#34;</xsl:variable>
+        
+        <xsl:variable name="escaped-text" 
+            select="replace(
+                        replace(
+                            replace(
+                                replace(
+                                    replace(.,$amp,$ampamp),
+                                        $lessthan,$amplessthan),
+                                    $greaterthan,$ampgreterthan),
+                                $singlequote,$ampsinglequote),
+                            $doublequote,$ampdoublequote)"/>
+
+        <xsl:value-of select="concat(' ',local-name(.),'=',$singlequote,$escaped-text,$singlequote)"/>
         <xsl:choose>
             <xsl:when test="not(position()=last())"><xsl:text>
 </xsl:text><xsl:text>             </xsl:text>
             </xsl:when>
-
+            
         </xsl:choose>
+           
     </xsl:template>
+    
+    <xsl:param name="singlequote">'</xsl:param>
     
     <!-- Maybe use this instead (but integrate it into this xsl):
         https://code.google.com/p/xml2json-xslt/source/browse/trunk/xml2json.xslt -->
