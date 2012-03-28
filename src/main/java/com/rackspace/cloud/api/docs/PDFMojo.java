@@ -375,7 +375,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer(new StreamSource(classLoader.getResourceAsStream(COVER_XSL)));
-	    transformer.setParameter("coverColor", coverColor);
+	    if(coverColor != null){
+		transformer.setParameter("coverColor", coverColor);
+	    }
 	    transformer.setParameter("branding", branding);
 
             transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
