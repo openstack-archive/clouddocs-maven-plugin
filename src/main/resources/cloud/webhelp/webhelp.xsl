@@ -737,7 +737,32 @@ These problems go away when you add this IE=7 mode meta tag.
         <xsl:variable name="lang" select="@language"/>
         
         <xsl:choose>
+            <xsl:when test="$lang='bash'">              
+                <pre class="programlisting brush: bash"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when> 
+            <xsl:when test="$lang='BASH'">              
+                <pre class="programlisting brush: bash"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>            
             <xsl:when test="$lang='javascript'">
+                <pre class="programlisting brush: javascript"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>
+            <xsl:when test="$lang='JAVASCRIPT'">
+                <pre class="programlisting brush: javascript"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>
+            <xsl:when test="$lang='js'">
+                <pre class="programlisting brush: javascript"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>
+            <xsl:when test="$lang='JS'">
                 <pre class="programlisting brush: javascript"> 
                     <xsl:apply-templates/>
                 </pre>
@@ -746,19 +771,57 @@ These problems go away when you add this IE=7 mode meta tag.
                 <pre class="programlisting brush: xml"> 
                     <xsl:apply-templates/>
                 </pre>
-            </xsl:when>                     
-            <xsl:when test="$lang='scala'">              
-                <pre class="programlisting brush:scala"> 
+            </xsl:when> 
+            <xsl:when test="$lang='XML'">
+                <pre class="programlisting brush: xml"> 
                     <xsl:apply-templates/>
                 </pre>
-            </xsl:when>   
+            </xsl:when>
+            <xsl:when test="$lang='java'">              
+                <pre class="programlisting brush: java"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>  
+            <xsl:when test="$lang='JAVA'">              
+                <pre class="programlisting brush: java"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>
             <xsl:when test="$lang='json'">
-                <pre class="programlisting brush:json"> 
+                <pre class="programlisting brush: json"> 
                     <xsl:apply-templates/>
                 </pre>
-            </xsl:when>          
+            </xsl:when> 
+            <xsl:when test="$lang='JSON'">
+                <pre class="programlisting brush: json"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when> 
+            <xsl:when test="$lang='python'">              
+                <pre class="programlisting brush: python"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when> 
+            <xsl:when test="$lang='PYTHON'">              
+                <pre class="programlisting brush: python"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>
+            <xsl:when test="$lang='py'">              
+                <pre class="programlisting brush: python"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>
+            <xsl:when test="$lang='PY'">              
+                <pre class="programlisting brush: python"> 
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates/>
+                <pre class="programlisting" >
+                    <xsl:apply-templates/>    
+                </pre>
+                
             </xsl:otherwise>
         </xsl:choose>      
     </xsl:template>    
