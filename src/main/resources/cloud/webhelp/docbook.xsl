@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet exclude-result-prefixes="d"
+<xsl:stylesheet exclude-result-prefixes="d g"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://docbook.org/ns/docbook"
 		            xmlns="http://www.w3.org/1999/xhtml"
@@ -669,5 +669,20 @@ ERROR: Feedback email not set but internal comments are enabled.
 <xsl:template match="d:sidebar/d:title">
   <b><xsl:apply-templates/></b>
 </xsl:template>
+
+<xsl:template name="anchor">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="conditional" select="1"/>
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id">
+      <xsl:with-param name="object" select="$node"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xslo:if xmlns:xslo="http://www.w3.org/1999/XSL/Transform" test="not($node[parent::d:blockquote])"><xsl:if test="$conditional = 0 or $node/@id or $node/@xml:id">
+    <!-- Do not close this a tag because it causes problems in older version of Firefox (pre 4.0) in conjunction with the SyntaxHighlighter we're using. -->
+    <a id="{$id}">&#160;</a>
+  </xsl:if></xslo:if>
+</xsl:template>
+
 
 </xsl:stylesheet>
