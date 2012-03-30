@@ -15,19 +15,15 @@ $(document).ready(function() {
 	// you click on a link within a page.
 	$('a[href*=#]').click(function() {
 		if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'')
-		&& location.hostname == this.hostname) {
+		    && location.hostname == this.hostname) {
 		    var $target = $(this.hash);
-		    $target = $target.length && $target|| $('[name=' + this.hash.slice(1) +']');
-		    if (!(this.hash == "#searchDiv" || this.hash == "#treeDiv" || this.hash == "") && $target.length) {
-			    var targetOffset = $target.offset().top - 140;
-			    $('html,body').animate({scrollTop: targetOffset}, 200);
-			    
-	            //If element webhelp-currentid exists then scroll to it
-	            if($('#webhelp-currentid')){
-	                window.location.hash='#webhelp-currentid';
-	            }			    
-			    
-			    return false;
+		    $target = $target.length && $target
+			|| $('[name=' + this.hash.slice(1) +']');
+		if (!(this.hash == "#searchDiv" || this.hash == "#treeDiv" || this.hash == "") && $target.length) {
+			var targetOffset = $target.offset().top - 140;
+			$('html,body')
+			    .animate({scrollTop: targetOffset}, 200);
+			return false;
 		    }
 		}
 	    });
@@ -85,22 +81,11 @@ $(document).ready(function() {
     // you click on a link from another page. 
     var hash = window.location.hash;
     if(hash){ 
-	    var targetOffset = $(hash).offset().top - 105;
-	    $('html,body').animate({scrollTop: targetOffset}, 200);
-	    
-	    //If element webhelp-currentid exists then scroll to it
-	    if($('#webhelp-currentid')){
-	        window.location.hash='#webhelp-currentid';
-	    }	    
-	    
-	    return false;
+	var targetOffset = $(hash).offset().top - 105;
+	$('html,body').animate({scrollTop: targetOffset}, 200);
+	return false;
     }
-    else{
-        //If element webhelp-currentid exists then scroll to it
-	    if($('#webhelp-currentid')){
-	        window.location.hash='#webhelp-currentid';
-	    }
-    }
+
 });
 
 /**
