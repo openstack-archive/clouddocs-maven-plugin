@@ -32,7 +32,7 @@
   float: none !important;
   height: auto !important;
   left: auto !important;
-  line-height: 1.1em !important;
+  line-height: 1.3em !important;
   margin: 0 !important;
   outline: 0 !important;
   overflow: visible !important;
@@ -49,9 +49,7 @@
   font-style: normal !important;
   font-size: 1em !important;
   min-height: inherit !important;
-  /************* Comment this out so the ? link does not appear
-  min-height: auto !important;
-  *************/
+
 }
 
 .syntaxhighlighter {
@@ -115,25 +113,57 @@
 .syntaxhighlighter.collapsed table {
   display: none !important;
 }
-.syntaxhighlighter.collapsed .toolbar {
+
+.syntaxhighlighter .mytoolbar{
+    display: none !important;   
+}
+
+.syntaxhighlighter .show{
+    display: block !important;   
+}
+
+.syntaxhighlighter .newtoolbar {
+    background-color: #F8F8F8 !important;
+    border: 1px solid #E7E5DC !important;
+    font-size: 1px !important;
+    padding: 8px 8px 8px 0 !important;
+    position: absolute !important; 
+    background-repeat: no-repeat !important;
+    display: block !important;
+    float: left !important;
+    margin-left: 8px !important;
+}
+
+.syntaxhighlighter .newtoolbar2 {
+    float: right;
+}
+
+.syntaxhighlighter .item {
+    background-repeat: no-repeat !important;
+    display: block !important;
+    float: left !important;
+    margin-left: 8px !important;
+}
+
+.syntaxhighlighter.collapsed .mybar {
   padding: 0.1em 0.8em 0em 0.8em !important;
   font-size: 1em !important;
   position: static !important;
   width: auto !important;
   height: auto !important;
 }
-.syntaxhighlighter.collapsed .toolbar span {
+.syntaxhighlighter.collapsed .mybar span {
   display: inline !important;
   margin-right: 1em !important;
 }
-.syntaxhighlighter.collapsed .toolbar span a {
+.syntaxhighlighter.collapsed .mybar span a {
   padding: 0 !important;
   display: none !important;
 }
-.syntaxhighlighter.collapsed .toolbar span a.expandSource {
+.syntaxhighlighter.collapsed .mybar span a.expandSource {
   display: inline !important;
 }
-.syntaxhighlighter .toolbar {
+.syntaxhighlighter .mybar {
   position: absolute !important;
   right: 1px !important;
   top: 1px !important;
@@ -142,26 +172,26 @@
   font-size: 10px !important;
   z-index: 10 !important;
 }
-.syntaxhighlighter .toolbar span.title {
+.syntaxhighlighter .mybar span.title {
   display: inline !important;
 }
-.syntaxhighlighter .toolbar a {
+.syntaxhighlighter .mybar a {
   display: block !important;
   text-align: center !important;
   text-decoration: none !important;
   padding-top: 1px !important;
 }
-.syntaxhighlighter .toolbar a.expandSource {
+.syntaxhighlighter .mybar a.expandSource {
   display: none !important;
 }
 .syntaxhighlighter.ie {
   font-size: .9em !important;
   padding: 1px 0 1px 0 !important;
 }
-.syntaxhighlighter.ie .toolbar {
+.syntaxhighlighter.ie .mybar {
   line-height: 8px !important;
 }
-.syntaxhighlighter.ie .toolbar a {
+.syntaxhighlighter.ie .mybar a {
   padding-top: 0px !important;
 }
 .syntaxhighlighter.printing .line.alt1 .content,
@@ -177,7 +207,7 @@
 .syntaxhighlighter.printing .line .content {
   color: black !important;
 }
-.syntaxhighlighter.printing .toolbar {
+.syntaxhighlighter.printing .mybar {
   display: none !important;
 }
 .syntaxhighlighter.printing a {
@@ -186,6 +216,9 @@
 .syntaxhighlighter.printing .plain, .syntaxhighlighter.printing .plain a {
   color: black !important;
 }
+.syntaxhighlighter .remove{
+color:#AABBCC !important;}
+
 .syntaxhighlighter.printing .comments, .syntaxhighlighter.printing .comments a {
   color: #008200 !important;
 }
@@ -261,37 +294,29 @@
 .syntaxhighlighter.collapsed {
   overflow: visible !important;
 }
-.syntaxhighlighter.collapsed .toolbar {
+.syntaxhighlighter.collapsed .mybar {
   color: blue !important;
   background: white !important;
   border: 1px solid #6ce26c !important;
 }
-.syntaxhighlighter.collapsed .toolbar a {
+.syntaxhighlighter.collapsed .mybar a {
   color: blue !important;
 }
-.syntaxhighlighter.collapsed .toolbar a:hover {
+.syntaxhighlighter.collapsed .mybar a:hover {
   color: red !important;
 }
-
-/************* Comment this out so the ? link does not appear
-.syntaxhighlighter .toolbar {
+.syntaxhighlighter .mybar {
   color: white !important;
-  background: #6ce26c !important;
+  background: #BBCCDD !important;
   border: none !important;
 }
-*************/ 
-
-
-.syntaxhighlighter .toolbar a {
+.syntaxhighlighter .mybar a {
   color: white !important;
 }
 
-/************* Comment this out so the ? link does not appear
-.syntaxhighlighter .toolbar a:hover {
+.syntaxhighlighter .mybar a:hover {
   color: black !important;
 }
-*************/
-
 .syntaxhighlighter .plain, .syntaxhighlighter .plain a {
   color: black !important;
 }
@@ -322,9 +347,7 @@
 .syntaxhighlighter .script {
   font-weight: bold !important;
   color: #006699 !important;
-  /************* Comment this out so the ? link does not appear
-  background-color: none !important;
-  *************/
+
 }
 .syntaxhighlighter .color1, .syntaxhighlighter .color1 a {
   color: gray !important;
@@ -339,3 +362,4 @@
 .syntaxhighlighter .keyword {
   font-weight: bold !important;
 }
+

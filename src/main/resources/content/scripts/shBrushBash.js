@@ -7,7 +7,7 @@
 	{
 		var keywords =	'if fi then elif else for do done until while break continue case esac function return in eq ne ge le';
 		var commands =  'alias apropos awk basename bash bc bg builtin bzip2 cal cat cd cfdisk chgrp chmod chown chroot' +
-						'cksum clear cmp comm command cp cron crontab csplit cut date dc dd ddrescue declare df ' +
+						'cksum clear cmp comm command cp cron crontab csplit curl cut date dc dd ddrescue declare df ' +
 						'diff diff3 dig dir dircolors dirname dirs du echo egrep eject enable env ethtool eval ' +
 						'exec exit expand export expr false fdformat fdisk fg fgrep file find fmt fold format ' +
 						'free fsck ftp gawk getopts grep groups gzip hash head history hostname id ifconfig ' +
@@ -17,14 +17,15 @@
 						'printenv printf ps pushd pwd quota quotacheck quotactl ram rcp read readonly renice ' +
 						'remsync rm rmdir rsync screen scp sdiff sed select seq set sftp shift shopt shutdown ' +
 						'sleep sort source split ssh strace su sudo sum symlink sync tail tar tee test time ' +
-						'times touch top traceroute trap tr true tsort tty type ulimit umask umount unalias ' +
+						'times touch top traceroute trap tr true tsort tty ulimit umask umount unalias ' +
 						'uname unexpand uniq units unset unshar useradd usermod users uuencode uudecode v vdir ' +
 						'vi watch wc whereis which who whoami Wget xargs yes'
 						;
 
 		this.regexList = [	
             //Make sure the replacement for the callouts does not get highlighted
-            {regex: /@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g, css: 'removed'},    		
+            {regex: /@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g, css: 'removed'},		
+            {regex: /(\-(.)+?\s)|curl\s/ig, css: 'color2 bold'},
 			{ regex: /^#!.*$/gm,											css: 'preprocessor bold' },
 			{ regex: /\/[\w-\/]+/gm,										css: 'plain' },
 			{ regex: SyntaxHighlighter.regexLib.singleLinePerlComments,		css: 'comments' },		// one line comments
@@ -36,7 +37,7 @@
 	}
 
 	Brush.prototype	= new SyntaxHighlighter.Highlighter();
-	Brush.aliases	= ['bash', 'shell', 'sh', 'curl'];
+	Brush.aliases	= ['bash', 'shell', 'sh'];
 
 	SyntaxHighlighter.brushes.Bash = Brush;
 
