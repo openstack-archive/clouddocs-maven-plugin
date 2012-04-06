@@ -457,3 +457,7 @@ div.sidebar{
 .co img {
 vertical-align: middle;
 }
+
+body div#content div.navfooter table tbody td, body div#content div.navfooter table  {
+    border: 0px solid black; 
+}
