@@ -45,7 +45,7 @@ var sh = {
 		'gutter' : true,
 		
 		/** Enables or disables toolbar. */
-		'toolbar' : false,
+		'toolbar' : true,
 		
 		/** Enables quick code copy and paste from double click. */
 		'quick-code' : true,
@@ -129,7 +129,8 @@ var sh = {
 		 */
 		getHtml: function(highlighter)
 		{
-			var html = '<div class="toolbar">',
+			//var html = '<div class="mytoolbar">',
+			var html = '<div class="show">',
 				items = sh.toolbar.items,
 				list = items.list
 				;
@@ -156,11 +157,16 @@ var sh = {
 		 */
 		getButtonHtml: function(highlighter, commandName, label)
 		{
-			return '<span><a href="#" class="toolbar_item'
-				+ ' command_' + commandName
-				+ ' ' + commandName
-				+ '">' + label + '</a></span>'
-				;
+			return '<div class="newtoolbar2"> '+
+			//'<a class="item" href="#"> '+
+			'<img src="images/icon_clipboard.png" alt="View Source" height="20" width="20" align="right" onclick="highlightCode(event);" /> '+
+			//'</a> '+
+			'</div>';
+			
+			//return '<span><a href="#" class="toolbar_item'
+				//+ ' command_' + commandName
+				//+ ' ' + commandName
+				//+ '">' + label + '</a></span>';
 		},
 		
 		/**
@@ -361,38 +367,6 @@ var sh = {
 }; // end of sh
 
 /**
- * Checks if target DOM elements has specified CSS class.
- * @param {DOMElement} target Target DOM element to check.
- * @param {String} className Name of the CSS class to check for.
- * @return {Boolean} Returns true if class name is present, false otherwise.
- */
-function hasClass(target, className)
-{
-	return target.className.indexOf(className) != -1;
-};
-
-/**
- * Adds CSS class name to the target DOM element.
- * @param {DOMElement} target Target DOM element.
- * @param {String} className New CSS class to add.
- */
-function addClass(target, className)
-{
-	if (!hasClass(target, className))
-		target.className += ' ' + className;
-};
-
-/**
- * Removes CSS class name from the target DOM element.
- * @param {DOMElement} target Target DOM element.
- * @param {String} className CSS class to remove.
- */
-function removeClass(target, className)
-{
-	target.className = target.className.replace(className, '');
-};
-
-/**
  * Converts the source to array object. Mostly used for function arguments and 
  * lists returned by getElementsByTagName() which aren't Array objects.
  * @param {List} source Source list.
@@ -418,16 +392,6 @@ function splitLines(block)
 	return block.split(/\r?\n/);
 }
 
-/**
- * Generates HTML ID for the highlighter.
- * @param {String} highlighterId Highlighter ID.
- * @return {String} Returns HTML ID.
- */
-function getHighlighterId(id)
-{
-	var prefix = 'highlighter_';
-	return id.indexOf(prefix) == 0 ? id : prefix + id;
-};
 
 /**
  * Finds Highlighter instance by ID.
@@ -459,51 +423,6 @@ function storeHighlighter(highlighter)
 	sh.vars.highlighters[getHighlighterId(highlighter.id)] = highlighter;
 };
 
-/**
- * Looks for a child or parent node which has specified classname.
- * Equivalent to jQuery's $(container).find(".className")
- * @param {Element} target Target element.
- * @param {String} search Class name or node name to look for.
- * @param {Boolean} reverse If set to true, will go up the node tree instead of down.
- * @return {Element} Returns found child or parent element on null.
- */
-function findElement(target, search, reverse /* optional */)
-{
-	if (target == null)
-		return null;
-		
-	var nodes			= reverse != true ? target.childNodes : [ target.parentNode ],
-		propertyToFind	= { '#' : 'id', '.' : 'className' }[search.substr(0, 1)] || 'nodeName',
-		expectedValue,
-		found
-		;
-
-	expectedValue = propertyToFind != 'nodeName'
-		? search.substr(1)
-		: search.toUpperCase()
-		;
-		
-	// main return of the found node
-	if ((target[propertyToFind] || '').indexOf(expectedValue) != -1)
-		return target;
-	
-	for (var i = 0; nodes && i < nodes.length && found == null; i++)
-		found = findElement(nodes[i], search, reverse);
-	
-	return found;
-};
-
-/**
- * Looks for a parent node which has specified classname.
- * This is an alias to <code>findElement(container, className, true)</code>.
- * @param {Element} target Target element.
- * @param {String} className Class name to look for.
- * @return {Element} Returns found parent element on null.
- */
-function findParentElement(target, className)
-{
-	return findElement(target, className, true);
-};
 
 /**
  * Finds an index of element in the array.
@@ -1152,6 +1071,60 @@ function quickCodeHandler(e)
 	});
 };
 
+function getDivByClassName(e, theClassName){
+
+    var targ = e.target;
+    var cName=targ.className;
+    var count=0;
+    var index=cName.indexOf('syntaxhighlighter');
+
+    while(-1==index && count<10){
+        ++count;
+        targ=targ.parentNode;
+        cName=targ.className;
+        index=cName.indexOf('syntaxhighlighter');
+    }
+    
+    if(index==0){
+        index=-1;
+        var arr=targ.getElementsByTagName('div');
+        if(null!=arr && arr.length>0){
+            
+            count=0;
+            for(count=0;count<arr.length;++count){
+                targ=arr[count];
+                cName=targ.className;
+                index=cName.indexOf(theClassName);
+                if((targ.className!=null)&&(index!=-1)){
+                    break;
+                }
+            }
+        }
+    } 
+    if(index==-1){
+        targ=null;
+    }
+    return targ;  
+};
+
+
+function showSelect(e){
+    var targ = getDivByClassName(e,'mytoolbar');
+    
+    if(null!=targ){
+        targ.className="show";
+    }
+};
+
+function hideSelect(e){
+    var targ = getDivByClassName(e,'show');    
+    
+    if(null!=targ){
+        targ.className="mytoolbar";
+    }
+};
+
+
 /**
  * Match object.
  */
@@ -1537,11 +1510,6 @@ sh.Highlighter.prototype = {
 	 */
 	getHtml: function(code)
 	{
-	    //Pad extra lines at the end
-	    code+='\n';
-	    code+='\n';
-	    code+='\n';
-	    code+='\n';
 	    
 		var html = '',
 			classes = [ 'syntaxhighlighter' ],
@@ -1553,6 +1521,8 @@ sh.Highlighter.prototype = {
 		//Replace all callouts with special characters
         code=code.replace(/<span(.)+?(alt\=\(([0-9]?[0-9])\))??(.)+?callouts\/([0-9]?[0-9])\.png\"(\salt\=\(([0-9]?[0-9])\))??(.)+?<\/span>/ig,'@@@@$5@$5@@@@');
 
+        //Replace mark bold with special characters
+        code=code.replace(/<span\sclass\s*?\=\s*?\"bold\"(.|\n|\r|\f)+?<strong>(.+?)<\/strong>(.)*?<\/span>/ig,'!!!!$2!!!!');
 		// process light mode
 		if (this.getParam('light') == true)
 			this.params.toolbar = this.params.gutter = false;
@@ -1626,6 +1596,7 @@ sh.Highlighter.prototype = {
 
 		//Put back the callouts
 		html=html.replace(/@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g,'<span class="co"><img src="../common/images/callouts/$1.png" alt="($2)"/></span>');	
+		html=html.replace(/!!!!(.+?)!!!!/g,'<span class="bold variable">$1<\/span>');
 		return html;
 	},
 	
@@ -1653,6 +1624,9 @@ sh.Highlighter.prototype = {
 		
 		if (this.getParam('quick-code'))
 			attachEvent(findElement(div, '.code'), 'dblclick', quickCodeHandler);
+
+            //attachEvent(findElement(div, '.code'), 'mouseenter', showSelect);
+            //attachEvent(findElement(div, '.code'), 'mouseleave', hideSelect);
 
 		return div;
 	},
@@ -1724,3 +1698,166 @@ return sh;
 
 // CommonJS
 typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter : null;
+
+
+function highlightCode(e){
+
+	var target = e.target,
+		highlighterDiv = findParentElement(target, '.syntaxhighlighter'),
+		container = findContainerElement(target),
+		textarea = document.createElement('textarea'),
+		highlighter;
+
+    var highlightId=getHighlighterId(highlighterDiv.id);
+    
+    highlighter = document.getElementById(highlightId);
+
+	// add source class name
+	addClass(highlighterDiv, 'source');
+
+	// Have to go over each line and grab it's text, can't just do it on the
+	// container because Firefox loses all \n where as Webkit doesn't.
+	var lines = container.childNodes,
+		code = []
+		;
+	
+	for (var i = 0; i < lines.length; i++)
+		code.push(lines[i].innerText || lines[i].textContent);
+	
+	// using \r instead of \r or \r\n makes this work equally well on IE, FF and Webkit
+	code = code.join('\r');
+
+    // For Webkit browsers, replace nbsp with a breaking space
+    code = code.replace(/\u00a0/g, " ");	
+
+
+	// inject <textarea/> tag
+	textarea.appendChild(document.createTextNode(code));
+	container.appendChild(textarea);
+	
+	// preselect all text
+	textarea.focus();
+	textarea.select();
+	
+    container.addEventListener("click", function(){removeHighlight(textarea, highlighterDiv)}, false);
+
+};
+
+function removeHighlight(textarea, highlighterDiv){
+    textarea.parentNode.removeChild(textarea);
+    removeClass(highlighterDiv, 'source');
+}
+
+function findContainerElement(target){
+    var syntaxdiv = findParentElement(target, '.syntaxhighlighter');
+    var retVal=null;
+    if(null!=syntaxdiv && syntaxdiv!=undefined){
+
+        var theDivs=syntaxdiv.getElementsByTagName('div');
+        
+        if(null!=theDivs && theDivs!=undefined && theDivs.length>0){
+            var index=0;            
+            var tmpDiv=null;
+            for(index=0;index<theDivs.length;++index){
+                tmpDiv=theDivs[index];
+                if(tmpDiv.className=='container'){
+
+                   retVal=tmpDiv;
+                   break;
+                }
+            }
+        }
+        
+    }
+    return retVal;   
+}
+
+/**
+ * Looks for a child or parent node which has specified classname.
+ * Equivalent to jQuery's $(container).find(".className")
+ * @param {Element} target Target element.
+ * @param {String} search Class name or node name to look for.
+ * @param {Boolean} reverse If set to true, will go up the node tree instead of down.
+ * @return {Element} Returns found child or parent element on null.
+ */
+function findElement(target, search, reverse /* optional */)
+{
+	if (target == null)
+		return null;
+		
+	var nodes			= reverse != true ? target.childNodes : [ target.parentNode ],
+		propertyToFind	= { '#' : 'id', '.' : 'className' }[search.substr(0, 1)] || 'nodeName',
+		expectedValue,
+		found
+		;
+
+	expectedValue = propertyToFind != 'nodeName'
+		? search.substr(1)
+		: search.toUpperCase()
+		;
+		
+	// main return of the found node
+	if ((target[propertyToFind] || '').indexOf(expectedValue) != -1)
+		return target;
+	
+	for (var i = 0; nodes && i < nodes.length && found == null; i++)
+		found = findElement(nodes[i], search, reverse);
+	
+	return found;
+};
+
+/**
+ * Looks for a parent node which has specified classname.
+ * This is an alias to <code>findElement(container, className, true)</code>.
+ * @param {Element} target Target element.
+ * @param {String} className Class name to look for.
+ * @return {Element} Returns found parent element on null.
+ */
+function findParentElement(target, className)
+{
+	return findElement(target, className, true);
+};
+
+/**
+ * Generates HTML ID for the highlighter.
+ * @param {String} highlighterId Highlighter ID.
+ * @return {String} Returns HTML ID.
+ */
+function getHighlighterId(id)
+{
+	var prefix = 'highlighter_';
+	return id.indexOf(prefix) == 0 ? id : prefix + id;
+};
+
+/**
+ * Adds CSS class name to the target DOM element.
+ * @param {DOMElement} target Target DOM element.
+ * @param {String} className New CSS class to add.
+ */
+function addClass(target, className)
+{
+	if (!hasClass(target, className))
+		target.className += ' ' + className;
+};
+
+/**
+ * Checks if target DOM elements has specified CSS class.
+ * @param {DOMElement} target Target DOM element to check.
+ * @param {String} className Name of the CSS class to check for.
+ * @return {Boolean} Returns true if class name is present, false otherwise.
+ */
+function hasClass(target, className)
+{
+	return target.className.indexOf(className) != -1;
+};
+
+/**
+ * Removes CSS class name from the target DOM element.
+ * @param {DOMElement} target Target DOM element.
+ * @param {String} className CSS class to remove.
+ */
+function removeClass(target, className)
+{
+	target.className = target.className.replace(className, '');
+};
+
