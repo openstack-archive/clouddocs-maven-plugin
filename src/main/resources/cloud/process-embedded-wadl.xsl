@@ -408,7 +408,7 @@
         <xsl:if test="$addMethodPageBreaks">
             <xsl:processing-instruction name="hard-pagebreak"/>
         </xsl:if>
-		<section xml:id="{concat(@name,'_',@rax:id,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)}">
+		<section xml:id="{concat(@name,'_',@rax:id,'_',translate($resource-path, $replacechars, '___'),'_',$sectionId)}">
 			<title><xsl:value-of select="$method.title"/></title>
 			<informaltable rules="all">
 				<col width="10%"/>
