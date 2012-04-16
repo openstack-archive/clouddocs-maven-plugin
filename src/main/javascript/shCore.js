@@ -1520,7 +1520,10 @@ sh.Highlighter.prototype = {
 
 		//Replace all callouts with special characters
         code=code.replace(/<span(.)+?(alt\=\(([0-9]?[0-9])\))??(.)+?callouts\/([0-9]?[0-9])\.png\"(\salt\=\(([0-9]?[0-9])\))??(.)+?<\/span>/ig,'@@@@$5@$5@@@@');
-
+        
+        //Replace manual callouts
+        code=code.replace(/<a(\s)+?id(\s)*?=(.)+?<img(.)+?\/callouts\/([0-9]?[0-9])\.png(.)+?>/ig,'~~~~$5~$5~~~~');
+        
         //Replace mark bold with special characters
         code=code.replace(/<span\sclass\s*?\=\s*?\"bold\"(.|\n|\r|\f)+?<strong>(.+?)<\/strong>(.)*?<\/span>/ig,'!!!!$2!!!!');
 		// process light mode
@@ -1595,7 +1598,8 @@ sh.Highlighter.prototype = {
 			;
 
 		//Put back the callouts
-		html=html.replace(/@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g,'<span class="co"><img src="../common/images/callouts/$1.png" alt="($2)"/></span>');	
+		html=html.replace(/@@@@([0-9]?[0-9])@([0-9]?[0-9])@@@@/g,'<span class="co"><img src="../common/images/callouts/$1.png" alt="($2)"/></span>');
+		html=html.replace(/~~~~([0-9]?[0-9])~([0-9]?[0-9])~~~~/g,'<span class="co"><img src="../common/images/callouts/$1.png" alt="($2)"/></span>');	
 		html=html.replace(/!!!!(.+?)!!!!/g,'<span class="bold variable">$1<\/span>');
 		return html;
 	},
