@@ -168,17 +168,18 @@ This avoids two problems in IE 8. We should someday figure out why this is happe
 These problems go away when you add this IE=7 mode meta tag.
  -->
 	<meta http-equiv="X-UA-Compatible" content="IE=7" />
-      
+      	<xsl:if test=".//d:programlisting[@language] or .//d:screen[@language] or .//d:literallayout[@language]">
     <link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/> 
     <script type="text/javascript" src="scripts/shCore.js"><xsl:comment/></script>
-    <script type="text/javascript" src="scripts/shBrushXml.js"><xsl:comment/></script>
-    <script type="text/javascript" src="scripts/shBrushJava.js"><xsl:comment/></script>      
-    <script type="text/javascript" src="scripts/shBrushJSON.js"><xsl:comment/></script>
-    <script type="text/javascript" src="scripts/shBrushJScript.js"><xsl:comment/></script>
-    <script type="text/javascript" src="scripts/shBrushPython.js"><xsl:comment/></script>
-    <script type="text/javascript" src="scripts/shBrushBash.js"><xsl:comment/></script> 
+    <!-- <script type="text/javascript" src="scripts/shBrushXml.js"><xsl:comment/></script> -->
+    <!-- <script type="text/javascript" src="scripts/shBrushJava.js"><xsl:comment/></script>       -->
+    <!-- <script type="text/javascript" src="scripts/shBrushJSON.js"><xsl:comment/></script> -->
+    <!-- <script type="text/javascript" src="scripts/shBrushJScript.js"><xsl:comment/></script> -->
+    <!-- <script type="text/javascript" src="scripts/shBrushPython.js"><xsl:comment/></script> -->
+    <!-- <script type="text/javascript" src="scripts/shBrushBash.js"><xsl:comment/></script>  -->
     <script type="text/javascript">SyntaxHighlighter.all();</script>      
-      
+	</xsl:if>
+
 <xsl:text>
 </xsl:text>
   </xsl:template>

@@ -161,6 +161,9 @@ set       toc,title
             </xsl:message>
         </xsl:if>
         
+	<!-- Alternate location for SyntaxHighlighter scripts -->
+
+
         <script type="text/javascript" src="../common/main.js">
             <xsl:comment></xsl:comment>
         </script>
