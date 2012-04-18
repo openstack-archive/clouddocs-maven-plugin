@@ -115,6 +115,8 @@
                             </xsl:copy>
                         </xsl:template>
                         
+			<xsl:template match="*[ancestor::db:programlisting and not(self::db:emphasis) and not(self::db:co)]"><xsl:apply-templates select="node() | @*"/></xsl:template>
+
                         <xsl:param name="max">8</xsl:param>
                         
                         <xsl:template match="db:programlisting">
