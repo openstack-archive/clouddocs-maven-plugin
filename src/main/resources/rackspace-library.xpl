@@ -115,14 +115,16 @@
                             </xsl:copy>
                         </xsl:template>
                         
-			<xsl:template match="*[ancestor::db:programlisting and not(self::db:emphasis) and not(self::db:co)]"><xsl:apply-templates select="node() | @*"/></xsl:template>
+			<xsl:template match="*[(ancestor::db:programlisting and not(self::db:emphasis) and not(self::db:co)) or 
+					       (ancestor::db:screen         and not(self::db:emphasis) and not(self::db:co)) or 
+					       (ancestor::db:literallayout  and not(self::db:emphasis) and not(self::db:co))]"><xsl:apply-templates select="node() | @*"/></xsl:template>
 
-                        <xsl:param name="max">8</xsl:param>
+                        <xsl:param name="max">15</xsl:param>
                         
                         <xsl:template match="db:programlisting">
                             <xsl:copy>
                                 <xsl:apply-templates select="@*"/>
-                                <xsl:if test="count(tokenize(.,'&#xA;')) &lt; $max">
+                                <xsl:if test="count(tokenize(.,'&#xA;')) &lt; $max + 1">
                                     <xsl:processing-instruction name="rax-fo">keep-together</xsl:processing-instruction>
                                     <xsl:comment>linefeeds: <xsl:value-of select="count(tokenize(.,'&#xA;'))"/></xsl:comment>
                                 </xsl:if>
