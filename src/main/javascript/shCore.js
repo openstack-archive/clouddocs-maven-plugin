@@ -1525,7 +1525,7 @@ sh.Highlighter.prototype = {
         code=code.replace(/<a(\s)+?id(\s)*?=(.)+?<img(.)+?\/callouts\/([0-9]?[0-9])\.png(.)+?>/ig,'~~~~$5~$5~~~~');
         
         //Replace mark bold with special characters
-        code=code.replace(/<span\s+?class\s*?\=\s*?(\")??bold(\")??(.|\n|\r|\f)+?<strong>([^>]+?)<\/strong>(.)*?<\/span>/ig,'!!!!$4!!!!');
+        code=code.replace(/<span\s+?class\s*?\=\s*?(\")??bold(\")??(.|\n|\r|\f)+?<strong>(.+?)<\/strong>(.)*?<\/span>/ig,'!!!!$4!!!!');
 		// process light mode
 		if (this.getParam('light') == true)
 			this.params.toolbar = this.params.gutter = false;
