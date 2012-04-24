@@ -1706,12 +1706,17 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
 
 function highlightCode(e){
 
-	var target = e.target,
-		highlighterDiv = findParentElement(target, '.syntaxhighlighter'),
+	var target = e.target;
+    if(null==target){
+	    target=e.srcElement;
+	}
+	var highlighterDiv = findParentElement(target, '.syntaxhighlighter'),
 		container = findContainerElement(target),
 		textarea = document.createElement('textarea'),
 		highlighter;
+	
 
+	
     var highlightId=getHighlighterId(highlighterDiv.id);
     
     highlighter = document.getElementById(highlightId);
@@ -1743,8 +1748,12 @@ function highlightCode(e){
 	textarea.focus();
 	textarea.select();
 	
-    container.addEventListener("click", function(){removeHighlight(textarea, highlighterDiv)}, false);
-
+	if(container.addEventListener){
+        container.addEventListener('click', function(){removeHighlight(textarea, highlighterDiv)}, false);
+    }
+    else if(container.attachEvent){
+        container.attachEvent('onmouseup', function(){removeHighlight(textarea, highlighterDiv)}, false);
+    }
 };
 
 function removeHighlight(textarea, highlighterDiv){
