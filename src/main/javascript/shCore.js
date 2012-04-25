@@ -159,7 +159,7 @@ var sh = {
 		{
 			return '<div class="newtoolbar2"> '+
 			//'<a class="item" href="#"> '+
-			'<img src="images/icon_clipboard.png" alt="View Source" height="20" width="20" align="right" onclick="highlightCode(event);" /> '+
+			'<img src="images/icon_clipboard.png" alt="Select Text" title="Select Text" height="20" width="20" align="right" onclick="highlightCode(event);" /> '+
 			//'</a> '+
 			'</div>';
 			
