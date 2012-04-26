@@ -159,7 +159,7 @@ var sh = {
 		{
 			return '<div class="newtoolbar2"> '+
 			//'<a class="item" href="#"> '+
-			'<img src="images/icon_clipboard.png" alt="View Source" height="20" width="20" align="right" onclick="highlightCode(event);" /> '+
+			'<img src="images/icon_clipboard.png" alt="Select Text" title="Select Text" height="20" width="20" align="right" onclick="highlightCode(event);" /> '+
 			//'</a> '+
 			'</div>';
 			
@@ -1525,7 +1525,7 @@ sh.Highlighter.prototype = {
         code=code.replace(/<a(\s)+?id(\s)*?=(.)+?<img(.)+?\/callouts\/([0-9]?[0-9])\.png(.)+?>/ig,'~~~~$5~$5~~~~');
         
         //Replace mark bold with special characters
-        code=code.replace(/<span\sclass\s*?\=\s*?\"bold\"(.|\n|\r|\f)+?<strong>(.+?)<\/strong>(.)*?<\/span>/ig,'!!!!$2!!!!');
+        code=code.replace(/<span\s+?class\s*?\=\s*?(\")??bold(\")??(.|\n|\r|\f)+?<strong>(.+?)<\/strong>(.)*?<\/span>/ig,'!!!!$4!!!!');
 		// process light mode
 		if (this.getParam('light') == true)
 			this.params.toolbar = this.params.gutter = false;
@@ -1706,12 +1706,17 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
 
 function highlightCode(e){
 
-	var target = e.target,
-		highlighterDiv = findParentElement(target, '.syntaxhighlighter'),
+	var target = e.target;
+    if(null==target){
+	    target=e.srcElement;
+	}
+	var highlighterDiv = findParentElement(target, '.syntaxhighlighter'),
 		container = findContainerElement(target),
 		textarea = document.createElement('textarea'),
 		highlighter;
+	
 
+	
     var highlightId=getHighlighterId(highlighterDiv.id);
     
     highlighter = document.getElementById(highlightId);
@@ -1743,8 +1748,12 @@ function highlightCode(e){
 	textarea.focus();
 	textarea.select();
 	
-    container.addEventListener("click", function(){removeHighlight(textarea, highlighterDiv)}, false);
-
+	if(container.addEventListener){
+        container.addEventListener('click', function(){removeHighlight(textarea, highlighterDiv)}, false);
+    }
+    else if(container.attachEvent){
+        container.attachEvent('onmouseup', function(){removeHighlight(textarea, highlighterDiv)}, false);
+    }
 };
 
 function removeHighlight(textarea, highlighterDiv){
