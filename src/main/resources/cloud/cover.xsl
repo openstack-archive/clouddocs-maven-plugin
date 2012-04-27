@@ -30,10 +30,10 @@
       <xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/></xsl:if> 
   </xsl:variable>
     
-    <xsl:variable name="status.text.font.size">
+    <xsl:variable name="status.bar.text.font.size">
         <xsl:call-template name="pi-attribute">
             <xsl:with-param name="pis" select="$docbook/*/processing-instruction('rax')"/>
-            <xsl:with-param name="attribute" select="'status.text.font.size'"/>
+            <xsl:with-param name="attribute" select="'status.bar.text.font.size'"/>
         </xsl:call-template>
     </xsl:variable>
 
@@ -325,8 +325,8 @@
 	<xsl:copy-of select="@*[not(local-name() = 'style')]"/>
 	<xsl:attribute name="style">
 	  <xsl:choose>
-	    <xsl:when test="not($status.text.font.size = '')">
-	      <xsl:value-of select="concat('font-size:',$status.text.font.size,';',substring-after(@style,'px;'))"/>
+	    <xsl:when test="not($status.bar.text.font.size = '')">
+	      <xsl:value-of select="concat('font-size:',$status.bar.text.font.size,';',substring-after(@style,'px;'))"/>
 	    </xsl:when>
 	    <xsl:otherwise>
 	      <xsl:value-of select="."/>
