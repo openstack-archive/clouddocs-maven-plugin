@@ -30,6 +30,13 @@
       <xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/></xsl:if> 
   </xsl:variable>
     
+    <xsl:variable name="status.text.font.size">
+        <xsl:call-template name="pi-attribute">
+            <xsl:with-param name="pis" select="$docbook/*/processing-instruction('rax')"/>
+            <xsl:with-param name="attribute" select="'status.text.font.size'"/>
+        </xsl:call-template>
+    </xsl:variable>
+
     <xsl:variable name="title.font.size">
         <xsl:call-template name="pi-attribute">
             <xsl:with-param name="pis" select="$docbook/*/processing-instruction('rax')"/>
@@ -312,4 +319,22 @@
 	<xsl:apply-templates select="@points|@id"/>
       </xsl:copy>
     </xsl:template>
+    
+    <xsl:template match="svg:tspan[contains(.,'$status.text$')]">
+      <xsl:copy>
+	<xsl:copy-of select="@*[not(local-name() = 'style')]"/>
+	<xsl:attribute name="style">
+	  <xsl:choose>
+	    <xsl:when test="not($status.text.font.size = '')">
+	      <xsl:value-of select="concat('font-size:',$status.text.font.size,';',substring-after(@style,'px;'))"/>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <xsl:value-of select="."/>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:attribute>
+	<xsl:apply-templates/>
+      </xsl:copy>
+    </xsl:template>
+
 </xsl:stylesheet>
