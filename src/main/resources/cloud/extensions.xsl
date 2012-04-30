@@ -202,7 +202,9 @@
             </xsl:otherwise>
         </xsl:choose>
 
-        <xsl:copy-of select="."/>             
+        <xsl:copy>
+            <xsl:apply-templates select="node() | @*"/>            
+        </xsl:copy>       
         
     </xsl:template>
 
