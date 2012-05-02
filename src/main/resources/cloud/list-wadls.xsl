@@ -4,6 +4,8 @@
     xmlns:wadl="http://wadl.dev.java.net/2009/02"
     exclude-result-prefixes="xs" version="2.0">
 
+    <xsl:param name="project.build.directory"/>
+
     <xsl:variable name="wadls">
         <xsl:for-each
             select="//wadl:resource[@href]|//wadl:resources[@href]">
@@ -43,7 +45,13 @@
                     </xsl:if>
                     <xsl:for-each
                         select="distinct-values($wadls/wadl/@href)">
-                        <wadl href="{.}"/>
+                        <xsl:if test="not(
+                                        document(
+                                            concat('file://',$project.build.directory,'/generated-resources/xml/xslt/',replace(., '^(.*/)?([^/]+)$', '$2'))
+                                            )/*
+                                         )">
+                            <wadl href="{.}"/>
+                        </xsl:if>
                     </xsl:for-each>
                 </xsl:for-each>
             </root>
