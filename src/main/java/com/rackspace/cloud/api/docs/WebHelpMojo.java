@@ -34,7 +34,7 @@ import java.io.StringReader;
 
 import org.apache.maven.plugin.MojoExecutionException;
 
-import scala.reflect.generic.Trees.This;
+//import scala.reflect.generic.Trees.This;
 
 import com.agilejava.docbkx.maven.AbstractWebhelpMojo;
 
@@ -395,6 +395,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("security", this.security);
         map.put("canonicalUrlBase", this.canonicalUrlBase);
         map.put("failOnValidationError", this.failOnValidationError);
+        map.put("project.build.directory", this.projectBuildDirectory);
         
         int lastSlash=inputFilename.lastIndexOf("/");
         

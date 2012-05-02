@@ -1,8 +1,12 @@
 <p:library xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:cx="http://xmlcalabash.com/ns/extensions"
+    xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
     xmlns:ml="http://xmlcalabash.com/ns/extensions/marklogic"
+    xmlns:ut="http://grtjn.nl/ns/xproc/util"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     version="1.0">
+    
+    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
     
     <p:declare-step version="1.0"
         xmlns:p="http://www.w3.org/ns/xproc"
@@ -298,6 +302,128 @@
             </p:store>
         </p:for-each>
         
+    </p:declare-step>
+    
+    <p:declare-step
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:normalize-wadls"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="normalize-wadls-step">
+        
+        <p:input port="source"/>
+        
+      
+        <p:output port="result" primary="true" >
+            <p:pipe step="group" port="result"/> 
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <ut:parameters name="params"/>
+        <p:sink/>
+        
+        <p:group name="group">
+            <p:output port="result" primary="true" >
+                <p:pipe step="lists-files" port="result"/> 
+            </p:output>
+            <p:output port="secondary" primary="false" sequence="true"/>
+            
+            <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value" xmlns:c="http://www.w3.org/ns/xproc-step">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+        
+        <p:xslt name="lists-files">
+            <p:input port="source"> 
+                <p:pipe step="normalize-wadls-step" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="classpath:/cloud/list-wadls.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="normalize-wadls-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+
+        <p:for-each>
+            <p:iteration-source select="//wadl">
+                <p:pipe step="lists-files" port="secondary"/>
+            </p:iteration-source>
+            <p:variable name="href" select="/*/@href"/>
+            
+            <p:load name="wadl">
+                <p:with-option name="href" select="$href"/>
+            </p:load>
+<!--            <p:load name="stylesheet">
+                <p:with-option name="href" select="concat($project.build.directory,
+                    '/generated-resources/cloud/normalizeWadl/normalizeWadl.xsl')"/>
+            </p:load>-->
+
+            <p:xslt name="normalize-wadl">
+                <p:input port="source">
+                    <p:pipe port="result" step="wadl"/>
+                </p:input>
+                <p:input port="stylesheet">
+<!--                    <p:pipe step="stylesheet" port="result"/>
+-->                    <p:document href="classpath:/cloud/normalizeWadl/normalizeWadl.xsl"/>
+                    <!--<p:document href="file:///home/dcramer/Documents/rax/auth-git/auth-doc-2.0/target/generated-resources/cloud/normalizeWadl/normalizeWadl.xsl"/>-->
+                    <!--file:///home/dcramer/Documents/rax/auth-git/auth-doc-2.0/target-->
+                </p:input>
+                <p:input port="parameters" >
+                    <p:pipe step="normalize-wadls-step" port="parameters"/>
+                </p:input>
+            </p:xslt>
+            <p:store 
+                encoding="utf-8" 
+                indent="true"
+                omit-xml-declaration="false">
+                <p:with-option name="href" select="concat('file://',$project.build.directory,'/generated-resources/xml/xslt/',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))"/>
+            </p:store>
+            <p:for-each>
+                <p:iteration-source>
+                    <p:pipe step="normalize-wadl" port="secondary"/>
+                </p:iteration-source>
+                <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
+                    <p:with-option name="href" select="concat('file://',$project.build.directory,'/generated-resources/xml/xslt/',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))"/>
+                </p:store>        
+            </p:for-each>
+            <!--
+                TODOs:
+                Don't rebuild wadls if already built?
+            -->
+
+        </p:for-each>
+        </p:group>
+       
+    </p:declare-step>
+
+
+
+    <!--+========================================================+
+| Step parameters
+|
+| Short-cut for p:parameters which passes through input, and with primary parameters input.
++-->
+    
+    <p:declare-step type="ut:parameters" name="current" >
+        <p:input port="source" sequence="true" primary="true"/>
+        <p:input port="in-parameters" kind="parameter" sequence="true" primary="true"/>
+        <p:output port="result" sequence="true" primary="true">
+            <!-- pipe input straight through to output -->
+            <p:pipe step="current" port="source"/>
+        </p:output>
+        
+        <!-- extra output port for cleaned params -->
+        <p:output port="parameters" sequence="false" primary="false">
+            <p:pipe step="params" port="result"/>
+        </p:output>
+        
+        <p:parameters name="params">
+            <p:input port="parameters">
+                <p:pipe step="current" port="in-parameters"/>
+            </p:input>
+        </p:parameters>
     </p:declare-step>
     
 </p:library>
