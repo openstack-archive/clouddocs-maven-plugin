@@ -15,7 +15,6 @@
 	<xsl:param name="project.directory" select="substring-before($project.build.directory,'/target')"/>
 	<xsl:param name="source.directory"/>
 	<xsl:param name="docbook.partial.path" select="concat(substring-after($source.directory,$project.directory),'/')"/>
-	<xsl:param name="compute.wadl.path.from.docbook.path" select="'0'"/>
 
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
 
@@ -47,7 +46,7 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="generated-reference-section">
-			<xsl:apply-templates select="document(concat('file:///', $wadl.path))//rax:resources" mode="generate-reference-section"/>
+			<xsl:apply-templates select="document($wadl.path)//rax:resources" mode="generate-reference-section"/>
 		</xsl:variable>
 		<xsl:apply-templates select="$generated-reference-section/*" mode="preprocess"/>
 	</xsl:template>
@@ -161,7 +160,7 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="generated-reference-section">
-			<xsl:apply-templates select="document(concat('file:///', $wadl.path))//rax:resources" mode="generate-reference-section"/>
+			<xsl:apply-templates select="document($wadl.path)//rax:resources" mode="generate-reference-section"/>
 		</xsl:variable>
 		<xsl:apply-templates select="$generated-reference-section//wadl:resources" mode="cheat-sheet"/>
 	</xsl:template>
@@ -222,7 +221,7 @@
 		<xsl:choose>
 			<xsl:when test="@href and not(./wadl:method)">
 				<xsl:apply-templates
-					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method"
+					select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method"
 					mode="method-rows">
 					<xsl:with-param name="wadl.path" select="$wadl.path"/>
 			    	<xsl:with-param name="resourceId" select="substring-after(current()/@href,'#')"/>
@@ -235,7 +234,7 @@
 			  </xsl:apply-templates>
 
 				<!-- <xsl:apply-templates -->
-				<!-- 	select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method" -->
+				<!-- 	select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method" -->
 				<!-- 	mode="method-rows"/>   --> <!--[@rax:id = $href]-->
 
 			</xsl:when>
@@ -250,7 +249,7 @@
 	  <xsl:param name="resourceId"/>
 	  
 	  <xsl:apply-templates
-	      select="document(concat('file:///', $wadl.path))//wadl:resource[@id = $resourceId]/wadl:method[@rax:id = current()/@href]"
+	      select="document($wadl.path)//wadl:resource[@id = $resourceId]/wadl:method[@rax:id = current()/@href]"
 	      mode="method-rows">
 	    <xsl:with-param name="local-content">
 	      <!-- Pass down content added in the DocBook doc -->
@@ -271,7 +270,7 @@
 		       wadl:method elements from the wadl. -->
 			<xsl:when test="@href and not(./wadl:method)">
 				<xsl:apply-templates
-					select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method"
+					select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method"
 					mode="preprocess">
 					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
                     <xsl:with-param name="resourceLink" select="."/>
@@ -293,7 +292,7 @@
 					</xsl:message>
 				</xsl:if>-->
 				<xsl:apply-templates select="$combined-method//wadl:method" mode="preprocess">
-					<xsl:with-param name="resource-path" select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
+					<xsl:with-param name="resource-path" select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
@@ -310,9 +309,9 @@
 		<xsl:param name="wadl.path"/>
 		<xsl:param name="href"/>
 		<wadl:method>
-			<xsl:copy-of select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/@*"/>
+			<xsl:copy-of select="document($wadl.path)//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/@*"/>
 			<xsl:apply-templates 
-				select="document(concat('file:///', $wadl.path))//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/node()" 
+				select="document($wadl.path)//wadl:resource[@id = substring-after($href,'#')]/wadl:method[@rax:id = current()/@href]/node()" 
 				mode="combine-method">
 				<xsl:with-param name="wadl-doc">
 					<xsl:copy-of select="wadl:doc/node()"/>
@@ -776,7 +775,7 @@
 					<xsl:with-param name="path" select="substring-before($path,'#')"/>
 				</xsl:call-template>
 			</xsl:when>
-			<xsl:when test="$compute.wadl.path.from.docbook.path = '0' and contains($path,'\')">
+<!--			<xsl:when test="$compute.wadl.path.from.docbook.path = '0' and contains($path,'\')">
 				<xsl:call-template name="wadlPath">
 					<xsl:with-param name="path" select="substring-after($path,'\')"/>
 				</xsl:call-template>
@@ -790,13 +789,11 @@
 				<xsl:value-of
 				    select="concat($project.build.directory, '/generated-resources/xml/xslt/',$path)"
 				/>
-			</xsl:when>
+			</xsl:when>-->
 			<xsl:otherwise>
-				<xsl:value-of
-				    select="concat($project.build.directory, '/generated-resources/xml/xslt',$docbook.partial.path,$path)"
-				/>
+				<xsl:value-of select="$path"/>
 			</xsl:otherwise>
-		</xsl:choose>
+		</xsl:choose>	
 	</xsl:template>
 	
 	<xsl:template name="trimUri">

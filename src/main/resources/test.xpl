@@ -21,6 +21,8 @@
       <p:document href="classpath:/rng/rackbook.rng"/>
     </p:input>
   </l:validate-transform>
+
+  <p:add-xml-base/>
   
   <p:xinclude fixup-xml-base="true"/>
 
@@ -45,6 +47,10 @@
   </cx:message>
   
   <l:extensions-info/>
+  
+  <cx:message>
+    <p:with-option name="message" select="'Normalize wadls'"/>
+  </cx:message>
 
   <l:normalize-wadls />
 
