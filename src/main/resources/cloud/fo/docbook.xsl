@@ -16,6 +16,7 @@
   <xsl:import href="fop1.xsl"/>
   <xsl:import href="../date.xsl"/>
   <xsl:import href="../this.xsl"/>
+  <xsl:import href="verbatim.xsl"/>
   <xsl:include href="../inline.xsl"/>
   <xsl:include href="../process-embedded-wadl.xsl"/>
 
@@ -323,10 +324,6 @@
               <xsl:otherwise>85%</xsl:otherwise>
           </xsl:choose>
       </xsl:attribute>
-  </xsl:attribute-set>
-
-  <!-- Wrap long examples -->
-  <xsl:attribute-set name="monospace.verbatim.properties">
       <xsl:attribute name="wrap-option">wrap</xsl:attribute>
       <xsl:attribute name="hyphenation-character">\</xsl:attribute>
   </xsl:attribute-set>

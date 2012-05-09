@@ -128,22 +128,12 @@
                         <xsl:template match="db:programlisting">
                             <xsl:copy>
                                 <xsl:apply-templates select="@*"/>
-                                <xsl:if test="count(tokenize(.,'&#xA;')) &lt; $max + 1">
-                                    <xsl:processing-instruction name="rax-fo">keep-together</xsl:processing-instruction>
-                                    <xsl:comment>linefeeds: <xsl:value-of select="count(tokenize(.,'&#xA;'))"/></xsl:comment>
+                                <xsl:if test="count(tokenize(.,'&#xA;')) &lt; $max">
+                                    <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction>
                                 </xsl:if>
                                 <xsl:apply-templates select="node()"/>
                             </xsl:copy>
-                        </xsl:template>
-                        
-                        <xsl:template match="processing-instruction('rax')[normalize-space(.) = 'fail']">
-                            <xsl:message terminate="yes">
-                                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                &lt;?rax fail?> found in the document.
-                                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            </xsl:message>
-                        </xsl:template>
-                        
+                        </xsl:template>                                               
                     </xsl:stylesheet>
                 </p:inline>
                 <!--<p:document href="cloud/code-listing-keep-together.xsl"/>-->
