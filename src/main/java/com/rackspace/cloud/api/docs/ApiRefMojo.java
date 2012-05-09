@@ -15,6 +15,11 @@ import javax.xml.transform.URIResolver;
 public abstract class ApiRefMojo extends AbstractHtmlMojo {
 
     /**
+     * @parameter expression="${project.build.directory}"
+     */
+    private String projectBuildDirectory;
+
+    /**
      * @parameter 
      *     expression="${generate-html.canonicalUrlBase}"
      *     default-value=""
@@ -68,6 +73,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("failOnValidationError", failOnValidationError);
+        map.put("project.build.directory", this.projectBuildDirectory);
         
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }

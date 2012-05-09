@@ -24,7 +24,8 @@
     </p:input>
   </l:validate-transform>
  
-  <p:xinclude/>
+  <p:add-xml-base/>
+  <p:xinclude fixup-xml-base="true"/>
   
   <cx:message>
     <p:with-option name="message" select="'Validating post-xinclude'"/>
@@ -35,10 +36,12 @@
       <p:document  href="classpath:/rng/rackbook.rng"/> 
     </p:input>
   </l:validate-transform>
+  
+  <l:normalize-wadls name="normalize"/>
       
   <p:xslt name="process-embedded-wadl">
     <p:input port="source"> 
-      <p:pipe step="validate-post-xinclude" port="result"/> 
+      <p:pipe step="normalize" port="result"/> 
     </p:input> 
     <p:input port="stylesheet">
       <p:document href="classpath:/cloud/apipage/process-embedded-wadl-apipage.xsl"/>
