@@ -5,7 +5,6 @@ This project is the Rackspace/OpenStack customization of the Docbkx plugin for c
 
 [More docs coming soon.]
 
-
 Release Notes
 =============
 
@@ -36,19 +35,6 @@ Bug fixes
 -  Wadl2DocBook: Fix the generation of ids for sections generated from
    wadl methods.
 
-Rackspace Oxygen 1.3 (April 25, 2012)
-=====================================
-
-Bug fixes and new features
---------------------------
-
--  Fixed bug where icon was not appearing in the JWS version of Oxygen
-   on Mac
--  Added schematron rules to oXygen to warn writer when pointers to a
-   wadl are invalid.
--  Fixed bug where certain settings weren't pushed down to user (e.g.
-   spell checking turned on with spell checking skipped for certain
-   elements like programlisting, etc).
 
 clouddocs-maven-plugin 1.1.0 (March 30, 2012)
 =============================================
@@ -415,8 +401,8 @@ New features and changes
 clouddocs-maven-plugin 1.3.0-SNAPSHOT (Expected in May 2012)
 ============================================================
 
-New features and chanes
------------------------
+New features and changes
+------------------------
 
 -  You can now control the size of the status bar text:
    ``<?rax status.bar.text.font.size="50px" status.bar.text="LIMITED AVAILABILITY"?>``.
@@ -426,6 +412,7 @@ New features and chanes
    <security>reviewer</security>, at the top of each generated section
    it shows what wadl the method came from and what the method id is.
 -  You no longer need to pre-normalize wadls when using wadl2docbook.
+-  Added css rules to hide sidebar automatically when printing web page. 
 
 Bug fixes
 ---------
