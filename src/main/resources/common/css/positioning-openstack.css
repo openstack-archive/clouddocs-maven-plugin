@@ -461,3 +461,23 @@ vertical-align: middle;
 body div#content div.navfooter table tbody td, body div#content div.navfooter table  {
     border: 0px solid black; 
 }
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    #content, #content * {
+        visibility: visible;
+    }
+
+   #sidebar, .navfooter {
+       display: none;
+   }
+
+   #content {
+	margin: 0 0 0 0;
+    }
+
+}
