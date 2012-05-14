@@ -17,7 +17,6 @@
 	<xsl:param name="docbook.partial.path" select="concat(substring-after($source.directory,$project.directory),'/')"/>
 
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
-	<xsl:param name="security"/>
 
 	<xsl:variable name="root" select="/"/>
 
