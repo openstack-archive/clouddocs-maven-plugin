@@ -3,7 +3,15 @@ Introduction
 
 This project is the Rackspace/OpenStack customization of the Docbkx plugin for creating documentation artifacts for Rackspace, OpenStack, and other OpenStack projects. 
 
-[More docs coming soon.]
+Example output
+==============
+http://docs.rackspace.com
+http://docs.openstack.org
+
+
+How To
+======
+http://wiki.openstack.org/Documentation/HowTo#Tools_Overview
 
 Release Notes
 =============
