@@ -382,6 +382,7 @@
 
   <!-- Glossary Setup -->
   <xsl:param name="glossary.as.blocks" select="1"/>
+  <xsl:param name="glossary.collection" select="concat($project.build.directory,'/mvn/com.rackspace.cloud.api/glossary/glossary.xml')"/>
 
   <!-- Sets up the Cloud Title Page -->
   <xsl:template name="user.pagemasters">
