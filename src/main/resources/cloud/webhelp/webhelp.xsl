@@ -177,7 +177,10 @@ These problems go away when you add this IE=7 mode meta tag.
     <!-- <script type="text/javascript" src="scripts/shBrushJScript.js"><xsl:comment/></script> -->
     <!-- <script type="text/javascript" src="scripts/shBrushPython.js"><xsl:comment/></script> -->
     <!-- <script type="text/javascript" src="scripts/shBrushBash.js"><xsl:comment/></script>  -->
-    <script type="text/javascript">SyntaxHighlighter.all();</script>      
+    <script type="text/javascript">
+               SyntaxHighlighter.config.space = '&#32;';
+               SyntaxHighlighter.all();
+    </script>      
 	</xsl:if>
 
 <xsl:text>
