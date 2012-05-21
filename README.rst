@@ -8,7 +8,7 @@ This project is the Rackspace/OpenStack customization of the Docbkx plugin for c
 Release Notes
 =============
 
-clouddocs-maven-plugin 1.3.0-SNAPSHOT (May 21, 2012)
+clouddocs-maven-plugin 1.3.0 (May 21, 2012)
 ============================================================
 
 New features and changes
