@@ -427,8 +427,8 @@
         </xsl:if>
 		<section xml:id="{concat(@name,'_',@rax:id,'_',translate($resource-path, $replacechars, '___'),'_',$sectionId)}">
 			<title><xsl:value-of select="$method.title"/></title>
-			<xsl:if test="$security = 'reviewer' or $security = 'writeronly'">
-			  <para security="reviewer">Source wadl: <link xlink:href="{$original.wadl.path}"><xsl:value-of select="$original.wadl.path"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
+			<xsl:if test="$security = 'writeronly'">
+			  <para security="writeronly">Source wadl: <link xlink:href="{$original.wadl.path}"><xsl:value-of select="$original.wadl.path"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
 			</xsl:if>
 			<informaltable rules="all">
 				<col width="10%"/>
