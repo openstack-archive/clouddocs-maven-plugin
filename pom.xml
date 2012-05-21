@@ -8,7 +8,7 @@
 
     <name>Cloud API Docs Plugin</name>
 
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.3.0</version>
     <packaging>maven-plugin</packaging>
 
     <properties>
@@ -331,9 +331,7 @@
 		  <phase>initialize</phase>
 		  <configuration>		    
 		    <target>
-		      <replace file="target/classes/cloud/normalizeWadl/normalizeWadl1.xsl" 
-			       token='href="normalizeWadl' 
-			       value='href="classpath:/cloud/normalizeWadl/normalizeWadl'/>
+		      <replace file="target/classes/cloud/normalizeWadl/normalizeWadl1.xsl" token="href=&quot;normalizeWadl" value="href=&quot;classpath:/cloud/normalizeWadl/normalizeWadl" />
 		    </target>		    
 		  </configuration>
 		  <goals>
