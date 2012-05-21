@@ -409,11 +409,24 @@ New features and changes
    The default size of the text is about 71.3px, so if you need it
    smaller go from there. 50px should work for "LIMITED AVAILABILITY".
 -  When generating DocBook from wadl, if you spin as
-   <security>reviewer</security>, at the top of each generated section
+   <security>writeronly</security>, at the top of each generated section
    it shows what wadl the method came from and what the method id is.
 -  You no longer need to pre-normalize wadls when using wadl2docbook.
--  Added css rules to hide sidebar automatically when printing web page. 
+-  Added css rules to hide sidebar automatically when printing web page.   
 
 Bug fixes
 ---------
-
+-  Fixed bug in extensions doc mechanism where wadl urls weren't picked
+   up from info/extensions metadata.
+-  Fixed bug where syntax highlighter padded spaces with &nbsp;s which
+   would break XML when cut and pasted since nbsp isn't interpreted as
+   a space character.
+-  Enabled automatic glossary generation for pdfs.
+-  Fixed the generation of ids on generated wrapper sections in
+   wadl2docbook.
+-  In certain cases, code listings with callouts had extra line breaks
+   added.
+-  The feature that automatically keeps short code listings together
+   was not working.
+-  When you clicked on a link to an anchor within a page, the heading
+   was partially hidden by the banner.
