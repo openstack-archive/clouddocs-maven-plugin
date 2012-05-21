@@ -133,18 +133,32 @@
                         <varlistentry>
                             <term>Doc Link (WADL)</term>
                             <listitem>
-                                <para>
-                                    None, the extension makes no modification to the API WADL.
-                                </para>                            
+				<xsl:choose>
+				  <xsl:when test="/db:book/db:info//atom:link[@type='application/vnd.sun.wadl+xml']/@href">
+                                    <link xlink:href="{/db:book/db:info//atom:link[@type='application/vnd.sun.wadl+xml']/@href}">
+                                        <xsl:value-of select="/db:book/db:info//atom:link[@type='application/vnd.sun.wadl+xml']/@href"/>
+                                    </link>         
+				  </xsl:when>
+				  <xsl:otherwise>
+				    None, the extension makes no modification to the API WADL.
+				  </xsl:otherwise>
+				</xsl:choose>                   
                             </listitem>
                         </varlistentry>
                         <varlistentry>
                             <term>doc Link(XSD)</term>
                             <listitem>
-                                <para>
+			      <para>
+				<xsl:choose>
+				  <xsl:when test="/db:book/db:info//atom:link[@type='application/xml']/@href">
                                     <link xlink:href="{/db:book/db:info//atom:link[@type='application/xml']/@href}">
                                         <xsl:value-of select="/db:book/db:info//atom:link[@type='application/xml']/@href"/>
-                                    </link>                            
+                                    </link>         
+				  </xsl:when>
+				  <xsl:otherwise>
+				    No schema provided.
+				  </xsl:otherwise>
+				</xsl:choose>                   
                                 </para>
                             </listitem>
                         </varlistentry>
