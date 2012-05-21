@@ -8,6 +8,40 @@ This project is the Rackspace/OpenStack customization of the Docbkx plugin for c
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.3.0-SNAPSHOT (May 21, 2012)
+============================================================
+
+New features and changes
+------------------------
+
+-  You can now control the size of the status bar text:
+   ``<?rax status.bar.text.font.size="50px" status.bar.text="LIMITED AVAILABILITY"?>``.
+   The default size of the text is about 71.3px, so if you need it
+   smaller go from there. 50px should work for "LIMITED AVAILABILITY".
+-  When generating DocBook from wadl, if you spin as
+   <security>writeronly</security>, at the top of each generated section
+   it shows what wadl the method came from and what the method id is.
+-  You no longer need to pre-normalize wadls when using wadl2docbook.
+-  Added css rules to hide sidebar automatically when printing web page.   
+
+Bug fixes
+---------
+-  Fixed bug in extensions doc mechanism where wadl urls weren't picked
+   up from info/extensions metadata.
+-  Fixed bug where syntax highlighter padded spaces with &nbsp;s which
+   would break XML when cut and pasted since nbsp isn't interpreted as
+   a space character.
+-  Enabled automatic glossary generation for pdfs.
+-  Fixed the generation of ids on generated wrapper sections in
+   wadl2docbook.
+-  In certain cases, code listings with callouts had extra line breaks
+   added.
+-  The feature that automatically keeps short code listings together
+   was not working.
+-  When you clicked on a link to an anchor within a page, the heading
+   was partially hidden by the banner.
+
+
 clouddocs-maven-plugin 1.2.0 (April 26, 2012)
 =============================================
 
@@ -398,35 +432,11 @@ New features and changes
    information in the toc pane.
 -  Other miscellaneous fixes.
 
-clouddocs-maven-plugin 1.3.0-SNAPSHOT (Expected in May 2012)
+clouddocs-maven-plugin 1.4.0-SNAPSHOT (Expected in June 2012)
 ============================================================
 
 New features and changes
 ------------------------
 
--  You can now control the size of the status bar text:
-   ``<?rax status.bar.text.font.size="50px" status.bar.text="LIMITED AVAILABILITY"?>``.
-   The default size of the text is about 71.3px, so if you need it
-   smaller go from there. 50px should work for "LIMITED AVAILABILITY".
--  When generating DocBook from wadl, if you spin as
-   <security>writeronly</security>, at the top of each generated section
-   it shows what wadl the method came from and what the method id is.
--  You no longer need to pre-normalize wadls when using wadl2docbook.
--  Added css rules to hide sidebar automatically when printing web page.   
-
 Bug fixes
 ---------
--  Fixed bug in extensions doc mechanism where wadl urls weren't picked
-   up from info/extensions metadata.
--  Fixed bug where syntax highlighter padded spaces with &nbsp;s which
-   would break XML when cut and pasted since nbsp isn't interpreted as
-   a space character.
--  Enabled automatic glossary generation for pdfs.
--  Fixed the generation of ids on generated wrapper sections in
-   wadl2docbook.
--  In certain cases, code listings with callouts had extra line breaks
-   added.
--  The feature that automatically keeps short code listings together
-   was not working.
--  When you clicked on a link to an anchor within a page, the heading
-   was partially hidden by the banner.
