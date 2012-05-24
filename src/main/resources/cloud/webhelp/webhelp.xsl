@@ -739,95 +739,36 @@ These problems go away when you add this IE=7 mode meta tag.
 
     <xsl:template match="db:programlisting[@language] | db:screen[@language] | db:literallayout[@language]">  
         <xsl:variable name="lang" select="@language"/>
-        
-        <xsl:choose>
-            <xsl:when test="$lang='bash'">              
-                <pre class="programlisting brush: bash"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when> 
-            <xsl:when test="$lang='BASH'">              
-                <pre class="programlisting brush: bash"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>            
-            <xsl:when test="$lang='javascript'">
-                <pre class="programlisting brush: javascript"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>
-            <xsl:when test="$lang='JAVASCRIPT'">
-                <pre class="programlisting brush: javascript"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>
-            <xsl:when test="$lang='js'">
-                <pre class="programlisting brush: javascript"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>
-            <xsl:when test="$lang='JS'">
-                <pre class="programlisting brush: javascript"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>
-            <xsl:when test="$lang='xml'">
-                <pre class="programlisting brush: xml"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when> 
-            <xsl:when test="$lang='XML'">
-                <pre class="programlisting brush: xml"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>
-            <xsl:when test="$lang='java'">              
-                <pre class="programlisting brush: java"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>  
-            <xsl:when test="$lang='JAVA'">              
-                <pre class="programlisting brush: java"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>
-            <xsl:when test="$lang='json'">
-                <pre class="programlisting brush: json"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when> 
-            <xsl:when test="$lang='JSON'">
-                <pre class="programlisting brush: json"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when> 
-            <xsl:when test="$lang='python'">              
-                <pre class="programlisting brush: python"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when> 
-            <xsl:when test="$lang='PYTHON'">              
-                <pre class="programlisting brush: python"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>
-            <xsl:when test="$lang='py'">              
-                <pre class="programlisting brush: python"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>
-            <xsl:when test="$lang='PY'">              
-                <pre class="programlisting brush: python"> 
-                    <xsl:apply-templates/>
-                </pre>
-            </xsl:when>
-            <xsl:otherwise>
-                <pre class="programlisting" >
-                    <xsl:apply-templates/>    
-                </pre>
-                
-            </xsl:otherwise>
-        </xsl:choose>      
+	
+	<xsl:variable name="brush">
+	  <xsl:choose>
+	    <xsl:when test="@language = 'bash' or @language = 'BASH' or @language = 'sh'">bash</xsl:when>
+	    <xsl:when test="@language = 'javascript' or @language = 'JAVASCRIPT' or @language = 'js' or @language = 'JavaScript'">javascript</xsl:when>
+	    <xsl:when test="@language = 'xml' or @language = 'XML'">xml</xsl:when>
+	    <xsl:when test="@language = 'java' or @language = 'JAVA'">java</xsl:when>
+	    <xsl:when test="@language = 'json' or @language = 'JSON'">json</xsl:when>
+	    <xsl:when test="@language = 'python' or @language = 'PYTHON' or @language = 'py' or @language = 'PY'">python</xsl:when>
+	    <xsl:otherwise>
+	      <xsl:message>
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		WARNING: Unsupported langague on a <xsl:value-of select="local-name()"/>
+		         element: <xsl:value-of select="@language"/>
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	      </xsl:message>
+	    </xsl:otherwise>
+	  </xsl:choose>
+	</xsl:variable>
+
+	<xsl:variable name="syntaxhighlighter.switches">
+	  <xsl:choose>
+	    <xsl:when test="contains(@role,'gutter:') or contains(@role,'first-line:') or contains(@role,'highlight:')"><xsl:value-of select="@role"/></xsl:when>
+	  </xsl:choose>
+	</xsl:variable>
+
+	<pre class="programlisting brush: {$brush}; {$syntaxhighlighter.switches}">
+	  <xsl:apply-templates/>
+	</pre>
+
     </xsl:template>    
 
     <xsl:include href="revhistory2atom.xsl"/>
