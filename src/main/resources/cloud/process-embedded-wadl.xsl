@@ -183,6 +183,7 @@
 
 	<xsl:template match="wadl:resources" name="wadl-resources" mode="preprocess">
 		<xsl:param name="original.wadl.path" />
+
         <!-- Handle skipSummary PI -->
 		<xsl:variable name="skipSummaryN">
             <xsl:call-template name="makeBoolean">
@@ -275,8 +276,9 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="original.wadl.path" select="document($wadl.path)/wadl:application/@rax:original-wadl|ancestor::*/@rax:original-wadl"/>
-		<xsl:variable name="resource-path" select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
-		
+		<xsl:variable name="resource-path"       select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
+		<xsl:variable name="template-parameters" select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:param"/>
+
 		<xsl:choose>
 		  <!-- When the wadl;resource contains no wadl:method references, then fetch all of the 
 		       wadl:method elements from the wadl. -->
@@ -295,7 +297,7 @@
 			<!-- If there is a wadl:doc element in the wadl:method in DocBook, then copy it down into the imported method. -->
 			<xsl:when test="@href">
 				<xsl:variable name="combined-method">
-					<xsl:apply-templates match="wadl:method" mode="combine-method">
+					<xsl:apply-templates select="wadl:method" mode="combine-method">
 						<xsl:with-param name="wadl.path" select="$wadl.path"/>
 						<xsl:with-param name="href" select="@href"/>
 					</xsl:apply-templates>
@@ -308,6 +310,7 @@
 				<xsl:apply-templates select="$combined-method//wadl:method" mode="preprocess">
 					<xsl:with-param name="resource-path" select="$resource-path"/>
 					<xsl:with-param name="original.wadl.path" select="$original.wadl.path"/> 
+					<xsl:with-param name="template-parameters" select="$template-parameters"/>
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
@@ -316,6 +319,7 @@
 					<xsl:with-param name="resource-path" select="$resource-path"/>
 					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
 					<xsl:with-param name="original.wadl.path" select="$original.wadl.path"/> 
+					<xsl:with-param name="template-parameters" select="$template-parameters"/>
                 </xsl:apply-templates>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -364,6 +368,9 @@
 		<xsl:param name="sectionId"/>
         <xsl:param name="resourceLink"/>
 		<xsl:param name="original.wadl.path"/>
+		<xsl:param name="template-parameters"/>
+
+
         <xsl:variable name="id" select="@rax:id"/>
         <!-- Handle skipText PIs -->
         <xsl:variable name="skipNoRequestTextN">
@@ -479,11 +486,11 @@
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 
             <!-- About the request -->
-
-			<xsl:if test="wadl:request/wadl:param[@style != 'plain']|ancestor::wadl:resource/wadl:param">
+			<xsl:if test="wadl:request/wadl:param[@style != 'plain']|$template-parameters//*">
                 <xsl:call-template name="paramTable">
                     <xsl:with-param name="mode" select="'Request'"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
+		    <xsl:with-param name="template-parameters" select="$template-parameters"/>
                 </xsl:call-template>
             </xsl:if>
 
@@ -679,7 +686,7 @@
 		</xsl:element>
 	</xsl:template>
 
-	<xsl:template match="wadl:param[@style != 'plain']" mode="preprocess">
+	<xsl:template match="wadl:param" mode="preprocess">
 	  <xsl:variable name="type">
 	    <xsl:value-of select="substring-after(@type,':')"/>
 	  </xsl:variable>
@@ -689,6 +696,7 @@
                 <xsl:otherwise> parameter </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+		<xsl:if test="@style != 'plain'">
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
 			<td align="left">
@@ -734,6 +742,7 @@
                 </para>
             </td>
 		</tr>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="wadl:response" mode="preprocess-normal">
@@ -842,6 +851,8 @@
     <xsl:template name="paramTable">
         <xsl:param name="mode"/>
     	<xsl:param name="method.title"/>
+	<xsl:param name="template-parameters"/>
+
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
                 <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction> 
@@ -862,7 +873,7 @@
                     <xsl:choose>
                         <xsl:when test="$mode = 'Request'">
                             <xsl:apply-templates
-                            select="wadl:request//wadl:param|ancestor::wadl:resource/wadl:param"
+                            select="wadl:request//wadl:param|$template-parameters"
                             mode="preprocess">
                                 <xsl:sort select="@style"/>
                             </xsl:apply-templates>
