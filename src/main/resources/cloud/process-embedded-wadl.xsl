@@ -2,7 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns="http://docbook.org/ns/docbook" xmlns:wadl="http://wadl.dev.java.net/2009/02"       xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:d="http://docbook.org/ns/docbook" xmlns:rax="http://docs.rackspace.com/api" xmlns:exsl="http://exslt.org/common"
-	exclude-result-prefixes="wadl rax d exsl xhtml" version="1.1">
+xmlns:exslt="http://exslt.org/common" 
+	exclude-result-prefixes="wadl rax d exsl xhtml exslt" version="1.1">
 	
 	<!-- For readability while testing -->
 	<!-- <xsl:output indent="yes"/>    -->
@@ -277,8 +278,11 @@
 		</xsl:variable>
 		<xsl:variable name="original.wadl.path" select="document($wadl.path)/wadl:application/@rax:original-wadl|ancestor::*/@rax:original-wadl"/>
 		<xsl:variable name="resource-path"       select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
-		<xsl:variable name="template-parameters" select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:param"/>
-
+		<xsl:variable name="template-parameters">
+		  <root>
+		    <xsl:copy-of select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:param"/>
+		  </root>
+		</xsl:variable>
 		<xsl:choose>
 		  <!-- When the wadl;resource contains no wadl:method references, then fetch all of the 
 		       wadl:method elements from the wadl. -->
@@ -368,7 +372,9 @@
 		<xsl:param name="sectionId"/>
         <xsl:param name="resourceLink"/>
 		<xsl:param name="original.wadl.path"/>
-		<xsl:param name="template-parameters"/>
+		<xsl:param name="template-parameters">
+		  <root/>
+		</xsl:param>
 
 
         <xsl:variable name="id" select="@rax:id"/>
@@ -486,7 +492,7 @@
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 
             <!-- About the request -->
-			<xsl:if test="wadl:request/wadl:param[@style != 'plain']|$template-parameters//*">
+	    <xsl:if test="wadl:request/wadl:param[@style != 'plain']|exslt:node-set($template-parameters)//wadl:param">
                 <xsl:call-template name="paramTable">
                     <xsl:with-param name="mode" select="'Request'"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
@@ -851,7 +857,9 @@
     <xsl:template name="paramTable">
         <xsl:param name="mode"/>
     	<xsl:param name="method.title"/>
-	<xsl:param name="template-parameters"/>
+	<xsl:param name="template-parameters">
+	  <root/>
+	</xsl:param>
 
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
@@ -873,7 +881,7 @@
                     <xsl:choose>
                         <xsl:when test="$mode = 'Request'">
                             <xsl:apply-templates
-                            select="wadl:request//wadl:param|$template-parameters"
+                            select="wadl:request//wadl:param|$template-parameters//wadl:param"
                             mode="preprocess">
                                 <xsl:sort select="@style"/>
                             </xsl:apply-templates>
