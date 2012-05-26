@@ -7,6 +7,7 @@
 
 $(document).ready(function() {  
 
+    $("#content").height($(document).height() - $("#header").height() - $("#toolbar").height() - 10);
 
 	// When you click on a link to an anchor, scroll down 
 	// 105 px to cope with the fact that the banner
@@ -198,6 +199,9 @@ function toggleHighlight(){
         searchHighlight($.cookie('textToSearch'));
     }
 }
+$(window).resize(function() {
+    $("#content").height($(document).height() - $("#header").height() - $("#toolbar").height() - 10);
+});
 /*
 CSS Browser Selector v0.4.0 (Nov 02, 2010)
 Rafael Lima (http://rafael.adm.br)

@@ -24,7 +24,7 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
 }
 
 #header {
-    position: fixed;
+    position: relative;
     width: 100%;
     height: 97px;
     top: 0;
@@ -353,7 +353,8 @@ body p.breadcrumbs {
 }
 
 body #content {
-	position: static;
+	position: fixed;
+	overflow: auto;
 	margin-top: 126px;
 	top: 0px;
 }
