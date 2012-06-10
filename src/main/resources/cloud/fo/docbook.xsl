@@ -26,6 +26,13 @@
 
   <xsl:variable name="profiled-nodes" select="exslt:node-set($preprocessed-nodes)"/>
 
+  <xsl:param name="rackspace.font">
+    <xsl:choose>
+      <xsl:when test="starts-with(/*/@xml:lang, 'zh')">AR-PL-New-Sung</xsl:when>
+      <xsl:otherwise>CartoGothic Std</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
   <!-- Front-Cover Background Image, should be set by the plugin -->
   <xsl:param name="cloud.api.background.image" select="'images/cover.svg'"/>
   <xsl:param name="cloud.api.cc.image.dir" select="'images/cc/'"/>
@@ -141,7 +148,7 @@
   <xsl:param name="use.extensions" select="1"/>
   <xsl:param name="callouts.extension" select="1"/>
   <xsl:param name="textinsert.extension" select="1"/>
-  <xsl:param name="title.fontset" select="'CartoGothic Std'"/>
+  <xsl:param name="title.fontset" select="$rackspace.font"/>
   <!--
       Don't use dingbats for things like the copyright symbol.  Assume
       our font already has it.
@@ -163,37 +170,37 @@
 
   <!-- Root Text Properties  -->
   <xsl:attribute-set name="root.properties">
-    <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+    <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
     <xsl:attribute name="font-size">10.5pt</xsl:attribute>
   </xsl:attribute-set>
 
   <!-- Title Properties (Sections/Components) -->
   <xsl:attribute-set name="component.title.properties">
-    <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+    <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
     <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.title.properties">
     <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
-    <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+    <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="header.content.properties">
-      <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+      <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="footer.content.properties">
-      <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+      <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="formal.title.properties">
       <xsl:attribute name="color">rgb(176,0,14)</xsl:attribute>
-      <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+      <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="admonition.title.properties">
       <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
-      <xsl:attribute name="font-family">CartoGothic Std</xsl:attribute>
+      <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
   </xsl:attribute-set>
 
 
