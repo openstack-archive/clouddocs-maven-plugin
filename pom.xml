@@ -8,7 +8,7 @@
 
     <name>Cloud API Docs Plugin</name>
 
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <properties>
@@ -385,6 +385,21 @@
                 <version>2.0.14</version>
 
                 <executions>
+
+                    <execution>
+                        <id>generate-xhtml</id>
+
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+
+                        <configuration>
+                            <type>xhtml</type>
+                            <superClassName>com.rackspace.cloud.api.docs.XhtmlMojo</superClassName>
+                            <excludedProperties>${excluded.properties},root.filename,base.dir</excludedProperties>
+                        </configuration>
+                    </execution>
+
                     <execution>
                         <id>generate-html</id>
 
