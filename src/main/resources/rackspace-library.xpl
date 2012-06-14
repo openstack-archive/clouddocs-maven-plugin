@@ -537,7 +537,7 @@
                 <p:pipe step="generate-war-step" port="source"/> 
             </p:input> 
             <p:input port="stylesheet">
-                <p:document href="classpath:/cloud/war/docbook.xsl"/>
+                <p:document href="target/docbkx/cloud/war/docbook.xsl"/>
             </p:input>
             <p:input port="parameters" >
                 <p:pipe step="generate-war-step" port="parameters"/>

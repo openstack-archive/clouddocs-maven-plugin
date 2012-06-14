@@ -10,12 +10,12 @@
 		exclude-result-prefixes="db doc f fp m mp xs"
                 version="2.0">
 
-  <xsl:import href="classpath:/cloud/war/dist/xslt/base/preprocess/1-logstruct.xsl"/>
-  <xsl:import href="classpath:/cloud/war/dist/xslt/base/preprocess/1-db4to5.xsl"/>
-  <xsl:import href="classpath:/cloud/war/dist/xslt/base/preprocess/15-transclude.xsl"/>
-  <xsl:import href="classpath:/cloud/war/dist/xslt/base/preprocess/2-profile.xsl"/>
-  <xsl:import href="classpath:/cloud/war/dist/xslt/base/preprocess/3-schemaext.xsl"/>
-  <xsl:import href="classpath:/cloud/war/dist/xslt/base/preprocess/4-normalize.xsl"/>
+<xsl:import href="../preprocess/1-logstruct.xsl"/>
+<xsl:import href="../preprocess/1-db4to5.xsl"/>
+<xsl:import href="../preprocess/15-transclude.xsl"/>
+<xsl:import href="../preprocess/2-profile.xsl"/>
+<xsl:import href="../preprocess/3-schemaext.xsl"/>
+<xsl:import href="../preprocess/4-normalize.xsl"/>
 
 <doc:function name="f:preprocess" xmlns="http://docbook.org/ns/docbook">
 <refpurpose>Returns result of preprocessing of input document by set of steps defined in 

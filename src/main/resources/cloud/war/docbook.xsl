@@ -11,8 +11,8 @@
 		exclude-result-prefixes="h f m fn db t ghost"
 		version="2.0">
 
-  <xsl:import href="classpath:/cloud/war/dist/xslt/base/html/docbook.xsl"/>
-  <xsl:include href="classpath:/cloud/war/dist/xslt/base/html/chunktemp.xsl"/>
+  <xsl:import href="dist/xslt/base/html/docbook.xsl"/>
+  <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
   <xsl:param name="use.id.as.filename" select="'1'"/>
   <!-- <xsl:param name="html.ext" select="'.jspx'"/> -->
   <xsl:param name="linenumbering" as="element()*">
@@ -30,8 +30,6 @@
     <ln xmlns="http://docbook.org/ns/docbook" path="address" everyNth="0"/>
     <ln xmlns="http://docbook.org/ns/docbook" path="epigraph/literallayout" everyNth="0"/>
   </xsl:param>
-
-  <xsl:param name="l10n.locale.dir">classpath:/cloud/war/dist/xslt/base/common/locales/</xsl:param>
 
   <xsl:param name="base.dir" select="'target/docbkx/xhtml/example/'"/>
 
@@ -66,5 +64,66 @@
 <xsl:param name="autolabel.elements">
   <db:refsection/>
 </xsl:param>
+
+  <xsl:template match="/" priority="10">
+    <xsl:choose>
+      <xsl:when test="$rootid = ''">
+        <xsl:apply-templates select="$chunks" mode="m:chunk"/>
+      </xsl:when>
+      <xsl:when test="$chunks[@xml:id = $rootid]">
+        <xsl:apply-templates select="$chunks[@xml:id = $rootid]" mode="m:chunk"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message terminate="yes">
+          <xsl:text>There is no chunk with the ID: </xsl:text>
+          <xsl:value-of select="$rootid"/>
+        </xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+    <db:book/>
+    
+    <xsl:result-document 
+        href="target/docbkx/xhtml/example/bookinfo.xml" 
+        method="xml" indent="yes" encoding="UTF-8">
+      <products xmlns="">
+        <product>
+          <id>1</id>
+          <types>
+            <type>
+              <id>1</id>
+              <displayname>Legal notice</displayname>
+              <url>/example/example-foo.html</url>
+              <sequence>2</sequence> 
+            </type>
+            <type>
+              <id>2</id>
+              <displayname>Overview</displayname>
+              <url>/example/Overview.html</url>
+              <sequence>2</sequence>
+            </type>
+            <type>
+              <id>2</id>
+              <displayname>Intended Audience</displayname>
+              <url>/example/section_eow_tmw_ad.html</url>
+              <sequence>2</sequence>
+            </type>
+          </types>     
+        </product>
+      </products>      
+    </xsl:result-document>
+    
+    <xsl:result-document 
+      href="target/docbkx/xhtml/example/WEB-INF/web.xml" 
+      method="xml" indent="yes" encoding="UTF-8">
+      <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://java.sun.com/xml/ns/j2ee  http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+       <xsl:comment>Noop</xsl:comment>
+      </web-app>
+    </xsl:result-document>
+    
+  </xsl:template>
+
 
 </xsl:stylesheet>

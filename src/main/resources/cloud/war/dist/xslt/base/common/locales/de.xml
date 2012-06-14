@@ -550,6 +550,26 @@
 </l:context>
 <l:context name="htmlhelp"><l:template name="langcode" text="0x0407 German (GERMANY)"/>
 </l:context>
+<l:context name="keycap"><l:template name="alt" text="Alt" lang="en"/>
+<l:template name="backspace" text="⤆" lang="en"/>
+<l:template name="control" text="Ctrl" lang="en"/>
+<l:template name="delete" text="Delete" lang="en"/>
+<l:template name="down" text="↓" lang="en"/>
+<l:template name="end" text="End" lang="en"/>
+<l:template name="enter" text="Enter" lang="en"/>
+<l:template name="escape" text="Esc" lang="en"/>
+<l:template name="home" text="Home" lang="en"/>
+<l:template name="insert" text="Insert" lang="en"/>
+<l:template name="left" text="←" lang="en"/>
+<l:template name="meta" text="Meta" lang="en"/>
+<l:template name="pagedown" text="Page Down" lang="en"/>
+<l:template name="pageup" text="Page Up" lang="en"/>
+<l:template name="right" text="→" lang="en"/>
+<l:template name="shift" text="Shift" lang="en"/>
+<l:template name="space" text="Spacebar" lang="en"/>
+<l:template name="tab" text="Tab" lang="en"/>
+<l:template name="up" text="↑" lang="en"/>
+</l:context>
 <l:context name="index"><l:template name="term-separator" text=", " lang="en"/>
 <l:template name="number-separator" text=", " lang="en"/>
 <l:template name="range-separator" text="-" lang="en"/>
