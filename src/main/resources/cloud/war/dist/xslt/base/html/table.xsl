@@ -13,7 +13,7 @@
 		exclude-result-prefixes="db doc f ghost h m t u xs"
                 version="2.0">
 
-  <xsl:include href="classpath:/cloud/war/dist/xslt/base/common/table.xsl"/>
+<xsl:include href="../common/table.xsl"/>
 
 <xsl:template match="db:table">
   <xsl:call-template name="t:formal-object">

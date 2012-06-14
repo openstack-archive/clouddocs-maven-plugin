@@ -159,17 +159,16 @@ target.</para>
   </xsl:variable>
 
   <xsl:choose>
-    <!-- <xsl:when test="$localization/l:l10n[@language=$adjusted.language] -->
-    <!--                 or f:check-locale($adjusted.language)"> -->
-    <!--   <xsl:value-of select="$adjusted.language"/> -->
-    <!-- </xsl:when> -->
+    <xsl:when test="$localization/l:l10n[@language=$adjusted.language]
+                    or f:check-locale($adjusted.language)">
+      <xsl:value-of select="$adjusted.language"/>
+    </xsl:when>
     <!-- try just the lang code without country -->
-    <!-- <xsl:when test="$localization/l:l10n[@language=substring-before($adjusted.language,'_')] -->
-    <!--                 or f:check-locale(substring-before($adjusted.language,'_'))"> -->
-    <!--   <xsl:value-of select="substring-before($adjusted.language,'_')"/> -->
-    <!-- </xsl:when> -->
+    <xsl:when test="$localization/l:l10n[@language=substring-before($adjusted.language,'_')]
+                    or f:check-locale(substring-before($adjusted.language,'_'))">
+      <xsl:value-of select="substring-before($adjusted.language,'_')"/>
+    </xsl:when>
     <!-- or use the default -->
-    <xsl:when test="false()"/>
     <xsl:otherwise>
       <xsl:message>
         <xsl:text>No localization exists for "</xsl:text>
@@ -838,44 +837,44 @@ the English locale value will be used as the default.</para>
 
 <!-- ============================================================ -->
 
-<!-- <doc:function name="f:check-locale" xmlns="http://docbook.org/ns/docbook"> -->
-<!--   <refpurpose>Test whether there is localization file for specified languahe</refpurpose> -->
+<doc:function name="f:check-locale" xmlns="http://docbook.org/ns/docbook">
+  <refpurpose>Test whether there is localization file for specified languahe</refpurpose>
 
-<!--   <refdescription> -->
-<!--     <para>This function returns true/false.</para> -->
-<!--   </refdescription> -->
+  <refdescription>
+    <para>This function returns true/false.</para>
+  </refdescription>
 
-<!--   <refparameter> -->
-<!--     <variablelist> -->
-<!--       <varlistentry><term>lang</term> -->
-<!--         <listitem> -->
-<!--           <para>BCP 47 code of language.</para> -->
-<!--         </listitem> -->
-<!--       </varlistentry> -->
-<!--     </variablelist> -->
-<!--   </refparameter> -->
+  <refparameter>
+    <variablelist>
+      <varlistentry><term>lang</term>
+        <listitem>
+          <para>BCP 47 code of language.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refparameter>
 
-<!--   <refreturn> -->
-<!--     <para>true/false</para> -->
-<!--   </refreturn> -->
-<!-- </doc:function> -->
+  <refreturn>
+    <para>true/false</para>
+  </refreturn>
+</doc:function>
 
-<!-- <xsl:function name="f:check-locale" as="xs:boolean"> -->
-<!--   <xsl:param name="lang" as="xs:string"/> -->
+<xsl:function name="f:check-locale" as="xs:boolean">
+  <xsl:param name="lang" as="xs:string"/>
 
-<!--   <xsl:choose> -->
-<!--     <xsl:when test="function-available('mldb:check-locale')"> -->
-<!--       <xsl:sequence use-when="function-available('mldb:check-locale')" -->
-<!--                     select="mldb:check-locale($lang)"/> -->
-<!--     </xsl:when> -->
-<!--     <xsl:otherwise> -->
-<!--       <xsl:variable name="dir" select="resolve-uri($l10n.locale.dir)"/> -->
-<!--       <xsl:sequence select="doc-available(resolve-uri(concat($lang,'.xml'), $dir))"/> -->
-<!--     </xsl:otherwise> -->
-<!--   </xsl:choose> -->
+  <xsl:choose>
+    <xsl:when test="function-available('mldb:check-locale')">
+      <xsl:sequence use-when="function-available('mldb:check-locale')"
+                    select="mldb:check-locale($lang)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:sequence
+          select="doc-available(f:resolve-path(concat($lang,'.xml'), $l10n.locale.dir))"/>
+    </xsl:otherwise>
+  </xsl:choose>
 
 
-<!-- </xsl:function> -->
+</xsl:function>
 
 <!-- ============================================================ -->
 
@@ -947,9 +946,8 @@ the English locale value will be used as the default.</para>
                     select="mldb:load-locale($lang)"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:variable name="dir" select="resolve-uri($l10n.locale.dir)"/>
       <xsl:variable name="locale-file"
-                    select="resolve-uri(concat($lang,'.xml'), $dir)"/>
+                    select="f:resolve-path(concat($lang,'.xml'), $l10n.locale.dir)"/>
       <xsl:sequence select="doc($locale-file)/l:l10n"/>
     </xsl:otherwise>
   </xsl:choose>

@@ -10,7 +10,7 @@
 		exclude-result-prefixes="db doc f ghost m mp n xs"
                 version="2.0">
 <!-- needed for standalone processing...not sure what to do about that
-<xsl:import href="classpath:/cloud/war/dist/xslt/base/common/l10n.xsl"/>
+<xsl:import href="../common/l10n.xsl"/>
 -->
 
 <xsl:param name="l10n.gentext.default.language" select="'en'"/>

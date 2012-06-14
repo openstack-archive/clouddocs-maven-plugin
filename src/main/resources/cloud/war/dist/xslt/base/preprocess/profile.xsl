@@ -4,7 +4,7 @@
                 exclude-result-prefixes="m"
                 version="2.0">
 
-  <xsl:import href="classpath:/cloud/war/dist/xslt/base/preprocess/2-profile.xsl"/>
+<xsl:import href="2-profile.xsl"/>
 
 <xsl:output method="xml" encoding="utf-8" indent="no"
 	    omit-xml-declaration="yes"/>

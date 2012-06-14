@@ -12,7 +12,7 @@
                 exclude-result-prefixes="ch db f fn h m t xs"
                 version="2.0">
 
-  <xsl:import href="classpath:/cloud/war/dist/xslt/base/html/chunkfunc.xsl"/>
+  <xsl:import href="chunkfunc.xsl"/>
 
   <!-- ====================================================================== -->
 
@@ -102,7 +102,6 @@
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
-    <foo/>
   </xsl:template>
 
   <xsl:template match="*" mode="m:chunk">

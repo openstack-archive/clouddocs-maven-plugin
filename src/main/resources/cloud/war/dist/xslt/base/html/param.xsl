@@ -59,7 +59,7 @@
 
 <xsl:param name="callout.unicode.start.character" select="10102"/>
 
-<xsl:param name="chunk.section.depth" select="10"/>
+<xsl:param name="chunk.section.depth">1</xsl:param>
 
 <xsl:param name="component.label.includes.part.label" select="0"/>
 
@@ -331,7 +331,7 @@
 
 <xsl:param name="toc.max.depth" select="8"/>
 
-<xsl:param name="toc.section.depth">10</xsl:param>
+<xsl:param name="toc.section.depth">2</xsl:param>
 
 <xsl:param name="use.embed.for.svg" select="0"/>
 

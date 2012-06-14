@@ -11,7 +11,7 @@
 		exclude-result-prefixes="db doc f fn h m t"
                 version="2.0">
 
-  <xsl:include href="classpath:/cloud/war/dist/xslt/base/html/oosynopsis.xsl"/>
+<xsl:include href="oosynopsis.xsl"/>
 
 <xsl:template match="db:refsynopsis">
   <div>

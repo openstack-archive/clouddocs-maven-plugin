@@ -20,7 +20,7 @@
 
      ******************************************************************** -->
 
-  <xsl:include href="classpath:/cloud/war/dist/xslt/base/common/footnotes.xsl"/>
+<xsl:include href="../common/footnotes.xsl"/>
 
 <xsl:template match="db:footnote">
   <xsl:variable name="name" select="f:node-id(.)"/>

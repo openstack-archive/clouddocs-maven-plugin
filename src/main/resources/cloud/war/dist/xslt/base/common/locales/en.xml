@@ -550,6 +550,26 @@
 </l:context>
 <l:context name="htmlhelp"><l:template name="langcode" text="0x0409 English (UNITED STATES)"/>
 </l:context>
+<l:context name="keycap"><l:template name="alt" text="Alt"/>
+<l:template name="backspace" text="⤆"/>
+<l:template name="control" text="Ctrl"/>
+<l:template name="delete" text="Delete"/>
+<l:template name="down" text="↓"/>
+<l:template name="end" text="End"/>
+<l:template name="enter" text="Enter"/>
+<l:template name="escape" text="Esc"/>
+<l:template name="home" text="Home"/>
+<l:template name="insert" text="Insert"/>
+<l:template name="left" text="←"/>
+<l:template name="meta" text="Meta"/>
+<l:template name="pagedown" text="Page Down"/>
+<l:template name="pageup" text="Page Up"/>
+<l:template name="right" text="→"/>
+<l:template name="shift" text="Shift"/>
+<l:template name="space" text="Spacebar"/>
+<l:template name="tab" text="Tab"/>
+<l:template name="up" text="↑"/>
+</l:context>
 <l:context name="index"><l:template name="term-separator" text=", "/>
 <l:template name="number-separator" text=", "/>
 <l:template name="range-separator" text="-"/>
