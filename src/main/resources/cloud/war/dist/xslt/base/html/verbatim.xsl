@@ -125,7 +125,7 @@
          and magically grows an xml:space="preserve" attribute, the processor
          doesn't fall over because we've added an attribute after a text node.
          Maybe this only happens in MarkLogic. Maybe it's a bug. For now: whatever. -->
-    <pre><xsl:if test="@language"><xsl:attribute name="class" select="@language"/></xsl:if><xsl:sequence select="$formatted"/></pre>
+    <pre><!-- <xsl:if test="@language"><xsl:attribute name="class" select="@language"/></xsl:if> --><xsl:sequence select="$formatted"/></pre>
   </div>
 </xsl:template>
 
