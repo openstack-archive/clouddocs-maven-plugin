@@ -85,7 +85,7 @@
     <xsl:result-document 
         href="target/docbkx/xhtml/example/bookinfo.xml" 
         method="xml" indent="yes" encoding="UTF-8">
-      <products xmlns="">
+<!--      <products xmlns="">
         <product>
           <id>1</id>
           <types>
@@ -109,7 +109,30 @@
             </type>
           </types>     
         </product>
-      </products>      
+      </products>  -->    
+      
+      <products xmlns="">
+        <product>
+          <!-- HACK...FIXME -->
+          <id><xsl:apply-templates select="//db:productname" mode="bookinfo"/></id>
+           <types>
+      <xsl:choose>
+        <xsl:when test="$rootid = ''">
+          <xsl:apply-templates select="$chunks" mode="bookinfo"/>
+        </xsl:when>
+        <xsl:when test="$chunks[@xml:id = $rootid]">
+          <xsl:apply-templates select="$chunks[@xml:id = $rootid]" mode="bookinfo"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message terminate="yes">
+            <xsl:text>There is no chunk with the ID: </xsl:text>
+            <xsl:value-of select="$rootid"/>
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+           </types>
+        </product>
+      </products>
     </xsl:result-document>
     
     <xsl:result-document 
@@ -124,6 +147,59 @@
     </xsl:result-document>
     
   </xsl:template>
+  
+  <xsl:template match="db:book|db:chapter|db:preface|db:section|db:appendix|db:glossary|db:part|db:index" mode="bookinfo">
+    <xsl:variable name="type">
+      <xsl:choose>
+        <xsl:when test="processing-instruction('rax')">
+          <xsl:value-of select="f:pi(processing-instruction('rax'),'type')"/>
+        </xsl:when>
+        <xsl:when test="ancestor::*[processing-instruction('rax')]">
+          <xsl:value-of select="f:pi(ancestor::*[processing-instruction('rax')]/processing-instruction('rax')[1],'type')"/>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="idNumber">
+      <xsl:choose>
+        <xsl:when test="$type = 'concepts'">1</xsl:when>
+        <xsl:when test="$type = 'apiref'">2</xsl:when>
+        <xsl:when test="$type = 'advanced'">3</xsl:when>
+        <xsl:otherwise>4</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="priority"><xsl:value-of select="f:pi(processing-instruction('rax'),'priority')"/></xsl:variable>
+    
+    <xsl:variable name="priorityCalculated">
+      <xsl:choose>
+        <xsl:when test="normalize-space($priority) != ''">
+          <xsl:value-of select="normalize-space($priority)"/>
+        </xsl:when>
+        <xsl:otherwise>100000</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <type xmlns="">
+      <id><xsl:value-of select="$idNumber"/></id>
+      <displayname><xsl:value-of select=".//db:title[1]"/></displayname>
+      <url>/example/<xsl:value-of select="f:chunk-filename(.)"/></url>
+      <sequence><xsl:value-of select="$priorityCalculated"/></sequence> 
+    </type>
+    <xsl:apply-templates select="db:book|db:chapter|db:preface|db:section|db:appendix|db:glossary|db:part|db:index" mode="bookinfo"/>
+  </xsl:template>
 
+  <xsl:template match="db:productname" mode="bookinfo">
+    <xsl:choose>
+      <xsl:when test="preceding::db:productname"/>
+      <xsl:when test="starts-with(normalize-space(.),'Cloud Servers')">1</xsl:when>
+      <xsl:when test="starts-with(normalize-space(.),'Cloud Databases')">2</xsl:when>
+      <xsl:when test="starts-with(normalize-space(.),'Cloud Monitoring')">3</xsl:when>
+      <xsl:when test="starts-with(normalize-space(.),'Cloud Block Storage')">4</xsl:when>
+      <xsl:when test="starts-with(normalize-space(.),'Cloud Files')">5</xsl:when>
+    </xsl:choose>  
+  </xsl:template>
+  
+  <xsl:template match="text()" mode="bookinfo"/>
 
 </xsl:stylesheet>
