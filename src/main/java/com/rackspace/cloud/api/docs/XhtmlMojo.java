@@ -67,11 +67,8 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
 	//final File targetDirectory = result.getParentFile();
 	// com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("apiref",ApiRefMojo.class,targetDirectory);
 	String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
-	System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-	System.out.println("result.getParentFile(): " + result.getParentFile());
 
 	// Zip up the war from here.
-	// TODO: compute /docbkx/xhtml?
 	String sourceDir = result.getParentFile() + "/" + warBasename;
 	String zipFile = result.getParentFile()  + "/" + warBasename + ".war";
 	result.deleteOnExit();
