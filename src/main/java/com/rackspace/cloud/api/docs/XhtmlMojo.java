@@ -134,7 +134,39 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
         
         map.put("security", security);
         map.put("failOnValidationError", failOnValidationError);
-        
+
+        int lastSlash=inputFilename.lastIndexOf("/");
+
+        //This is the case if the path includes a relative path
+        if(-1!=lastSlash){
+        	String theFileName=inputFilename.substring(lastSlash);
+        	String theDirName=inputFilename.substring(0,lastSlash);
+            
+        	int index = theFileName.indexOf('.');
+        	if(-1!=index){
+            	String targetDir="target/docbkx/xhtml/"+theDirName+theFileName.substring(0,index) + "/";
+
+            	map.put("base.dir", targetDir);        		
+        	}
+        	else{
+        		//getLog().info("~~~~~~~~theFileName file has incompatible format: "+theFileName);
+        	}
+
+        }
+        //This is the case when it's just a file name with no path information
+        else{
+        	String theFileName=inputFilename;
+        	int index = theFileName.indexOf('.');
+        	if(-1!=index){
+            	String targetDir="target/docbkx/xhtml/"+theFileName.substring(0,index) + "/";
+            	map.put("base.dir", targetDir);        		
+        	}
+        	else{
+        		//getLog().info("~~~~~~~~inputFilename file has incompatible format: "+inputFilename);
+        	}
+        }
+
+
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
 }
