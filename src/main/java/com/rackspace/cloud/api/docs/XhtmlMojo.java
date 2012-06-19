@@ -134,6 +134,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
         
         map.put("security", security);
         map.put("failOnValidationError", failOnValidationError);
+        map.put("project.build.directory", projectBuildDirectory);
 
         int lastSlash=inputFilename.lastIndexOf("/");
 
