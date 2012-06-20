@@ -39,7 +39,9 @@
   
   <l:programlisting-keep-together name="programlisting-keep-together"/>
   
-  <l:generate-war name="my-generate-war"/>
+  <l:docbook-xslt2-preprocess/>
+  
+  <l:generate-war/>
 
   <cx:message>
     <p:with-option name="message" select="'Exiting xproc pipeline: war'"/>

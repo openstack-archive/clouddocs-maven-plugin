@@ -556,4 +556,34 @@
 
     </p:declare-step>
 
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:docbook-xslt2-preprocess"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="docbook-xslt2-preprocess-step">
+        
+        <p:input port="source"/>
+        
+        <p:output port="result" primary="true">
+            <p:pipe step="docbook-xslt2-preprocess-xslt" port="result"/>
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="docbook-xslt2-preprocess-xslt">
+            <p:input port="source"> 
+                <p:pipe step="docbook-xslt2-preprocess-step" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="target/docbkx/cloud/war/preprocess.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="docbook-xslt2-preprocess-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+                
+    </p:declare-step>
+
 </p:library>

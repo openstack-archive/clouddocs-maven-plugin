@@ -33,6 +33,35 @@
 
   <xsl:param name="base.dir" select="'target/docbkx/xhtml/example/'"/>
 
+  <xsl:param name="preprocess" select="'profile normalize'"/>
+  <xsl:param name="project.build.directory">/home/dcramer/rax/published/cloud-servers-2x-upstream/target</xsl:param>
+  <xsl:param name="glossary.collection" select="concat($project.build.directory,'/mvn/com.rackspace.cloud.api/glossary/glossary.xml')"/>  
+
+  <xsl:param name="security">external</xsl:param>
+  <xsl:param name="root.attr.status"><xsl:if test="/*[@status = 'draft']">draft;</xsl:if></xsl:param>
+  <xsl:param name="profile.security">
+    <xsl:choose>
+      <xsl:when test="$security = 'external'"><xsl:value-of select="$root.attr.status"/>external</xsl:when>
+      <xsl:when test="$security = 'internal'"><xsl:value-of select="$root.attr.status"/>internal;external</xsl:when>
+      <xsl:when test="$security = 'reviewer'"><xsl:value-of select="$root.attr.status"/>reviewer;internal;external</xsl:when>
+      <xsl:when test="$security = 'writeronly'"><xsl:value-of select="$root.attr.status"/>reviewer;internal;external;writeronly</xsl:when>
+      <xsl:when test="$security = 'external'"><xsl:value-of select="$root.attr.status"/>external</xsl:when>
+      <xsl:otherwise>
+	<xsl:message terminate="yes"> 
+	  ERROR: The value "<xsl:value-of select="$security"/>" is not valid for the security paramter. 
+	         Valid values are: external, internal, reviewer, and writeronly. 
+	</xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="show.comments">
+    <xsl:choose>
+      <xsl:when test="$security = 'reviewer' or $security = 'writeronly'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+
   <xsl:param name="generate.toc" as="element()*">
     <tocparam xmlns="http://docbook.org/ns/docbook" path="appendix" toc="0" title="1"/>
     <tocparam xmlns="http://docbook.org/ns/docbook" path="article/appendix" toc="0" title="1"/>
@@ -1404,5 +1433,6 @@
     </xsl:if>
   </xsl:template>
   
+
 
 </xsl:stylesheet>
