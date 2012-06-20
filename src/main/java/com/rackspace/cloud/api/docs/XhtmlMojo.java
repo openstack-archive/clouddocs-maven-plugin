@@ -30,7 +30,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
      * 
      * @parameter 
      *     expression="${generate-html.failOnValidationError}"
-     *     default-value="0"
+     *     default-value="yes"
      */
     private String failOnValidationError;
     
