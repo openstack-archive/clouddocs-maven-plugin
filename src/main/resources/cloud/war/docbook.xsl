@@ -468,14 +468,19 @@
 			
 		</xsl:variable>
 		
+
 		<div id="prevnextbuttons">
+			<xsl:if test="$prev">
 			<div id = "previouslink">
 				<span id="previousbutton">
 					<a>
 						<xsl:attribute name="href">
-							<xsl:if test="$prev">
-								<xsl:value-of select="f:href(/,$prev[1])"/>
-							</xsl:if>
+							<xsl:choose>
+								<xsl:when test="$prev and not($prev = $node)">
+									<xsl:value-of select="f:href(/,$prev[1])"/>
+								</xsl:when>
+								<xsl:otherwise>#</xsl:otherwise>
+							</xsl:choose>	
 						</xsl:attribute>
 						&lt;&#160;Previous
 					</a>
@@ -484,13 +489,18 @@
 					<xsl:apply-templates select="$prev" mode="m:object-title-markup"/>
 				</span>
 			</div>
-			<div id="nextlink">
+			</xsl:if>
+			<xsl:if test="$next">
+				<div id="nextlink">
 				<span id="nextbutton">
 					<a>
 						<xsl:attribute name="href">
-							<xsl:if test="$next">
+							<xsl:choose>
+								<xsl:when test="$next and not($next = $node)">
 								<xsl:value-of select="f:href(/,$next[1])"/>
-							</xsl:if>
+								</xsl:when>
+								<xsl:otherwise>#</xsl:otherwise>
+							</xsl:choose>							
 						</xsl:attribute>
 						Next&#160;&gt;
 					</a>
@@ -499,6 +509,7 @@
 					<xsl:apply-templates select="$next" mode="m:object-title-markup"/>
 				</span>
 			</div>
+			</xsl:if>
 		</div>
 		
 	</xsl:template>
