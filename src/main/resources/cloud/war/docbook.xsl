@@ -458,5 +458,49 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template name="t:user-footer-content">
+		<xsl:param name="node" select="."/>
+		<xsl:param name="next" select="()"/>
+		<xsl:param name="prev" select="()"/>
+		<xsl:param name="up" select="()"/>
+		
+		<xsl:variable name="nextfile">
+			
+		</xsl:variable>
+		
+		<div id="prevnextbuttons">
+			<div id = "previouslink">
+				<span id="previousbutton">
+					<a>
+						<xsl:attribute name="href">
+							<xsl:if test="$prev">
+								<xsl:value-of select="f:href(/,$prev[1])"/>
+							</xsl:if>
+						</xsl:attribute>
+						&lt;&#160;Previous
+					</a>
+				</span>
+				<span id="previouschunk">
+					<xsl:apply-templates select="$prev" mode="m:object-title-markup"/>
+				</span>
+			</div>
+			<div id="nextlink">
+				<span id="nextbutton">
+					<a>
+						<xsl:attribute name="href">
+							<xsl:if test="$next">
+								<xsl:value-of select="f:href(/,$next[1])"/>
+							</xsl:if>
+						</xsl:attribute>
+						Next&#160;&gt;
+					</a>
+				</span>
+				<span id="nextchunk">
+					<xsl:apply-templates select="$next" mode="m:object-title-markup"/>
+				</span>
+			</div>
+		</div>
+		
+	</xsl:template>
 
 </xsl:stylesheet>
