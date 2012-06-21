@@ -57,12 +57,15 @@
 
 <!-- ================================================== -->
 <!-- Overriding a couple of templates from 4-normalize.xsl to fix bugs. -->
+  
+<!-- Don't remove programlistings etc -->
   <xsl:template match="@*|node()" mode="m:verbatim-phase-1" xmlns:m="http://docbook.org/xslt/ns/mode">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()" mode="m:verbatim-phase-1"/>
     </xsl:copy>
   </xsl:template>
 
+<!-- Move title into db:info if there's one outside  -->
   <xsl:template match="db:info" mode="m:normalize">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
