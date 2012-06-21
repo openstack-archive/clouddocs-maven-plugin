@@ -106,7 +106,7 @@ set       toc,title
 </xsl:param>
 
   <xsl:param name="enable.disqus">0</xsl:param>
-
+  <xsl:param name="disqus_identifier" select="/*/@xml:id"/>
   <xsl:param name="disqus.shortname">
     <xsl:choose>
       <xsl:when test="$branding = 'test'">jonathan-test-dns</xsl:when>
@@ -186,7 +186,7 @@ ERROR: Feedback email not set but internal comments are enabled.
 	    <script type="text/javascript">
 	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>';
 	      <xsl:if test="$use.disqus.id != '0'">
-	      var disqus_identifier = '<xsl:value-of select="/*/@xml:id"/><xsl:value-of select="$version.for.disqus"/><xsl:value-of select="@xml:id"/>';
+	      var disqus_identifier = '<xsl:value-of select="$disqus_identifier"/><xsl:value-of select="$version.for.disqus"/><xsl:value-of select="@xml:id"/>';
 	      </xsl:if>
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>

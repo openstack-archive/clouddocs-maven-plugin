@@ -103,6 +103,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String useDisqusId;
 
     /**
+     * Controls whether the disqus identifier is used.
+     *
+     * @parameter expression="${generate-webhelp.disqus_identifier}" 
+     */
+    private String disqusIdentifier;
+
+    /**
      * Controls the branding of the output.
      *
      * @parameter expression="${generate-webhelp.branding}" default-value="rackspace"
@@ -255,6 +262,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         if (disqusShortname != null) {
             transformer.setParameter("disqus.shortname", disqusShortname);
         }
+        if (disqusIdentifier != null) {
+            transformer.setParameter("disqus_identifier", disqusIdentifier);
+        }
+
         if (enableGoogleAnalytics != null) {
             transformer.setParameter("enable.google.analytics", enableGoogleAnalytics);
         }
