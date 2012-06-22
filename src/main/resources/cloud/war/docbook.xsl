@@ -15,6 +15,8 @@
 
   <xsl:import href="dist/xslt/base/html/docbook.xsl"/>
   <xsl:import href="static-header.xsl"/>
+  <xsl:import href="changebars.xsl"/>
+	
   <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
   <xsl:param name="use.id.as.filename" select="'1'"/>
   <!-- <xsl:param name="html.ext" select="'.jspx'"/> -->
@@ -36,6 +38,29 @@
 
   <xsl:param name="toc.section.depth">1</xsl:param>
   <xsl:param name="chunk.section.depth">1</xsl:param>
+	
+	<xsl:param name="branding">not set</xsl:param>
+	<xsl:param name="enable.disqus">0</xsl:param>
+	<xsl:param name="disqus.shortname">
+		<xsl:choose>
+			<xsl:when test="$branding = 'test'">jonathan-test-dns</xsl:when>
+			<xsl:when test="$branding = 'rackspace'">rc-api-docs</xsl:when>
+			<xsl:when test="$branding = 'openstack'">openstackdocs</xsl:when>
+			<xsl:when test="$branding = 'openstackextension'">openstackdocs</xsl:when>
+		</xsl:choose>
+	</xsl:param>
+	<xsl:param name="use.version.for.disqus">0</xsl:param>
+	<xsl:variable name="version.for.disqus">
+		<xsl:choose>
+			<xsl:when test="$use.version.for.disqus!='0'">
+				<xsl:value-of select="translate(/*/db:info/db:releaseinfo[1],' ','')"/>
+			</xsl:when>
+			<xsl:otherwise></xsl:otherwise>
+		</xsl:choose>       
+	</xsl:variable>	
+	<xsl:param name="use.disqus.id">1</xsl:param>
+	<xsl:param name="feedback.email" select="f:pi(processing-instruction('rax'),'feedback.email')"/>
+	
 
   <xsl:param name="base.dir" select="'target/docbkx/xhtml/example/'"/>
 
@@ -119,8 +144,8 @@
    <!-- Rackspace stuff -->
   <script type="text/javascript" src="http://rackspace.com/min/?g=js-header&amp;1332945039"><xsl:comment/></script>
   <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?g=css&amp;1333990221" />
-  <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css" />
-  <link rel="stylesheet" type="text/css" href="http://docs.rackspace.com/common/css/newformat.css"/>
+ <!-- <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css" />-->
+<!--  <link rel="stylesheet" type="text/css" href="http://docs.rackspace.com/common/css/newformat.css"/>-->
   <script type="text/javascript" src="http://docs.rackspace.com/common/newformat.js"><xsl:comment/></script>
   <!-- Rackspace stuff -->
   
@@ -511,6 +536,52 @@
 			</div>
 			</xsl:if>
 		</div>
+		
+		<xsl:if test="$enable.disqus!='0' and (//db:section[not(@xml:id)] or //db:chapter[not(@xml:id)] or //db:part[not(@xml:id)] or //db:appendix[not(@xml:id)] or //db:preface[not(@xml:id)] or /*[not(@xml:id)])">
+			<xsl:message terminate="yes"> 
+				<xsl:for-each select="//db:section[not(@xml:id)]|//db:chapter[not(@xml:id)]|//db:part[not(@xml:id)]|//db:appendix[not(@xml:id)]|//db:preface[not(@xml:id)]|/*[not(@xml:id)]">
+					ERROR: The <xsl:value-of select="local-name()"/> "<xsl:value-of select=".//db:title[1]"/>" is missing an id.
+				</xsl:for-each>
+				When Disqus comments are enabled, the root element and every part, chapter, appendix, preface, and section must have an xml:id attribute.
+			</xsl:message>
+		</xsl:if>
+		
+		<!-- Alternate location for SyntaxHighlighter scripts -->
+		
+		
+		<script type="text/javascript" src="../common/main.js">
+            <xsl:comment></xsl:comment>
+        </script>
+		
+		<xsl:if test="$enable.disqus != '0'">
+			<hr />
+			<xsl:choose>
+				<xsl:when test="$enable.disqus = 'intranet'">
+					<xsl:if test="$feedback.email =''">
+						<xsl:message terminate="yes">
+							ERROR: Feedback email not set but internal comments are enabled.
+						</xsl:message>
+					</xsl:if>
+					<script language="JavaScript" src="/comments.php?email={$feedback.email}" type="text/javascript"><xsl:comment/></script>
+					<noscript>You must have JavaScript enabled to view and post comments.</noscript>
+				</xsl:when>
+				<xsl:otherwise>
+					
+					<div id="disqus_thread">
+						<script type="text/javascript">
+	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>';
+	      <xsl:if test="$use.disqus.id != '0'">
+	      var disqus_identifier = '<xsl:value-of select="/*/@xml:id"/><xsl:value-of select="$version.for.disqus"/><xsl:value-of select="@xml:id"/>';
+	      </xsl:if>
+	    </script>
+						<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+						<script type="text/javascript" src="../common/comments.js"><xsl:comment/></script>
+					</div>	  
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+		
+		
 		
 	</xsl:template>
 
