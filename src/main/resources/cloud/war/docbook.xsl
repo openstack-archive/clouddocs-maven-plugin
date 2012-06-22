@@ -274,7 +274,7 @@
     <type xmlns="">
       <id><xsl:value-of select="$idNumber"/></id>
       <displayname><xsl:value-of select="db:title|db:info/db:title"/></displayname>
-      <url>/example/<xsl:value-of select="f:chunk-filename(.)"/></url>
+      <url><xsl:value-of select="f:href(/,.)"/></url>
       <sequence><xsl:value-of select="$priorityCalculated"/></sequence> 
     </type>
   </xsl:template>
