@@ -435,7 +435,7 @@
   <script>
     $(function(){
 	 $.getJSON("/IndexWar/IndexServlet?headerfooter=2",{"headerfooter" : "2"},function(data){
-		 getHeader(data);
+		 getFooter(data);
 	 });
      });
   </script>
