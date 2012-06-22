@@ -401,20 +401,20 @@
 <xsl:template name="t:user-head-content">
   <xsl:param name="node" select="."/>
   
-  <link rel="stylesheet" type="text/css" href="common/css/custom.css"/>
-  <link rel="stylesheet" type="text/css" href="common/css/jquery-ui-1.8.2.custom.css"/>
-  <link rel="stylesheet" type="text/css" href="common/css/jquery.treeview.css"/>
-  <link rel="stylesheet" type="text/css" href="common/css/jquery.qtip.css"/>
+  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/custom.css"/>
+  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery-ui-1.8.2.custom.css"/>
+  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery.treeview.css"/>
+  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery.qtip.css"/>
   <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css"/>
-  <link rel="stylesheet" type="text/css" href="common/css/newformat.css"/>
-  <link rel="stylesheet" type="text/css" href="common/css/style-new.css"/>
-  <link rel="stylesheet" type="text/css" href="common/css/rackspace-header1.css"/>
+  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/newformat.css"/>
+  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/style-new.css"/>
+  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/rackspace-header1.css"/>
 
-  <script type="text/javascript" src="common/scripts/docs.js" ><xsl:comment/></script>
+  <script type="text/javascript" src="/IndexWar/common/scripts/docs.js" ><xsl:comment/></script>
 
-  <script type="text/javascript" src="common/scripts/rackspace-header2.js"><xsl:comment/></script>
-  <script type="text/javascript" src="common/scripts/smartbutton.js"><xsl:comment/></script>
-  <script type="text/javascript" src="common/scripts/munchkin.js"><xsl:comment/></script>
+  <script type="text/javascript" src="/IndexWar/common/scripts/rackspace-header2.js"><xsl:comment/></script>
+  <script type="text/javascript" src="/IndexWar/common/scripts/smartbutton.js"><xsl:comment/></script>
+  <script type="text/javascript" src="/IndexWar/common/scripts/munchkin.js"><xsl:comment/></script>
 
   <script>
     $(function(){
@@ -549,9 +549,9 @@
 		<!-- Alternate location for SyntaxHighlighter scripts -->
 		
 		
-		<script type="text/javascript" src="../common/main.js">
+<!--		<script type="text/javascript" src="../common/main.js">
             <xsl:comment></xsl:comment>
-        </script>
+        </script>-->
 		
 		<xsl:if test="$enable.disqus != '0'">
 			<hr />
