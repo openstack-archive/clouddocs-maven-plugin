@@ -14,7 +14,9 @@
 		version="2.0">
 
   <xsl:import href="dist/xslt/base/html/docbook.xsl"/>
+  <!-- 
   <xsl:import href="static-header.xsl"/>
+  -->
   <xsl:import href="changebars.xsl"/>
 	
   <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
@@ -146,7 +148,7 @@
   <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?g=css&amp;1333990221" />
  <!-- <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css" />-->
 <!--  <link rel="stylesheet" type="text/css" href="http://docs.rackspace.com/common/css/newformat.css"/>-->
-  <script type="text/javascript" src="http://docs.rackspace.com/common/newformat.js"><xsl:comment/></script>
+  <script type="text/javascript" src="/IndexWar/common/scripts/newformat.js"><xsl:comment/></script>
   <!-- Rackspace stuff -->
   
 </xsl:template>
@@ -318,7 +320,9 @@
 	  <!-- START HEADER -->
 	  <div id="raxdocs-header">
 	    <xsl:comment/>
+	    <!--  
 	    <xsl:call-template name="static-header"/>
+	    -->
 	  </div>
 	  <!-- END HEADER -->
 
@@ -378,9 +382,13 @@
         	
        
           <!-- BEGIN FOOTER -->
+           
 	  <div id="rax-footer">
+	   <!-- 
 	    <xsl:call-template name="static-footer"/>
+	  -->
 	  </div>
+	  
 	  <!-- END FOOTER -->
         </body>
       </html>
@@ -418,7 +426,7 @@
 
   <script>
     $(function(){
-	 $.getJSON("IndexServlet?headerfooter=1",{"headerfooter" : "1"},function(data){
+	 $.getJSON("/IndexWar/IndexServlet?headerfooter=1",{"headerfooter" : "1"},function(data){
 		 getHeader(data);
 	 });
     });
@@ -426,7 +434,7 @@
  
   <script>
     $(function(){
-	 $.getJSON("IndexServlet?headerfooter=2",{"headerfooter" : "2"},function(data){
+	 $.getJSON("/IndexWar/IndexServlet?headerfooter=2",{"headerfooter" : "2"},function(data){
 		 getHeader(data);
 	 });
      });
