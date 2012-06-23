@@ -15,7 +15,9 @@
 		version="2.0">
 
   <xsl:import href="dist/xslt/base/html/docbook.xsl"/>
+  <!-- 
   <xsl:import href="static-header.xsl"/>
+  -->
   <xsl:import href="changebars.xsl"/>
 	
   <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
@@ -312,7 +314,8 @@
 	  <!-- START HEADER -->
 	  <div id="raxdocs-header">
 	    <xsl:comment/>
-	    <!-- <xsl:call-template name="static-header"/> -->
+	    <!--  
+	    -->
 	  </div>
 	  <!-- END HEADER -->
 
@@ -375,9 +378,12 @@
         	
        
           <!-- BEGIN FOOTER -->
+           
 	  <div id="rax-footer">
-	    <!-- <xsl:call-template name="static-footer"/> -->
+	   <!-- 
+	  -->
 	  </div>
+	  
 	  <!-- END FOOTER -->
         </body>
       </html>
