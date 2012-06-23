@@ -10,7 +10,8 @@
 		xmlns:db="http://docbook.org/ns/docbook"
 		xmlns:tp="http://docbook.org/xslt/ns/template/private"
 		xmlns:mp="http://docbook.org/xslt/ns/mode/private"
-		exclude-result-prefixes="h f m fn db t ghost tp mp"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		exclude-result-prefixes="h f m fn db t ghost tp mp xs"
 		version="2.0">
 
   <xsl:import href="dist/xslt/base/html/docbook.xsl"/>
@@ -18,6 +19,7 @@
   <xsl:import href="changebars.xsl"/>
 	
   <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
+  <xsl:param name="input.filename"/>
   <xsl:param name="use.id.as.filename" select="'1'"/>
   <!-- <xsl:param name="html.ext" select="'.jspx'"/> -->
   <xsl:param name="linenumbering" as="element()*">
@@ -140,14 +142,6 @@
   </xsl:if>
 
   <script type="text/javascript" src="{concat($resource.root, 'js/dbmodnizr.js')}">&#160;</script>
-  
-   <!-- Rackspace stuff -->
-  <script type="text/javascript" src="http://rackspace.com/min/?g=js-header&amp;1332945039"><xsl:comment/></script>
-  <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?g=css&amp;1333990221" />
- <!-- <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css" />-->
-<!--  <link rel="stylesheet" type="text/css" href="http://docs.rackspace.com/common/css/newformat.css"/>-->
-  <script type="text/javascript" src="http://docs.rackspace.com/common/newformat.js"><xsl:comment/></script>
-  <!-- Rackspace stuff -->
   
 </xsl:template>
 
@@ -274,7 +268,7 @@
     <type xmlns="">
       <id><xsl:value-of select="$idNumber"/></id>
       <displayname><xsl:value-of select="db:title|db:info/db:title"/></displayname>
-      <url><xsl:value-of select="f:href(/,.)"/></url>
+      <url><xsl:value-of select="concat('/',$input.filename, '/', f:href(/,.))"/></url>
       <sequence><xsl:value-of select="$priorityCalculated"/></sequence> 
     </type>
   </xsl:template>
@@ -318,7 +312,7 @@
 	  <!-- START HEADER -->
 	  <div id="raxdocs-header">
 	    <xsl:comment/>
-	    <xsl:call-template name="static-header"/>
+	    <!-- <xsl:call-template name="static-header"/> -->
 	  </div>
 	  <!-- END HEADER -->
 
@@ -330,7 +324,10 @@
 						<div id="treeDiv">
 							<div id="ulTreeDiv">
 								<ul id="tree" class="filetree">
-									<xsl:apply-templates select="/*" mode="mp:toc"/>
+									<xsl:apply-templates select="/*" mode="mp:toc">
+<xsl:with-param name="toc-context" select="."/>
+									</xsl:apply-templates>									  
+
 								</ul>
 							</div>
 						</div>
@@ -379,7 +376,7 @@
        
           <!-- BEGIN FOOTER -->
 	  <div id="rax-footer">
-	    <xsl:call-template name="static-footer"/>
+	    <!-- <xsl:call-template name="static-footer"/> -->
 	  </div>
 	  <!-- END FOOTER -->
         </body>
@@ -401,36 +398,36 @@
 <xsl:template name="t:user-head-content">
   <xsl:param name="node" select="."/>
   
-  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/custom.css"/>
-  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery-ui-1.8.2.custom.css"/>
-  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery.treeview.css"/>
-  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery.qtip.css"/>
-  <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css"/>
-  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/newformat.css"/>
-  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/style-new.css"/>
-  <link rel="stylesheet" type="text/css" href="/IndexWar/common/css/rackspace-header1.css"/>
+<script type="text/javascript" src="http://rackspace.com/min/?g=js-header&amp;1332945039">&#160;</script>
+<link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?g=css&amp;1333990221"/>
+<script type="text/javascript" src="/IndexWar/common/scripts/newformat.js">&#160;</script>
+<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/custom.css"/>
+<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery-ui-1.8.2.custom.css"/>
+<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery.treeview.css"/>
+<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery.qtip.css"/>
+<link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css"/>
+<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/newformat.css"/>
+<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/style-new.css"/>
+<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/rackspace-header1.css"/>
+<script type="text/javascript" src="/IndexWar/common/scripts/docs.js">&#160;</script>
+<script type="text/javascript" src="/IndexWar/common/scripts/rackspace-header2.js">&#160;</script>
+<script type="text/javascript" src="/IndexWar/common/scripts/smartbutton.js">&#160;</script>
+<script type="text/javascript" src="/IndexWar/common/scripts/munchkin.js">&#160;</script>
 
-  <script type="text/javascript" src="/IndexWar/common/scripts/docs.js" ><xsl:comment/></script>
 
-  <script type="text/javascript" src="/IndexWar/common/scripts/rackspace-header2.js"><xsl:comment/></script>
-  <script type="text/javascript" src="/IndexWar/common/scripts/smartbutton.js"><xsl:comment/></script>
-  <script type="text/javascript" src="/IndexWar/common/scripts/munchkin.js"><xsl:comment/></script>
-
-  <script>
+<script>
     $(function(){
-	 $.getJSON("IndexServlet?headerfooter=1",{"headerfooter" : "1"},function(data){
+	 $.getJSON("/IndexWar/IndexServlet?headerfooter=1",{"headerfooter" : "1"},function(data){
 		 getHeader(data);
 	 });
     });
-  </script>
- 
-  <script>
+  </script><script>
     $(function(){
-	 $.getJSON("IndexServlet?headerfooter=2",{"headerfooter" : "2"},function(data){
-		 getHeader(data);
+	 $.getJSON("/IndexWar/IndexServlet?headerfooter=2",{"headerfooter" : "2"},function(data){
+		 getFooter(data);
 	 });
      });
-  </script>
+  </script>  
 
 </xsl:template>
 
@@ -584,5 +581,83 @@
 		
 		
 	</xsl:template>
+
+	<!-- ======================================== -->
+	<!-- Customized from html/autotoc.xsl         -->
+	<!-- Adding id="currentchapter" to <li> so we -->
+	<!-- can style it.                            -->
+	<!-- ======================================== -->
+<xsl:template name="tp:subtoc">
+  <xsl:param name="toc-context" select="."/>
+  <xsl:param name="nodes" select="()"/>
+
+  <xsl:variable name="subtoc" as="element()">
+    <ul class="toc">
+      <xsl:apply-templates mode="mp:toc" select="$nodes">
+        <xsl:with-param name="toc-context" select="$toc-context"/>
+      </xsl:apply-templates>
+    </ul>
+  </xsl:variable>
+
+  <xsl:variable name="depth" as="xs:integer">
+    <xsl:choose>
+      <xsl:when test="self::db:section">
+        <xsl:value-of select="count(ancestor::db:section) + 1"/>
+      </xsl:when>
+      <xsl:when test="self::db:sect1">1</xsl:when>
+      <xsl:when test="self::db:sect2">2</xsl:when>
+      <xsl:when test="self::db:sect3">3</xsl:when>
+      <xsl:when test="self::db:sect4">4</xsl:when>
+      <xsl:when test="self::db:sect5">5</xsl:when>
+      <xsl:when test="self::db:refsect1">1</xsl:when>
+      <xsl:when test="self::db:refsect2">2</xsl:when>
+      <xsl:when test="self::db:refsect3">3</xsl:when>
+      <xsl:when test="self::db:simplesect">
+	<!-- sigh... -->
+	<xsl:choose>
+	  <xsl:when test="parent::db:section">
+            <xsl:value-of select="count(ancestor::db:section)"/>
+          </xsl:when>
+          <xsl:when test="parent::db:sect1">2</xsl:when>
+          <xsl:when test="parent::db:sect2">3</xsl:when>
+          <xsl:when test="parent::db:sect3">4</xsl:when>
+          <xsl:when test="parent::db:sect4">5</xsl:when>
+          <xsl:when test="parent::db:sect5">6</xsl:when>
+          <xsl:when test="parent::db:refsect1">2</xsl:when>
+          <xsl:when test="parent::db:refsect2">3</xsl:when>
+          <xsl:when test="parent::db:refsect3">4</xsl:when>
+          <xsl:otherwise>1</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="depth.from.context"
+		select="count(ancestor::*)-count($toc-context/ancestor::*)"/>
+
+  <xsl:variable name="subtoc.list" select="$subtoc"/>
+
+  <xsl:variable name="show.subtoc" as="xs:boolean"
+		select="count($subtoc/*) &gt; 0
+			and $toc.section.depth > $depth and exists($nodes)
+			and $toc.max.depth > $depth.from.context"/>
+
+  <li>
+    <xsl:if test="f:href(/,.) = f:href(/,$toc-context)">
+      <xsl:attribute name="id">currentchapter</xsl:attribute>
+    </xsl:if>
+
+    <xsl:call-template name="tp:toc-line">
+      <xsl:with-param name="toc-context" select="$toc-context"/>
+    </xsl:call-template>
+    <xsl:if test="$show.subtoc">
+      <xsl:copy-of select="$subtoc.list"/>
+    </xsl:if>
+  </li>
+</xsl:template>
+	<!-- ======================================== -->
+	<!-- End of autotoc.xsl customization         -->
+	<!-- ======================================== -->
 
 </xsl:stylesheet>

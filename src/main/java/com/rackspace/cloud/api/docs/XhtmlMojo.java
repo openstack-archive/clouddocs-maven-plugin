@@ -347,7 +347,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
         	if(-1!=index){
             	String targetDir="target/docbkx/xhtml/"+theDirName+theFileName.substring(0,index) + "/";
 
-            	map.put("base.dir", targetDir);        		
+            	map.put("base.dir", targetDir);      
         	}
         	else{
         		//getLog().info("~~~~~~~~theFileName file has incompatible format: "+theFileName);
@@ -361,6 +361,8 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
         	if(-1!=index){
             	String targetDir="target/docbkx/xhtml/"+theFileName.substring(0,index) + "/";
             	map.put("base.dir", targetDir);        		
+            	map.put("input.filename", theFileName.substring(0,index));  		
+
         	}
         	else{
         		//getLog().info("~~~~~~~~inputFilename file has incompatible format: "+inputFilename);
