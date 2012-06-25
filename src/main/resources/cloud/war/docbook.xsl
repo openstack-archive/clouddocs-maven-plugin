@@ -11,7 +11,8 @@
 		xmlns:tp="http://docbook.org/xslt/ns/template/private"
 		xmlns:mp="http://docbook.org/xslt/ns/mode/private"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		exclude-result-prefixes="h f m fn db t ghost tp mp xs"
+                xmlns:raxm="http://docs.rackspace.com/api/metadata"
+		exclude-result-prefixes="h f m fn db t ghost tp mp xs raxm"
 		version="2.0">
 
   <xsl:import href="dist/xslt/base/html/docbook.xsl"/>
@@ -21,6 +22,9 @@
   <xsl:import href="changebars.xsl"/>
 	
   <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
+  
+  <xsl:param name="IndexWar">/IndexWar</xsl:param>
+  <xsl:param name="resource.root" select="concat($IndexWar,'/common/docbook/')"/>
   <xsl:param name="input.filename"/>
   <xsl:param name="use.id.as.filename" select="'1'"/>
   <!-- <xsl:param name="html.ext" select="'.jspx'"/> -->
@@ -357,6 +361,12 @@
 								</xsl:if>
 								
 								<div class="body">
+								  
+								  <h3>Tutorial: <xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></h3>
+								  <xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="beadbar">
+								    <xsl:with-param name="current-node" select="generate-id(.)"/>
+								  </xsl:apply-templates>
+								  								  
 									<xsl:apply-templates select=".">
 										<xsl:with-param name="override-chunk" select="true()"/>
 									</xsl:apply-templates>
@@ -406,30 +416,30 @@
   
 <script type="text/javascript" src="http://rackspace.com/min/?g=js-header&amp;1332945039">&#160;</script>
 <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?g=css&amp;1333990221"/>
-<script type="text/javascript" src="/IndexWar/common/scripts/newformat.js">&#160;</script>
-<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/custom.css"/>
-<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery-ui-1.8.2.custom.css"/>
-<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery.treeview.css"/>
-<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/jquery.qtip.css"/>
+<script type="text/javascript" src="{$IndexWar}/common/scripts/newformat.js">&#160;</script>
+<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/custom.css"/>
+<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery-ui-1.8.2.custom.css"/>
+<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery.treeview.css"/>
+<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery.qtip.css"/>
 <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css"/>
-<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/newformat.css"/>
-<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/style-new.css"/>
-<link rel="stylesheet" type="text/css" href="/IndexWar/common/css/rackspace-header1.css"/>
-<script type="text/javascript" src="/IndexWar/common/scripts/docs.js">&#160;</script>
-<script type="text/javascript" src="/IndexWar/common/scripts/rackspace-header2.js">&#160;</script>
-<script type="text/javascript" src="/IndexWar/common/scripts/smartbutton.js">&#160;</script>
-<script type="text/javascript" src="/IndexWar/common/scripts/munchkin.js">&#160;</script>
+<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/newformat.css"/>
+<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/style-new.css"/>
+<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/rackspace-header1.css"/>
+<script type="text/javascript" src="{$IndexWar}/common/scripts/docs.js">&#160;</script>
+<script type="text/javascript" src="{$IndexWar}/common/scripts/rackspace-header2.js">&#160;</script>
+<script type="text/javascript" src="{$IndexWar}/common/scripts/smartbutton.js">&#160;</script>
+<script type="text/javascript" src="{$IndexWar}/common/scripts/munchkin.js">&#160;</script>
 
 
 <script>
     $(function(){
-	 $.getJSON("/IndexWar/IndexServlet?headerfooter=1",{"headerfooter" : "1"},function(data){
+	 $.getJSON("<xsl:value-of select="$IndexWar"/>/IndexServlet?headerfooter=1",{"headerfooter" : "1"},function(data){
 		 getHeader(data);
 	 });
     });
   </script><script>
     $(function(){
-	 $.getJSON("/IndexWar/IndexServlet?headerfooter=2",{"headerfooter" : "2"},function(data){
+	 $.getJSON("<xsl:value-of select="$IndexWar"/>/IndexServlet?headerfooter=2",{"headerfooter" : "2"},function(data){
 		 getFooter(data);
 	 });
      });
@@ -492,10 +502,12 @@
 		<xsl:param name="prev" select="()"/>
 		<xsl:param name="up" select="()"/>
 		
-		<xsl:variable name="nextfile">
+		<xsl:variable name="nextfile"/>
 			
-		</xsl:variable>
-		
+	  <img src="{$IndexWar}/common/images/BigTutorialArrow.png" class="bigtutorialarrow"/>
+	  <div class="bigtypeprogress">Success!</div>
+		<br/>
+	  <br/>
 
 		<div id="prevnextbuttons">
 			<xsl:if test="$prev">
@@ -665,5 +677,69 @@
 	<!-- ======================================== -->
 	<!-- End of autotoc.xsl customization         -->
 	<!-- ======================================== -->
+
+  <xsl:template match="*" mode="beadbar">
+    <xsl:param name="current-node"/>
+    <div class="progressindicator">
+      <xsl:apply-templates select="db:section" mode="beadbar-steps">
+        <xsl:with-param name="current-node" select="$current-node"/>
+      </xsl:apply-templates>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="db:section" mode="beadbar-steps">
+    <xsl:param name="current-node"/>
+
+    <xsl:variable name="gray">
+      <xsl:choose>
+        <xsl:when test="following-sibling::db:section[generate-id(.) = $current-node] or generate-id(.) = $current-node"/>
+        <xsl:otherwise>gray</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+    <xsl:when test="position() &lt; 6">
+    <div>
+      <xsl:attribute name="id">
+        <xsl:value-of select="concat('step',position() - 1)"/>
+      </xsl:attribute>
+     <xsl:choose>
+       <xsl:when test="position() = 1">
+         <a href="{f:href(/,.)}">
+          <span class="firstbead"><img src="{$IndexWar}/common/images/bead.png"/></span>
+          <span class="firststeptext  currentstep">
+             <xsl:attribute name="class">
+               <xsl:choose>
+                 <xsl:when test="$current-node = generate-id(.)">firststeptext currentstep</xsl:when>
+                 <xsl:otherwise>firststeptext</xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="m:object-title-markup"/></span>
+           </a>
+       </xsl:when>
+       <xsl:otherwise>
+         <span class="stepline"><img class="stepline" src="{$IndexWar}/common/images/line{$gray}.png"/></span>
+         <span class="stepbead"><a href="{f:href(/,.)}"><img src="{$IndexWar}/common/images/bead{$gray}.png"/></a></span>
+         <span class="steptext">
+           <xsl:attribute name="class">
+             <xsl:choose>
+               <xsl:when test="$current-node = generate-id(.)">steptext currentstep</xsl:when>
+               <xsl:otherwise>steptext</xsl:otherwise>
+             </xsl:choose>
+           </xsl:attribute>
+           <a href="{f:href(/,.)}"><xsl:apply-templates select="." mode="m:object-title-markup"/></a></span>
+       </xsl:otherwise>
+     </xsl:choose> 
+    </div>
+    </xsl:when>
+      <xsl:otherwise>
+        <xsl:message terminate="no">
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!          
+WARNING: No more than five steps are allowed in a tutorial.
+         Step number <xsl:value-of select="position()"/> truncated. 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        </xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>
