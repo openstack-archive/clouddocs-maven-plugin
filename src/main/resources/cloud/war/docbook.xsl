@@ -23,7 +23,7 @@
 	
   <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
   
-  <xsl:param name="IndexWar">/IndexWar</xsl:param>
+  <xsl:param name="IndexWar">../IndexWar</xsl:param>
   <xsl:param name="resource.root" select="concat($IndexWar,'/common/docbook/')"/>
   <xsl:param name="input.filename"/>
   <xsl:param name="use.id.as.filename" select="'1'"/>
@@ -304,7 +304,7 @@
     <type xmlns="">
       <id><xsl:value-of select="$idNumber"/></id>
       <displayname><xsl:value-of select="db:title|db:info/db:title"/></displayname>
-      <url><xsl:value-of select="normalize-space(concat('/',$input.filename, '/', f:href(/,.)))"/></url>
+      <url><xsl:value-of select="normalize-space(concat('../',$input.filename, '/', f:href(/,.)))"/></url>
       <sequence><xsl:value-of select="$priorityCalculated"/></sequence> 
     </type>
   </xsl:template>
