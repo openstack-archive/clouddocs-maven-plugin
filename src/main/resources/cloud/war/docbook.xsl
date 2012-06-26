@@ -46,7 +46,7 @@
 
   <xsl:param name="toc.section.depth">1</xsl:param>
   <xsl:param name="chunk.section.depth">1</xsl:param>
-	
+		
 	<xsl:param name="branding">not set</xsl:param>
 	<xsl:param name="enable.disqus">0</xsl:param>
 	<xsl:param name="disqus.shortname">
@@ -195,16 +195,53 @@
       </products>  
     	-->    
       
-      <xsl:variable name="productid">
+<!--      <xsl:variable name="productid">
       	<xsl:choose>
       		<xsl:when test="//db:productname"><xsl:apply-templates select="//db:productname" mode="bookinfo"/></xsl:when>
       		<xsl:otherwise>1</xsl:otherwise>
       	</xsl:choose>
       </xsl:variable>
+-->            
+      
       
       <products xmlns="">
-        <product>
-          <!-- HACK...FIXME -->
+        <xsl:choose>
+          <xsl:when test="$rootid = ''">
+            <xsl:for-each-group select="$chunks" group-by="db:info/raxm:metadata/raxm:products/raxm:product">
+              <product>
+                <id><xsl:choose>
+                    <xsl:when test="current-grouping-key() = 'servers'">1</xsl:when>
+                    <xsl:when test="current-grouping-key() = 'cdb'">2</xsl:when>
+                    <xsl:when test="current-grouping-key() = 'cm'">3</xsl:when>
+                    <xsl:when test="current-grouping-key() = 'cbs'">4</xsl:when>
+                    <xsl:when test="current-grouping-key() = 'files'">5</xsl:when>
+                    <xsl:when test="current-grouping-key() = 'clb'">6</xsl:when>                    
+                    <xsl:otherwise>0</xsl:otherwise>
+                  </xsl:choose></id>
+                <types>
+                <xsl:apply-templates select="current-group()" mode="bookinfo"/>
+                </types>
+              </product>
+            </xsl:for-each-group>
+          </xsl:when>
+          <xsl:when test="$chunks[@xml:id = $rootid]">
+          <!--
+              <xsl:for-each-group select="$chunks[@xml:id = $rootid]" group-by="db:info/raxm:product">
+              <!-\- FIXME -\->
+            </xsl:for-each-group>
+          -->
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:message terminate="yes">
+              <xsl:text>There is no chunk with the ID: </xsl:text>
+              <xsl:value-of select="$rootid"/>
+            </xsl:message>
+          </xsl:otherwise>
+        </xsl:choose>
+        
+      <!--
+      <product>
+          <!-\- HACK...FIXME -\->
           <id><xsl:value-of select="$productid"/></id>
            <types>
       <xsl:choose>
@@ -223,6 +260,8 @@
       </xsl:choose>
            </types>
         </product>
+        -->
+        
       </products>
     </xsl:result-document>
     
@@ -240,27 +279,18 @@
   </xsl:template>
   
   <xsl:template match="*" mode="bookinfo">
-    <xsl:variable name="type">
-      <xsl:choose>
-        <xsl:when test="processing-instruction('rax')">
-          <xsl:value-of select="f:pi(processing-instruction('rax'),'type')"/>
-        </xsl:when>
-        <xsl:when test="ancestor::*[processing-instruction('rax')]">
-          <xsl:value-of select="f:pi(ancestor::*[processing-instruction('rax')]/processing-instruction('rax')[1],'type')"/>
-        </xsl:when>
-        <xsl:otherwise/>
-      </xsl:choose>
-    </xsl:variable>
+    <xsl:variable name="type" select="normalize-space(.//raxm:type)"/>
     
     <xsl:variable name="idNumber">
       <xsl:choose>
-        <xsl:when test="$type = 'concepts'">1</xsl:when>
+        <xsl:when test="$type = 'concept'">1</xsl:when>
         <xsl:when test="$type = 'apiref'">2</xsl:when>
-        <xsl:when test="$type = 'advanced'">3</xsl:when>
-        <xsl:otherwise>1</xsl:otherwise>
+        <xsl:when test="$type = 'resource'">3</xsl:when>
+        <xsl:when test="$type = 'tutorial'">4</xsl:when>
+        <xsl:otherwise>100</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="priority"><xsl:value-of select="f:pi(processing-instruction('rax'),'priority')"/></xsl:variable>
+    <xsl:variable name="priority" select="normalize-space(db:info//raxm:priority[1])"/>
     
     <xsl:variable name="priorityCalculated">
       <xsl:choose>
@@ -274,12 +304,12 @@
     <type xmlns="">
       <id><xsl:value-of select="$idNumber"/></id>
       <displayname><xsl:value-of select="db:title|db:info/db:title"/></displayname>
-      <url><xsl:value-of select="concat('/',$input.filename, '/', f:href(/,.))"/></url>
+      <url><xsl:value-of select="normalize-space(concat('/',$input.filename, '/', f:href(/,.)))"/></url>
       <sequence><xsl:value-of select="$priorityCalculated"/></sequence> 
     </type>
   </xsl:template>
 
-  <xsl:template match="db:productname" mode="bookinfo">
+  <!--<xsl:template match="db:productname" mode="bookinfo">
     <xsl:choose>
       <xsl:when test="preceding::db:productname"/>
       <xsl:when test="starts-with(normalize-space(.),'Cloud Servers')">1</xsl:when>
@@ -290,7 +320,7 @@
       <xsl:otherwise>1</xsl:otherwise>
     </xsl:choose>  
   </xsl:template>
-  
+  -->
   <xsl:template match="text()" mode="bookinfo"/>
 
   <xsl:template match="*" mode="m:chunk" priority="10">
@@ -362,11 +392,15 @@
 								
 								<div class="body">
 								  
+								  <xsl:choose>
+								    <xsl:when test="key('genid', $uchunk/@xml:id)/db:info//raxm:type[normalize-space(.) = 'tutorial']">
 								  <h3>Tutorial: <xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></h3>
 								  <xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="beadbar">
 								    <xsl:with-param name="current-node" select="generate-id(.)"/>
 								  </xsl:apply-templates>
-								  								  
+								    </xsl:when>
+								  </xsl:choose>
+								  
 									<xsl:apply-templates select=".">
 										<xsl:with-param name="override-chunk" select="true()"/>
 									</xsl:apply-templates>
@@ -414,6 +448,7 @@
 <xsl:template name="t:user-head-content">
   <xsl:param name="node" select="."/>
   
+  <link rel="shortcut icon" href="{$IndexWar}/common/images/favicon-{$branding}.ico" type="image/x-icon"/>
 <script type="text/javascript" src="http://rackspace.com/min/?g=js-header&amp;1332945039">&#160;</script>
 <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?g=css&amp;1333990221"/>
 <script type="text/javascript" src="{$IndexWar}/common/scripts/newformat.js">&#160;</script>
@@ -501,9 +536,10 @@
 		<xsl:param name="next" select="()"/>
 		<xsl:param name="prev" select="()"/>
 		<xsl:param name="up" select="()"/>
-		
-		<xsl:variable name="nextfile"/>
-			
+	
+
+<xsl:choose>
+  <xsl:when test="$up/db:info//raxm:type[normalize-space(.) = 'tutorial']">
 	  <img src="{$IndexWar}/common/images/BigTutorialArrow.png" class="bigtutorialarrow"/>
 	  <div class="bigtypeprogress">Success!</div>
 		<br/>
@@ -551,7 +587,9 @@
 			</div>
 			</xsl:if>
 		</div>
-		
+  </xsl:when>
+</xsl:choose>
+	  
 		<xsl:if test="$enable.disqus!='0' and (//db:section[not(@xml:id)] or //db:chapter[not(@xml:id)] or //db:part[not(@xml:id)] or //db:appendix[not(@xml:id)] or //db:preface[not(@xml:id)] or /*[not(@xml:id)])">
 			<xsl:message terminate="yes"> 
 				<xsl:for-each select="//db:section[not(@xml:id)]|//db:chapter[not(@xml:id)]|//db:part[not(@xml:id)]|//db:appendix[not(@xml:id)]|//db:preface[not(@xml:id)]|/*[not(@xml:id)]">
