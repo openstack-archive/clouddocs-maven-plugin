@@ -460,6 +460,7 @@
 <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/newformat.css"/>
 <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/style-new.css"/>
 <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/rackspace-header1.css"/>
+<!--  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/hashcode.css"/> -->
 <script type="text/javascript" src="{$IndexWar}/common/scripts/docs.js">&#160;</script>
 <script type="text/javascript" src="{$IndexWar}/common/scripts/rackspace-header2.js">&#160;</script>
 <script type="text/javascript" src="{$IndexWar}/common/scripts/smartbutton.js">&#160;</script>
@@ -628,7 +629,7 @@
 	      </xsl:if>
 	    </script>
 						<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-						<script type="text/javascript" src="../common/comments.js"><xsl:comment/></script>
+						<script type="text/javascript" src="{$IndexWar}/common/scripts/comments.js"><xsl:comment/></script>
 					</div>	  
 				</xsl:otherwise>
 			</xsl:choose>
