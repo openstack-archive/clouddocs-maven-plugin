@@ -23,7 +23,12 @@ public class FileUtils {
 
 
     public static void addDirectory(ZipOutputStream zout, File fileSource) {
-	// Taken from:
+	int fileSourceNameLength = fileSource.toString().length() + 1; 	
+	addDirectory(zout, fileSource, fileSourceNameLength );
+    }
+
+    private static void addDirectory(ZipOutputStream zout, File fileSource, int fileSourceNameLength) {
+	// Adapted from:
 	// http://www.java-examples.com/create-zip-file-directory-recursively-using-zipoutputstream-example
 	//get sub-folder/files list
 	File[] files = fileSource.listFiles();
@@ -35,7 +40,7 @@ public class FileUtils {
 		//if the file is directory, call the function recursively
 		if(files[i].isDirectory())
 		    {
-			addDirectory(zout, files[i]);
+			addDirectory(zout, files[i], fileSourceNameLength);
 			continue;
 		    }
                        
@@ -53,8 +58,13 @@ public class FileUtils {
                                
 			//create object of FileInputStream
 			FileInputStream fin = new FileInputStream(files[i]);
-                               
-			zout.putNextEntry(new ZipEntry(files[i].getName()));
+                            
+			String parentPath = "";
+			if(fileSource.toString().length() > fileSourceNameLength){
+			    parentPath = fileSource.toString().substring(fileSourceNameLength) + "/";
+			}
+
+			zout.putNextEntry(new ZipEntry(parentPath + files[i].getName()));
                          
 			/*
 			 * After creating entry in the zip file, actually
