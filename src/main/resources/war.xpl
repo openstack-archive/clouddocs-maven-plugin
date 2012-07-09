@@ -17,7 +17,7 @@
   <cx:message>
     <p:with-option name="message" select="'Entering xproc pipeline: war'"/>
   </cx:message>
-  
+
   <l:validate-transform name="validate-pre-xinclude">
     <p:input port="schema" >
       <p:document href="classpath:/rng/rackbook.rng"/>
@@ -37,6 +37,10 @@
     </p:input>
   </l:validate-transform>
   
+  <l:normalize-wadls />
+ 
+  <l:process-embedded-wadl/>
+
   <l:programlisting-keep-together name="programlisting-keep-together"/>
   
   <l:docbook-xslt2-preprocess/>
