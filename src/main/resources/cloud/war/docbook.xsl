@@ -10,9 +10,12 @@
 		xmlns:db="http://docbook.org/ns/docbook"
 		xmlns:tp="http://docbook.org/xslt/ns/template/private"
 		xmlns:mp="http://docbook.org/xslt/ns/mode/private"
+		xmlns:xdmp="http://marklogic.com/xdmp"
+		xmlns:ext="http://docbook.org/extensions/xslt20"
+		xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:raxm="http://docs.rackspace.com/api/metadata"
-		exclude-result-prefixes="h f m fn db t ghost tp mp xs raxm"
+		exclude-result-prefixes="h f m fn db t ghost tp mp xs raxm xdmp ext xlink"
 		version="2.0">
 
   <xsl:import href="dist/xslt/base/html/docbook.xsl"/>
@@ -100,7 +103,6 @@
     </xsl:choose>
   </xsl:param>
 
-
   <xsl:param name="generate.toc" as="element()*">
     <tocparam xmlns="http://docbook.org/ns/docbook" path="appendix" toc="0" title="1"/>
     <tocparam xmlns="http://docbook.org/ns/docbook" path="article/appendix" toc="0" title="1"/>
@@ -121,6 +123,11 @@
     <tocparam xmlns="http://docbook.org/ns/docbook" path="set" toc="0" title="1"/>
   </xsl:param>
   
+  <!-- TEMPORARY HACK!!! -->
+  <xsl:template match="db:glossterm" name="db:glossterm">
+    <xsl:param name="firstterm"/>
+    <xsl:apply-templates/>  
+  </xsl:template>
 
 <xsl:template name="t:system-head-content">
   <xsl:param name="node" select="."/>
@@ -149,15 +156,29 @@
 
   <script type="text/javascript" src="{concat($resource.root, 'js/dbmodnizr.js')}">&#160;</script>
   
+ <xsl:if test="$node//db:programlisting[@language] or $node//db:screen[@language] or $node//db:literallayout[@language]">
+  <!--  <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
+   <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
+    <script type="text/javascript">
+               SyntaxHighlighter.config.space = '&#32;';
+               SyntaxHighlighter.all();
+    </script>      -->
+  </xsl:if>
+  
 </xsl:template>
 
-  <xsl:param name="docbook.css" select="''"/>
+  <!--<xsl:param name="docbook.css" select="''"/>-->
 
 <xsl:param name="autolabel.elements">
   <db:refsection/>
 </xsl:param>
 
+  <!-- We need too collect lists that contain their own raxm:metadata so we can 
+       add <type>s to the bookinfo for resources mentioned in lists in the doc -->
+  <xsl:param name="resource-lists" select="//db:itemizedlist[db:info/raxm:metadata]"/>
+  
   <xsl:template match="/" priority="10">
+    
     <xsl:choose>
       <xsl:when test="$rootid = ''">
         <xsl:apply-templates select="$chunks" mode="m:chunk"/>
@@ -172,6 +193,8 @@
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
+    
+    <!-- We have to output xml to keep Calabash happy -->
     <db:book/>
     
     <xsl:result-document 
@@ -203,23 +226,35 @@
       </xsl:variable>
 -->            
       
-      
       <products xmlns="">
         <xsl:choose>
           <xsl:when test="$rootid = ''">
             <xsl:for-each-group select="$chunks" group-by="db:info/raxm:metadata/raxm:products/raxm:product">
               <product>
-                <id><xsl:choose>
+                <id><xsl:value-of select="f:productnumber(current-grouping-key())"/><!--                  <xsl:choose>
                     <xsl:when test="current-grouping-key() = 'servers'">1</xsl:when>
                     <xsl:when test="current-grouping-key() = 'cdb'">2</xsl:when>
                     <xsl:when test="current-grouping-key() = 'cm'">3</xsl:when>
                     <xsl:when test="current-grouping-key() = 'cbs'">4</xsl:when>
                     <xsl:when test="current-grouping-key() = 'files'">5</xsl:when>
-                    <xsl:when test="current-grouping-key() = 'clb'">6</xsl:when>                    
+                    <xsl:when test="current-grouping-key() = 'clb'">6</xsl:when>  
+                    <xsl:when test="current-grouping-key() = 'auth'">7</xsl:when>  
+                    <xsl:when test="current-grouping-key() = 'cdns'">8</xsl:when>                    
                     <xsl:otherwise>0</xsl:otherwise>
-                  </xsl:choose></id>
+                  </xsl:choose>--></id>
                 <types>
-                <xsl:apply-templates select="current-group()" mode="bookinfo"/>
+                  <xsl:variable name="types">
+                    <xsl:apply-templates select="current-group()" mode="bookinfo">
+                      <xsl:sort select="./db:info//raxm:type[1]"/>
+                      <!-- Here we add <type>s to the bookinfo for resources mentioned in lists in the doc -->
+                    </xsl:apply-templates>
+                    <xsl:apply-templates 
+                      select="$resource-lists[db:info/raxm:metadata//raxm:product = current-grouping-key()]/db:listitem" 
+                      mode="bookinfo"/>
+                  </xsl:variable>
+                  <xsl:apply-templates select="$types/type" mode="copy-types">
+                    <xsl:sort select="number(./id)" data-type="number"/>
+                  </xsl:apply-templates>
                 </types>
               </product>
             </xsl:for-each-group>
@@ -278,21 +313,28 @@
     
   </xsl:template>
   
+  <xsl:template match="node() | @*" mode="copy-types">
+    <xsl:copy>
+      <xsl:apply-templates select="node() | @*" mode="copy-types"/>
+    </xsl:copy>
+  </xsl:template>
+  
   <xsl:template match="*" mode="bookinfo">
-    <xsl:variable name="type" select="normalize-space(.//raxm:type)"/>
+    <xsl:param name="type" select="normalize-space(db:info//raxm:type[1])"/>
+    <xsl:param name="priority" select="normalize-space(db:info//raxm:priority[1])"/>
     
-    <xsl:variable name="idNumber">
-      <xsl:choose>
+    <xsl:variable name="idNumber" select="f:calculatetype($type)"/>
+<!--      <xsl:choose>
         <xsl:when test="$type = 'concept'">1</xsl:when>
         <xsl:when test="$type = 'apiref'">2</xsl:when>
         <xsl:when test="$type = 'resource'">3</xsl:when>
         <xsl:when test="$type = 'tutorial'">4</xsl:when>
+        <xsl:when test="$type = 'apiref-mgmt'">5</xsl:when>
         <xsl:otherwise>100</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="priority" select="normalize-space(db:info//raxm:priority[1])"/>
-    
-    <xsl:variable name="priorityCalculated">
+-->        
+<!--    <xsl:variable name="priorityCalculated">
       <xsl:choose>
         <xsl:when test="normalize-space($priority) != ''">
           <xsl:value-of select="normalize-space($priority)"/>
@@ -300,9 +342,38 @@
         <xsl:otherwise>100000</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    
+    -->
+    <xsl:choose>
+      <xsl:when test="self::db:listitem">
+        <type xmlns="">
+          <id><xsl:value-of select="f:calculatetype(parent::*/db:info//raxm:type[1])"/></id>
+          <displayname><xsl:value-of select=".//db:link[1]"/></displayname>
+          <url><xsl:value-of select=".//db:link[1]/@xlink:href"/></url>
+          <sequence><xsl:value-of select="f:calculatepriority(parent::*/db:info//raxm:priority[1])"/></sequence> 
+        </type>        
+      </xsl:when>
+      <xsl:when test="self::db:chapter and ($type = 'apiref' or $type = 'apiref-mgmt')">
+        <xsl:apply-templates select="db:section" mode="bookinfo-apiref">
+          <xsl:with-param name="priorityCalculated" select="f:calculatepriority(normalize-space(db:info//raxm:priority[1]))"/>
+          <xsl:with-param name="type" select="$idNumber"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <type xmlns="">
+          <id><xsl:value-of select="$idNumber"/></id>
+          <displayname><xsl:value-of select="db:title|db:info/db:title"/></displayname>
+          <url><xsl:value-of select="normalize-space(concat('../',$input.filename, '/', f:href(/,.)))"/></url>
+          <sequence><xsl:value-of select="f:calculatepriority(normalize-space(db:info//raxm:priority[1]))"/></sequence> 
+        </type>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="db:section" mode="bookinfo-apiref">
+    <xsl:param name="priorityCalculated"/>
+    <xsl:param name="type"/>
     <type xmlns="">
-      <id><xsl:value-of select="$idNumber"/></id>
+      <id><xsl:value-of select="$type"/></id>
       <displayname><xsl:value-of select="db:title|db:info/db:title"/></displayname>
       <url><xsl:value-of select="normalize-space(concat('../',$input.filename, '/', f:href(/,.)))"/></url>
       <sequence><xsl:value-of select="$priorityCalculated"/></sequence> 
@@ -361,10 +432,9 @@
 						<div id="treeDiv">
 							<div id="ulTreeDiv">
 								<ul id="tree" class="filetree">
-									<xsl:apply-templates select="/*" mode="mp:toc">
-<xsl:with-param name="toc-context" select="."/>
+									<xsl:apply-templates select="ancestor-or-self::db:chapter" mode="mp:toc">
+                        <xsl:with-param name="toc-context" select="."/>
 									</xsl:apply-templates>									  
-
 								</ul>
 							</div>
 						</div>
@@ -391,13 +461,54 @@
 								</xsl:if>
 								
 								<div class="body">
-								  
+								  <!-- Title and breadcrumbs: WIP -->
+								  <h1><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></h1>
+<!--                    <xsl:choose>
+                      <xsl:when test="(ancestor-or-self::*/db:info//raxm:product[1])[1] = 'servers'">
+                        <h1>Cloud Servers</h1>
+                      </xsl:when>
+                      <xsl:when test="(ancestor-or-self::*/db:info//raxm:product[1])[1] = 'files'">
+                        <h1>Cloud Files</h1>
+                      </xsl:when>
+                      <xsl:when test="(ancestor-or-self::*/db:info//raxm:product[1])[1] = 'clb'">
+                        <h1>Cloud Loadbalancers</h1>
+                      </xsl:when>
+                      <xsl:when test="(ancestor-or-self::*/db:info//raxm:product[1])[1] = 'cm'">
+                        <h1>Cloud Montioring</h1>
+                      </xsl:when>
+                      <xsl:when test="(ancestor-or-self::*/db:info//raxm:product[1])[1] = 'cdb'">
+                        <h1>Cloud Databases</h1>
+                      </xsl:when>
+                      <xsl:when test="(ancestor-or-self::*/db:info//raxm:product[1])[1] = 'cbs'">
+                        <h1>Cloud Block Storage</h1>
+                      </xsl:when>
+                      <xsl:otherwise/>
+                    </xsl:choose>
+--> 								  <div id="breadcrumbs">
+								    <xsl:choose>
+								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'tutorial'">
+								        <a href="#">Tutorials</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								      </xsl:when>								     
+								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'concept'">
+								        <a href="#">Concepts</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								      </xsl:when>
+								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'apiref'">
+								        <a href="#">API Documentation</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								      </xsl:when>
+								      <xsl:otherwise>
+								        
+								      </xsl:otherwise>
+								    </xsl:choose>
+								    &#160;
+								  </div>
+								  <hr/>
 								  <xsl:choose>
 								    <xsl:when test="key('genid', $uchunk/@xml:id)/db:info//raxm:type[normalize-space(.) = 'tutorial']">
 								  <h3>Tutorial: <xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></h3>
 								  <xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="beadbar">
 								    <xsl:with-param name="current-node" select="generate-id(.)"/>
 								  </xsl:apply-templates>
+								      <br/>
 								    </xsl:when>
 								  </xsl:choose>
 								  
@@ -540,6 +651,16 @@
 	
 
 <xsl:choose>
+  <xsl:when test="./db:info//raxm:type[normalize-space(.) = 'tutorial']">
+    <div class="starttutorial">
+      <img src="{$IndexWar}/common/images/BigTutorialArrow.png" class="bigtutorialarrow"/>    
+      <div id="starttutoriallink">
+          <a href="{f:href(/,$next[1])}">Start!</a>
+      </div>
+    </div>
+    <br/>
+    <br/>    
+  </xsl:when>
   <xsl:when test="$up/db:info//raxm:type[normalize-space(.) = 'tutorial']">
 	  <img src="{$IndexWar}/common/images/BigTutorialArrow.png" class="bigtutorialarrow"/>
 	  <div class="bigtypeprogress">Success!</div>
@@ -736,7 +857,7 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:choose>
-    <xsl:when test="position() &lt; 6">
+    <xsl:when test="position() &lt; 10">
     <div>
       <xsl:attribute name="id">
         <xsl:value-of select="concat('step',position() - 1)"/>
@@ -773,12 +894,211 @@
       <xsl:otherwise>
         <xsl:message terminate="no">
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!          
-WARNING: No more than five steps are allowed in a tutorial.
+WARNING: No more than six steps are allowed in a tutorial.
          Step number <xsl:value-of select="position()"/> truncated. 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:function name="f:productname" as="xs:string">
+    <xsl:param name="key"/>
+    <xsl:choose>
+      <xsl:when test="$key = 'servers'">Cloud Servers</xsl:when>
+      <xsl:when test="$key= 'files'">Cloud Files</xsl:when>
+      <xsl:when test="$key= 'clb'">Cloud Loadbalancers</xsl:when>
+      <xsl:when test="$key= 'cm'">Cloud Montioring</xsl:when>
+      <xsl:when test="$key= 'cdb'">Cloud Databases</xsl:when>
+      <xsl:when test="$key= 'cbs'">Cloud Block Storage</xsl:when>
+      <xsl:otherwise>&#160;</xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <xsl:function name="f:productnumber" as="xs:string">
+    <xsl:param name="key"/>
+    <xsl:choose>
+      <xsl:when test="$key = 'servers'">1</xsl:when>
+      <xsl:when test="$key= 'cdb'">2</xsl:when>
+      <xsl:when test="$key= 'cm'">3</xsl:when>
+      <xsl:when test="$key= 'cbs'">4</xsl:when>      
+      <xsl:when test="$key= 'files'">5</xsl:when>
+      <xsl:when test="$key= 'clb'">6</xsl:when>
+      <xsl:when test="$key= 'auth'">7</xsl:when>
+      <xsl:when test="$key= 'cdns'">8</xsl:when>      
+      <xsl:otherwise>&#160;</xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  
+  <xsl:function name="f:calculatetype" as="xs:string">
+    <xsl:param name="key"/>
+    <xsl:choose>
+      <xsl:when test="$key = 'concept'">1</xsl:when>
+      <xsl:when test="$key= 'apiref'">2</xsl:when>
+      <xsl:when test="$key= 'resource'">3</xsl:when>
+      <xsl:when test="$key= 'tutorial'">4</xsl:when>      
+      <xsl:when test="$key= 'apiref-mgmt'">5</xsl:when>
+      <xsl:otherwise>100</xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  
+  <xsl:function name="f:calculatepriority">
+    <xsl:param name="priority"/>
+    <xsl:choose>
+      <xsl:when test="normalize-space($priority) != ''">
+        <xsl:value-of select="normalize-space($priority)"/>
+      </xsl:when>
+      <xsl:otherwise>100000</xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <!-- This is from dist/xslt/base/html/verbatim.xsl and adds syntaxhighlighter to code listings. -->
+  <xsl:param name="pygmenter-uri" select="''"/>
+  <xsl:template match="db:programlisting|db:screen|db:synopsis
+    |db:literallayout[@class='monospaced']"
+    mode="m:verbatim">
+    <xsl:param name="areas" select="()"/>
+    
+    <xsl:variable name="pygments-pi" as="xs:string?"
+      select="f:pi(/processing-instruction('dbhtml'), 'pygments')"/>
+    
+    <xsl:variable name="use-pygments" as="xs:boolean"
+      select="$pygments-pi = 'true' or $pygments-pi = 'yes' or $pygments-pi = '1'
+      or (contains(@role,'pygments') and not(contains(@role,'nopygments')))"/>
+    
+    <xsl:variable name="verbatim" as="node()*">
+      <!-- n.b. look below where the class attribute is computed -->
+      <xsl:choose>
+        <xsl:when test="contains(@role,'nopygments') or string-length(.) &gt; 9000
+          or self::db:literallayout or exists(*)">
+          <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:when test="$pygments-default = 0 and not($use-pygments)">
+          <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:when use-when="function-available('xdmp:http-post')"
+          test="$pygmenter-uri != ''">
+          <xsl:sequence select="ext:highlight(string(.), string(@language))"/>
+        </xsl:when>
+        <xsl:when use-when="function-available('ext:highlight')"
+          test="true()">
+          <xsl:sequence select="ext:highlight(string(.), string(@language))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="formatted" as="node()*">
+      <xsl:call-template name="t:verbatim-patch-html">
+        <xsl:with-param name="content" select="$verbatim"/>
+        <xsl:with-param name="areas" select="$areas"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <xsl:variable name="lang" select="@language"/>
+    
+    <xsl:variable name="brush">
+      <xsl:choose>
+        <xsl:when test="@language = 'bash' or @language = 'BASH' or @language = 'sh'">bash</xsl:when>
+        <xsl:when test="@language = 'javascript' or @language = 'JAVASCRIPT' or @language = 'js' or @language = 'JavaScript'">javascript</xsl:when>
+        <xsl:when test="@language = 'xml' or @language = 'XML'">xml</xsl:when>
+        <xsl:when test="@language = 'java' or @language = 'JAVA'">java</xsl:when>
+        <xsl:when test="@language = 'json' or @language = 'JSON'">json</xsl:when>
+        <xsl:when test="@language = 'python' or @language = 'PYTHON' or @language = 'py' or @language = 'PY'">python</xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            WARNING: Unsupported langague on a <xsl:value-of select="local-name()"/>
+            element: <xsl:value-of select="@language"/>
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="syntaxhighlighter.switches">
+      <xsl:choose>
+        <xsl:when test="contains(@role,'gutter:') or contains(@role,'first-line:') or contains(@role,'highlight:')"><xsl:value-of select="@role"/></xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <div id="{generate-id()}" class="exampleblock">
+      <div class="exbuttons">
+        <table class="typegroup">
+          <tr>
+            <td class="typebutton" onmousedown="ExMouseDown('cURL','{generate-id()}')" style="background-color:#DDD; font-weight:bold;color:#333">cURL</td>
+            <td class="typebutton" onmousedown="ExMouseDown('Request', '{generate-id()}')">Request</td>
+            <td class="typebutton" onmousedown="ExMouseDown('Response', '{generate-id()}')">Response</td>
+          </tr>
+        </table>
+        <div class="formatgroup">
+          <b>Format:</b> 
+          <span 
+            class="formatbutton" onmousedown="ExMouseDown('JSON', '{generate-id()}')" style="font-weight:bold">JSON</span>&#160;|&#160;<span 
+            class="formatbutton" onmousedown="ExMouseDown('XML',  '{generate-id()}')">XML</span>
+        </div>        
+      </div>
+    <div>
+      <xsl:sequence select="f:html-attributes(.)"/>
+      <xsl:attribute name="class">
+        <xsl:value-of select="'excontent'"/> 
+        <!-- n.b. look above where $verbatim is computed -->
+        <xsl:choose>
+          <xsl:when test="contains(@role,'nopygments') or string-length(.) &gt; 9000
+            or self::db:literallayout or exists(*)"/>
+          <xsl:when test="$pygments-default = 0 and not($use-pygments)"/>
+          <xsl:when use-when="function-available('xdmp:http-post')"
+            test="$pygmenter-uri != ''">
+            <xsl:value-of select="' highlight'"/>
+          </xsl:when>
+          <xsl:when use-when="function-available('ext:highlight')"
+            test="true()">
+            <xsl:value-of select="' highlight'"/>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:attribute>
+      <!-- Removed spaces before xsl:attribute so that if <pre> is schema validated
+         and magically grows an xml:space="preserve" attribute, the processor
+         doesn't fall over because we've added an attribute after a text node.
+         Maybe this only happens in MarkLogic. Maybe it's a bug. For now: whatever. -->
+      <div class="cURL JSON">
+      <pre><xsl:if test="not($lang = '')"><xsl:attribute name="class" select="concat('programlisting brush:',$brush, '; ', $syntaxhighlighter.switches)"/></xsl:if><!-- <xsl:if test="@language"><xsl:attribute name="class" select="@language"/></xsl:if> --><xsl:sequence select="$formatted"/></pre>
+      </div>
+      <div class="Request JSON">
+        <p>
+          Request JSON not provided
+        </p>
+      </div>
+      <div class="Response JSON">
+        <p>
+          Response JSON not provides.
+        </p>
+      </div>
+      <div class="cURL XML">
+        <p>
+          cURL XML not provided
+        </p>
+      </div>
+      <div class="Request XML">
+        <p>
+          Request XML not provided
+        </p>
+      </div>
+      <div class="Response XML">
+        <p>
+          Response XML not provided
+        </p>
+      </div>
+      
+      <div class="copyexpand">
+        <span class="excopybutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">copy</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
+      </div>
+      
+      </div>
+    </div>
   </xsl:template>
 
 </xsl:stylesheet>
