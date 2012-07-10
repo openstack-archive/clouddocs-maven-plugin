@@ -157,12 +157,12 @@
   <script type="text/javascript" src="{concat($resource.root, 'js/dbmodnizr.js')}">&#160;</script>
   
  <xsl:if test="$node//db:programlisting[@language] or $node//db:screen[@language] or $node//db:literallayout[@language]">
-  <!--  <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
+   <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
    <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
     <script type="text/javascript">
                SyntaxHighlighter.config.space = '&#32;';
                SyntaxHighlighter.all();
-    </script>      -->
+    </script>      
   </xsl:if>
   
 </xsl:template>
@@ -1040,6 +1040,7 @@ WARNING: No more than six steps are allowed in a tutorial.
             class="formatbutton" onmousedown="ExMouseDown('XML',  '{generate-id()}')">XML</span>
         </div>        
       </div>
+      
     <div>
       <xsl:sequence select="f:html-attributes(.)"/>
       <xsl:attribute name="class">
@@ -1064,39 +1065,37 @@ WARNING: No more than six steps are allowed in a tutorial.
          and magically grows an xml:space="preserve" attribute, the processor
          doesn't fall over because we've added an attribute after a text node.
          Maybe this only happens in MarkLogic. Maybe it's a bug. For now: whatever. -->
-      <div class="cURL JSON">
+      <div class="cURL raxJSON">
       <pre><xsl:if test="not($lang = '')"><xsl:attribute name="class" select="concat('programlisting brush:',$brush, '; ', $syntaxhighlighter.switches)"/></xsl:if><!-- <xsl:if test="@language"><xsl:attribute name="class" select="@language"/></xsl:if> --><xsl:sequence select="$formatted"/></pre>
       </div>
-      <div class="Request JSON">
+      <div class="Request raxJSON">
         <p>
           Request JSON not provided
         </p>
       </div>
-      <div class="Response JSON">
+      <div class="Response raxJSON">
         <p>
           Response JSON not provides.
         </p>
       </div>
-      <div class="cURL XML">
+      <div class="cURL raxXML">
         <p>
           cURL XML not provided
         </p>
       </div>
-      <div class="Request XML">
+      <div class="Request raxXML">
         <p>
           Request XML not provided
         </p>
       </div>
-      <div class="Response XML">
+      <div class="Response raxXML">
         <p>
           Response XML not provided
         </p>
+      </div>      
       </div>
-      
       <div class="copyexpand">
         <span class="excopybutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">copy</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
-      </div>
-      
       </div>
     </div>
   </xsl:template>
