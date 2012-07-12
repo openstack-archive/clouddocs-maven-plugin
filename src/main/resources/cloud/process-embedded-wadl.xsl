@@ -9,7 +9,7 @@ xmlns:exslt="http://exslt.org/common"
 	<!-- <xsl:output indent="yes"/>    -->
 	<xsl:import href="date.xsl"/>
 	
-	<xsl:param name="project.build.directory">../../target</xsl:param>
+	<xsl:param name="project.build.directory">/home/dcramer/rax/foundations/foundation-api-docs/bsl/target</xsl:param>
     <xsl:param name="wadl.norequest.msg"><para>This operation does not require a request body.</para></xsl:param>
     <xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
     <xsl:param name="wadl.noreqresp.msg"><para>This operation does not require a request body and does not return a response body.</para></xsl:param>
@@ -276,11 +276,12 @@ xmlns:exslt="http://exslt.org/common"
 				<xsl:with-param name="path" select="@href"/>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:variable name="original.wadl.path" select="document($wadl.path)/wadl:application/@rax:original-wadl|ancestor::*/@rax:original-wadl"/>
-		<xsl:variable name="resource-path"       select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
+		<xsl:variable name="source.wadl" select="document($wadl.path)/*"/>
+		<xsl:variable name="original.wadl.path" select="$source.wadl/wadl:application/@rax:original-wadl|ancestor::*/@rax:original-wadl"/>
+		<xsl:variable name="resource-path"       select="$source.wadl//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
 		<xsl:variable name="template-parameters">
 		  <root>
-		    <xsl:copy-of select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:param"/>
+		  	<xsl:copy-of select="$source.wadl//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:param"/>
 		  </root>
 		</xsl:variable>
 		<xsl:choose>
@@ -294,6 +295,7 @@ xmlns:exslt="http://exslt.org/common"
                     <xsl:with-param name="resourceLink" select="."/>
 					<xsl:with-param name="original.wadl.path" select="$original.wadl.path"/> 
 					<xsl:with-param name="resource-path" select="$resource-path"/>
+					<xsl:with-param name="template-parameters" select="$template-parameters"/>
 				</xsl:apply-templates>				
 			</xsl:when>
 			<!-- When the wadl:resource has an href AND child wadl:method elements
@@ -492,7 +494,7 @@ xmlns:exslt="http://exslt.org/common"
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 
             <!-- About the request -->
-	    <xsl:if test="wadl:request/wadl:param[@style != 'plain']|exslt:node-set($template-parameters)//wadl:param">
+	    <xsl:if test="wadl:request//wadl:param[@style != 'plain']|exslt:node-set($template-parameters)//wadl:param">
                 <xsl:call-template name="paramTable">
                     <xsl:with-param name="mode" select="'Request'"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
@@ -579,14 +581,14 @@ xmlns:exslt="http://exslt.org/common"
 							<xsl:value-of select="$resource-path-computed"/>
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:if test="$context = 'reference-page'">
-					<xsl:for-each select="wadl:request/wadl:param[@style = 'query']">
+<!--					<xsl:if test="$context = 'reference-page'">
+-->					<xsl:for-each select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
 						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1"
 							>?</xsl:if><xsl:value-of select="@name"/>=<replaceable><xsl:value-of
 								select="substring-after(@type,':')"/></replaceable><xsl:if
 							test="not(position() = last())">&amp;</xsl:if>
 					</xsl:for-each>
-					</xsl:if>
+<!--					</xsl:if>-->
 				</code>
 			</td>
 			<td>
