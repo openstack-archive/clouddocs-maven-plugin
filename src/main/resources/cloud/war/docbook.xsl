@@ -427,8 +427,10 @@
 
 			<div id="content-home-wrap">
 				<div class="container_12">
-					
-					<div id="sidebar">
+					<table class="content-home-table">
+					  <tbody>
+					    <tr>
+					<td id="sidebar">
 						<div id="treeDiv">
 							<div id="ulTreeDiv">
 								<ul id="tree" class="filetree">
@@ -438,11 +440,11 @@
 								</ul>
 							</div>
 						</div>
-					</div>
-
+					</td>
+					      
 					<!-- END TOC -->
 
-					<div id="main-content">
+					<td id="main-content">
 						
 						<div class="page">
 							<xsl:call-template name="t:body-attributes"/>
@@ -527,7 +529,10 @@
 								</xsl:call-template>
 							</xsl:if>
 						</div>
-					</div>					
+					</td>
+					    </tr>
+					  </tbody>
+					</table>
 				</div>
 			</div>
         	
