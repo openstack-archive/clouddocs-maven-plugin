@@ -26,6 +26,18 @@
 	
   <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
   
+  <xsl:param name="local.l10n.xml" select="document('')"/>
+  <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
+    <l:l10n 
+      xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
+      language="en" 
+      english-language-name="English"> 
+      <l:context name="xref">
+        <l:template name="section" text="%t"/>
+      </l:context>
+    </l:l10n>
+  </i18n>
+  
   <xsl:param name="IndexWar">../IndexWar</xsl:param>
   <xsl:param name="resource.root" select="concat($IndexWar,'/common/docbook/')"/>
   <xsl:param name="input.filename"/>
