@@ -48,7 +48,7 @@
   </xsl:param>
 
   <xsl:param name="toc.section.depth">1</xsl:param>
-  <xsl:param name="chunk.section.depth">1</xsl:param>
+  <xsl:param name="chunk.section.depth">100</xsl:param>
 		
 	<xsl:param name="branding">not set</xsl:param>
 	<xsl:param name="enable.disqus">0</xsl:param>
@@ -177,6 +177,12 @@
        add <type>s to the bookinfo for resources mentioned in lists in the doc -->
   <xsl:param name="resource-lists" select="//db:itemizedlist[db:info/raxm:metadata]"/>
   
+  <xsl:template match="node() | @*" mode="identity-copy">
+    <xsl:copy>
+      <xsl:apply-templates select="node() | @*" mode="identity-copy"/>
+    </xsl:copy>
+  </xsl:template>
+  
   <xsl:template match="/" priority="10">
     
     <xsl:choose>
@@ -195,7 +201,7 @@
     </xsl:choose>
     
     <!-- We have to output xml to keep Calabash happy -->
-    <db:book/>
+    <xsl:apply-templates mode="identity-copy"/>
     
     <xsl:result-document 
         href="{$base.dir}/bookinfo.xml" 
@@ -419,8 +425,6 @@
 	  <!-- START HEADER -->
 	  <div id="raxdocs-header">
 	    <xsl:comment/>
-	    <!--  
-	    -->
 	  </div>
 	  <!-- END HEADER -->
 
@@ -820,11 +824,19 @@
 		select="count(ancestor::*)-count($toc-context/ancestor::*)"/>
 
   <xsl:variable name="subtoc.list" select="$subtoc"/>
-
+  <xsl:variable name="child-sections">
+    <xsl:apply-templates select="./db:section" mode="child-sections">
+      <xsl:with-param name="toc-context" select="$toc-context"/>
+    </xsl:apply-templates>
+  </xsl:variable>
+  
   <xsl:variable name="show.subtoc" as="xs:boolean"
-		select="count($subtoc/*) &gt; 0
+		select="(count($subtoc/*) &gt; 0
 			and $toc.section.depth > $depth and exists($nodes)
-			and $toc.max.depth > $depth.from.context"/>
+			and $toc.max.depth > $depth.from.context)
+			or 
+			(: Here we show the child section's toc if we are the parent of the current section or if we're the current section :)
+			(($child-sections/* or f:href(/,.) = f:href(/,$toc-context)) and exists($nodes) and count($subtoc/*) &gt; 0)"/>
 
   <li>
     <xsl:if test="f:href(/,.) = f:href(/,$toc-context)">
@@ -833,12 +845,55 @@
 
     <xsl:call-template name="tp:toc-line">
       <xsl:with-param name="toc-context" select="$toc-context"/>
+      <!-- Pass this in to make link to apiref wrapper dead -->
+<!--      <xsl:with-param name="omit.link" as="xs:boolean">
+        <xsl:choose>
+          <xsl:when test="self::db:section and starts-with(ancestor::*/db:info/raxm:metadata//raxm:type, 'apiref-')">
+            <xsl:value-of select="boolean('true')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="boolean('false')"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>-->
     </xsl:call-template>
     <xsl:if test="$show.subtoc">
       <xsl:copy-of select="$subtoc.list"/>
     </xsl:if>
   </li>
 </xsl:template>
+  
+  <xsl:template name="tp:toc-line">
+    <xsl:param name="toc-context" select="."/>
+    <xsl:param name="depth" select="1"/>
+    <xsl:param name="depth.from.context" select="8"/>
+    <xsl:param name="omit.link" select="false()" as="xs:boolean"/>
+    <span>
+      <a href="{f:href(/,.)}">
+<!--        <xsl:attribute name="href">
+          <xsl:choose>
+            <xsl:when test="$omit.link">#</xsl:when>
+            <xsl:otherwise><xsl:value-of select="f:href(/,.)"/></xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>-->
+        <xsl:variable name="label">
+          <xsl:apply-templates select="." mode="m:label-content"/>
+        </xsl:variable>
+        <xsl:copy-of select="$label"/>
+        <xsl:if test="$label != ''">
+          <xsl:value-of select="$autotoc.label.separator"/>
+        </xsl:if>
+        
+        <xsl:apply-templates select="." mode="m:titleabbrev-content"/>
+      </a>
+    </span>
+  </xsl:template>
+  
+  <!-- We use this template to figure out if we're the parent of the current section -->
+  <xsl:template match="db:section" mode="child-sections">
+    <xsl:param name="toc-context"/>
+    <xsl:if test="f:href(/,.) = f:href(/,$toc-context)"><true/></xsl:if>
+  </xsl:template>
 	<!-- ======================================== -->
 	<!-- End of autotoc.xsl customization         -->
 	<!-- ======================================== -->
@@ -906,6 +961,7 @@ WARNING: No more than six steps are allowed in a tutorial.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
 
   <xsl:function name="f:productname" as="xs:string">
     <xsl:param name="key"/>
