@@ -41,9 +41,11 @@
  
   <l:process-embedded-wadl/>
 
-  <l:programlisting-keep-together name="programlisting-keep-together"/>
+  <l:programlisting-keep-together/>
   
   <l:docbook-xslt2-preprocess/>
+  
+  <l:add-stop-chunking-pis/>
   
   <l:generate-war/>
 

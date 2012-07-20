@@ -616,5 +616,36 @@
         
     </p:declare-step>
     
+    
+    
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:add-stop-chunking-pis"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="add-stop-chunking-pis-step">
+        
+        <p:input port="source"/>
+        
+        <p:output port="result" primary="true">
+            <p:pipe step="add-stop-chunking-pis-xslt" port="result"/>
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="add-stop-chunking-pis-xslt">
+            <p:input port="source"> 
+                <p:pipe step="add-stop-chunking-pis-step" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="classpath:/cloud/war/add-stop-chunking-pis.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="add-stop-chunking-pis-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+        
+    </p:declare-step>
 
 </p:library>
