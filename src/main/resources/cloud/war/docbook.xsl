@@ -168,15 +168,6 @@
 
   <script type="text/javascript" src="{concat($resource.root, 'js/dbmodnizr.js')}">&#160;</script>
   
- <xsl:if test="$node//db:programlisting[@language] or $node//db:screen[@language] or $node//db:literallayout[@language]">
-   <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
-   <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
-    <script type="text/javascript">
-               SyntaxHighlighter.config.space = '&#32;';
-               SyntaxHighlighter.all();
-    </script>      
-  </xsl:if>
-  
 </xsl:template>
 
   <!--<xsl:param name="docbook.css" select="''"/>-->
@@ -589,6 +580,7 @@
 <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery.treeview.css"/>
 <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery.qtip.css"/>
 <link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css"/>
+<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/positioning-rackspace.css"/>
 <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/newformat.css"/>
 <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/style-new.css"/>
 <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/rackspace-header1.css"/>
@@ -597,7 +589,15 @@
 <script type="text/javascript" src="{$IndexWar}/common/scripts/rackspace-header2.js">&#160;</script>
 <script type="text/javascript" src="{$IndexWar}/common/scripts/smartbutton.js">&#160;</script>
 <script type="text/javascript" src="{$IndexWar}/common/scripts/munchkin.js">&#160;</script>
-
+  
+  <xsl:if test="$node//db:programlisting[@language] or $node//db:screen[@language] or $node//db:literallayout[@language]">
+    <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
+    <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
+    <script type="text/javascript">
+               SyntaxHighlighter.config.space = '&#32;';
+               SyntaxHighlighter.all();
+    </script>      
+  </xsl:if>
 
 <script>
     $(function(){
