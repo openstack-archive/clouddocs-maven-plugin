@@ -44,7 +44,6 @@
        non-chunking version to format an element.  -->
   <xsl:include href="urn:docbkx:stylesheet-base/xhtml/profile-chunk-code.xsl" />
 
-  <xsl:include href="../process-embedded-wadl.xsl"/>
 
   <xsl:param name="builtForOpenStack">0</xsl:param>
   <!-- ======================================== -->
@@ -52,6 +51,12 @@
   <xsl:variable name="preprocessed-nodes">
     <xsl:apply-templates select="exslt:node-set($profiled-nodes)" mode="preprocess"/>
   </xsl:variable>
+
+  <xsl:template match="@*|node()" mode="preprocess">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()" mode="preprocess"/>
+    </xsl:copy>
+  </xsl:template>
 
   <xsl:template match="d:legalnotice" mode="preprocess">
     <xsl:message>

@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns="http://docbook.org/ns/docbook" xmlns:wadl="http://wadl.dev.java.net/2009/02"       xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink"
-	xmlns:d="http://docbook.org/ns/docbook" xmlns:rax="http://docs.rackspace.com/api" xmlns:exsl="http://exslt.org/common"
-xmlns:exslt="http://exslt.org/common" 
-	exclude-result-prefixes="wadl rax d exsl xhtml exslt" version="1.1">
+	xmlns:d="http://docbook.org/ns/docbook" xmlns:rax="http://docs.rackspace.com/api" 
+	exclude-result-prefixes="wadl rax d xhtml" version="2.0">
 	
 	<!-- For readability while testing -->
 	<!-- <xsl:output indent="yes"/>    -->
-	<xsl:import href="date.xsl"/>
+	<xsl:import href="classpath:/cloud/date.xsl"/>
 	
 	<xsl:param name="project.build.directory">/home/dcramer/rax/foundations/foundation-api-docs/bsl/target</xsl:param>
-    <xsl:param name="wadl.norequest.msg"><para>This operation does not require a request body.</para></xsl:param>
-    <xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
-    <xsl:param name="wadl.noreqresp.msg"><para>This operation does not require a request body and does not return a response body.</para></xsl:param>
+	<xsl:param name="wadl.norequest.msg"><para>This operation does not require a request body.</para></xsl:param>
+	<xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
+	<xsl:param name="wadl.noreqresp.msg"><para>This operation does not require a request body and does not return a response body.</para></xsl:param>
 	<xsl:param name="project.directory" select="substring-before($project.build.directory,'/target')"/>
 	<xsl:param name="source.directory"/>
 	<xsl:param name="docbook.partial.path" select="concat(substring-after($source.directory,$project.directory),'/')"/>
-
+	<xsl:param name="security">external</xsl:param>
+	
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
 
 	<xsl:variable name="root" select="/"/>
 
-<!-- Uncomment this template for testing in Oxygen -->
-<!--	<xsl:template match="/">
+	<xsl:template match="/">
 		<xsl:apply-templates mode="preprocess"/>
-	</xsl:template>-->
+	</xsl:template>
 
 	<xsl:template match="@*|node()" mode="preprocess">
 		<xsl:copy>
@@ -494,7 +493,7 @@ xmlns:exslt="http://exslt.org/common"
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 
             <!-- About the request -->
-	    <xsl:if test="wadl:request//wadl:param[@style != 'plain']|exslt:node-set($template-parameters)//wadl:param">
+	    <xsl:if test="wadl:request//wadl:param[@style != 'plain']|$template-parameters//wadl:param">
                 <xsl:call-template name="paramTable">
                     <xsl:with-param name="mode" select="'Request'"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
@@ -546,6 +545,7 @@ xmlns:exslt="http://exslt.org/common"
 	</xsl:template>
 
 	<xsl:template name="method-row">
+	  <xsl:param name="local-content"/>
 	  <xsl:param name="resource-path"/>
 	  <xsl:param name="resource-path-computed">
 	  	<xsl:choose>

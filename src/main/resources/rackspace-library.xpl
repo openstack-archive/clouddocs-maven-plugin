@@ -431,4 +431,33 @@
         </p:parameters>
     </p:declare-step>
     
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:process-embedded-wadl"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="process-embedded-wadl-step">
+        
+        <p:input port="source"/>
+        
+        <p:output port="result" primary="true">
+            <p:pipe step="process-embedded-wadl-xslt" port="result"/>
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="process-embedded-wadl-xslt">
+            <p:input port="source"> 
+                <p:pipe step="process-embedded-wadl-step" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="classpath:/cloud/process-embedded-wadl.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="process-embedded-wadl-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+        
+    </p:declare-step>
 </p:library>

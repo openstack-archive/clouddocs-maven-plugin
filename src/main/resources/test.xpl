@@ -54,4 +54,6 @@
 
   <l:normalize-wadls />
 
+  <l:process-embedded-wadl/>
+
 </p:declare-step>
