@@ -62,7 +62,21 @@
   <xsl:param name="toc.section.depth">1</xsl:param>
   <xsl:param name="chunk.section.depth">100</xsl:param>
 		
-	<xsl:param name="branding">not set</xsl:param>
+  <xsl:param name="branding">rackspace</xsl:param>	
+		
+  <xsl:param name="enable.google.analytics">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="google.analytics.id">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace'">UA-23102455-4</xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+  </xsl:param>
+ 	
 	<xsl:param name="enable.disqus">0</xsl:param>
 	<xsl:param name="disqus.shortname">
 		<xsl:choose>
@@ -496,13 +510,13 @@
 --> 								  <div id="breadcrumbs">
 								    <xsl:choose>
 								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'tutorial'">
-								        <a href="#">Tutorials</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								        <a href="#">Tutorials</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
 								      </xsl:when>								     
 								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'concept'">
-								        <a href="#">Concepts</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								        <a href="#">Concepts</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
 								      </xsl:when>
 								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'apiref'">
-								        <a href="#">API Documentation</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								        <a href="#">API Documentation</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
 								      </xsl:when>
 								      <xsl:otherwise>
 								        
@@ -590,6 +604,16 @@
 <script type="text/javascript" src="{$IndexWar}/common/scripts/smartbutton.js">&#160;</script>
 <script type="text/javascript" src="{$IndexWar}/common/scripts/munchkin.js">&#160;</script>
   
+  <xsl:if test="$enable.google.analytics = '1' and not($google.analytics.id = '')">
+    <script type="text/javascript">
+	    var _gaq = _gaq || [];
+	    _gaq.push(['_setAccount', '<xsl:value-of select="$google.analytics.id"/>']);
+	  </script>
+    <script type="text/javascript" src="{$IndexWar}/common/scripts/ga.js">
+	    <xsl:comment></xsl:comment>
+	  </script>
+  </xsl:if>
+  
   <xsl:if test="$node//db:programlisting[@language] or $node//db:screen[@language] or $node//db:literallayout[@language]">
     <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
     <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
@@ -676,7 +700,7 @@
     <div class="starttutorial">
       <img src="{$IndexWar}/common/images/BigTutorialArrow.png" class="bigtutorialarrow"/>    
       <div id="starttutoriallink">
-          <a href="{f:href(/,$next[1])}">Start!</a>
+        <a href="{f:href(/,$next[1])}" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'Next', 'click', 1]);">Start!</a>
       </div>
     </div>
     <br/>
@@ -881,7 +905,7 @@
     <xsl:param name="depth.from.context" select="8"/>
     <xsl:param name="omit.link" select="false()" as="xs:boolean"/>
     <span>
-      <a href="{f:href(/,.)}">
+      <a href="{f:href(/,.)}" onclick="_gaq.push(['_trackEvent', 'SidebarToc', '{f:href(/,.)}', 'click', 1]);">
 <!--        <xsl:attribute name="href">
           <xsl:choose>
             <xsl:when test="$omit.link">#</xsl:when>
@@ -936,7 +960,7 @@
       </xsl:attribute>
      <xsl:choose>
        <xsl:when test="position() = 1">
-         <a href="{f:href(/,.)}">
+         <a href="{f:href(/,.)}" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'Bead: {f:href(/,.)}', 'click', 1]);">
           <span class="firstbead"><img src="{$IndexWar}/common/images/bead.png"/></span>
           <span class="firststeptext  currentstep">
              <xsl:attribute name="class">
@@ -950,7 +974,7 @@
        </xsl:when>
        <xsl:otherwise>
          <span class="stepline"><img class="stepline" src="{$IndexWar}/common/images/line{$gray}.png"/></span>
-         <span class="stepbead"><a href="{f:href(/,.)}"><img src="{$IndexWar}/common/images/bead{$gray}.png"/></a></span>
+         <span class="stepbead"><a href="{f:href(/,.)}" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'Bead: {f:href(/,.)}', 'click', 1]);"><img src="{$IndexWar}/common/images/bead{$gray}.png"/></a></span>
          <span class="steptext">
            <xsl:attribute name="class">
              <xsl:choose>
@@ -958,7 +982,7 @@
                <xsl:otherwise>steptext</xsl:otherwise>
              </xsl:choose>
            </xsl:attribute>
-           <a href="{f:href(/,.)}"><xsl:apply-templates select="." mode="m:object-title-markup"/></a></span>
+           <a href="{f:href(/,.)}" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'Bead: {f:href(/,.)}', 'click', 1]);"><xsl:apply-templates select="." mode="m:object-title-markup"/></a></span>
        </xsl:otherwise>
      </xsl:choose> 
     </div>
