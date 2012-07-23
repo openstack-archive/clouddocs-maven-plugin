@@ -1025,11 +1025,13 @@ WARNING: No more than six steps are allowed in a tutorial.
     </xsl:choose>
   </xsl:function>
 
+
+
   <!-- This is from dist/xslt/base/html/verbatim.xsl and adds syntaxhighlighter to code listings. -->
   <xsl:param name="pygmenter-uri" select="''"/>
   <xsl:template match="db:programlisting|db:screen|db:synopsis
     |db:literallayout[@class='monospaced']"
-    mode="m:verbatim">
+    mode="m:verbatim-tabbed">
     <xsl:param name="areas" select="()"/>
     
     <xsl:variable name="pygments-pi" as="xs:string?"
@@ -1169,6 +1171,153 @@ WARNING: No more than six steps are allowed in a tutorial.
       </div>
       <div class="copyexpand">
         <span class="excopybutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">copy</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
+      </div>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="db:programlisting|db:screen|db:synopsis
+    |db:literallayout[@class='monospaced']"
+    mode="m:verbatim">
+    <xsl:param name="areas" select="()"/>
+    
+    <xsl:variable name="pygments-pi" as="xs:string?"
+      select="f:pi(/processing-instruction('dbhtml'), 'pygments')"/>
+    
+    <xsl:variable name="use-pygments" as="xs:boolean"
+      select="$pygments-pi = 'true' or $pygments-pi = 'yes' or $pygments-pi = '1'
+      or (contains(@role,'pygments') and not(contains(@role,'nopygments')))"/>
+    
+    <xsl:variable name="verbatim" as="node()*">
+      <!-- n.b. look below where the class attribute is computed -->
+      <xsl:choose>
+        <xsl:when test="contains(@role,'nopygments') or string-length(.) &gt; 9000
+          or self::db:literallayout or exists(*)">
+          <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:when test="$pygments-default = 0 and not($use-pygments)">
+          <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:when use-when="function-available('xdmp:http-post')"
+          test="$pygmenter-uri != ''">
+          <xsl:sequence select="ext:highlight(string(.), string(@language))"/>
+        </xsl:when>
+        <xsl:when use-when="function-available('ext:highlight')"
+          test="true()">
+          <xsl:sequence select="ext:highlight(string(.), string(@language))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="formatted" as="node()*">
+      <xsl:call-template name="t:verbatim-patch-html">
+        <xsl:with-param name="content" select="$verbatim"/>
+        <xsl:with-param name="areas" select="$areas"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <xsl:variable name="lang" select="@language"/>
+    
+    <xsl:variable name="brush">
+      <xsl:choose>
+        <xsl:when test="@language = 'bash' or @language = 'BASH' or @language = 'sh'">bash</xsl:when>
+        <xsl:when test="@language = 'javascript' or @language = 'JAVASCRIPT' or @language = 'js' or @language = 'JavaScript'">javascript</xsl:when>
+        <xsl:when test="@language = 'xml' or @language = 'XML'">xml</xsl:when>
+        <xsl:when test="@language = 'java' or @language = 'JAVA'">java</xsl:when>
+        <xsl:when test="@language = 'json' or @language = 'JSON'">json</xsl:when>
+        <xsl:when test="@language = 'python' or @language = 'PYTHON' or @language = 'py' or @language = 'PY'">python</xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            WARNING: Unsupported langague on a <xsl:value-of select="local-name()"/>
+            element: <xsl:value-of select="@language"/>
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="syntaxhighlighter.switches">
+      <xsl:choose>
+        <xsl:when test="contains(@role,'gutter:') or contains(@role,'first-line:') or contains(@role,'highlight:')"><xsl:value-of select="@role"/></xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <div id="{generate-id()}" class="exampleblock">
+<!--      <div class="exbuttons">
+        <table class="typegroup">
+          <tr>
+            <td class="typebutton" onmousedown="ExMouseDown('cURL','{generate-id()}')" style="background-color:#DDD; font-weight:bold;color:#333">cURL</td>
+            <td class="typebutton" onmousedown="ExMouseDown('Request', '{generate-id()}')">Request</td>
+            <td class="typebutton" onmousedown="ExMouseDown('Response', '{generate-id()}')">Response</td>
+          </tr>
+        </table>
+        <div class="formatgroup">
+          <b>Format:</b> 
+          <span 
+            class="formatbutton" onmousedown="ExMouseDown('JSON', '{generate-id()}')" style="font-weight:bold">JSON</span>&#160;|&#160;<span 
+              class="formatbutton" onmousedown="ExMouseDown('XML',  '{generate-id()}')">XML</span>
+        </div>        
+      </div>-->
+      
+      <div>
+        <xsl:sequence select="f:html-attributes(.)"/>
+        <xsl:attribute name="class">
+          <xsl:value-of select="'excontent'"/> 
+          <!-- n.b. look above where $verbatim is computed -->
+          <xsl:choose>
+            <xsl:when test="contains(@role,'nopygments') or string-length(.) &gt; 9000
+              or self::db:literallayout or exists(*)"/>
+            <xsl:when test="$pygments-default = 0 and not($use-pygments)"/>
+            <xsl:when use-when="function-available('xdmp:http-post')"
+              test="$pygmenter-uri != ''">
+              <xsl:value-of select="' highlight'"/>
+            </xsl:when>
+            <xsl:when use-when="function-available('ext:highlight')"
+              test="true()">
+              <xsl:value-of select="' highlight'"/>
+            </xsl:when>
+            <xsl:otherwise/>
+          </xsl:choose>
+        </xsl:attribute>
+        <!-- Removed spaces before xsl:attribute so that if <pre> is schema validated
+         and magically grows an xml:space="preserve" attribute, the processor
+         doesn't fall over because we've added an attribute after a text node.
+         Maybe this only happens in MarkLogic. Maybe it's a bug. For now: whatever. -->
+        <!--<div class="cURL raxJSON"> -->
+          <pre><xsl:if test="not($lang = '')"><xsl:attribute name="class" select="concat('programlisting brush:',$brush, '; ', $syntaxhighlighter.switches)"/></xsl:if><!-- <xsl:if test="@language"><xsl:attribute name="class" select="@language"/></xsl:if> --><xsl:sequence select="$formatted"/></pre>
+        <!--</div>-->
+<!--        <div class="Request raxJSON">
+          <p>
+            Request JSON not provided
+          </p>
+        </div>
+        <div class="Response raxJSON">
+          <p>
+            Response JSON not provides.
+          </p>
+        </div>
+        <div class="cURL raxXML">
+          <p>
+            cURL XML not provided
+          </p>
+        </div>
+        <div class="Request raxXML">
+          <p>
+            Request XML not provided
+          </p>
+        </div>
+        <div class="Response raxXML">
+          <p>
+            Response XML not provided
+          </p>
+        </div>      -->
+      </div>
+      <div class="copyexpand"> 
+<!--        onmousedown="ExMouseDown('expand', '{generate-id()}')" -->
+        <span class="excopybutton" onclick="highlightCode(event);">copy</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
       </div>
     </div>
   </xsl:template>
