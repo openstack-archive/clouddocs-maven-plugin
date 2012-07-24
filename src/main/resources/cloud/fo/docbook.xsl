@@ -18,13 +18,8 @@
   <xsl:import href="../this.xsl"/>
   <xsl:import href="verbatim.xsl"/>
   <xsl:include href="../inline.xsl"/>
-  <xsl:include href="../process-embedded-wadl.xsl"/>
 
-  <xsl:variable name="preprocessed-nodes">
-    <xsl:apply-templates select="exslt:node-set($profiled-content)" mode="preprocess"/>
-  </xsl:variable>
-
-  <xsl:variable name="profiled-nodes" select="exslt:node-set($preprocessed-nodes)"/>
+  <xsl:variable name="profiled-nodes" select="exslt:node-set($profiled-content)"/>
 
   <xsl:param name="rackspace.font">
     <xsl:choose>
@@ -32,6 +27,8 @@
       <xsl:otherwise>CartoGothic Std</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
+
+  <xsl:param name="project.build.directory"/>
 
   <!-- Front-Cover Background Image, should be set by the plugin -->
   <xsl:param name="cloud.api.background.image" select="'images/cover.svg'"/>

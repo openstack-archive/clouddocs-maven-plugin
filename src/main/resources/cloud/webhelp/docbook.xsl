@@ -19,6 +19,8 @@
   <xsl:param name="use.extensions">1</xsl:param>
   <xsl:param name="callouts.extension">1</xsl:param>
 
+  <xsl:param name="project.build.directory"/>
+
   <xsl:param name="feedback.email">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
