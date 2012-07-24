@@ -254,5 +254,9 @@
 
 <implementation type="cxu:compare"
 		class-name="com.xmlcalabash.extensions.xmlunit.Compare" />
+		
+<!-- Rackspace Extensions -->
+<implementation type="cx:replace-text"
+	class-name="com.rackspace.cloud.api.docs.ReplaceTextXProcStep" />
 
 </xproc-config>

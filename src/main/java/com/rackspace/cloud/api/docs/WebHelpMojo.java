@@ -159,6 +159,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String canonicalUrlBase;
 
     /**
+     * @parameter 
+     *     expression="${generate-webhelp.replacementsFile}"
+     *     default-value=""
+     */
+    private String replacementsFile;
+    
+    /**
      * 
      * @parameter 
      *     expression="${generate-webhelp.failOnValidationError}"
@@ -405,8 +412,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         
         map.put("security", this.security);
         map.put("canonicalUrlBase", this.canonicalUrlBase);
+        map.put("replacementsFile", this.replacementsFile);
         map.put("failOnValidationError", this.failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
+        map.put("inputSrcFile", inputFilename);
         
         int lastSlash=inputFilename.lastIndexOf("/");
         
