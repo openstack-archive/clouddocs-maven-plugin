@@ -616,6 +616,7 @@
   
   <xsl:if test="$node//db:programlisting[@language] or $node//db:screen[@language] or $node//db:literallayout[@language]">
     <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
+    <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/rax-overrides.css')}"/>
     <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
     <script type="text/javascript">
                SyntaxHighlighter.config.space = '&#32;';
