@@ -218,7 +218,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
 	// Zip up the war from here.
 	String sourceDir = result.getParentFile() + "/" + warBasename;
 	String zipFile = result.getParentFile()  + "/" + warBasename + ".war";
-	result.deleteOnExit();
+	//result.deleteOnExit();
 
 	try
 	    {
