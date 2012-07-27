@@ -617,6 +617,7 @@
   <xsl:if test="$node//db:programlisting[@language] or $node//db:screen[@language] or $node//db:literallayout[@language]">
     <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
     <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
+    <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shSelect.js')}"><xsl:comment/></script>
     <script type="text/javascript">
                SyntaxHighlighter.config.space = '&#32;';
                SyntaxHighlighter.all();
@@ -1341,7 +1342,7 @@ WARNING: No more than six steps are allowed in a tutorial.
       </div>
       <div class="copyexpand"> 
 <!--        onmousedown="ExMouseDown('expand', '{generate-id()}')" -->
-        <span class="excopybutton" onclick="highlightCode(event);">copy</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
+        <span class="excopybutton" onclick="highlightCode2(event);">copy</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
       </div>
     </div>
   </xsl:template>
