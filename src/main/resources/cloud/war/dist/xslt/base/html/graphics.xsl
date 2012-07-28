@@ -1028,7 +1028,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 <!-- Resolve xml:base attributes -->
 <xsl:template match="@fileref">
   <xsl:choose>
-    <xsl:when test="starts-with(., '/')">
+    <xsl:when test="starts-with(., '/') or $keep.relative.image.uris != 0">
       <!-- special case: if it's absolute w/o a scheme, leave it alone -->
       <xsl:value-of select="."/>
     </xsl:when>
