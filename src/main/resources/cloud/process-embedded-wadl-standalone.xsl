@@ -876,7 +876,8 @@
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
                 <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction> 
-                <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
+            	<!-- HACK!!! Technical Debt!!! This should be a <caption> but the DB xsls aren't handling them right, so I'm making it a title here. Need to fix in the base xsls-->
+                <title><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></title>
                 <col width="30%"/>
                 <col width="10%"/>
                 <col width="10%"/>
