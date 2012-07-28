@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:xhtml="http://www.w3.org/1999/xhtml"
 		xmlns:h="http://www.w3.org/1999/xhtml"
 		xmlns:f="http://docbook.org/xslt/ns/extension"
 		xmlns:t="http://docbook.org/xslt/ns/template"
@@ -385,7 +386,7 @@
         <type xmlns="">
           <id><xsl:value-of select="$idNumber"/></id>
           <displayname><xsl:value-of select="db:title|db:info/db:title"/></displayname>
-          <url><xsl:value-of select="normalize-space(concat('../',$input.filename, '/', f:href(/,.)))"/></url>
+          <url><xsl:value-of select="normalize-space(concat($input.filename, '/', f:href(/,.)))"/></url>
           <sequence><xsl:value-of select="f:calculatepriority(normalize-space(db:info//raxm:priority[1]))"/></sequence> 
         </type>
       </xsl:otherwise>
@@ -510,13 +511,13 @@
 --> 								  <div id="breadcrumbs">
 								    <xsl:choose>
 								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'tutorial'">
-								        <a href="#">Tutorials</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								        <a href="#">Tutorials</a><xsl:text> &gt; </xsl:text><a href="{$IndexWar}/index.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
 								      </xsl:when>								     
 								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'concept'">
-								        <a href="#">Concepts</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								        <a href="#">Concepts</a><xsl:text> &gt; </xsl:text><a href="{$IndexWar}/index.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
 								      </xsl:when>
 								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'apiref'">
-								        <a href="#">API Documentation</a><xsl:text> &gt; </xsl:text><a href="../IndexWar/landing.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								        <a href="#">API Documentation</a><xsl:text> &gt; </xsl:text><a href="{$IndexWar}/index.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
 								      </xsl:when>
 								      <xsl:otherwise>
 								        
@@ -1051,14 +1052,45 @@ WARNING: No more than six steps are allowed in a tutorial.
     </xsl:choose>
   </xsl:function>
 
-
+  <xsl:function name="f:calculate-code-listing-tab-label" as="xs:string">
+    <xsl:param name="example-title"/>
+    <xsl:param name="section-title"/>
+<!--    <xsl:message>#<xsl:value-of select="$example-title"/>$$
+      <xsl:value-of select="$section-title"/>#</xsl:message>-->
+    <xsl:choose>
+      <xsl:when test="starts-with(normalize-space($example-title), normalize-space($section-title)) and contains($example-title,'Request')">Request</xsl:when>
+      <xsl:when test="starts-with(normalize-space($example-title), normalize-space($section-title)) and contains($example-title,'Response')">Response</xsl:when>        
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="ends-with(normalize-space($example-title),': JSON')">
+            <xsl:value-of select="replace(normalize-space($example-title), '(.*): JSON$', '$1')"/>
+          </xsl:when>
+          <xsl:when test="ends-with(normalize-space($example-title),': XML')">
+            <xsl:value-of select="replace(normalize-space($example-title), '(.*): XML$', '$1')"/>              
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- WTF? -->
+            <xsl:value-of select="normalize-space($example-title)"/>              
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  <xsl:function name="f:calculate-code-listing-tab-token" as="xs:string">
+    <xsl:param name="example-title"/>
+    <xsl:param name="section-title"/>
+    <xsl:variable name="label" select="f:calculate-code-listing-tab-label($example-title,$section-title)"/>
+    <xsl:variable name="badchars">()"':;!@#$%^&amp;*=</xsl:variable>
+    <xsl:value-of select="translate($label,$badchars,'_')"/>
+  </xsl:function>
 
   <!-- This is from dist/xslt/base/html/verbatim.xsl and adds syntaxhighlighter to code listings. -->
   <xsl:param name="pygmenter-uri" select="''"/>
   <xsl:template match="db:programlisting|db:screen|db:synopsis
     |db:literallayout[@class='monospaced']"
-    mode="m:verbatim-tabbed">
+    mode="programlisting-wadl">
     <xsl:param name="areas" select="()"/>
+    <xsl:param name="first" />
     
     <xsl:variable name="pygments-pi" as="xs:string?"
       select="f:pi(/processing-instruction('dbhtml'), 'pygments')"/>
@@ -1104,7 +1136,7 @@ WARNING: No more than six steps are allowed in a tutorial.
       <xsl:choose>
         <xsl:when test="@language = 'bash' or @language = 'BASH' or @language = 'sh'">bash</xsl:when>
         <xsl:when test="@language = 'javascript' or @language = 'JAVASCRIPT' or @language = 'js' or @language = 'JavaScript'">javascript</xsl:when>
-        <xsl:when test="@language = 'xml' or @language = 'XML'">xml</xsl:when>
+        <xsl:when test="@language = 'xml' or @language = 'XML' or @language = 'atom'">xml</xsl:when>
         <xsl:when test="@language = 'java' or @language = 'JAVA'">java</xsl:when>
         <xsl:when test="@language = 'json' or @language = 'JSON'">json</xsl:when>
         <xsl:when test="@language = 'python' or @language = 'PYTHON' or @language = 'py' or @language = 'PY'">python</xsl:when>
@@ -1124,52 +1156,30 @@ WARNING: No more than six steps are allowed in a tutorial.
         <xsl:when test="contains(@role,'gutter:') or contains(@role,'first-line:') or contains(@role,'highlight:')"><xsl:value-of select="@role"/></xsl:when>
       </xsl:choose>
     </xsl:variable>
-    
-    <div id="{generate-id()}" class="exampleblock">
-      <div class="exbuttons">
-        <table class="typegroup">
-          <tr>
-            <td class="typebutton" onmousedown="ExMouseDown('cURL','{generate-id()}')" style="background-color:#DDD; font-weight:bold;color:#333">cURL</td>
-            <td class="typebutton" onmousedown="ExMouseDown('Request', '{generate-id()}')">Request</td>
-            <td class="typebutton" onmousedown="ExMouseDown('Response', '{generate-id()}')">Response</td>
-          </tr>
-        </table>
-        <div class="formatgroup">
-          <b>Format:</b> 
-          <span 
-            class="formatbutton" onmousedown="ExMouseDown('JSON', '{generate-id()}')" style="font-weight:bold">JSON</span>&#160;|&#160;<span 
-            class="formatbutton" onmousedown="ExMouseDown('XML',  '{generate-id()}')">XML</span>
-        </div>        
-      </div>
-      
+      <!--
     <div>
-      <xsl:sequence select="f:html-attributes(.)"/>
-      <xsl:attribute name="class">
-        <xsl:value-of select="'excontent'"/> 
-        <!-- n.b. look above where $verbatim is computed -->
-        <xsl:choose>
-          <xsl:when test="contains(@role,'nopygments') or string-length(.) &gt; 9000
-            or self::db:literallayout or exists(*)"/>
-          <xsl:when test="$pygments-default = 0 and not($use-pygments)"/>
-          <xsl:when use-when="function-available('xdmp:http-post')"
-            test="$pygmenter-uri != ''">
-            <xsl:value-of select="' highlight'"/>
-          </xsl:when>
-          <xsl:when use-when="function-available('ext:highlight')"
-            test="true()">
-            <xsl:value-of select="' highlight'"/>
-          </xsl:when>
-          <xsl:otherwise/>
-        </xsl:choose>
-      </xsl:attribute>
-      <!-- Removed spaces before xsl:attribute so that if <pre> is schema validated
+      <xsl:sequence select="f:html-attributes(.)"/>-->
+      <!--
+      <xsl:variable name="tabToken" select="f:calculate-code-listing-tab-token((ancestor::db:example/db:info/db:title)[1], (ancestor::db:section/db:info/db:title)[1])"/>-->
+      <xsl:variable name="tabToken" select="f:calculate-code-listing-tab-token((ancestor::db:example/db:info/db:title)[1], (ancestor::db:section[1]//db:title)[1])"/>
+    <!-- Removed spaces before xsl:attribute so that if <pre> is schema validated
          and magically grows an xml:space="preserve" attribute, the processor
          doesn't fall over because we've added an attribute after a text node.
          Maybe this only happens in MarkLogic. Maybe it's a bug. For now: whatever. -->
-      <div class="cURL raxJSON">
+      <div>
+        <xsl:attribute name="class">
+          <xsl:if test="not(normalize-space($tabToken) = '')"><xsl:value-of select="$tabToken"/> </xsl:if>
+          <xsl:text> </xsl:text>
+          <xsl:if test="$lang = 'xml'">raxXML</xsl:if>
+          <xsl:if test="$lang = 'json' or $lang = 'javascript'">raxJSON</xsl:if>
+          <xsl:if test="$lang = 'atom'">raxATOM</xsl:if>
+        </xsl:attribute>
+        <xsl:if test="$first">
+          <xsl:attribute name="style">display: block;</xsl:attribute>
+        </xsl:if>
       <pre><xsl:if test="not($lang = '')"><xsl:attribute name="class" select="concat('programlisting brush:',$brush, '; ', $syntaxhighlighter.switches)"/></xsl:if><!-- <xsl:if test="@language"><xsl:attribute name="class" select="@language"/></xsl:if> --><xsl:sequence select="$formatted"/></pre>
       </div>
-      <div class="Request raxJSON">
+<!--      <div class="Request raxJSON">
         <p>
           Request JSON not provided
         </p>
@@ -1193,12 +1203,9 @@ WARNING: No more than six steps are allowed in a tutorial.
         <p>
           Response XML not provided
         </p>
-      </div>      
-      </div>
-      <div class="copyexpand">
-        <span class="excopybutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">copy</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
-      </div>
-    </div>
+      </div>      -->
+  <!--    </div>-->
+
   </xsl:template>
   
   <xsl:template match="db:programlisting|db:screen|db:synopsis
@@ -1257,7 +1264,7 @@ WARNING: No more than six steps are allowed in a tutorial.
         <xsl:otherwise>
           <xsl:message>
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            WARNING: Unsupported langague on a <xsl:value-of select="local-name()"/>
+            WARNING: Unsupported language on a <xsl:value-of select="local-name()"/>
             element: <xsl:value-of select="@language"/>
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
           </xsl:message>
@@ -1312,9 +1319,9 @@ WARNING: No more than six steps are allowed in a tutorial.
          and magically grows an xml:space="preserve" attribute, the processor
          doesn't fall over because we've added an attribute after a text node.
          Maybe this only happens in MarkLogic. Maybe it's a bug. For now: whatever. -->
-        <!--<div class="cURL raxJSON"> -->
+        <div class="cURL raxJSON Request raxXML Response">
           <pre><xsl:if test="not($lang = '')"><xsl:attribute name="class" select="concat('programlisting brush:',$brush, '; ', $syntaxhighlighter.switches)"/></xsl:if><!-- <xsl:if test="@language"><xsl:attribute name="class" select="@language"/></xsl:if> --><xsl:sequence select="$formatted"/></pre>
-        <!--</div>-->
+        </div>
 <!--        <div class="Request raxJSON">
           <p>
             Request JSON not provided
@@ -1343,9 +1350,78 @@ WARNING: No more than six steps are allowed in a tutorial.
       </div>
       <div class="copyexpand"> 
 <!--        onmousedown="ExMouseDown('expand', '{generate-id()}')" -->
-        <span class="excopybutton" onclick="highlightCode2(event);">copy</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
+        <span class="excopybutton" onclick="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
       </div>
     </div>
+  </xsl:template>
+  
+  <xsl:template match="db:example[@role = 'wadl']">
+    <xsl:variable name="id" select="generate-id()"/>
+    
+    <xsl:choose>
+      <xsl:when test="following-sibling::db:example[@role = 'wadl'] and not(preceding-sibling::db:example[@role = 'wadl']) ">        
+        <div id="{$id}" class="exampleblock">
+          <div class="exbuttons">
+            <table class="typegroup">
+              <tr>
+                <!-- TODO: Only put the things here you need -->    
+                <xsl:variable name="tabs">
+                 <xsl:apply-templates select="db:programlisting|following-sibling::db:example[@role = 'wadl']/db:programlisting" mode="programlisting-req-resp-buttons">
+                    <xsl:with-param name="id" select="$id"/>
+                 </xsl:apply-templates>
+                </xsl:variable>
+                <xsl:for-each-group select="$tabs/*" group-by="@onmousedown">
+                  <xsl:copy-of select="current-group()[1]"/>
+                </xsl:for-each-group>
+                <!--
+                <td class="typebutton" onmousedown="ExMouseDown('cURL','{generate-id()}')" style="background-color:#DDD; font-weight:bold;color:#333">cURL</td>
+                <td class="typebutton" onmousedown="ExMouseDown('Request', '{generate-id()}')">Request</td>
+                <td class="typebutton" onmousedown="ExMouseDown('Response', '{generate-id()}')">Response</td>
+                -->
+              </tr>
+            </table>
+            <xsl:if test="../db:example[@role = 'wadl']/db:programlisting[@language = 'xml'] and 
+                         (../db:example[@role = 'wadl']/db:programlisting[@language = 'javascript'] or 
+                          ../db:example[@role = 'wadl']/db:programlisting[@language = 'json'])" >
+              <div class="formatgroup"> 
+                <b>Format:</b> 
+                <span 
+                  class="formatbutton" onmousedown="ExMouseDown('raxJSON', '{$id}')" style="font-weight:bold">JSON</span>&#160;|&#160;<span 
+                  class="formatbutton" onmousedown="ExMouseDown('raxXML',  '{$id}')">XML</span>
+              </div>
+            </xsl:if>        
+          </div>
+          <div class="excontent">
+            <!-- programlisting divs here: TODO: Wrap each in a diff with class="Request raxXML" or whatever -->          
+            <xsl:apply-templates select="db:programlisting" mode="programlisting-wadl">
+              <xsl:with-param name="first" select="true()"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="following-sibling::db:example[@role = 'wadl']/db:programlisting" mode="programlisting-wadl"/>
+          </div>
+          <div class="copyexpand">
+            <span class="excopybutton" onclick="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{$id}')">expand</span>
+          </div>
+        </div>
+      </xsl:when>
+      <xsl:when test="preceding-sibling::db:example[@role = 'wadl']">
+        <!-- Nuke it: we did a paneled code block -->   
+      </xsl:when>      
+      <xsl:otherwise>
+        <!-- Weird situation, process with db templates -->
+        <xsl:apply-imports/>  
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="db:programlisting" mode="programlisting-req-resp-buttons">
+    <xsl:param name="id"/>
+    <xsl:variable name="tabLabel" select="f:calculate-code-listing-tab-label((ancestor::db:example/db:info/db:title)[1], (ancestor::db:section[1]//db:title)[1])"/>
+    <xsl:variable name="tabToken" select="f:calculate-code-listing-tab-token((ancestor::db:example/db:info/db:title)[1], (ancestor::db:section[1]//db:title)[1])"/>
+
+    <!--<xsl:variable name="badchars">()"':;!@#$%^&amp;*=</xsl:variable>-->
+    <!-- TODO: figure out which to make the default: style="background-color:#DDD; font-weight:bold;color:#333" -->
+    <!-- <td class="typebutton" onmousedown="ExMouseDown('{translate($tabName,$badchars,'_')}','{$id}')"><xsl:value-of select="$tabName"/></td>-->
+    <td class="typebutton" onmousedown="ExMouseDown('{$tabToken}','{$id}')"><xsl:value-of select="$tabLabel"/></td>
   </xsl:template>
 
 </xsl:stylesheet>
