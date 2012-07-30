@@ -39,6 +39,9 @@
     </l:l10n>
   </i18n>
   
+  <xsl:param name="callout.unicode" select="1"/>
+  <xsl:param name="callout.graphics" select="0"/>
+  
   <xsl:param name="IndexWar">/new</xsl:param>
   <xsl:param name="resource.root" select="concat($IndexWar,'/common/docbook/')"/>
   <xsl:param name="input.filename"/>
