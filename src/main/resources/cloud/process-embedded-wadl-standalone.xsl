@@ -1065,4 +1065,17 @@
   </xsl:if>
 </xsl:template>
    
+   <!-- HACK ALERT! This probably should get its own step in the xpl -->
+	<!-- Here we're modifying the structure of some books to make them 
+		 work in the new platform better -->
+	<xsl:template match="processing-instruction('raxm-following-sibling-chapters')" mode="preprocess">
+		<xsl:apply-templates select="parent::d:chapter/following-sibling::d:chapter" mode="chapter2section"/>
+	</xsl:template>
+	<xsl:template match="d:chapter[preceding-sibling::*/processing-instruction('raxm-following-sibling-chapters')]" mode="preprocess"/>
+    <xsl:template match="d:chapter" mode="chapter2section">
+    	<section>
+    		<xsl:apply-templates select="@*|node()" mode="preprocess"/>
+    	</section>
+    </xsl:template>
+	
 </xsl:stylesheet>
