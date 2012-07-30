@@ -256,7 +256,7 @@
       <products xmlns="">
         <xsl:choose>
           <xsl:when test="$rootid = ''">
-            <xsl:for-each-group select="$chunks" group-by="db:info/raxm:metadata/raxm:products/raxm:product">
+            <xsl:for-each-group select="$chunks|$resource-lists" group-by="db:info/raxm:metadata/raxm:products/raxm:product">
               <product>
                 <id><xsl:value-of select="f:productnumber(current-grouping-key())"/><!--                  <xsl:choose>
                     <xsl:when test="current-grouping-key() = 'servers'">1</xsl:when>
@@ -371,6 +371,7 @@
     </xsl:variable>
     -->
     <xsl:choose>
+      <xsl:when test="self::db:itemizedlist"/>
       <xsl:when test="self::db:listitem">
         <type xmlns="">
           <id><xsl:value-of select="f:calculatetype(parent::*/db:info//raxm:type[1])"/></id>
@@ -389,7 +390,7 @@
         <type xmlns="">
           <id><xsl:value-of select="$idNumber"/></id>
           <displayname><xsl:value-of select="db:title|db:info/db:title"/></displayname>
-          <url><xsl:value-of select="normalize-space(concat($input.filename, '/', f:href(/,.)))"/></url>
+          <url><xsl:value-of select="normalize-space(concat($IndexWar,'/',$input.filename, '/', f:href(/,.)))"/></url>
           <sequence><xsl:value-of select="f:calculatepriority(normalize-space(db:info//raxm:priority[1]))"/></sequence> 
         </type>
       </xsl:otherwise>
@@ -402,7 +403,7 @@
     <type xmlns="">
       <id><xsl:value-of select="$type"/></id>
       <displayname><xsl:value-of select="db:title|db:info/db:title"/></displayname>
-      <url><xsl:value-of select="normalize-space(concat($input.filename, '/', f:href(/,.)))"/></url>
+      <url><xsl:value-of select="normalize-space(concat($IndexWar,'/',$input.filename, '/', f:href(/,.)))"/></url>
       <sequence><xsl:value-of select="$priorityCalculated"/></sequence> 
     </type>
   </xsl:template>
@@ -622,7 +623,6 @@
     <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
     <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/rax-overrides.css')}"/>
     <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
-    <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shSelect.js')}"><xsl:comment/></script>
     <script type="text/javascript">
                SyntaxHighlighter.config.space = '&#32;';
                SyntaxHighlighter.all();
@@ -1082,9 +1082,8 @@ WARNING: No more than six steps are allowed in a tutorial.
   <xsl:function name="f:calculate-code-listing-tab-token" as="xs:string">
     <xsl:param name="example-title"/>
     <xsl:param name="section-title"/>
-    <xsl:variable name="label" select="f:calculate-code-listing-tab-label($example-title,$section-title)"/>
-    <xsl:variable name="badchars">()"':;!@#$%^&amp;*=</xsl:variable>
-    <xsl:value-of select="translate($label,$badchars,'_')"/>
+    <xsl:variable name="badchars">()"':;!@#$%^&amp;*= </xsl:variable>
+    <xsl:value-of select="translate(normalize-space(f:calculate-code-listing-tab-label($example-title,$section-title)),$badchars,'_')"/>
   </xsl:function>
 
   <!-- This is from dist/xslt/base/html/verbatim.xsl and adds syntaxhighlighter to code listings. -->
@@ -1211,8 +1210,11 @@ WARNING: No more than six steps are allowed in a tutorial.
 
   </xsl:template>
   
-  <xsl:template match="db:programlisting|db:screen|db:synopsis
-    |db:literallayout[@class='monospaced']"
+  <xsl:param name="min-lines-for-boxed-codelisting">5</xsl:param>
+  <xsl:template match="
+    db:programlisting[count(tokenize(.,'&#xA;')) &gt; $min-lines-for-boxed-codelisting and not(parent::db:programlistingco)]|
+    db:screen[count(tokenize(.,'&#xA;')) &gt; $min-lines-for-boxed-codelisting and not(parent::db:programlistingco)]|
+    db:literallayout[@class='monospaced' and count(tokenize(.,'&#xA;')) &gt; $min-lines-for-boxed-codelisting and not(parent::db:programlistingco)]"
     mode="m:verbatim">
     <xsl:param name="areas" select="()"/>
     
@@ -1325,42 +1327,117 @@ WARNING: No more than six steps are allowed in a tutorial.
         <div class="cURL raxJSON Request raxXML Response">
           <pre><xsl:if test="not($lang = '')"><xsl:attribute name="class" select="concat('programlisting brush:',$brush, '; ', $syntaxhighlighter.switches)"/></xsl:if><!-- <xsl:if test="@language"><xsl:attribute name="class" select="@language"/></xsl:if> --><xsl:sequence select="$formatted"/></pre>
         </div>
-<!--        <div class="Request raxJSON">
-          <p>
-            Request JSON not provided
-          </p>
-        </div>
-        <div class="Response raxJSON">
-          <p>
-            Response JSON not provides.
-          </p>
-        </div>
-        <div class="cURL raxXML">
-          <p>
-            cURL XML not provided
-          </p>
-        </div>
-        <div class="Request raxXML">
-          <p>
-            Request XML not provided
-          </p>
-        </div>
-        <div class="Response raxXML">
-          <p>
-            Response XML not provided
-          </p>
-        </div>      -->
       </div>
       <div class="copyexpand"> 
 <!--        onmousedown="ExMouseDown('expand', '{generate-id()}')" -->
-        <span class="excopybutton" onclick="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}')">expand</span>
+        <span class="excopybutton" onmousedown="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}',null,'action')">expand</span>
       </div>
     </div>
   </xsl:template>
   
+  
+  <xsl:template match="
+    db:programlisting[parent::db:programlistingco]|
+    db:screen[parent::db:programlistingco]|
+    db:literallayout[@class='monospaced' and parent::db:programlistingco]"
+    mode="m:verbatim">
+    <xsl:param name="areas" select="()"/>
+    
+    <xsl:variable name="pygments-pi" as="xs:string?"
+      select="f:pi(/processing-instruction('dbhtml'), 'pygments')"/>
+    
+    <xsl:variable name="use-pygments" as="xs:boolean"
+      select="$pygments-pi = 'true' or $pygments-pi = 'yes' or $pygments-pi = '1'
+      or (contains(@role,'pygments') and not(contains(@role,'nopygments')))"/>
+    
+    <xsl:variable name="verbatim" as="node()*">
+      <!-- n.b. look below where the class attribute is computed -->
+      <xsl:choose>
+        <xsl:when test="contains(@role,'nopygments') or string-length(.) &gt; 9000
+          or self::db:literallayout or exists(*)">
+          <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:when test="$pygments-default = 0 and not($use-pygments)">
+          <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:when use-when="function-available('xdmp:http-post')"
+          test="$pygmenter-uri != ''">
+          <xsl:sequence select="ext:highlight(string(.), string(@language))"/>
+        </xsl:when>
+        <xsl:when use-when="function-available('ext:highlight')"
+          test="true()">
+          <xsl:sequence select="ext:highlight(string(.), string(@language))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="formatted" as="node()*">
+      <xsl:call-template name="t:verbatim-patch-html">
+        <xsl:with-param name="content" select="$verbatim"/>
+        <xsl:with-param name="areas" select="$areas"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <xsl:variable name="lang" select="@language"/>
+    
+    <xsl:variable name="brush">
+      <xsl:choose>
+        <xsl:when test="@language = 'bash' or @language = 'BASH' or @language = 'sh'">bash</xsl:when>
+        <xsl:when test="@language = 'javascript' or @language = 'JAVASCRIPT' or @language = 'js' or @language = 'JavaScript'">javascript</xsl:when>
+        <xsl:when test="@language = 'xml' or @language = 'XML'">xml</xsl:when>
+        <xsl:when test="@language = 'java' or @language = 'JAVA'">java</xsl:when>
+        <xsl:when test="@language = 'json' or @language = 'JSON'">json</xsl:when>
+        <xsl:when test="@language = 'python' or @language = 'PYTHON' or @language = 'py' or @language = 'PY'">python</xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            WARNING: Unsupported language on a <xsl:value-of select="local-name()"/>
+            element: <xsl:value-of select="@language"/>
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="syntaxhighlighter.switches">
+      <xsl:choose>
+        <xsl:when test="contains(@role,'gutter:') or contains(@role,'first-line:') or contains(@role,'highlight:')"><xsl:value-of select="@role"/></xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+      
+      <div>
+        <xsl:sequence select="f:html-attributes(.)"/>
+        <xsl:attribute name="class">
+          <!-- n.b. look above where $verbatim is computed -->
+          <xsl:choose>
+            <xsl:when test="contains(@role,'nopygments') or string-length(.) &gt; 9000
+              or self::db:literallayout or exists(*)"/>
+            <xsl:when test="$pygments-default = 0 and not($use-pygments)"/>
+            <xsl:when use-when="function-available('xdmp:http-post')"
+              test="$pygmenter-uri != ''">
+              <xsl:value-of select="' highlight'"/>
+            </xsl:when>
+            <xsl:when use-when="function-available('ext:highlight')"
+              test="true()">
+              <xsl:value-of select="' highlight'"/>
+            </xsl:when>
+            <xsl:otherwise/>
+          </xsl:choose>
+        </xsl:attribute>
+        <!-- Removed spaces before xsl:attribute so that if <pre> is schema validated
+         and magically grows an xml:space="preserve" attribute, the processor
+         doesn't fall over because we've added an attribute after a text node.
+         Maybe this only happens in MarkLogic. Maybe it's a bug. For now: whatever. -->
+          <pre><xsl:if test="not($lang = '')"><xsl:attribute name="class" select="concat('programlisting brush:',$brush, '; ', $syntaxhighlighter.switches)"/></xsl:if><!-- <xsl:if test="@language"><xsl:attribute name="class" select="@language"/></xsl:if> --><xsl:sequence select="$formatted"/></pre>
+      </div>
+  </xsl:template>
+  
   <xsl:template match="db:example[@role = 'wadl']">
     <xsl:variable name="id" select="generate-id()"/>
-    
+    <xsl:variable name="exampleTypeDefault" select="f:calculate-code-listing-tab-token((db:info/db:title)[1], (ancestor::db:section[1]//db:title)[1])"/>
     <xsl:choose>
       <xsl:when test="following-sibling::db:example[@role = 'wadl'] and not(preceding-sibling::db:example[@role = 'wadl']) ">        
         <div id="{$id}" class="exampleblock">
@@ -1369,9 +1446,15 @@ WARNING: No more than six steps are allowed in a tutorial.
               <tr>
                 <!-- TODO: Only put the things here you need -->    
                 <xsl:variable name="tabs">
-                 <xsl:apply-templates select="db:programlisting|following-sibling::db:example[@role = 'wadl']/db:programlisting" mode="programlisting-req-resp-buttons">
+                 <xsl:apply-templates select="db:programlisting" mode="programlisting-req-resp-buttons">
                     <xsl:with-param name="id" select="$id"/>
+                    <xsl:with-param name="exampleTypeDefault" select="$exampleTypeDefault"/>
+                    <xsl:with-param name="defaultTab" select="1"/>
                  </xsl:apply-templates>
+                  <xsl:apply-templates select="following-sibling::db:example[@role = 'wadl']/db:programlisting" mode="programlisting-req-resp-buttons">
+                    <xsl:with-param name="id" select="$id"/>
+                    <xsl:with-param name="exampleTypeDefault" select="$exampleTypeDefault"/>
+                  </xsl:apply-templates>
                 </xsl:variable>
                 <xsl:for-each-group select="$tabs/*" group-by="@onmousedown">
                   <xsl:copy-of select="current-group()[1]"/>
@@ -1387,10 +1470,10 @@ WARNING: No more than six steps are allowed in a tutorial.
                          (../db:example[@role = 'wadl']/db:programlisting[@language = 'javascript'] or 
                           ../db:example[@role = 'wadl']/db:programlisting[@language = 'json'])" >
               <div class="formatgroup"> 
-                <b>Format:</b> 
+                <b>Format:&#160;</b> 
                 <span 
-                  class="formatbutton" onmousedown="ExMouseDown('raxJSON', '{$id}')" style="font-weight:bold">JSON</span>&#160;|&#160;<span 
-                  class="formatbutton" onmousedown="ExMouseDown('raxXML',  '{$id}')">XML</span>
+                  class="formatbutton" onmousedown="ExMouseDown('raxJSON', '{$id}','{$exampleTypeDefault}', 'format')" style="font-weight:bold">JSON</span>&#160;|&#160;<span 
+                    class="formatbutton" onmousedown="ExMouseDown('raxXML',  '{$id}','{$exampleTypeDefault}', 'format')">XML</span>
               </div>
             </xsl:if>        
           </div>
@@ -1402,7 +1485,7 @@ WARNING: No more than six steps are allowed in a tutorial.
             <xsl:apply-templates select="following-sibling::db:example[@role = 'wadl']/db:programlisting" mode="programlisting-wadl"/>
           </div>
           <div class="copyexpand">
-            <span class="excopybutton" onclick="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{$id}')">expand</span>
+            <span class="excopybutton" onmousedown="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}',null,'action')">expand</span>
           </div>
         </div>
       </xsl:when>
@@ -1418,13 +1501,41 @@ WARNING: No more than six steps are allowed in a tutorial.
 
   <xsl:template match="db:programlisting" mode="programlisting-req-resp-buttons">
     <xsl:param name="id"/>
+    <xsl:param name="exampleTypeDefault"/>
+    <xsl:param name="defaultTab" select="0"/>
     <xsl:variable name="tabLabel" select="f:calculate-code-listing-tab-label((ancestor::db:example/db:info/db:title)[1], (ancestor::db:section[1]//db:title)[1])"/>
     <xsl:variable name="tabToken" select="f:calculate-code-listing-tab-token((ancestor::db:example/db:info/db:title)[1], (ancestor::db:section[1]//db:title)[1])"/>
 
     <!--<xsl:variable name="badchars">()"':;!@#$%^&amp;*=</xsl:variable>-->
     <!-- TODO: figure out which to make the default: style="background-color:#DDD; font-weight:bold;color:#333" -->
     <!-- <td class="typebutton" onmousedown="ExMouseDown('{translate($tabName,$badchars,'_')}','{$id}')"><xsl:value-of select="$tabName"/></td>-->
-    <td class="typebutton" onmousedown="ExMouseDown('{$tabToken}','{$id}')"><xsl:value-of select="$tabLabel"/></td>
+    <td class="typebutton" onmousedown="ExMouseDown('{$tabToken}','{$id}','{$exampleTypeDefault}', 'tab')"><xsl:if test="$defaultTab = 1">
+        <xsl:attribute name="style">background-color:#DDD; font-weight:bold;color:#333</xsl:attribute>
+      </xsl:if><xsl:value-of select="$tabLabel"/></td>
   </xsl:template>
 
+<!-- HACK ALERT: TECHNICAL DEBT!!! We're removing the link to the callout 
+  to make this work with the syntaxhighlighting. -->
+  <xsl:template match="ghost:co" mode="mp:expand-ghost-co">
+    <xsl:if test="@xml:id">
+      <!-- DWC: HACK -->
+      <!-- <a name="{@xml:id}"/> -->
+    </xsl:if>
+    <xsl:call-template name="t:callout-bug">
+      <xsl:with-param name="conum">
+        <xsl:choose>
+          <xsl:when test="@number">
+            <xsl:value-of select="@number"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:number count="ghost:co"
+              level="any"
+              from="db:programlisting|db:screen|db:literallayout|db:synopsis"
+              format="1"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  
 </xsl:stylesheet>
