@@ -623,6 +623,7 @@
     <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
     <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/rax-overrides.css')}"/>
     <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
+    <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shSelect.js')}"><xsl:comment/></script>
     <script type="text/javascript">
                SyntaxHighlighter.config.space = '&#32;';
                SyntaxHighlighter.all();
@@ -1330,7 +1331,7 @@ WARNING: No more than six steps are allowed in a tutorial.
       </div>
       <div class="copyexpand"> 
 <!--        onmousedown="ExMouseDown('expand', '{generate-id()}')" -->
-        <span class="excopybutton" onmousedown="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}',null,'action')">expand</span>
+        <span class="excopybutton" onclick="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}',null,'action')">expand</span>
       </div>
     </div>
   </xsl:template>
@@ -1485,7 +1486,7 @@ WARNING: No more than six steps are allowed in a tutorial.
             <xsl:apply-templates select="following-sibling::db:example[@role = 'wadl']/db:programlisting" mode="programlisting-wadl"/>
           </div>
           <div class="copyexpand">
-            <span class="excopybutton" onmousedown="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}',null,'action')">expand</span>
+            <span class="excopybutton" onclick="highlightCode2(event);">select</span>&#160;|&#160;<span class="expandbutton" onmousedown="ExMouseDown('expand', '{generate-id()}',null,'action')">expand</span>
           </div>
         </div>
       </xsl:when>
