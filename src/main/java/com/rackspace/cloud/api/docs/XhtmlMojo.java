@@ -42,89 +42,89 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
      *     default-value=""
      */
     private String security;
-    
+   
     
     
         /**
      * Controls whether output is colorized based on revisionflag attributes.
      *
-     * @parameter expression="${generate-webhelp.show.changebars}"
+     * @parameter expression="${generate-xhtml.show.changebars}"
      */
     private String showChangebars;
     
      /**
      * Display built for OpenStack logo?
      *
-     * @parameter expression="${generate-webhelp.builtForOpenStack}" default-value="0"
+     * @parameter expression="${generate-xhtml.builtForOpenStack}" default-value="0"
      */
     private String builtForOpenStack;
 
     /**
      * Controls whether output is colorized based on revisionflag attributes.
      *
-     * @parameter expression="${generate-webhelp.meta.robots}" 
+     * @parameter expression="${generate-xhtml.meta.robots}" 
      */
     private String metaRobots;
 
     /**
      * Controls whether the version string is used as part of the Disqus identifier.
      *
-     * @parameter expression="${generate-webhelp.use.version.for.disqus}" default-value="0"
+     * @parameter expression="${generate-xhtml.use.version.for.disqus}" default-value="0"
      */
     private String useVersionForDisqus;
 
     /**
      * Controls whether the disqus identifier is used.
      *
-     * @parameter expression="${generate-webhelp.use.disqus.id}" default-value="1"
+     * @parameter expression="${generate-xhtml.use.disqus.id}" default-value="1"
      */
     private String useDisqusId;
 
     /**
      * Controls the branding of the output.
      *
-     * @parameter expression="${generate-webhelp.branding}" default-value="rackspace"
+     * @parameter expression="${generate-xhtml.branding}" default-value="rackspace"
      */
     private String branding;
 
     /**
      * Controls whether Disqus comments appear at the bottom of each page.
      *
-     * @parameter expression="${generate-webhelp.enable.disqus}" default-value="0"
+     * @parameter expression="${generate-xhtml.enable.disqus}" default-value="0"
      */
     private String enableDisqus;
 
     /**
      * A parameter used by the Disqus comments.
      *
-     * @parameter expression="${generate-webhelp.disqus.shortname}" default-value=""
+     * @parameter expression="${generate-xhtml.disqus.shortname}" default-value=""
      */
     private String disqusShortname;
 
     /**
      * A parameter used to control whether to include Google Analytics goo.
      *
-     * @parameter expression="${generate-webhelp.enable.google.analytics}" default-value=""
+     * @parameter expression="${generate-xhtml.enable.google.analytics}" default-value=""
      */
     private String enableGoogleAnalytics;
 
     /**
      * A parameter used to control whether to include Google Analytics goo.
      *
-     * @parameter expression="${generate-webhelp.google.analytics.id}" default-value=""
+     * @parameter expression="${generate-xhtml.google.analytics.id}" default-value=""
      */
     private String googleAnalyticsId;
 
     /**
      * A parameter used to specify the path to the pdf for download in webhelp.
      *
-     * @parameter expression="${generate-webhelp.pdf.url}" default-value=""
+     * @parameter expression="${generate-xhtml.pdf.url}" default-value=""
      */
     private String pdfUrl;
 
     /**
      * @parameter 
-     *     expression="${generate-webhelp.canonicalUrlBase}"
+     *     expression="${generate-xhtml.canonicalUrlBase}"
      *     default-value=""
      */
     private String canonicalUrlBase;
@@ -140,7 +140,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
      * A parameter used to specify the presence of extensions metadata.
      *
      * @parameter 
-     *     expression="${generate-webhelp.includes}" 
+     *     expression="${generate-xhtml.includes}" 
      *     default-value=""
      */
     private String transformDir;   
@@ -148,7 +148,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
     /**
      * A parameter used to configure how many elements to trim from the URI in the documentation for a wadl method.
      *
-     * @parameter expression="${generate-webhelp.trim.wadl.uri.count}" default-value=""
+     * @parameter expression="${generate-xhtml.trim.wadl.uri.count}" default-value=""
      */
     private String trimWadlUriCount;
 
@@ -158,7 +158,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
      * Otherwise, in /generated-resources/xml/xslt/path/to/docbook-src, e.g.
      * /generated-resources/xml/xslt/src/docbkx/foo.wadl
      *
-     * @parameter expression="${generate-webhelp.compute.wadl.path.from.docbook.path}" default-value="0"
+     * @parameter expression="${generate-xhtml.compute.wadl.path.from.docbook.path}" default-value="0"
      */
     private String computeWadlPathFromDocbookPath;
 
@@ -166,28 +166,30 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
       * Sets the email for TildeHash (internal) comments. Note that this
       * doesn't affect Disqus comments.
       *
-      * @parameter expression="${generate-webhelp.feedback.email}" default-value=""
+      * @parameter expression="${generate-xhtml.feedback.email}" default-value=""
       */
     private String feedbackEmail;
 
      /**
       * Controls whether or not the social icons are displayed.
       *
-      * @parameter expression="${generate-webhelp.social.icons}" default-value="0"
+      * @parameter expression="${generate-xhtml.social.icons}" default-value="0"
       */
     private String socialIcons;
     /**
      * A parameter used to specify the path to the lega notice in webhelp.
      *
-     * @parameter expression="${generate-webhelp.legal.notice.url}" default-value="index.html"
+     * @parameter expression="${generate-xhtml.legal.notice.url}" default-value="index.html"
      */
     private String legalNoticeUrl;
     
     
-    
-    
-    
-    
+        /**
+     * A parameter used to specify the path to the lega notice in webhelp.
+     *
+     * @parameter expression="${generate-xhtml.chunk.section.depth}" 
+     */
+    private String chunkSectionDepth;
     
 
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
@@ -327,7 +329,9 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
    if(trimWadlUriCount != null){
 	map.put("trim.wadl.uri.count",trimWadlUriCount);
     }
-
+  if(chunkSectionDepth != null){
+	map.put("chunk.section.depth",chunkSectionDepth);
+    }
 	map.put("social.icons",socialIcons);
 
 //   sourceDocBook = new File(sourceFilename);
