@@ -24,7 +24,6 @@
                 <xsl:when
                     test="
                             (./db:info/raxm:metadata//raxm:type = 'concept' and not(.//db:section/db:info/raxm:metadata)) (: Concepts that don't have descendant concepts stop chunking :)
-                            or ancestor::*[./db:info/raxm:metadata//raxm:type = 'tutorial']                               (: Tutorials stop chunking after the first section. Tho there shouldn't be section/sections anyway :)
                             ">
                     <xsl:processing-instruction name="dbhtml">stop-chunking</xsl:processing-instruction>
                 </xsl:when>
@@ -33,5 +32,24 @@
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
     </xsl:template>
+    
+
+    <xsl:template match="db:section">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:choose>
+                <xsl:when
+                    test="
+                    ancestor::*[./db:info/raxm:metadata//raxm:type = 'tutorial']                               (: Tutorials stop chunking after the first section. Tho there shouldn't be section/sections anyway :)
+                    ">
+                    <xsl:processing-instruction name="dbhtml">stop-chunking</xsl:processing-instruction>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
+            <xsl:apply-templates select="node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+
 
 </xsl:stylesheet>
