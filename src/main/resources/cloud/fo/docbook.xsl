@@ -39,7 +39,8 @@
   <xsl:param name="coverLogoLeft"/>
   <xsl:param name="coverLogoTop"/>
   <xsl:param name="coverUrl"/>
-  
+  <xsl:param name="secondaryCoverLogoPath"/>
+
   <xsl:param name="draft.mode">no</xsl:param>
 
   <xsl:param name="alignment">start</xsl:param>
@@ -887,12 +888,15 @@
 	  </xsl:choose>
       </xsl:variable>
 
-      <xsl:if test="$builtForOpenStack != 0">
+      <xsl:if test="$builtForOpenStack != 0 or $secondaryCoverLogoPath != ''">
 	<fo:block-container absolute-position="fixed" left="1in" top="8in">
 	  <fo:block>
 	    <fo:external-graphic>
 	      <xsl:attribute name="src">
-		<xsl:value-of select="concat('url(',$cloud.api.cc.image.dir,'/../built-for-openstack.svg)')"/>
+		<xsl:choose>
+		  <xsl:when test="$secondaryCoverLogoPath != 0">url(<xsl:value-of select="$secondaryCoverLogoPath"/>)</xsl:when>
+		  <xsl:otherwise><xsl:value-of select="concat('url(',$cloud.api.cc.image.dir,'/../built-for-openstack.svg)')"/></xsl:otherwise>
+		</xsl:choose>
 	      </xsl:attribute>
 	    </fo:external-graphic>
 	  </fo:block>

@@ -86,6 +86,15 @@ public abstract class PDFMojo extends AbstractFoMojo {
      */
     private String coverLogoPath;
 
+
+    /**
+     * Path to an alternative cover logo.
+     *
+     * @parameter expression="${generate-pdf.secondaryCoverLogoPath}" default-value=""
+     */
+    private String secondaryCoverLogoPath;
+
+
     /**
      * Distance from the left edge of the page at which the 
      * cover logo is displayed. 
@@ -324,6 +333,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	transformer.setParameter("branding", branding);
 	transformer.setParameter("builtForOpenStack", builtForOpenStack);
 	transformer.setParameter("coverLogoPath", coverLogoPath);
+	transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
 	transformer.setParameter("coverLogoLeft", coverLogoLeft);
 	transformer.setParameter("coverLogoTop", coverLogoTop);
 	transformer.setParameter("coverUrl", coverUrl);
