@@ -323,9 +323,9 @@ These problems go away when you add this IE=7 mode meta tag.
 	    <xsl:comment></xsl:comment>
 	  </script>
         <!-- Google Analytics Social Button Tracking -->
-	  <script type="text/javascript" src="http://www.tabpress.com/_js/ga_social_tracking.js">
-	      <xsl:comment></xsl:comment>
-	  </script>
+	  <!-- <script type="text/javascript" src="http://www.tabpress.com/_js/ga_social_tracking.js"> -->
+	  <!--     <xsl:comment></xsl:comment> -->
+	  <!-- </script> -->
 	    <!-- Load Twitter JS-API asynchronously -->
 	  <script>
 	    (function(){var twitterWidgets = document.createElement('script');
