@@ -16,6 +16,21 @@ http://wiki.openstack.org/Documentation/HowTo#Tools_Overview
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.4.0 (August 13, 2012)
+============================================================
+- Chinese fonts now supported in pdf output.
+- WADL2DocBook: Fixed bug where query params were copied down the WADL
+  tree.
+- Removed reference to tabpress.com js file which was not loading
+  causing pages not to load. Unfortunately, this disables all social
+  icons for now.
+- Added support for a secondaryCoverLogoPath param that allows the
+  user to specify a second logo that appears on the bottom left of the
+  pdf.
+- Fixed bug where cross-references were not resolved correctly in the
+  revision history table.
+- Fixed bug where parameters were omitted in some cases. 
+
 clouddocs-maven-plugin 1.3.1 (May 30, 2012)
 ============================================================
 
