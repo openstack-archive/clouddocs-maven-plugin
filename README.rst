@@ -16,6 +16,15 @@ http://wiki.openstack.org/Documentation/HowTo#Tools_Overview
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.5.0 (August 14, 2012)
+============================================================
+- Support build-time search and replace via a configuration file. To
+  use add a parameter like the following to your pom.xml:
+  <replacementsFile>replacements.config</replacementsFile>
+  Where replacements.config is a file in the same directory as your
+  pom.xml. See the example replacements.config file for documentation
+  on how to use it.  
+
 clouddocs-maven-plugin 1.4.0 (August 13, 2012)
 ============================================================
 - Chinese fonts now supported in pdf output.
