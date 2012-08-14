@@ -406,6 +406,59 @@
         </p:group>
     </p:declare-step>
 
+	<p:declare-step 
+		xmlns:l="http://xproc.org/library" 
+		xml:id="search-and-replace"
+		xmlns:c="http://www.w3.org/ns/xproc-step" 
+		type="l:search-and-replace"  
+		name="search-and-replace-step">
+      <p:input port="source" primary="true" sequence="true"/>
+      <p:output port="result" sequence="true">
+      	<p:pipe step="group" port="result"/>
+      </p:output>
+   
+        <p:input port="parameters" kind="parameter"/>
+        <ut:parameters name="params"/>
+        <p:sink/>
+   
+        <p:group name="group">
+            <p:output port="result" primary="true">
+                <p:pipe step="replace" port="result"/>
+            </p:output>
+
+   	        <p:variable name="inputSrcFile" select="//c:param[@name = 'inputSrcFile']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+   	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+            <p:variable name="replacementsFile" select="//c:param[@name = 'replacementsFile']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+			<cx:replace-text name="replace">
+            	<p:input port="source">
+                    <p:pipe step="search-and-replace-step" port="source"/>
+                </p:input>
+				<p:with-option name="replacements.file" select="$replacementsFile">
+	  			</p:with-option>
+			</cx:replace-text>
+			<p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
+               <p:with-option name="href"
+                select="concat('file://',$project.build.directory,'/docbkx/',$inputSrcFile)"
+                />
+            </p:store>
+		</p:group>   	        
+   </p:declare-step>
+
+   <!-- Search and replace calabash extension -->
+   <p:declare-step 
+   		type="cx:replace-text" 
+   		xml:id="replace-text">
+      <p:input port="source" primary="true" sequence="true"/>
+      <p:output port="result" primary="true" sequence="true"/>
+      <p:option name="replacements.file" cx:type="xsd:string"/>
+   </p:declare-step>
+    
     <!--+========================================================+
 | Step parameters
 |

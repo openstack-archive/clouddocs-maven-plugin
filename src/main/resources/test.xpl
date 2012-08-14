@@ -49,6 +49,11 @@
   <l:extensions-info/>
   
   <cx:message>
+    <p:with-option name="message" select="'Making replacements'"/>
+  </cx:message>
+  <l:search-and-replace/>
+    
+  <cx:message>
     <p:with-option name="message" select="'Normalize wadls'"/>
   </cx:message>
 

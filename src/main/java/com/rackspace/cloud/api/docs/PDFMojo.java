@@ -156,6 +156,13 @@ public abstract class PDFMojo extends AbstractFoMojo {
      *     default-value=""
      */
     private String canonicalUrlBase;
+    
+    /**
+     * @parameter 
+     *     expression="${generate-pdf.replacementsFile}"
+     *     default-value=""
+     */
+    private String replacementsFile;
 
     /**
      * 
@@ -390,7 +397,10 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    }
 	    transformer.setParameter("branding", branding);
 
-            transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
+            //transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
+	    	String srcFilename = sourceDocBook.getName();
+	    	getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory+"/docbkx/"+srcFilename);
+	    	transformer.setParameter("docbook.infile", this.projectBuildDirectory+"/docbkx/"+srcFilename);
             transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
         }
         catch (TransformerConfigurationException e)
@@ -416,8 +426,10 @@ public abstract class PDFMojo extends AbstractFoMojo {
         
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);
+        map.put("replacementsFile", replacementsFile);
         map.put("failOnValidationError", failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
+        map.put("inputSrcFile", inputFilename);
         //String outputDir=System.getProperty("project.build.outputDirectory ");        
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
