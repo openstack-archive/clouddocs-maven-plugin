@@ -177,14 +177,6 @@
 
 <xsl:template name="t:javascript">
   <xsl:param name="node" select="."/>
-
-  <xsl:if test="//db:annotation">
-    <script type="text/javascript" src="{concat($resource.root, 'js/AnchorPosition.js')}">&#160;</script>
-    <script type="text/javascript" src="{concat($resource.root, 'js/PopupWindow.js')}">&#160;</script>
-    <script type="text/javascript" src="{concat($resource.root, 'js/annotation.js')}">&#160;</script>
-  </xsl:if>
-
-  <script type="text/javascript" src="{concat($resource.root, 'js/dbmodnizr.js')}">&#160;</script>
   
 </xsl:template>
 
@@ -204,6 +196,9 @@
     </xsl:copy>
   </xsl:template>
   
+  <xsl:template name="t:css"/>    
+  
+ 
   <xsl:template match="/" priority="10">
     
     <xsl:choose>
@@ -590,24 +585,54 @@
 <xsl:template name="t:user-head-content">
   <xsl:param name="node" select="."/>
   
+  <script type="text/javascript" src="{$IndexWar}/common/scripts/jquery-1.4.3.min.js"><xsl:comment/></script>
+  <script type="text/javascript" src="{$IndexWar}/common/scripts/jquery-hoverintent.js"><xsl:comment/></script>
+  <script type="text/javascript" src="{$IndexWar}/common/scripts/rackspacemin-1332945039.js"><xsl:comment/></script>
+  
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/docbook/css/default.css"/>
   <link rel="shortcut icon" href="{$IndexWar}/common/images/favicon-{$branding}.ico" type="image/x-icon"/>
-<script type="text/javascript" src="http://rackspace.com/min/?g=js-header&amp;1332945039">&#160;</script>
-<link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?g=css&amp;1333990221"/>
-<script type="text/javascript" src="{$IndexWar}/common/scripts/newformat.js">&#160;</script>
-<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/custom.css"/>
-<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery-ui-1.8.2.custom.css"/>
-<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery.treeview.css"/>
-<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery.qtip.css"/>
-<link rel="stylesheet" type="text/css" href="http://rackspace.com/min/?f=css/managed.rackspace.css"/>
-<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/positioning-rackspace.css"/>
-<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/newformat.css"/>
-<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/style-new.css"/>
-<link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/rackspace-header1.css"/>
-<!--  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/hashcode.css"/> -->
-<script type="text/javascript" src="{$IndexWar}/common/scripts/docs.js">&#160;</script>
-<script type="text/javascript" src="{$IndexWar}/common/scripts/rackspace-header2.js">&#160;</script>
-<script type="text/javascript" src="{$IndexWar}/common/scripts/smartbutton.js">&#160;</script>
-<script type="text/javascript" src="{$IndexWar}/common/scripts/munchkin.js">&#160;</script>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/rackspace-min1333990221.css"/>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/custom.css"/>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery-ui-1.8.2.custom.css"/>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery.treeview.css"/>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/jquery.qtip.css"/>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/managed-rackspace.css"/>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/positioning-rackspace.css"/>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/newformat.css"/>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/style-new.css"/>
+  <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/rackspace-header1.css"/>
+  <link type="text/css" rel="stylesheet" href="{$IndexWar}/common/syntaxhighlighter/styles/shCoreDefault.css"/>
+  <link type="text/css" rel="stylesheet" href="{$IndexWar}/common/css/rax-overrides.css"/>
+  
+  
+  <xsl:if test="//db:annotation">
+    <script type="text/javascript" src="{concat($resource.root, 'js/AnchorPosition.js')}"><xsl:comment/></script>
+    <script type="text/javascript" src="{concat($resource.root, 'js/PopupWindow.js')}"><xsl:comment/></script>
+    <script type="text/javascript" src="{concat($resource.root, 'js/annotation.js')}"><xsl:comment/></script>
+  </xsl:if>
+  <script type="text/javascript" src="{concat($resource.root, 'js/dbmodnizr.js')}"><xsl:comment/></script>
+  <script type="text/javascript" src="{$IndexWar}/common/scripts/newformat.js"><xsl:comment/></script> 
+  <script type="text/javascript" src="{$IndexWar}/common/scripts/docs.js"><xsl:comment/></script>
+  <script type="text/javascript" src="{$IndexWar}/common/scripts/rackspace-header2.js"><xsl:comment/></script>
+  <script type="text/javascript" src="{$IndexWar}/common/scripts/smartbutton.js"><xsl:comment/></script>
+  <script type="text/javascript" src="{$IndexWar}/common/scripts/munchkin.js"><xsl:comment/></script>
+  <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
+  <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shSelect.js')}"><xsl:comment/></script>
+  
+  <script>
+   $(function(){
+	  $.getJSON("/new/IndexServlet?headerfooter=1",{"headerfooter" : "1"},function(data){
+		  getHeader(data);
+	   });
+    });
+  </script>
+  <script>
+    $(function(){
+	   $.getJSON("/new/IndexServlet?headerfooter=3",{"headerfooter" : "3"},function(data){
+		 getFooter(data,"3");
+	   });
+    });
+  </script>
   
   <xsl:if test="$enable.google.analytics = '1' and not($google.analytics.id = '')">
     <script type="text/javascript">
@@ -620,30 +645,12 @@
   </xsl:if>
   
   <xsl:if test="$node//db:programlisting[@language] or $node//db:screen[@language] or $node//db:literallayout[@language]">
-    <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/shCoreDefault.css')}"/> 
-    <link type="text/css" rel="stylesheet" href="{concat($IndexWar,'/common/syntaxhighlighter/styles/rax-overrides.css')}"/>
-    <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shCore.js')}"><xsl:comment/></script>
-    <script type="text/javascript" src="{concat($IndexWar,'/common/syntaxhighlighter/scripts/shSelect.js')}"><xsl:comment/></script>
     <script type="text/javascript">
                SyntaxHighlighter.config.space = '&#32;';
                SyntaxHighlighter.all();
     </script>      
   </xsl:if>
-
-<script>
-    $(function(){
-	 $.getJSON("<xsl:value-of select="$IndexWar"/>/IndexServlet?headerfooter=1",{"headerfooter" : "1"},function(data){
-		 getHeader(data);
-	 });
-    });
-  </script><script>
-    $(function(){
-	 $.getJSON("<xsl:value-of select="$IndexWar"/>/IndexServlet?headerfooter=2",{"headerfooter" : "2"},function(data){
-		 getFooter(data);
-	 });
-     });
-  </script>  
-
+  
 </xsl:template>
 
 	<!-- Overriding this so I can add the preferred classes and ids -->
