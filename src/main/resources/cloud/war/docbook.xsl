@@ -601,8 +601,9 @@
   <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/newformat.css"/>
   <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/style-new.css"/>
   <link rel="stylesheet" type="text/css" href="{$IndexWar}/common/css/rackspace-header1.css"/>
-  <link type="text/css" rel="stylesheet" href="{$IndexWar}/common/syntaxhighlighter/styles/shCoreDefault.css"/>
   <link type="text/css" rel="stylesheet" href="{$IndexWar}/common/css/rax-overrides.css"/>
+  <link type="text/css" rel="stylesheet" href="{$IndexWar}/common/syntaxhighlighter/styles/shCoreDefault.css"/>
+
   
   
   <xsl:if test="//db:annotation">

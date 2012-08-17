@@ -548,10 +548,33 @@
             <p:iteration-source>
                 <p:pipe step="generate-war-xslt" port="secondary"/>
             </p:iteration-source>
-            <p:store encoding="utf-8" indent="false"
-                omit-xml-declaration="false">
-                <p:with-option name="href" select="base-uri(/*)"/>
-            </p:store>
+            <p:choose>
+                <p:when test="ends-with(base-uri(/*),'.xml')">
+                    <p:store encoding="utf-8" indent="true" method="xml" 
+                        omit-xml-declaration="false">
+                        <p:with-option name="href" select="base-uri(/*)"/>
+                    </p:store>
+                </p:when>
+                <p:otherwise>
+                    <p:xslt>
+                        <p:input port="stylesheet">
+                            <p:document href="target/docbkx/cloud/war/xhtml2html.xsl"/>
+                        </p:input>
+                    </p:xslt>
+                   <!--
+                       <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">                  
+
+                        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" 
+                        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"                        
+                   -->
+                    <p:store encoding="utf-8" indent="true" method="xml" 
+                        omit-xml-declaration="true" 
+                        doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" 
+                        doctype-system="http://www.w3.org/TR/html4/loose.dtd">
+                        <p:with-option name="href" select="base-uri(/*)"/>
+                    </p:store>
+                </p:otherwise>
+            </p:choose>
         </p:for-each>
 
     </p:declare-step>
