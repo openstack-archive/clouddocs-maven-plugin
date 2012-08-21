@@ -251,7 +251,7 @@
       <products xmlns="">
         <xsl:choose>
           <xsl:when test="$rootid = ''">
-            <xsl:for-each-group select="$chunks|$resource-lists" group-by="db:info/raxm:metadata/raxm:products/raxm:product">
+            <xsl:for-each-group select="$chunks|$resource-lists" group-by="db:info/raxm:metadata//raxm:product">
               <product>
                 <id><xsl:value-of select="f:productnumber(current-grouping-key())"/><!--                  <xsl:choose>
                     <xsl:when test="current-grouping-key() = 'servers'">1</xsl:when>
