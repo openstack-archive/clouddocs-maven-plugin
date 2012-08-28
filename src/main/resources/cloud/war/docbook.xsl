@@ -28,6 +28,7 @@
   <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
   
   <xsl:param name="local.l10n.xml" select="document('')"/>
+  
   <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
     <l:l10n 
       xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
@@ -152,7 +153,7 @@
     <tocparam xmlns="http://docbook.org/ns/docbook" path="section" toc="0"/>
     <tocparam xmlns="http://docbook.org/ns/docbook" path="set" toc="0" title="1"/>
   </xsl:param>
-  
+    
   <!-- TEMPORARY HACK!!! -->
   <xsl:template match="db:glossterm" name="db:glossterm">
     <xsl:param name="firstterm"/>
@@ -427,7 +428,8 @@
     <xsl:variable name="nchunk" select="($chunk/following::h:chunk|$chunk/descendant::h:chunk)[1]"/>
     <xsl:variable name="pchunk" select="($chunk/preceding::h:chunk|$chunk/parent::h:chunk)[last()]"/>
     <xsl:variable name="uchunk" select="$chunk/ancestor::h:chunk[1]"/>
-    
+    <xsl:variable name="prodname" select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])" />
+
     <!--
     <xsl:message>Creating chunk: <xsl:value-of select="concat($base.dir,$chunkfn)"/></xsl:message>
     -->
@@ -436,6 +438,7 @@
       <html>
         <xsl:call-template name="t:head">
           <xsl:with-param name="node" select="."/>
+         <xsl:with-param name="prodname" select="$prodname"/>
         </xsl:call-template>
         <body  class="hybrid-home">
 
@@ -485,7 +488,10 @@
 								
 								<div class="body">
 								  <!-- Title and breadcrumbs: WIP -->
+								  <!--  
 								  <h1><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></h1>
+								  -->
+								  <h1><xsl:value-of select="$prodname"/></h1>
 <!--                    <xsl:choose>
                       <xsl:when test="(ancestor-or-self::*/db:info//raxm:product[1])[1] = 'servers'">
                         <h1>Cloud Servers</h1>
@@ -1545,6 +1551,71 @@ WARNING: No more than six steps are allowed in a tutorial.
         </xsl:choose>
       </xsl:with-param>
     </xsl:call-template>
+  </xsl:template>
+
+
+  <xsl:template name="t:head">
+    <xsl:param name="node" select="."/>
+    <xsl:param name="prodname" />
+    <head>
+      <title>
+        <xsl:value-of select="f:title($node)"/><xsl:text> - </xsl:text><xsl:value-of select="$prodname"/>
+      </title>
+
+      <xsl:if test="$html.base != ''">
+        <base href="{$html.base}"/>
+      </xsl:if>
+
+      <xsl:call-template name="t:system-head-content">
+        <xsl:with-param name="node" select="$node"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="t:head-meta">
+        <xsl:with-param name="node" select="$node"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="t:head-links">
+        <xsl:with-param name="node" select="$node"/>
+      </xsl:call-template>
+
+      <xsl:if test="($draft.mode = 'yes'
+                     or ($draft.mode = 'maybe' and
+		         $node/ancestor-or-self::*[@status][1]/@status = 'draft'))
+                    and $draft.watermark.image != ''">
+        <style type="text/css">
+          body { background-image: url('<xsl:value-of select="$draft.watermark.image"/>');
+            background-repeat: no-repeat;
+            background-position: center center;
+            /* The following property make the watermark "fixed" on the page. */
+            /* I think that's just a bit too distracting for the reader... */
+            /* background-attachment: fixed; */
+          }
+        </style>
+      </xsl:if>
+
+      <xsl:if test="$html.stylesheets != ''">
+        <xsl:for-each select="tokenize($html.stylesheets, '\s+')">
+          <link rel="stylesheet" href="{.}">
+            <xsl:choose>
+              <xsl:when test="ends-with(.,'.css')">
+                <xsl:attribute name="type" select="'text/css'"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- ??? what type is this ??? -->
+              </xsl:otherwise>
+            </xsl:choose>
+          </link>
+        </xsl:for-each>
+      </xsl:if>
+
+      <xsl:call-template name="t:javascript">
+        <xsl:with-param name="node" select="$node"/>
+      </xsl:call-template>
+
+      <xsl:call-template name="t:user-head-content">
+        <xsl:with-param name="node" select="$node"/>
+      </xsl:call-template>
+    </head>
   </xsl:template>
   
 </xsl:stylesheet>
