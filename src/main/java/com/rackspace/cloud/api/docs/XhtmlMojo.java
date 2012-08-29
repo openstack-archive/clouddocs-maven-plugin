@@ -116,6 +116,13 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
     private String googleAnalyticsId;
 
     /**
+     * A parameter used to control whether to include Google Analytics goo.
+     *
+     * @parameter expression="${generate-xhtml.google.analytics.domain}" default-value=""
+     */    
+    private String googleAnalyticsDomain;
+    
+    /**
      * A parameter used to specify the path to the pdf for download in webhelp.
      *
      * @parameter expression="${generate-xhtml.pdf.url}" default-value=""
@@ -306,6 +313,10 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
         if (googleAnalyticsId != null) {
             map.put("google.analytics.id", googleAnalyticsId);
         }
+        System.out.println("~!@~!@~!@~!@googleAnalyticsDomain="+googleAnalyticsDomain+"~!@~!@~!@~!@");
+        if(googleAnalyticsDomain != null){
+        	map.put("google.analytics.domain", googleAnalyticsDomain);
+        }       
         if (pdfUrl != null) {
             map.put("pdf.url", pdfUrl);
         }
@@ -316,7 +327,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
     if(canonicalUrlBase != null){
 	map.put("canonical.url.base",canonicalUrlBase);
     }
-
+    System.out.println("^^^^^^^^^^^^^security="+security+"^^^^^^^^^^^^^^");
     if(security != null){
 	map.put("security",security);
     }

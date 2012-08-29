@@ -81,7 +81,14 @@
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:param>
- 	
+  <xsl:param name="google.analytics.domain">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace'">.rackspace.com</xsl:when>
+      <xsl:when test="$branding = 'openstack'">.openstack.org</xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+  </xsl:param> 	
+  
 	<xsl:param name="enable.disqus">0</xsl:param>
 	<xsl:param name="disqus.shortname">
 		<xsl:choose>
@@ -645,6 +652,12 @@
     <script type="text/javascript">
 	    var _gaq = _gaq || [];
 	    _gaq.push(['_setAccount', '<xsl:value-of select="$google.analytics.id"/>']);
+	    <xsl:choose>
+	        <xsl:when test="$google.analytics.domain = ''"><!-- Do nothing --></xsl:when>
+	        <xsl:otherwise>
+	    _gaq.push(['_setDomainName', '<xsl:value-of select="$google.analytics.domain"/>']);	        
+	        </xsl:otherwise>	
+	    </xsl:choose>    
 	  </script>
     <script type="text/javascript" src="{$IndexWar}/common/scripts/ga.js">
 	    <xsl:comment></xsl:comment>

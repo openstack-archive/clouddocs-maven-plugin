@@ -62,6 +62,13 @@
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:param>
+  <xsl:param name="google.analytics.domain">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace'">.rackspace.com</xsl:when>
+      <xsl:when test="$branding = 'openstack'">.openstack.org</xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+  </xsl:param>
 
   <xsl:param name="security">external</xsl:param>
   <xsl:param name="root.attr.status"><xsl:if test="/*[@status = 'draft']">draft;</xsl:if></xsl:param>
