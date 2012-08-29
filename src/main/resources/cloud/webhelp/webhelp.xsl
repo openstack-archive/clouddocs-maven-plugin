@@ -318,6 +318,12 @@ These problems go away when you add this IE=7 mode meta tag.
 	  <script type="text/javascript">
 	    var _gaq = _gaq || [];
 	    _gaq.push(['_setAccount', '<xsl:value-of select="$google.analytics.id"/>']);
+	    <xsl:choose>
+	        <xsl:when test="$google.analytics.domain = ''"><!-- Do nothing --></xsl:when>
+	        <xsl:otherwise>
+	    _gaq.push(['_setDomainName', '<xsl:value-of select="$google.analytics.domain"/>']);	        
+	        </xsl:otherwise>	
+	    </xsl:choose>  
 	  </script>
 	  <script type="text/javascript" src="../common/ga.js">
 	    <xsl:comment></xsl:comment>
