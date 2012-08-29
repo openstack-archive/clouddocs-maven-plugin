@@ -313,7 +313,6 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
         if (googleAnalyticsId != null) {
             map.put("google.analytics.id", googleAnalyticsId);
         }
-        System.out.println("~!@~!@~!@~!@googleAnalyticsDomain="+googleAnalyticsDomain+"~!@~!@~!@~!@");
         if(googleAnalyticsDomain != null){
         	map.put("google.analytics.domain", googleAnalyticsDomain);
         }       
@@ -327,7 +326,6 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
     if(canonicalUrlBase != null){
 	map.put("canonical.url.base",canonicalUrlBase);
     }
-    System.out.println("^^^^^^^^^^^^^security="+security+"^^^^^^^^^^^^^^");
     if(security != null){
 	map.put("security",security);
     }
