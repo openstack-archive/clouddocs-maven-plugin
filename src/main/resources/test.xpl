@@ -35,7 +35,11 @@
       <p:document href="classpath:/rng/rackbook.rng"/>
     </p:input>
   </l:validate-transform>
-
+  
+  <cx:message>
+    <p:with-option name="message" select="'copying and transforming images'"/>
+  </cx:message>
+  <l:copy-and-transform-images/>
   <cx:message>
     <p:with-option name="message" select="'Performing programlisting keep together'"/>
   </cx:message>

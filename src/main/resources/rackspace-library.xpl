@@ -513,4 +513,95 @@
         </p:xslt>
         
     </p:declare-step>
+    
+    <p:declare-step 
+		xmlns:l="http://xproc.org/library" 
+		xmlns:c="http://www.w3.org/ns/xproc-step"
+		xml:id="copy-and-transform-images"
+		type="l:copy-and-transform-images"  
+		name="copy-and-transform-images-step">
+		
+		<p:input port="source" primary="true" sequence="true"/>
+	    <p:output port="result" primary="true"/>
+        <p:input port="parameters" kind="parameter"/>
+        <ut:parameters name="params"/>
+        <p:sink/>
+   
+		<p:identity>
+			<p:input port="source">
+				<p:pipe step="copy-and-transform-images-step" port="source"/>
+			</p:input>
+		</p:identity>
+		<p:group name="loop-grp">
+			<p:output port="result" primary="true" sequence="true">
+				<p:pipe step="copy-and-transform-images-step" port="source"/>
+			</p:output>
+			<p:output port="secondary" primary="false" sequence="true">
+				<p:pipe step="loop" port="result"/>
+			</p:output>
+            
+			<p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+				<p:pipe step="params" port="parameters"/>
+			</p:variable>
+   	        <p:variable name="inputSrcFile" select="//c:param[@name = 'inputSrcFile']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+			<p:variable name="image.copy.dir" select="//c:param[@name = 'imageCopyDir']/@value">
+				<p:pipe step="params" port="parameters"/>
+			</p:variable>
+			
+			<p:for-each name="loop">
+				<p:iteration-source select="//*:imagedata"/>
+				<p:output port="result" primary="true"/>
+				
+				<p:variable name="filerefVal" select="//*:imagedata/@fileref/string()"/>
+				<!-- cx:message>
+					<p:with-option name="message" select="concat('file://',$project.build.directory,'/',$image.copy.dir)"/>
+				</cx:message -->
+				<p:try>
+					<p:group>
+						<p:choose>
+							<p:when test="string-length($image.copy.dir)&gt;1">
+								<cx:copy-transform>
+									<!-- p:with-option name="href" select="concat('file://',substring-before($project.build.directory,'/target'),'/src/',$filerefVal,'')"/ -->
+									<p:with-option name="href" select="concat('file://./src/',$filerefVal,'')"/>
+									<!-- p:with-option name="target" select="concat('file://',$project.build.directory,'/docbkx/salman')"/ -->
+									<p:with-option name="target" select="concat('file://',$project.build.directory,'/',$image.copy.dir)"/>
+									<p:with-option name="inputFileName" select="concat($inputSrcFile,'')"/>
+								</cx:copy-transform>
+							</p:when>
+						</p:choose>  	 
+						<p:identity>
+						   <p:input port="source">
+							   <p:inline><cx:result>Valid</cx:result></p:inline>
+							</p:input>
+						</p:identity>
+						<!-- cx:message>
+							<p:with-option name="message" select="concat($filerefVal,' file was FOUND')"/>
+						</cx:message -->
+					</p:group>
+					<p:catch>
+						<p:identity>
+						   <p:input port="source">
+							   <p:inline><cx:result>Invalid</cx:result></p:inline>
+							</p:input>
+						</p:identity>
+						<!-- cx:message>
+							<p:with-option name="message" select="concat($filerefVal,' file was NOT FOUND')"/>
+						</cx:message -->
+					</p:catch>
+				</p:try>
+			</p:for-each>				
+		</p:group>
+	</p:declare-step>
+   <!-- Search and replace calabash extension -->
+	<p:declare-step type="cx:copy-transform"
+		xml:id="copy-transform">
+	    <p:output port="result" primary="false"/>
+	    <p:option name="href" required="true" cx:type="xsd:anyURI"/>
+		<p:option name="target" required="true" cx:type="xsd:anyURI"/>
+		<p:option name="inputFileName" cx:type="xsd:string"/>
+	    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
+	 </p:declare-step>
+    
 </p:library>
