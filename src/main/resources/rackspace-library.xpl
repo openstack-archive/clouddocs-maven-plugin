@@ -539,7 +539,10 @@
 			<p:output port="secondary" primary="false" sequence="true">
 				<p:pipe step="loop" port="result"/>
 			</p:output>
-            
+
+            <p:variable name="paramOutputType" select="//c:param[@name = 'outputType']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
 			<p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
 				<p:pipe step="params" port="parameters"/>
 			</p:variable>
@@ -560,17 +563,18 @@
 				</cx:message -->
 				<p:try>
 					<p:group>
-						<p:choose>
-							<p:when test="string-length($image.copy.dir)&gt;1">
+						<!-- p:choose>
+							<p:when test="string-length($image.copy.dir)&gt;1" -->
 								<cx:copy-transform>
 									<!-- p:with-option name="href" select="concat('file://',substring-before($project.build.directory,'/target'),'/src/',$filerefVal,'')"/ -->
 									<p:with-option name="href" select="concat('file://./src/',$filerefVal,'')"/>
 									<!-- p:with-option name="target" select="concat('file://',$project.build.directory,'/docbkx/salman')"/ -->
 									<p:with-option name="target" select="concat('file://',$project.build.directory,'/',$image.copy.dir)"/>
 									<p:with-option name="inputFileName" select="concat($inputSrcFile,'')"/>
+									<p:with-option name="outputType" select="concat($paramOutputType,'')"/>
 								</cx:copy-transform>
-							</p:when>
-						</p:choose>  	 
+							<!-- /p:when>
+						</p:choose -->
 						<p:identity>
 						   <p:input port="source">
 							   <p:inline><cx:result>Valid</cx:result></p:inline>
@@ -601,6 +605,7 @@
 	    <p:option name="href" required="true" cx:type="xsd:anyURI"/>
 		<p:option name="target" required="true" cx:type="xsd:anyURI"/>
 		<p:option name="inputFileName" cx:type="xsd:string"/>
+		<p:option name="outputType" cx:type="xsd:string"/>
 	    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
 	 </p:declare-step>
     

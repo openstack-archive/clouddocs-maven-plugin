@@ -430,6 +430,8 @@ public abstract class PDFMojo extends AbstractFoMojo {
         map.put("failOnValidationError", failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
+        map.put("outputType", "pdf");
+
         //String outputDir=System.getProperty("project.build.outputDirectory ");        
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }

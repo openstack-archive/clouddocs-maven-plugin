@@ -424,6 +424,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("failOnValidationError", this.failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
+        map.put("outputType", "html");
         
         int lastSlash=inputFilename.lastIndexOf("/");
         
