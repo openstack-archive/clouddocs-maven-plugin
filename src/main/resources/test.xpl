@@ -16,6 +16,12 @@
     <p:with-option name="message" select="'Entering xproc pipeline'"/>
   </cx:message>
 
+  <cx:message>
+      <p:with-option name="message" select="'Validating DocBook version'"/>
+  </cx:message>
+
+  <l:check-docbook-version/>
+
   <l:validate-transform name="validate-pre-xinclude">
     <p:input port="schema">
       <p:document href="classpath:/rng/rackbook.rng"/>
@@ -35,11 +41,12 @@
       <p:document href="classpath:/rng/rackbook.rng"/>
     </p:input>
   </l:validate-transform>
-  
+
+  <!--
   <cx:message>
     <p:with-option name="message" select="'copying and transforming images'"/>
   </cx:message>
-  <l:copy-and-transform-images/>
+  <l:copy-and-transform-images/> -->
   <cx:message>
     <p:with-option name="message" select="'Performing programlisting keep together'"/>
   </cx:message>

@@ -513,7 +513,7 @@
         </p:xslt>
         
     </p:declare-step>
-    
+
     <p:declare-step 
 		xmlns:l="http://xproc.org/library" 
 		xmlns:c="http://www.w3.org/ns/xproc-step"
@@ -595,9 +595,66 @@
 						</cx:message -->
 					</p:catch>
 				</p:try>
-			</p:for-each>				
+			</p:for-each>
 		</p:group>
 	</p:declare-step>
+
+	<p:declare-step
+    		xmlns:l="http://xproc.org/library"
+    		xmlns:c="http://www.w3.org/ns/xproc-step"
+    		xml:id="check-docbook-version"
+    		type="l:check-docbook-version"
+    		name="check-docbook-version-step">
+
+    		<p:input port="source" primary="true" sequence="true"/>
+    	    <p:output port="result" primary="true">
+                <p:pipe step="tryvalidation" port="result"/>
+            </p:output>
+            <p:output port="report" sequence="true">
+                <p:pipe step="tryvalidation" port="report"/>
+            </p:output>
+    	    <p:variable name="docBookVersion" select="//*:book/@version/string()"/>
+            <p:choose name="tryvalidation">
+
+    	        <p:when test="$docBookVersion=6">
+                 <p:output port="result">
+                     <p:pipe step="printmessage1" port="result"/>
+                 </p:output>
+                   <p:output port="report" sequence="true">
+                        <p:empty />
+                    </p:output>
+
+                    <cx:message name="printmessage1">
+                        <p:with-option name="message" select="concat('DocBook version: ', $docBookVersion)"/>
+                    </cx:message>
+
+    	        </p:when>
+
+    	        <p:otherwise>
+                    <p:output port="result">
+                        <p:pipe step="bad-document" port="result"/>
+                    </p:output>
+                    <p:output port="report">
+                        <p:inline>
+                            <c:errors xmlns:c="http://www.w3.org/ns/xproc-step">
+                               <c:error line="1" column="1">Source XML is not a valid docbook 5 file</c:error>
+                            </c:errors>
+                        </p:inline>
+                    </p:output>
+                    <p:error xmlns:my="http://www.rackspace.org/error"
+                                                         name="bad-document" code="my:unk12">
+                       <p:input port="source">
+                         <p:inline>
+                           <message>The document element is unknown.</message>
+                         </p:inline>
+                       </p:input>
+                    </p:error>
+                </p:otherwise>
+
+            </p:choose>
+
+    </p:declare-step>
+
    <!-- Search and replace calabash extension -->
 	<p:declare-step type="cx:copy-transform"
 		xml:id="copy-transform">
