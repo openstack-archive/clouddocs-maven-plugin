@@ -39,7 +39,7 @@
   
   <l:normalize-wadls />
  
-  <l:process-embedded-wadl/>
+  <l:process-embedded-wadl-war/>
 
   <l:programlisting-keep-together/>
   

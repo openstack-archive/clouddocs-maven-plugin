@@ -612,10 +612,10 @@
     <p:declare-step 
         xmlns:p="http://www.w3.org/ns/xproc"
         xmlns:l="http://xproc.org/library"
-        type="l:process-embedded-wadl"
+        type="l:process-embedded-wadl-war"
         xmlns:c="http://www.w3.org/ns/xproc-step"
         version="1.0"
-        name="process-embedded-wadl-step">
+        name="process-embedded-wadl-step-war">
         
         <p:input port="source"/>
         
@@ -627,13 +627,13 @@
         
         <p:xslt name="process-embedded-wadl-xslt">
             <p:input port="source"> 
-                <p:pipe step="process-embedded-wadl-step" port="source"/> 
+                <p:pipe step="process-embedded-wadl-step-war" port="source"/> 
             </p:input> 
             <p:input port="stylesheet">
                 <p:document href="classpath:/cloud/process-embedded-wadl-standalone.xsl"/>
             </p:input>
             <p:input port="parameters" >
-                <p:pipe step="process-embedded-wadl-step" port="parameters"/>
+                <p:pipe step="process-embedded-wadl-step-war" port="parameters"/>
             </p:input>
         </p:xslt>
         
