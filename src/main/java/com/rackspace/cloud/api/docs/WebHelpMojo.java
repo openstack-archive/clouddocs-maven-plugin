@@ -467,7 +467,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
             throws MojoExecutionException {
 
-        String pathToPipelineFile = "classpath:/test.xpl"; //use "classpath:/path" for this to work
+        String pathToPipelineFile = "classpath:/webhelp.xpl"; //use "classpath:/path" for this to work
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
         Map map=new HashMap<String, String>();
