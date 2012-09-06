@@ -135,7 +135,14 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
      *     default-value=""
      */
     private String canonicalUrlBase;
- 
+    
+    /**
+     * @parameter 
+     *     expression="${generate-pdf.replacementsFile}"
+     *     default-value="replacements.config"
+     */
+    private String replacementsFile;
+
     /**
      * 
      *
@@ -361,6 +368,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
     if(canonicalUrlBase != null){
 	map.put("canonical.url.base",canonicalUrlBase);
     }
+    map.put("replacementsFile", replacementsFile);
     if(security != null){
 	map.put("security",security);
     }
@@ -393,6 +401,8 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
         map.put("profileRevision", this.profileRevision);
         map.put("profileUserlevel", this.profileUserlevel);
         map.put("profileVendor", this.profileVendor);
+        
+        map.put("inputSrcFile", inputFilename);
         
         int lastSlash=inputFilename.lastIndexOf("/");
 

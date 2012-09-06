@@ -168,7 +168,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     /**
      * @parameter 
      *     expression="${generate-webhelp.replacementsFile}"
-     *     default-value=""
+     *     default-value="replacements.config"
      */
     private String replacementsFile;
     

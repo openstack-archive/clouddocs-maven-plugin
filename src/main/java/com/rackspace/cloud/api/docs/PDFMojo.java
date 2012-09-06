@@ -160,7 +160,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
     /**
      * @parameter 
      *     expression="${generate-pdf.replacementsFile}"
-     *     default-value=""
+     *     default-value="replacements.config"
      */
     private String replacementsFile;
 

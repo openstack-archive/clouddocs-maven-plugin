@@ -44,7 +44,9 @@
   <l:programlisting-keep-together/>
   
   <l:docbook-xslt2-preprocess/>
-  
+
+  <l:search-and-replace/>
+
   <l:add-stop-chunking-pis/>
   
   <l:generate-war/>
