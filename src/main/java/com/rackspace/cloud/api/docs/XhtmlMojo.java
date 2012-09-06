@@ -198,6 +198,41 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
      */
     private String chunkSectionDepth;
     
+    
+        // Profiling attrs:
+    /**
+     * @parameter expression="${generate-xhtml.profile.os}" 
+     */
+    private String profileOs;
+    /**
+     * @parameter expression="${generate-xhtml.profile.arch}" 
+     */
+    private String profileArch;
+    /**
+     * @parameter expression="${generate-xhtml.profile.condition}" 
+     */
+    private String profileCondition;
+    /**
+     * @parameter expression="${generate-xhtml.profile.audience}" 
+     */
+    private String profileAudience;
+    /**
+     * @parameter expression="${generate-xhtml.profile.conformance}" 
+     */
+    private String profileConformance;
+    /**
+     * @parameter expression="${generate-xhtml.profile.revision}" 
+     */
+    private String profileRevision;
+    /**
+     * @parameter expression="${generate-xhtml.profile.userlevel}" 
+     */
+    private String profileUserlevel;
+    /**
+     * @parameter expression="${generate-xhtml.profile.vendor}" 
+     */
+    private String profileVendor;
+    
 
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
         return super.createTransformerBuilder (new DocBookResolver (resolver, getType()));
@@ -348,6 +383,16 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
 //   map.put("docbook.infile",sourceDocBook.getAbsolutePath());
 //   map.put("source.directory",sourceDirectory);
            
+           
+        // Profiling attrs:        
+        map.put("profileOs", this.profileOs);
+        map.put("profileArch", this.profileArch);
+        map.put("profileCondition", this.profileCondition);
+        map.put("profileAudience", this.profileAudience);
+        map.put("profileConformance", this.profileConformance);
+        map.put("profileRevision", this.profileRevision);
+        map.put("profileUserlevel", this.profileUserlevel);
+        map.put("profileVendor", this.profileVendor);
         
         int lastSlash=inputFilename.lastIndexOf("/");
 

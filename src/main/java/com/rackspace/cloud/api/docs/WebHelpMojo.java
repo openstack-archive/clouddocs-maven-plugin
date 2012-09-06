@@ -242,6 +242,41 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.legal.notice.url}" default-value="index.html"
      */
     private String legalNoticeUrl;
+    
+    // Profiling attrs:
+    /**
+     * @parameter expression="${generate-webhelp.profile.os}" 
+     */
+    private String profileOs;
+    /**
+     * @parameter expression="${generate-webhelp.profile.arch}" 
+     */
+    private String profileArch;
+    /**
+     * @parameter expression="${generate-webhelp.profile.condition}" 
+     */
+    private String profileCondition;
+    /**
+     * @parameter expression="${generate-webhelp.profile.audience}" 
+     */
+    private String profileAudience;
+    /**
+     * @parameter expression="${generate-webhelp.profile.conformance}" 
+     */
+    private String profileConformance;
+    /**
+     * @parameter expression="${generate-webhelp.profile.revision}" 
+     */
+    private String profileRevision;
+    /**
+     * @parameter expression="${generate-webhelp.profile.userlevel}" 
+     */
+    private String profileUserlevel;
+    /**
+     * @parameter expression="${generate-webhelp.profile.vendor}" 
+     */
+    private String profileVendor;
+
 
     /**
      * DOCUMENT ME!
@@ -411,6 +446,23 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     }
 
+    public void preProcess() throws MojoExecutionException {
+        super.preProcess();
+
+        final File targetDirectory = getTargetDirectory();
+        File xslParentDirectory  = targetDirectory.getParentFile();
+
+        if (!targetDirectory.exists()) {
+            com.rackspace.cloud.api.docs.FileUtils.mkdir(targetDirectory);
+        }
+
+        //
+        // Extract all images into the image directory.
+        //
+        com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("cloud/war",PDFMojo.class,xslParentDirectory);
+    }
+
+
     @Override
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
             throws MojoExecutionException {
@@ -426,6 +478,16 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("failOnValidationError", this.failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
+
+        // Profiling attrs:        
+        map.put("profileOs", this.profileOs);
+        map.put("profileArch", this.profileArch);
+        map.put("profileCondition", this.profileCondition);
+        map.put("profileAudience", this.profileAudience);
+        map.put("profileConformance", this.profileConformance);
+        map.put("profileRevision", this.profileRevision);
+        map.put("profileUserlevel", this.profileUserlevel);
+        map.put("profileVendor", this.profileVendor);
         
         int lastSlash=inputFilename.lastIndexOf("/");
         
