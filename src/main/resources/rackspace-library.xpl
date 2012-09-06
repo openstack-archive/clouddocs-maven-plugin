@@ -616,7 +616,7 @@
     	    <p:variable name="docBookVersion" select="//*:book/@version/string()"/>
             <p:choose name="tryvalidation">
 
-    	        <p:when test="$docBookVersion=6">
+    	        <p:when test="$docBookVersion=5">
                  <p:output port="result">
                      <p:pipe step="printmessage1" port="result"/>
                  </p:output>
