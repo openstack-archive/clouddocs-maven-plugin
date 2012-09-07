@@ -614,30 +614,28 @@
                 <p:pipe step="tryvalidation" port="report"/>
             </p:output>
 
-    	    <p:variable name="docBookVersion" select="//*:book/@version/string()"/>
+    	    <!-- p:variable name="docBookVersion" select="//*:book/@version/string()"/ -->
     	    <p:variable name="nameSpaceText" select="namespace-uri(/*)" />
-
-    	    <cx:message name="printNameSpace">
-                <p:with-option name="message" select="concat('Document Namespace: ', $nameSpaceText)"/>
-            </cx:message>
 
             <p:choose name="tryvalidation">
 
-    	        <p:when test="$docBookVersion=5 and $nameSpaceText='http://docbook.org/ns/docbook'" >
-                 <p:output port="result">
-                     <p:pipe step="printmessage1" port="result"/>
-                 </p:output>
-                   <p:output port="report" sequence="true">
+    	        <p:when test="$nameSpaceText='http://docbook.org/ns/docbook'" >
+
+                    <p:output port="result">
+                        <p:pipe step="printNameSpace" port="result"/>
+                    </p:output>
+                    <p:output port="report" sequence="true">
                         <p:empty />
                     </p:output>
 
-                    <cx:message name="printmessage1">
-                        <p:with-option name="message" select="concat('DocBook version: ', $docBookVersion)"/>
+                    <cx:message name="printNameSpace">
+                        <p:with-option name="message" select="concat('Document Namespace: ', $nameSpaceText)"/>
                     </cx:message>
 
     	        </p:when>
 
     	        <p:otherwise>
+
                     <p:output port="result">
                         <p:pipe step="bad-document" port="result"/>
                     </p:output>
@@ -648,14 +646,15 @@
                             </c:errors>
                         </p:inline>
                     </p:output>
-                    <p:error xmlns:my="http://www.rackspace.org/error"
-                                                         name="bad-document" code="my:unk12">
+
+                    <p:error xmlns:my="http://www.rackspace.org/error" name="bad-document" code="my:unk12">
                        <p:input port="source">
                          <p:inline>
-                           <message>The document element is unknown.</message>
+                           <message>The document element is unknown, please upgrade your document to DocBook version 5.</message>
                          </p:inline>
                        </p:input>
                     </p:error>
+
                 </p:otherwise>
 
             </p:choose>
