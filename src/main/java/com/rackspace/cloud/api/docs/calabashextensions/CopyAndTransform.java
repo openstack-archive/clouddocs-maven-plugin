@@ -111,10 +111,10 @@ public class CopyAndTransform extends DefaultStep {
         imagesList.add(file.getAbsolutePath().toLowerCase());
 
         if (outputType != null && outputType.equalsIgnoreCase("pdf")) {
-            getLog().info("################# PDF {" + imagesList.size() + "} #################");
+//            getLog().info("################# PDF {" + imagesList.size() + "} #################");
             checkIfFileExists(uri, inputFileName, file);
         } else if (outputType != null && outputType.equalsIgnoreCase("html")){
-            getLog().info("################# WEB Help {" + imagesList.size() + "} #################");
+//            getLog().info("################# WEB Help {" + imagesList.size() + "} #################");
             checkIfFileExists(uri, inputFileName, file);
             performFileCopy(inputFileName, file);
         }

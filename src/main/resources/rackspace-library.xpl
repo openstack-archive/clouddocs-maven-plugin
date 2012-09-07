@@ -613,10 +613,17 @@
             <p:output port="report" sequence="true">
                 <p:pipe step="tryvalidation" port="report"/>
             </p:output>
+
     	    <p:variable name="docBookVersion" select="//*:book/@version/string()"/>
+    	    <p:variable name="nameSpaceText" select="namespace-uri(/*)" />
+
+    	    <cx:message name="printNameSpace">
+                <p:with-option name="message" select="concat('Document Namespace: ', $nameSpaceText)"/>
+            </cx:message>
+
             <p:choose name="tryvalidation">
 
-    	        <p:when test="$docBookVersion=6">
+    	        <p:when test="$docBookVersion=5 and $nameSpaceText='http://docbook.org/ns/docbook'" >
                  <p:output port="result">
                      <p:pipe step="printmessage1" port="result"/>
                  </p:output>
