@@ -36,7 +36,7 @@
                     <p:empty/> 
                 </p:output>      
                 
-                <p:validate-with-relax-ng name="xmlvalidate"  assert-valid="true"> 
+                <p:validate-with-relax-ng name="xmlvalidate"  assert-valid="true" dtd-id-idref-warnings="true"> 
                     <p:input port="source"> 
                         <p:pipe step="main" port="source"/> 
                     </p:input> 

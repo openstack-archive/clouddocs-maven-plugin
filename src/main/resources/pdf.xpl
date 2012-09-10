@@ -16,11 +16,6 @@
     <p:with-option name="message" select="'Entering xproc pipeline'"/>
   </cx:message>
 
-  <l:validate-transform name="validate-pre-xinclude">
-    <p:input port="schema">
-      <p:document href="classpath:/rng/rackbook.rng"/>
-    </p:input>
-  </l:validate-transform>
 
   <p:add-xml-base/>
   
