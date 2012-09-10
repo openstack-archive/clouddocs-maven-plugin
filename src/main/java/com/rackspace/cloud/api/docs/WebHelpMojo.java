@@ -1,52 +1,33 @@
 package com.rackspace.cloud.api.docs;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.net.URL;
-
-import java.security.CodeSource;
-import java.util.*;
-import java.util.zip.ZipInputStream;
-
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.Source;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import java.io.StringReader;
-
-import org.apache.maven.plugin.MojoExecutionException;
-
-//import scala.reflect.generic.Trees.This;
-
 import com.agilejava.docbkx.maven.AbstractWebhelpMojo;
-
-import com.agilejava.docbkx.maven.TransformerBuilder;
 import com.agilejava.docbkx.maven.PreprocessingFilter;
-import javax.xml.transform.URIResolver;
-
-import com.rackspace.cloud.api.docs.CalabashHelper;
-import com.rackspace.cloud.api.docs.DocBookResolver;
-
-import com.agilejava.docbkx.maven.Parameter;
-import com.agilejava.docbkx.maven.FileUtils;
+import com.agilejava.docbkx.maven.TransformerBuilder;
+import com.rackspace.cloud.api.docs.builders.PDFBuilder;
 
 public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     /**
@@ -171,6 +152,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      *     default-value=""
      */
     private String imageCopyDir;
+
+    /**
+     * @parameter 
+     *     expression="${generate-webhelp.makePdf}"
+     *     default-value=""
+     */
+    private String makePdf;
     
     /**
      * 
@@ -427,7 +415,6 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("outputType", "html");
         
         int lastSlash=inputFilename.lastIndexOf("/");
-        
         //This is the case if the path includes a relative path
         if(-1!=lastSlash){
         	String theFileName=inputFilename.substring(lastSlash);
@@ -457,6 +444,46 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	}
         }
         map.put("webhelp", "true");
+
+        
+        if(makePdf!=null && makePdf.equalsIgnoreCase("true")) {
+        	getLog().info("\n************************************* START: Automatically generating PDF for WEBHELP *************************************");
+        	//Target directory for Webhelp points to ${basepath}/target/docbkx/webhelp. So get parent.
+        	File baseDir = getTargetDirectory().getParentFile();
+        	//The point FO/PDF file output to be generated at ${basepath}/target/docbkx/pdf.
+        	File targetDir = new File(baseDir.getAbsolutePath()+"/autopdf");
+        	//Create a new instance of PDFBuilder class and set config variables.
+        	PDFBuilder pdfBuilder = new PDFBuilder();
+        	
+        	pdfBuilder.setProject(getMavenProject());
+        	pdfBuilder.setSourceDirectory(getSourceDirectory());
+        	pdfBuilder.setAutopdfTargetDirectory(targetDir);
+        	pdfBuilder.setBranding(branding);
+        	pdfBuilder.setIncludes(getIncludes());
+        	pdfBuilder.setEntities(getEntities());
+        	
+        	pdfBuilder.setSourceFilePath(getSourceDirectory()+"/os-compute-devguide.xml");
+        	pdfBuilder.setProjectBuildDirectory(baseDir.getAbsolutePath());
+        	
+        	pdfBuilder.preProcess();
+        	File foFile = pdfBuilder.processSources(map);
+        	File pdfFile = pdfBuilder.postProcessResult(foFile);
+        	if(pdfFile!=null) {
+        		int index = inputFilename.lastIndexOf('.');
+        		File targetDirForPdf = new File(getTargetDirectory().getAbsolutePath(),inputFilename.substring(0,index));
+        		if(!targetDirForPdf.exists()) {
+        			FileUtils.mkdir(targetDirForPdf);
+        		}
+        		boolean moved = pdfBuilder.movePdfToWebhelpDir(pdfFile, targetDirForPdf);
+        		if(moved) {
+        			getLog().info("Successfully moved auto-generated PDF file to Webhelp target directory!");
+        		} else {
+        			getLog().error("Unable to move auto-generated PDF file to Webhelp target directory!");
+        		}
+        	}
+        	getLog().info("************************************* END: Automatically generating PDF for WEBHELP *************************************\n");
+        }
+
         
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
