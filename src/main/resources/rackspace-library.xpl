@@ -602,9 +602,11 @@
 	<p:declare-step
     		xmlns:l="http://xproc.org/library"
     		xmlns:c="http://www.w3.org/ns/xproc-step"
-    		xml:id="check-docbook-version"
-    		type="l:check-docbook-version"
-    		name="check-docbook-version-step">
+    		xml:id="validate-docbook-format"
+    		type="l:validate-docbook-format"
+    		name="validate-docbook-format-step">
+
+    		<p:option name="docbookNamespace" required="true" />
 
     		<p:input port="source" primary="true" sequence="true"/>
     	    <p:output port="result" primary="true">
@@ -619,7 +621,7 @@
 
             <p:choose name="tryvalidation">
 
-    	        <p:when test="$nameSpaceText='http://docbook.org/ns/docbook'" >
+    	        <p:when test="$nameSpaceText=$docbookNamespace" >
 
                     <p:output port="result">
                         <p:pipe step="printNameSpace" port="result"/>
@@ -629,7 +631,7 @@
                     </p:output>
 
                     <cx:message name="printNameSpace">
-                        <p:with-option name="message" select="concat('Document Namespace: ', $nameSpaceText)"/>
+                        <p:with-option name="message" select="concat('Document Namespace: ', $docbookNamespace)"/>
                     </cx:message>
 
     	        </p:when>
