@@ -271,6 +271,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.profile.vendor}" 
      */
     private String profileVendor;
+    private String autoPdfUrl;
 
 
     /**
@@ -301,6 +302,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         }
         transformer.setParameter("project.build.directory", projectBuildDirectory);
         transformer.setParameter("branding", branding);
+        
+        //if the pdf is generated automatically with webhelp then this will be set.
+        transformer.setParameter("autoPdfUrl", autoPdfUrl);
+        
         transformer.setParameter("builtForOpenStack", builtForOpenStack);
         transformer.setParameter("enable.disqus", enableDisqus);
         if (disqusShortname != null) {
@@ -536,10 +541,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	
         	pdfBuilder.setSourceFilePath(getSourceDirectory()+"/os-compute-devguide.xml");
         	pdfBuilder.setProjectBuildDirectory(baseDir.getAbsolutePath());
-        	
+        	//setup fonts and images 
         	pdfBuilder.preProcess();
+        	//process input docbook to create FO file
         	File foFile = pdfBuilder.processSources(map);
+        	//transform FO file to PDF
         	File pdfFile = pdfBuilder.postProcessResult(foFile);
+        	//move PDF to where the webhelp stuff is for this docbook.
         	if(pdfFile!=null) {
         		int index = inputFilename.lastIndexOf('.');
         		File targetDirForPdf = new File(getTargetDirectory().getAbsolutePath(),inputFilename.substring(0,index));
@@ -553,9 +561,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         			getLog().error("Unable to move auto-generated PDF file to Webhelp target directory!");
         		}
         	}
+        	autoPdfUrl = "../"+pdfFile.getName();
         	getLog().info("************************************* END: Automatically generating PDF for WEBHELP *************************************\n");
         }
-
+        
         
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
