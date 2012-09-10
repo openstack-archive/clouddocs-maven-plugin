@@ -160,7 +160,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
     /**
      * @parameter 
      *     expression="${generate-pdf.replacementsFile}"
-     *     default-value=""
+     *     default-value="replacements.config"
      */
     private String replacementsFile;
 
@@ -178,6 +178,41 @@ public abstract class PDFMojo extends AbstractFoMojo {
      *     expression="${generate-pdf.security}" 
      */
     private String security;
+    
+    
+   // Profiling attrs:
+    /**
+     * @parameter expression="${generate-pdf.profile.os}" 
+     */
+    private String profileOs;
+    /**
+     * @parameter expression="${generate-pdf.profile.arch}" 
+     */
+    private String profileArch;
+    /**
+     * @parameter expression="${generate-pdf.profile.condition}" 
+     */
+    private String profileCondition;
+    /**
+     * @parameter expression="${generate-pdf.profile.audience}" 
+     */
+    private String profileAudience;
+    /**
+     * @parameter expression="${generate-pdf.profile.conformance}" 
+     */
+    private String profileConformance;
+    /**
+     * @parameter expression="${generate-pdf.profile.revision}" 
+     */
+    private String profileRevision;
+    /**
+     * @parameter expression="${generate-pdf.profile.userlevel}" 
+     */
+    private String profileUserlevel;
+    /**
+     * @parameter expression="${generate-pdf.profile.vendor}" 
+     */
+    private String profileVendor;
     
     
     protected void setImageDirectory (File imageDirectory) {
@@ -198,6 +233,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
         final File targetDirectory = getTargetDirectory();
         File imageParentDirectory  = targetDirectory.getParentFile();
+        File xslParentDirectory  = targetDirectory.getParentFile();
 
         if (!targetDirectory.exists()) {
             FileUtils.mkdir(targetDirectory);
@@ -208,6 +244,8 @@ public abstract class PDFMojo extends AbstractFoMojo {
         //
         FileUtils.extractJaredDirectory("images",PDFMojo.class,imageParentDirectory);
         setImageDirectory (new File (imageParentDirectory, "images"));
+        
+        FileUtils.extractJaredDirectory("cloud/war",PDFMojo.class,xslParentDirectory);
 
         //
         // Extract all fonts into fonts directory
@@ -419,7 +457,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
             throws MojoExecutionException {
 
-        String pathToPipelineFile = "classpath:/test.xpl"; //use "classpath:/path" for this to work
+        String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
         Map map=new HashMap<String, String>();
@@ -432,6 +470,17 @@ public abstract class PDFMojo extends AbstractFoMojo {
         map.put("inputSrcFile", inputFilename);
         map.put("outputType", "pdf");
 
+        
+        // Profiling attrs:        
+        map.put("profileOs", this.profileOs);
+        map.put("profileArch", this.profileArch);
+        map.put("profileCondition", this.profileCondition);
+        map.put("profileAudience", this.profileAudience);
+        map.put("profileConformance", this.profileConformance);
+        map.put("profileRevision", this.profileRevision);
+        map.put("profileUserlevel", this.profileUserlevel);
+        map.put("profileVendor", this.profileVendor);
+        
         //String outputDir=System.getProperty("project.build.outputDirectory ");        
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }

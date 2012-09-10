@@ -663,8 +663,8 @@ function parseParams(str)
 			.replace(/^['"]|['"]$/g, '') // strip quotes from end of strings
 			;
 		
-		// try to parse array value
-		if (value != null && arrayRegex.test(value))
+		// try to parse array value	
+	    if (value != null && arrayRegex.test(value))
 		{
 			var m = arrayRegex.exec(value);
 			value = m.values.length > 0 ? m.values.split(/\s*,\s*/) : [];

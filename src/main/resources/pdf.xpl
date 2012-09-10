@@ -55,6 +55,8 @@
 
   <l:programlisting-keep-together/>
 
+  <l:docbook-xslt2-preprocess/>
+
   <cx:message>
     <p:with-option name="message" select="'Adding extension info'"/>
   </cx:message>

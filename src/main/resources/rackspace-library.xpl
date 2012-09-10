@@ -514,6 +514,164 @@
         
     </p:declare-step>
 
+
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:generate-war"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="generate-war-step">
+        
+        <p:input port="source"/>
+        
+        <p:output port="secondary" primary="false" sequence="true"/>
+        <p:output port="result" primary="true">
+	  <p:pipe step="generate-war-xslt" port="result"/>
+	</p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="generate-war-xslt">
+            <p:input port="source"> 
+                <p:pipe step="generate-war-step" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="target/docbkx/cloud/war/docbook.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="generate-war-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+        
+        <p:for-each>
+            <p:iteration-source>
+                <p:pipe step="generate-war-xslt" port="secondary"/>
+            </p:iteration-source>
+            <p:choose>
+                <p:when test="ends-with(base-uri(/*),'.xml')">
+                    <p:store encoding="utf-8" indent="true" method="xml" 
+                        omit-xml-declaration="false">
+                        <p:with-option name="href" select="base-uri(/*)"/>
+                    </p:store>
+                </p:when>
+                <p:otherwise>
+                    <p:xslt>
+                        <p:input port="stylesheet">
+                            <p:document href="target/docbkx/cloud/war/xhtml2html.xsl"/>
+                        </p:input>
+                    </p:xslt>
+                   <!--
+                       <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">                  
+
+                        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" 
+                        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"                        
+                   -->
+                    <p:store encoding="utf-8" indent="true" method="xml" 
+                        omit-xml-declaration="true" 
+                        doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" 
+                        doctype-system="http://www.w3.org/TR/html4/loose.dtd">
+                        <p:with-option name="href" select="base-uri(/*)"/>
+                    </p:store>
+                </p:otherwise>
+            </p:choose>
+        </p:for-each>
+
+    </p:declare-step>
+
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:docbook-xslt2-preprocess"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="docbook-xslt2-preprocess-step">
+        
+        <p:input port="source"/>
+        
+        <p:output port="result" primary="true">
+            <p:pipe step="docbook-xslt2-preprocess-xslt" port="result"/>
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="docbook-xslt2-preprocess-xslt">
+            <p:input port="source"> 
+                <p:pipe step="docbook-xslt2-preprocess-step" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="target/docbkx/cloud/war/preprocess.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="docbook-xslt2-preprocess-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+                
+    </p:declare-step>
+
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:process-embedded-wadl-war"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="process-embedded-wadl-step-war">
+        
+        <p:input port="source"/>
+        
+        <p:output port="result" primary="true">
+            <p:pipe step="process-embedded-wadl-xslt" port="result"/>
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="process-embedded-wadl-xslt">
+            <p:input port="source"> 
+                <p:pipe step="process-embedded-wadl-step-war" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="classpath:/cloud/process-embedded-wadl-standalone.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="process-embedded-wadl-step-war" port="parameters"/>
+            </p:input>
+        </p:xslt>
+        
+    </p:declare-step>
+    
+    
+    
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:add-stop-chunking-pis"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="add-stop-chunking-pis-step">
+        
+        <p:input port="source"/>
+        
+        <p:output port="result" primary="true">
+            <p:pipe step="add-stop-chunking-pis-xslt" port="result"/>
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="add-stop-chunking-pis-xslt">
+            <p:input port="source"> 
+                <p:pipe step="add-stop-chunking-pis-step" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="classpath:/cloud/war/add-stop-chunking-pis.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="add-stop-chunking-pis-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+        
+    </p:declare-step>
+
+
     <p:declare-step 
 		xmlns:l="http://xproc.org/library" 
 		xmlns:c="http://www.w3.org/ns/xproc-step"
