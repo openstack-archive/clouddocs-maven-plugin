@@ -20,7 +20,9 @@
       <p:with-option name="message" select="'Validating DocBook version'"/>
   </cx:message>
 
-  <l:check-docbook-version/>
+  <l:validate-docbook-format>
+      <p:with-option name="docbookNamespace" select="'http://docbook.org/ns/docbook'"/>
+  </l:validate-docbook-format>
 
   <l:validate-transform name="validate-pre-xinclude">
     <p:input port="schema">
