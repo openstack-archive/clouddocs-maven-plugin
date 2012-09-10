@@ -670,5 +670,52 @@
         </p:xslt>
         
     </p:declare-step>
+    
+    
+    
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:bookinfo"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="bookinfo-step">
+        
+        <p:input port="source"/>
+        
+        <p:output port="secondary" primary="false" sequence="true"/>
+        
+        <p:output port="result" primary="true">
+            <p:pipe step="bookinfo-xslt" port="result"/>
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="bookinfo-xslt">
+            <p:input port="source"> 
+                <p:pipe step="bookinfo-step" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="target/docbkx/cloud/webhelp/bookinfo.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="bookinfo-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+        
+        <p:for-each>
+            <p:iteration-source>
+                <p:pipe step="bookinfo-xslt" port="secondary"/>
+            </p:iteration-source>
+            
+            <p:store encoding="utf-8" indent="true" method="xml" 
+                omit-xml-declaration="false">
+                <p:with-option name="href" select="base-uri(/*)"/>
+            </p:store>
+            
+        </p:for-each>
+        
+    </p:declare-step>
+    
 
 </p:library>

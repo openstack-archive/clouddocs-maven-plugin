@@ -460,6 +460,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         // Extract all images into the image directory.
         //
         com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("cloud/war",PDFMojo.class,xslParentDirectory);
+        com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("cloud/webhelp",PDFMojo.class,xslParentDirectory);
     }
 
 
@@ -500,7 +501,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	if(-1!=index){
             	String targetFile="target/docbkx/webhelp/"+theDirName+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
 
-            	map.put("targetExtQueryFile", targetFile);        		
+            	map.put("targetExtQueryFile", targetFile);     
+            	map.put("base.dir", "target/docbkx/webhelp/"+theDirName+theFileName.substring(0,index));   		
+            	map.put("input.filename",theDirName+theFileName.substring(0,index));
         	}
         	else{
         		//getLog().info("~~~~~~~~theFileName file has incompatible format: "+theFileName);
@@ -513,7 +516,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	int index = theFileName.indexOf('.');
         	if(-1!=index){
             	String targetFile="target/docbkx/webhelp/"+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
-            	map.put("targetExtQueryFile", targetFile);        		
+            	map.put("targetExtQueryFile", targetFile);  
+            	
+            	String targetDir="target/docbkx/webhelp/"+theFileName.substring(0,index) + "/";
+            	map.put("base.dir", targetDir);        		
+            	map.put("input.filename", theFileName.substring(0,index));  	      		
         	}
         	else{
         		//getLog().info("~~~~~~~~inputFilename file has incompatible format: "+inputFilename);

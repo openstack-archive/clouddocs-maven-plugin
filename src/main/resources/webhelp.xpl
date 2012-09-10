@@ -39,15 +39,21 @@
   <cx:message>
     <p:with-option name="message" select="'Performing programlisting keep together'"/>
   </cx:message>
-
   <l:programlisting-keep-together/>
 
+  <cx:message>
+    <p:with-option name="message" select="'Profiling'"/>
+  </cx:message>
   <l:docbook-xslt2-preprocess/>
+
+  <cx:message>
+    <p:with-option name="message" select="'Generating bookinfo.xml'"/>
+  </cx:message>
+  <l:bookinfo/>
 
   <cx:message>
     <p:with-option name="message" select="'Adding extension info'"/>
   </cx:message>
-  
   <l:extensions-info/>
   
   <cx:message>
@@ -56,11 +62,13 @@
   <l:search-and-replace/>
     
   <cx:message>
-    <p:with-option name="message" select="'Normalize wadls'"/>
+    <p:with-option name="message" select="'Normalize wadls (if necessary)'"/>
   </cx:message>
-
   <l:normalize-wadls />
-
+  
+  <cx:message>
+    <p:with-option name="message" select="'Process embedded wadls (if necessary)'"/>
+  </cx:message>
   <l:process-embedded-wadl/>
 
 </p:declare-step>
