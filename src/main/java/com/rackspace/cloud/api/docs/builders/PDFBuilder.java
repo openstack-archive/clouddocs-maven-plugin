@@ -769,7 +769,7 @@ public class PDFBuilder {
 
 	protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter, Map<String,String> map)
 			throws MojoExecutionException {
-		String pathToPipelineFile = "classpath:/test.xpl"; //use "classpath:/path" for this to work
+		String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
 
 		//from super
 		final InputSource inputSource = new InputSource(sourceFile.getAbsolutePath());
