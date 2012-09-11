@@ -48,6 +48,10 @@ import com.rackspace.cloud.api.docs.DocBookResolver;
 import com.agilejava.docbkx.maven.Parameter;
 import com.agilejava.docbkx.maven.FileUtils;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipOutputStream;
+
 public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     /**
      * Sets the URI for the glossary.
@@ -367,14 +371,45 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         return "cloud/webhelp/profile-webhelp.xsl";
     }
 
-    public void postProcessResult(File result) throws MojoExecutionException {
+        public void postProcessResult(File result) throws MojoExecutionException {
+	
+	       super.postProcessResult(result);
+	
+	       copyTemplate(result);
+    
+           transformFeed(result);
+	
+    	   //final File targetDirectory = result.getParentFile();
+	       //com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("apiref",ApiRefMojo.class,targetDirectory);
+	       String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
 
-        super.postProcessResult(result);
+           //Zip up the war from here.
+	       String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
+	       String zipFile =   result.getParentFile().getParentFile()  + "/" + warBasename + ".war";
+	       //result.deleteOnExit();
 
-        copyTemplate(result);
+           try{
+        		//create object of FileOutputStream
+        		FileOutputStream fout = new FileOutputStream(zipFile);
+                                         
+        		//create object of ZipOutputStream from FileOutputStream
+        		ZipOutputStream zout = new ZipOutputStream(fout);
+                               
+        		//create File object from source directory
+        		File fileSource = new File(sourceDir);
+                               
+        		com.rackspace.cloud.api.docs.FileUtils.addDirectory(zout, fileSource);
+                               
+        		//close the ZipOutputStream
+        		zout.close();
+                               
+        		System.out.println("Zip file has been created!");
+                               
+        	    }catch(IOException ioe){
+            		System.out.println("IOException :" + ioe);     
+        	    }
 
-        transformFeed(result);
-    }
+            }
 
     protected void copyTemplate(File result) throws MojoExecutionException {
 
@@ -445,6 +480,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         }
 
     }
+    
 
     public void preProcess() throws MojoExecutionException {
         super.preProcess();
