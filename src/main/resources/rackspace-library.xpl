@@ -758,67 +758,115 @@
 	</p:declare-step>
 
 	<p:declare-step
-    		xmlns:l="http://xproc.org/library"
-    		xmlns:c="http://www.w3.org/ns/xproc-step"
-    		xml:id="validate-docbook-format"
-    		type="l:validate-docbook-format"
-    		name="validate-docbook-format-step">
+		xmlns:l="http://xproc.org/library"
+		xmlns:c="http://www.w3.org/ns/xproc-step"
+		xml:id="validate-docbook-format"
+		type="l:validate-docbook-format"
+		name="validate-docbook-format-step">
 
-    		<p:option name="docbookNamespace" required="true" />
+		<p:input port="source" primary="true" sequence="true"/>
+		<p:input port="parameters" kind="parameter"/>
+		<p:output port="result" primary="true">
+			<p:pipe step="tryvalidation" port="result"/>
+		</p:output>
+		<p:output port="report" sequence="true">
+			<p:pipe step="tryvalidation" port="report"/>
+		</p:output>
+		<p:option name="docbookNamespace" required="true" />
+		<!-- p:variable name="docBookVersion" select="//*:book/@version/string()"/ -->
+		<p:variable name="nameSpaceText" select="namespace-uri(/*)" />
 
-    		<p:input port="source" primary="true" sequence="true"/>
-    	    <p:output port="result" primary="true">
-                <p:pipe step="tryvalidation" port="result"/>
-            </p:output>
-            <p:output port="report" sequence="true">
-                <p:pipe step="tryvalidation" port="report"/>
-            </p:output>
-
-    	    <!-- p:variable name="docBookVersion" select="//*:book/@version/string()"/ -->
-    	    <p:variable name="nameSpaceText" select="namespace-uri(/*)" />
-
-            <p:choose name="tryvalidation">
-
-    	        <p:when test="$nameSpaceText=$docbookNamespace" >
-
-                    <p:output port="result">
-                        <p:pipe step="printNameSpace" port="result"/>
-                    </p:output>
-                    <p:output port="report" sequence="true">
-                        <p:empty />
-                    </p:output>
-
-                    <cx:message name="printNameSpace">
-                        <p:with-option name="message" select="concat('Document Namespace: ', $docbookNamespace)"/>
-                    </cx:message>
-
-    	        </p:when>
-
-    	        <p:otherwise>
-
-                    <p:output port="result">
-                        <p:pipe step="bad-document" port="result"/>
-                    </p:output>
-                    <p:output port="report">
+        <p:try name="tryvalidation"> 
+            <p:group> 
+                <p:output port="result"> 
+                    <p:pipe step="xmlvalidate" port="result"/>  
+                </p:output> 
+                <p:output port="report" sequence="true"> 
+                    <p:empty/> 
+                </p:output>      
+                
+                <p:choose name="xmlvalidate">
+					<p:when test="$nameSpaceText!=$docbookNamespace" >	
+						<p:output port="result">
+							<p:pipe step="bad-document" port="result"/>
+						</p:output>
+						<p:output port="report" sequence="true">
+							<p:inline>
+								<c:errors xmlns:c="http://www.w3.org/ns/xproc-step">
+								   <c:error line="1" column="1">Source XML is not a valid docbook 5 file</c:error>
+								</c:errors>
+							</p:inline>
+						</p:output>
+						<p:error xmlns:rax="http://www.rackspace.com/build/error" name="bad-document" code="rax:unsupported-version">
+						   <p:input port="source">
+							 <p:inline>
+							   <message>
+						@@@@@@@@@@@@@@@@@@@@@@
+						!!!VALIDATION ERROR!!!
+						!!!!!!!!!!!!!!!!!!!!!!
+						The input document version is not supported by this build process. 
+						Please upgrade your document to DocBook version 5. 
+						Refer to the following link for more information http://wiki.openstack.org/Documentation/HowTo#docs.openstack.org_.28DocBook_5.29
+						!!!!!!!!!!!!!!!!!!!!!!
+						!!!VALIDATION ERROR!!!                    
+						@@@@@@@@@@@@@@@@@@@@@@
+								</message>
+							 </p:inline>
+						   </p:input>
+						</p:error>
+					</p:when>
+					<p:otherwise>
+						<p:output port="result">
+							<p:pipe step="echo" port="result"/>
+						</p:output>
+						<p:output port="report" sequence="true">
+							<p:empty />
+						</p:output>
+						<p:identity name="echo">
+							<p:input port="source">
+								<p:pipe step="validate-docbook-format-step" port="source"/>
+							</p:input>
+						</p:identity>
+					</p:otherwise>
+    	        </p:choose>     	        
+            </p:group>  
+            <p:catch name="catch">  
+                <p:output port="result">  
+                    <p:pipe step="validate-docbook-format-step" port="source"/>  
+                </p:output>  
+                <p:output port="report">  
+                    <p:pipe step="id" port="result"/> 
+                </p:output>  
+                <p:xslt name="id">
+                    <p:input port="source">  
+                        <p:pipe step="catch" port="error"/>  
+                    </p:input>  
+                    <p:input port="stylesheet">
                         <p:inline>
-                            <c:errors xmlns:c="http://www.w3.org/ns/xproc-step">
-                               <c:error line="1" column="1">Source XML is not a valid docbook 5 file</c:error>
-                            </c:errors>
+                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                                
+                                <xsl:param name="failOnValidationError">yes</xsl:param>
+                                <xsl:param name="security"/>
+                                
+                                <xsl:template match="node()|@*">
+                                    <xsl:message terminate="{$failOnValidationError}">
+                                        <xsl:copy-of select="//message/text()"/>
+                                    </xsl:message>    
+                                    <xsl:copy>
+                                        <xsl:apply-templates select="node() | @*"/>
+                                    </xsl:copy>
+                                </xsl:template>
+                                
+                            </xsl:stylesheet>
                         </p:inline>
-                    </p:output>
-
-                    <p:error xmlns:my="http://www.rackspace.org/error" name="bad-document" code="my:unk12">
-                       <p:input port="source">
-                         <p:inline>
-                           <message>The document element is unknown, please upgrade your document to DocBook version 5.</message>
-                         </p:inline>
-                       </p:input>
-                    </p:error>
-
-                </p:otherwise>
-
-            </p:choose>
-
+                    </p:input>
+                    <p:input port="parameters" >
+                        <p:pipe step="validate-docbook-format-step" port="parameters"/>
+                    </p:input>
+                </p:xslt>
+            </p:catch>  
+        </p:try>
+        
     </p:declare-step>
 
    <!-- Search and replace calabash extension -->

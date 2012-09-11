@@ -1,4 +1,4 @@
-package com.rackspace.cloud.api.docs;
+package com.rackspace.cloud.api.docs.calabash.extensions;
 
 import java.io.BufferedReader;
 import java.io.File;

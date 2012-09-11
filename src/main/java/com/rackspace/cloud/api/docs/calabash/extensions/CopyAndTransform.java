@@ -1,4 +1,4 @@
-package com.rackspace.cloud.api.docs.calabashextensions;
+package com.rackspace.cloud.api.docs.calabash.extensions;
 
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcException;
