@@ -179,6 +179,14 @@ public abstract class PDFMojo extends AbstractFoMojo {
      */
     private String security;
      
+    /**
+     * 
+     *
+     * @parameter expression="${generate-pdf.draft.status}" default-value=""
+     */
+    private String draftStatus;
+
+
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
     }
@@ -347,6 +355,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	transformer.setParameter("coverLogoTop", coverLogoTop);
 	transformer.setParameter("coverUrl", coverUrl);
 	transformer.setParameter("coverColor", coverColor);
+	transformer.setParameter("draft.status", draftStatus);
 
 	transformer.setParameter("project.build.directory", projectBuildDirectory);
 
@@ -397,6 +406,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    if(coverColor != null){
 		transformer.setParameter("coverColor", coverColor);
 	    }
+	    transformer.setParameter("draft.status", draftStatus);
 	    transformer.setParameter("branding", branding);
 
             //transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());

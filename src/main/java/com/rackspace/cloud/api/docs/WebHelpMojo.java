@@ -248,6 +248,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String legalNoticeUrl;
 
     /**
+     * 
+     *
+     * @parameter expression="${generate-webhelp.draft.status}" default-value=""
+     */
+    private String draftStatus;
+
+
+    /**
      * DOCUMENT ME!
      *
      * @param transformer    DOCUMENT ME!
@@ -299,6 +307,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         if (legalNoticeUrl != null) {
             transformer.setParameter("legal.notice.url", legalNoticeUrl);
         }
+
+	transformer.setParameter("draft.status", draftStatus);
 
     if(canonicalUrlBase != null){
 	transformer.setParameter("canonical.url.base",canonicalUrlBase);
