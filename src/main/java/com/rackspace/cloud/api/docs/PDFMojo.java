@@ -355,10 +355,21 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	transformer.setParameter("coverLogoTop", coverLogoTop);
 	transformer.setParameter("coverUrl", coverUrl);
 	transformer.setParameter("coverColor", coverColor);
+	
+    String sysDraftStatus=System.getProperty("draft.status");
+    getLog().info("adjustTransformer():sysDraftStatus="+sysDraftStatus);
+    if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
+    	draftStatus=sysDraftStatus;
+    }
 	transformer.setParameter("draft.status", draftStatus);
 
 	transformer.setParameter("project.build.directory", projectBuildDirectory);
-
+    
+	String sysSecurity=System.getProperty("security");
+    getLog().info("adjustTransformer():sysSecurity="+sysSecurity);
+    if(null!=sysSecurity && !sysSecurity.isEmpty()){
+    	security=sysSecurity;
+    }
 	if(security != null){
 	    transformer.setParameter("security",security);
 	}
@@ -406,6 +417,11 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    if(coverColor != null){
 		transformer.setParameter("coverColor", coverColor);
 	    }
+	    String sysDraftStatus=System.getProperty("draft.status");
+	    getLog().info("transformerCover():sysDraftStatus="+sysDraftStatus);
+	    if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
+	    	draftStatus=sysDraftStatus;
+	    }
 	    transformer.setParameter("draft.status", draftStatus);
 	    transformer.setParameter("branding", branding);
 
@@ -435,7 +451,11 @@ public abstract class PDFMojo extends AbstractFoMojo {
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
         Map map=new HashMap<String, String>();
-        
+	    String sysSecurity=System.getProperty("security");
+	    getLog().info("adjustTransformer():sysSecurity="+sysSecurity);
+	    if(null!=sysSecurity && !sysSecurity.isEmpty()){
+	    	security=sysSecurity;
+	    }
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("replacementsFile", replacementsFile);
