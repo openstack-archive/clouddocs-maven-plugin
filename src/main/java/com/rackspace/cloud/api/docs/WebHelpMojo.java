@@ -3,6 +3,7 @@ package com.rackspace.cloud.api.docs;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -520,9 +521,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         		//getLog().info("~~~~~~~~inputFilename file has incompatible format: "+inputFilename);
         	}
         }
-        map.put("webhelp", "true");
 
-        
+
         if(makePdf!=null && makePdf.equalsIgnoreCase("true")) {
         	getLog().info("\n************************************* START: Automatically generating PDF for WEBHELP *************************************");
         	//Target directory for Webhelp points to ${basepath}/target/docbkx/webhelp. So get parent.
@@ -544,6 +544,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	//setup fonts and images 
         	pdfBuilder.preProcess();
         	//process input docbook to create FO file
+
         	File foFile = pdfBuilder.processSources(map);
         	//transform FO file to PDF
         	File pdfFile = pdfBuilder.postProcessResult(foFile);
@@ -564,7 +565,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	autoPdfUrl = "../"+pdfFile.getName();
         	getLog().info("************************************* END: Automatically generating PDF for WEBHELP *************************************\n");
         }
-        
+
+        map.put("webhelp", "true");
+        map.put("outputType", "html");
         
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
