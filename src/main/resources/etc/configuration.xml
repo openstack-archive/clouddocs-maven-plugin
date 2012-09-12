@@ -262,4 +262,7 @@
 <implementation type="cx:copy-transform"
 	class-name="com.rackspace.cloud.api.docs.calabash.extensions.CopyAndTransform" />
 
+<implementation type="cx:copy-transform-xproc"
+	class-name="com.rackspace.cloud.api.docs.calabash.extensions.CopyAndTransformXProcStep" />
+
 </xproc-config>

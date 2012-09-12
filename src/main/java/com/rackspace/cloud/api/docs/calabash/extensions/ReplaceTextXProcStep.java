@@ -213,7 +213,8 @@ class XPathReplacement implements Iterable<Replacement>, ProcessMatchingNodes  {
 	@Override
 	public void processComment(XdmNode node) throws SaxonApiException {
 		String newValue = computeReplacement(node);
-		matcher.addText(newValue);}
+		matcher.addText(newValue);
+	}
 
 	@Override
 	public void processPI(XdmNode node) throws SaxonApiException {
@@ -229,5 +230,22 @@ class Replacement {
 	public Replacement(String _oldVal, String _newVal) {
 		this.oldValue = _oldVal;
 		this.newValue = _newVal;
+	}
+	
+	@Override
+	public int hashCode() {
+        int result = oldValue.hashCode();
+        return result;
+    }
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if(!(o instanceof Replacement)) return false;
+		
+		Replacement repl = (Replacement) o;
+		if(this.oldValue.equals(repl.oldValue)) return true;
+		
+		return false;
 	}
 }

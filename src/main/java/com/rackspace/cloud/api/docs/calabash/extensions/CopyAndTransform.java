@@ -76,8 +76,8 @@ public class CopyAndTransform extends DefaultStep {
 
         RuntimeValue href = getOption(_href);
         URI uri = href.getBaseURI().resolve(href.getString());
-//        getLog().info("HREF IS = " + getOption(_href, "something"));
-//        getLog().info("############################################################################################################");
+        //getLog().info("HREF IS = " + getOption(_href, "something"));
+        //getLog().info("############################################################################################################");
         String executionPath = System.getProperty("user.dir") + File.separator;
 
         String inputFileName = getOption(_inputFileName, "Unknown");
@@ -91,7 +91,7 @@ public class CopyAndTransform extends DefaultStep {
             processedImagesMap.put(outputType + inputFileName, imagesList);
         }
 
-//        getLog().info("############################################# MAKE PDF: " + makePdf + "####################################################");
+        //getLog().info("############################################# MAKE PDF: " + makePdf + "####################################################");
 
 
         File file;
@@ -103,13 +103,13 @@ public class CopyAndTransform extends DefaultStep {
         }
 
         if (imagesList.size() > 0 && imagesList.contains(file.getAbsolutePath().toLowerCase())) {
-//            getLog().error("DocBook File: '" +inputFileName+ "' - File: '" +uri.getPath()+ "' - Problem: File already processed.");
-//            throw new XProcException(step.getNode(), "File already processed: " + file.getAbsolutePath());
+        	//getLog().error("DocBook File: '" +inputFileName+ "' - File: '" +uri.getPath()+ "' - Problem: File already processed.");
+        	//throw new XProcException(step.getNode(), "File already processed: " + file.getAbsolutePath());
             return;
         }
 
         imagesList.add(file.getAbsolutePath().toLowerCase());
-
+        
         if (outputType != null && outputType.equalsIgnoreCase("pdf")) {
 //            getLog().info("################# PDF {" + imagesList.size() + "} #################");
             checkIfFileExists(uri, inputFileName, file);
@@ -157,13 +157,13 @@ public class CopyAndTransform extends DefaultStep {
                 throw new XProcException(step.getNode(), "Cannot copy: target is a directory: " + target.getAbsolutePath());
             }
         }
-
         TreeWriter tree = new TreeWriter(runtime);
         tree.startDocument(step.getNode().getBaseURI());
         tree.addStartElement(XProcConstants.c_result);
         tree.startContent();
 
         tree.addText(target.toURI().toASCIIString());
+        
 
         try {
             FileInputStream src = new FileInputStream(file);
