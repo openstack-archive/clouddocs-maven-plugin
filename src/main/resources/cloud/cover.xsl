@@ -24,7 +24,7 @@
   </xsl:variable>
 
   <xsl:variable name="draft.text">
-      <xsl:if test="$draft.status = 'draft' or ($docbook/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')] and $draft.status = '')">DRAFT</xsl:if>
+      <xsl:if test="$draft.status = 'on' or ($docbook/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')] and $draft.status = '')">DRAFT</xsl:if>
   </xsl:variable>
 
   <xsl:variable name="rackspace.status.text">

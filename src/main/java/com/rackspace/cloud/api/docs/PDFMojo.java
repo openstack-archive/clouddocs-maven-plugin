@@ -361,6 +361,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
     if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
     	draftStatus=sysDraftStatus;
     }
+    
 	transformer.setParameter("draft.status", draftStatus);
 
 	transformer.setParameter("project.build.directory", projectBuildDirectory);
@@ -417,12 +418,14 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    if(coverColor != null){
 		transformer.setParameter("coverColor", coverColor);
 	    }
+
 	    String sysDraftStatus=System.getProperty("draft.status");
-	    getLog().info("transformerCover():sysDraftStatus="+sysDraftStatus);
 	    if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
 	    	draftStatus=sysDraftStatus;
 	    }
-	    transformer.setParameter("draft.status", draftStatus);
+	    if(null!=draftStatus){
+		transformer.setParameter("draft.status", draftStatus);
+	    }
 	    transformer.setParameter("branding", branding);
 
             //transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());

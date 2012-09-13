@@ -308,12 +308,20 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             transformer.setParameter("legal.notice.url", legalNoticeUrl);
         }
 
+	String sysDraftStatus=System.getProperty("draft.status");
+	if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
+	    draftStatus=sysDraftStatus;
+	}
 	transformer.setParameter("draft.status", draftStatus);
 
     if(canonicalUrlBase != null){
 	transformer.setParameter("canonical.url.base",canonicalUrlBase);
     }
 
+    String sysSecurity=System.getProperty("security");
+    if(null!=sysSecurity && !sysSecurity.isEmpty()){
+	security=sysSecurity;
+    }
     if(security != null){
 	transformer.setParameter("security",security);
     }
