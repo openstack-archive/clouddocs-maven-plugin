@@ -47,7 +47,7 @@
     
   <xsl:param name="security">external</xsl:param>
   <xsl:param name="draft.status" select="''"/>
-  <xsl:param name="root.attr.status"><xsl:if test="$draft.status = 'draft' or (/*[@status = 'draft'] and $draft.status = '')">draft;</xsl:if></xsl:param>
+  <xsl:param name="root.attr.status"><xsl:if test="$draft.status = 'on' or (/*[@status = 'draft'] and $draft.status = '')">draft;</xsl:if></xsl:param>
   <xsl:param name="profile.security">
     <xsl:choose>
       <xsl:when test="$security = 'external'"><xsl:value-of select="$root.attr.status"/>external</xsl:when>
