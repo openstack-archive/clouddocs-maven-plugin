@@ -32,7 +32,19 @@
                                <xsl:if test="/*/db:info/raxm:metadata">
                                 <type xmlns="">
                                     <id><xsl:value-of select="f:calculatetype(/*/db:info/raxm:metadata/raxm:type)"/></id>
-                                    <displayname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></displayname>
+                                    <displayname>
+                                        <xsl:choose>
+                                            <xsl:when test="/*/db:info/raxm:metadata/raxm:displayname">
+                                                <xsl:value-of select="/*/db:info/raxm:metadata/raxm:displayname"/>
+                                            </xsl:when>
+                                            <xsl:when test="/*/db:titleabbrev|/*/db:info/db:titleabbrev">
+                                                <xsl:value-of select="/*/db:titleabbrev|/*/db:info/db:titleabbrev"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="/*/db:title|/*/db:info/db:title"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </displayname>
                                     <url><xsl:value-of select="concat($IndexWar,'/',/*/db:info/raxm:metadata/raxm:product,'/api/',/*/db:info/raxm:metadata/raxm:product/@version,'/',$input.filename,'/content/',$default.topic)"/></url>
                                     <sequence><xsl:value-of select="f:calculatepriority(/*/db:info//raxm:priority[1])"/></sequence> 
                                 </type>  
