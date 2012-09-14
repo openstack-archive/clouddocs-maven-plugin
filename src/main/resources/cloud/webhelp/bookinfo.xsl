@@ -9,7 +9,9 @@
     version="2.0">
     
     <xsl:param name="base.dir" select="'target/docbkx/xhtml/example/'"/>
-    <xsl:param name="input.filename">cs-devguide.xml</xsl:param>
+    <xsl:param name="input.filename">cs-devguide</xsl:param>
+    <xsl:param name="default.topic">index.html</xsl:param>
+    <xsl:param name="IndexWar"/>
     
     <!-- We need too collect lists that contain their own raxm:metadata so we can 
         add <type>s to the bookinfo for resources mentioned in lists in the doc -->
@@ -24,14 +26,14 @@
             <products xmlns="">
                 <xsl:for-each-group select="//db:info/raxm:metadata" group-by="raxm:product">
                     <product>
-                        <id><xsl:value-of select="f:productnumber(current-grouping-key())"/></id>
+                        <id><xsl:value-of select="f:productnumber(current-grouping-key(),current-group()//raxm:product/@version)"/></id>
                         <types>
                             <xsl:variable name="types">
 <xsl:if test="/*/db:info/raxm:metadata">
                                 <type xmlns="">
                                     <id><xsl:value-of select="f:calculatetype(/*/db:info/raxm:metadata/raxm:type)"/></id>
                                     <displayname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></displayname>
-                                    <url><xsl:value-of select="concat(/*/raxm:product,'/api/',raxm:product/@version,'/',$input.filename)"/></url>
+                                    <url><xsl:value-of select="concat($IndexWar,'/',/*/db:info/raxm:metadata/raxm:product,'/api/',/*/db:info/raxm:metadata/raxm:product/@version,'/',$input.filename,'/content/',$default.topic)"/></url>
                                     <sequence><xsl:value-of select="f:calculatepriority(/*/db:info//raxm:priority[1])"/></sequence> 
                                 </type>  
 </xsl:if>
@@ -74,11 +76,12 @@
                 </type>        
     </xsl:template>
         
-    <xsl:function name="f:productname" as="xs:string">
+<!--    <xsl:function name="f:productname" as="xs:string">
         <xsl:param name="key"/>
+        <xsl:param name="version"/>
         <xsl:choose>
-            <xsl:when test="$key = 'servers'">Cloud Servers</xsl:when>
-            <xsl:when test="$key = 'servers-firstgen'">First Generation Cloud Servers</xsl:when>
+            <xsl:when test="$key = 'servers' and $version='v2'">Cloud Servers</xsl:when>
+            <xsl:when test="$key = 'servers' and $version='v1.0'">First Generation Cloud Servers</xsl:when>
             <xsl:when test="$key= 'cdb'">Cloud Databases</xsl:when>
             <xsl:when test="$key= 'cm'">Cloud Montioring</xsl:when>
             <xsl:when test="$key= 'cbs'">Cloud Block Storage</xsl:when>            
@@ -88,13 +91,14 @@
             <xsl:when test="$key= 'cdns'">Cloud DNS</xsl:when>
             <xsl:otherwise>&#160;</xsl:otherwise>
         </xsl:choose>
-    </xsl:function>
+    </xsl:function>-->
     
     <xsl:function name="f:productnumber" as="xs:string">
         <xsl:param name="key"/>
+        <xsl:param name="version"/>
         <xsl:choose>
-            <xsl:when test="$key = 'servers'">1</xsl:when>
-            <xsl:when test="$key = 'servers-firstgen'">1</xsl:when>
+            <xsl:when test="$key = 'servers' and $version='v2'">1</xsl:when>
+            <xsl:when test="$key = 'servers' and $version='v1.0'">9</xsl:when>
             <xsl:when test="$key= 'cdb'">2</xsl:when>
             <xsl:when test="$key= 'cm'">3</xsl:when>
             <xsl:when test="$key= 'cbs'">4</xsl:when>      
