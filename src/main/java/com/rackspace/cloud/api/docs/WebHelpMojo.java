@@ -476,11 +476,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("security", this.security);
         map.put("canonicalUrlBase", this.canonicalUrlBase);
         map.put("replacementsFile", this.replacementsFile);
+        //This is where the images will be copied in the target. This is a POM configuration.
         map.put("imageCopyDir", this.imageCopyDir);
         map.put("failOnValidationError", this.failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
-        map.put("outputType", "html");
 
         // Profiling attrs:        
         map.put("profileOs", this.profileOs);
@@ -521,13 +521,22 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         		//getLog().info("~~~~~~~~inputFilename file has incompatible format: "+inputFilename);
         	}
         }
+        
+        //targetExtQueryFile can tell us where the html will be built. Comparing this with the imageCopyDir path
+        //we can figure out the relative path of the images to the html output. So passing the path to the content dir to the pipeline.
+        String targetExtQueryFile = (String) map.get("targetExtQueryFile");
+        int pos = targetExtQueryFile.lastIndexOf(File.separator);
+        targetExtQueryFile = targetExtQueryFile.substring(0, pos);
+        map.put("targetHtmlContentDir", baseDir+File.separator+targetExtQueryFile);
 
 
+        //makePdf is a POM configuration for generate-webhelp goal to control the execution of
+        //automatic building of pdf output
         if(makePdf!=null && makePdf.equalsIgnoreCase("true")) {
         	getLog().info("\n************************************* START: Automatically generating PDF for WEBHELP *************************************");
         	//Target directory for Webhelp points to ${basepath}/target/docbkx/webhelp. So get parent.
         	File baseDir = getTargetDirectory().getParentFile();
-        	//The point FO/PDF file output to be generated at ${basepath}/target/docbkx/pdf.
+        	//The point FO/PDF file output to be generated at ${basepath}/target/docbkx/autopdf.
         	File targetDir = new File(baseDir.getAbsolutePath()+"/autopdf");
         	//Create a new instance of PDFBuilder class and set config variables.
         	PDFBuilder pdfBuilder = new PDFBuilder();
@@ -539,7 +548,16 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setIncludes(getIncludes());
         	pdfBuilder.setEntities(getEntities());
         	
-        	pdfBuilder.setSourceFilePath(getSourceDirectory()+"/os-compute-devguide.xml");
+        	String srcFilename = this.projectBuildDirectory+"/docbkx/"+sourceFile.getName();
+	    	File tempHandle = new File(srcFilename);
+	    	if(tempHandle.exists()) {
+	    		System.out.println("***********************"+ srcFilename);
+	    		pdfBuilder.setSourceFilePath(srcFilename);
+	    	} else {
+	    		System.out.println("***********************"+ getSourceDirectory()+File.separator+inputFilename);
+	    		pdfBuilder.setSourceFilePath(getSourceDirectory()+File.separator+inputFilename);
+	    	}
+        	
         	pdfBuilder.setProjectBuildDirectory(baseDir.getAbsolutePath());
         	//setup fonts and images 
         	pdfBuilder.preProcess();
@@ -566,7 +584,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	getLog().info("************************************* END: Automatically generating PDF for WEBHELP *************************************\n");
         }
 
+        
         map.put("webhelp", "true");
+        
+        //this parameter will be used the copy and transform image step to decide whether to just check the existence of an image (for pdf)
+        //or to check existence, transform and copy image as well (for html)
         map.put("outputType", "html");
         
         return CalabashHelper.createSource(source, pathToPipelineFile, map);

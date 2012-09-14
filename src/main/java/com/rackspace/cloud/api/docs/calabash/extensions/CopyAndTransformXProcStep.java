@@ -25,6 +25,7 @@ import com.xmlcalabash.util.ProcessMatchingNodes;
 
 public class CopyAndTransformXProcStep extends DefaultStep {
 	private static final QName _target = new QName("target");
+	private static final QName _targetHtmlContentDir = new QName("targetHtmlContentDir");
 	private static final QName _inputFileName = new QName("inputFileName");
 	private static final QName _outputType = new QName("outputType");
 	private static final QName _fail_on_error = new QName("fail-on-error");
@@ -68,7 +69,7 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 		super.run();
 		System.out.println("Entering CopyAndTransformXProcStep!!! ");
 
-		XdmNode updatedDoc = makeReplacements (source.read());
+		XdmNode updatedDoc = processInlineImages (source.read());
 		result.write(updatedDoc);
 
 		System.out.println("Leaving CopyAndTransformXProcStep!!! ");
@@ -78,6 +79,14 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 		RuntimeValue target = getOption(_target);
 		URI uri = target.getBaseURI().resolve(target.getString());
 
+		return uri;
+	}
+
+	private URI getTargetHtmlContentDirectoryURI() {
+		RuntimeValue target = getOption(_targetHtmlContentDir);
+		URI uri = target.getBaseURI().resolve(target.getString());
+		File ttt = new File(uri);
+		System.out.println(ttt.getAbsolutePath());
 		return uri;
 	}
 
@@ -91,26 +100,22 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 	}
 
 
-	private XdmNode makeReplacements(XdmNode doc) {
-
-		CopyTransformImage xpathRepl = new CopyTransformImage("//*:imagedata/@fileref",getTargetDirectoryURI(), getInputDocbookName(), getOutputType(), step.getNode());
-		//CopyTransformImage xpathRepl = new CopyTransformImage("//*:imagedata/@fileref[not(. = ../following-sibling::imagedata/@fileref)]");
+	private XdmNode processInlineImages(XdmNode doc) {
+		
+		CopyTransformImage xpathRepl = 
+				new CopyTransformImage(	"//*:imagedata/@fileref",
+										getTargetDirectoryURI(),
+										getTargetHtmlContentDirectoryURI(),
+										getInputDocbookName(), 
+										getOutputType(), 
+										step.getNode());
 
 		matcher = new ProcessMatch(runtime, xpathRepl);
 		xpathRepl.setMatcher(matcher);
 
 		matcher.match(doc, new RuntimeValue(xpathRepl.getXPath()));
 		doc = matcher.getResult();
-
-		/*
-
-        System.out.println("\n\n\n****************************************************************");
-        System.out.println(doc.toString());
-        System.out.println("****************************************************************\n\n\n");
-
-        doc.toString().replaceAll(Pattern.quote("file:///Users/somethingthatistotallywrong.svg"), "file:///Users/salmanqureshi/Projects/Rackspace/Dev/compute-api-final/openstack-compute-api-2/target/docbkx/webhelp/api/openstack/2/figures/Arrow_east.svg");
-		 */
-
+		
 		return doc;
 	}
 }

@@ -672,54 +672,6 @@
     </p:declare-step>
 
 
-    <p:declare-step 
-		xmlns:l="http://xproc.org/library" 
-		xmlns:c="http://www.w3.org/ns/xproc-step"
-		xml:id="copy-and-transform-images"
-		type="l:copy-and-transform-images"  
-		name="copy-and-transform-images-step">
-		
-		<p:input port="source" primary="true" sequence="true"/>
-	    <p:output port="result" primary="true"/>
-        <p:input port="parameters" kind="parameter"/>
-        <ut:parameters name="params"/>
-        <p:sink/>
-   
-		<p:identity>
-			<p:input port="source">
-				<p:pipe step="copy-and-transform-images-step" port="source"/>
-			</p:input>
-		</p:identity>
-		<p:group name="loop-grp">
-			<p:output port="result" primary="true" sequence="true">
-				<p:pipe step="copy-and-transform-images-step" port="source"/>
-			</p:output>
-			<p:output port="secondary" primary="false" sequence="true">
-				<p:pipe step="loop" port="result"/>
-			</p:output>
-
-            <p:variable name="paramOutputType" select="//c:param[@name = 'outputType']/@value">
-                <p:pipe step="params" port="parameters"/>
-            </p:variable>
-			<p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
-				<p:pipe step="params" port="parameters"/>
-			</p:variable>
-   	        <p:variable name="inputSrcFile" select="//c:param[@name = 'inputSrcFile']/@value">
-                <p:pipe step="params" port="parameters"/>
-            </p:variable>
-			<p:variable name="image.copy.dir" select="//c:param[@name = 'imageCopyDir']/@value">
-				<p:pipe step="params" port="parameters"/>
-			</p:variable>
-			
-			<cx:copy-transform-xproc name="loop">
-				<p:with-option name="target" select="concat('file://',$project.build.directory,'/',$image.copy.dir)"/>
-				<p:with-option name="inputFileName" select="concat($inputSrcFile,'')"/>
-				<p:with-option name="outputType" select="concat($paramOutputType,'')"/>
-			</cx:copy-transform-xproc>
-						
-		</p:group>
-	</p:declare-step>
-
 	<p:declare-step
 		xmlns:l="http://xproc.org/library"
 		xmlns:c="http://www.w3.org/ns/xproc-step"
@@ -832,24 +784,69 @@
         
     </p:declare-step>
 
-   <!-- Search and replace calabash extension -->
-	<p:declare-step type="cx:copy-transform"
-		xml:id="copy-transform">
-	    <p:output port="result" primary="false"/>
-	    <p:option name="href" required="true" cx:type="xsd:anyURI"/>
-		<p:option name="target" required="true" cx:type="xsd:anyURI"/>
-		<p:option name="inputFileName" cx:type="xsd:string"/>
-		<p:option name="outputType" cx:type="xsd:string"/>
-	    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
-	 </p:declare-step>
+    <p:declare-step 
+		xmlns:l="http://xproc.org/library" 
+		xmlns:c="http://www.w3.org/ns/xproc-step"
+		xml:id="copy-and-transform-images"
+		type="l:copy-and-transform-images"  
+		name="copy-and-transform-images-step">
+		
+		<p:input port="source" primary="true" sequence="true"/>
+	    <p:output port="result" primary="true"/>
+        <p:input port="parameters" kind="parameter"/>
+        <ut:parameters name="params"/>
+        <p:sink/>
    
-   <!-- Search and replace calabash extension -->
+		<p:identity>
+			<p:input port="source">
+				<p:pipe step="copy-and-transform-images-step" port="source"/>
+			</p:input>
+		</p:identity>
+		<p:group name="loop-grp">
+			<p:output port="result" primary="true" sequence="true">
+				<p:pipe step="copy-and-transform-images-step" port="source"/>
+			</p:output>
+			<p:output port="secondary" primary="false" sequence="true">
+				<p:pipe step="loop" port="result"/>
+			</p:output>
+			<!-- output type can be pdf of html -->
+            <p:variable name="output.type" select="//c:param[@name = 'outputType']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+			<p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+				<p:pipe step="params" port="parameters"/>
+			</p:variable>
+   	        <p:variable name="input.docbook.file" select="//c:param[@name = 'inputSrcFile']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+			<p:variable name="image.copy.dir" select="//c:param[@name = 'imageCopyDir']/@value">
+				<p:pipe step="params" port="parameters"/>
+			</p:variable>
+			<!-- this param is passed by WebhelpMojo and contains the path where final html output will be written.
+			Comparing this path with the image copy dir param, we can find the relative path of the images to html -->
+			<p:variable name="target.html.content.dir" select="//c:param[@name = 'targetHtmlContentDir']/@value">
+				<p:pipe step="params" port="parameters"/>
+			</p:variable>
+			
+			<cx:copy-transform name="loop">
+				<p:with-option name="target" select="concat('file://',$project.build.directory,'/',$image.copy.dir)"/>
+				<p:with-option name="targetHtmlContentDir" select="concat('file://',$target.html.content.dir)"/>
+				<p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
+				<p:with-option name="outputType" select="concat($output.type,'')"/>
+			</cx:copy-transform>
+						
+		</p:group>
+	</p:declare-step>
+
+
+   <!-- copy and transform images calabash extension -->
    <p:declare-step 
-   		type="cx:copy-transform-xproc" 
-   		xml:id="copy-transform-xproc">
+   		type="cx:copy-transform" 
+   		xml:id="copy-transform">
       	<p:input port="source" primary="true" sequence="true"/>
 	    <p:output port="result" primary="false"/>
 		<p:option name="target" required="true" cx:type="xsd:anyURI"/>
+		<p:option name="targetHtmlContentDir" required="false" cx:type="xsd:anyURI"/>
 		<p:option name="inputFileName" cx:type="xsd:string"/>
 		<p:option name="outputType" cx:type="xsd:string"/>
 	    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
