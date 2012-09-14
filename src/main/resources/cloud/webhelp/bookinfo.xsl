@@ -24,21 +24,21 @@
             href="{$base.dir}/bookinfo.xml" 
             method="xml" indent="yes" encoding="UTF-8">
             <products xmlns="">
-                <xsl:for-each-group select="//db:info/raxm:metadata" group-by="raxm:product">
+                <xsl:for-each-group select="//db:info/raxm:metadata" group-by="f:productnumber(raxm:product,raxm:product/@version)">             
                     <product>
-                        <id><xsl:value-of select="f:productnumber(current-grouping-key(),current-group()//raxm:product/@version)"/></id>
+                        <id><xsl:value-of select="current-grouping-key()"/></id>
                         <types>
                             <xsl:variable name="types">
-<xsl:if test="/*/db:info/raxm:metadata">
+                               <xsl:if test="/*/db:info/raxm:metadata">
                                 <type xmlns="">
                                     <id><xsl:value-of select="f:calculatetype(/*/db:info/raxm:metadata/raxm:type)"/></id>
                                     <displayname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></displayname>
                                     <url><xsl:value-of select="concat($IndexWar,'/',/*/db:info/raxm:metadata/raxm:product,'/api/',/*/db:info/raxm:metadata/raxm:product/@version,'/',$input.filename,'/content/',$default.topic)"/></url>
                                     <sequence><xsl:value-of select="f:calculatepriority(/*/db:info//raxm:priority[1])"/></sequence> 
                                 </type>  
-</xsl:if>
+                               </xsl:if>
                                 <xsl:apply-templates 
-                                    select="$resource-lists[db:info/raxm:metadata//raxm:product = current-grouping-key()]/db:listitem" 
+                                    select="$resource-lists[f:productnumber(db:info/raxm:metadata/raxm:product,db:info/raxm:metadata/raxm:product/@version) = current-grouping-key()]/db:listitem" 
                                     mode="bookinfo"/>
                             </xsl:variable>
                             <xsl:apply-templates select="$types/type" mode="copy-types">
@@ -72,7 +72,7 @@
                     <id><xsl:value-of select="f:calculatetype(parent::*/db:info//raxm:type[1])"/></id>
                     <displayname><xsl:value-of select=".//db:link[1]"/></displayname>
                     <url><xsl:value-of select=".//db:link[1]/@xlink:href"/></url>
-                    <sequence><xsl:value-of select="f:calculatepriority(parent::*/db:info//raxm:priority[1])"/></sequence> 
+                    <sequence><xsl:value-of select="f:calculatepriority(parent::*/db:info//raxm:priority[1]) + count(preceding::db:listitem)"/></sequence> 
                 </type>        
     </xsl:template>
         
@@ -105,7 +105,8 @@
             <xsl:when test="$key= 'cloudfiles'">5</xsl:when>
             <xsl:when test="$key= 'loadbalancers'">6</xsl:when>
             <xsl:when test="$key= 'auth'">7</xsl:when>
-            <xsl:when test="$key= 'cdns'">8</xsl:when>      
+            <xsl:when test="$key= 'cdns'">8</xsl:when>   
+            <xsl:when test="$key= 'sites'">10</xsl:when>
             <xsl:otherwise>&#160;</xsl:otherwise>
         </xsl:choose>
     </xsl:function>
