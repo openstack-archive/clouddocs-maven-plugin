@@ -819,17 +819,12 @@
    	        <p:variable name="input.docbook.file" select="//c:param[@name = 'inputSrcFile']/@value">
                 <p:pipe step="params" port="parameters"/>
             </p:variable>
-			<p:variable name="image.copy.dir" select="//c:param[@name = 'imageCopyDir']/@value">
-				<p:pipe step="params" port="parameters"/>
-			</p:variable>
-			<!-- this param is passed by WebhelpMojo and contains the path where final html output will be written.
-			Comparing this path with the image copy dir param, we can find the relative path of the images to html -->
 			<p:variable name="target.html.content.dir" select="//c:param[@name = 'targetHtmlContentDir']/@value">
 				<p:pipe step="params" port="parameters"/>
 			</p:variable>
 			
 			<cx:copy-transform name="loop">
-				<p:with-option name="target" select="concat('file://',$project.build.directory,'/',$image.copy.dir)"/>
+				<p:with-option name="target" select="concat('', 'file:///home/mtariq/Projects/rackspace/compute-api/openstack-compute-api-2/target/docbkx/webhelp/api/openstack-compute/2')"/>
 				<p:with-option name="targetHtmlContentDir" select="concat('file://',$target.html.content.dir)"/>
 				<p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
 				<p:with-option name="outputType" select="concat($output.type,'')"/>

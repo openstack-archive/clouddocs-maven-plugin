@@ -135,6 +135,7 @@ public class PDFBuilder {
 		// Extract all fonts into fonts directory
 		//
 		FileUtils.extractJaredDirectory("fonts",PDFBuilder.class,imageParentDirectory);
+		System.out.println("************************************** HELLO WORLD **************************************");
 	}
 
 	public File processSources(Map<String,String> map) throws MojoExecutionException{

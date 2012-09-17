@@ -78,15 +78,12 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 	private URI getTargetDirectoryURI() {
 		RuntimeValue target = getOption(_target);
 		URI uri = target.getBaseURI().resolve(target.getString());
-
 		return uri;
 	}
 
 	private URI getTargetHtmlContentDirectoryURI() {
 		RuntimeValue target = getOption(_targetHtmlContentDir);
 		URI uri = target.getBaseURI().resolve(target.getString());
-		File ttt = new File(uri);
-		System.out.println(ttt.getAbsolutePath());
 		return uri;
 	}
 

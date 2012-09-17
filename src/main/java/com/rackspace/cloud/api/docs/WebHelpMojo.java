@@ -156,13 +156,6 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     
     /**
      * @parameter 
-     *     expression="${generate-webhelp.imageCopyDir}"
-     *     default-value=""
-     */
-    private String imageCopyDir;
-
-    /**
-     * @parameter 
      *     expression="${generate-webhelp.makePdf}"
      *     default-value=""
      */
@@ -471,13 +464,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         String pathToPipelineFile = "classpath:/webhelp.xpl"; //use "classpath:/path" for this to work
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        Map map=new HashMap<String, String>();
+        Map<String, String> map=new HashMap<String, String>();
         
         map.put("security", this.security);
         map.put("canonicalUrlBase", this.canonicalUrlBase);
         map.put("replacementsFile", this.replacementsFile);
-        //This is where the images will be copied in the target. This is a POM configuration.
-        map.put("imageCopyDir", this.imageCopyDir);
         map.put("failOnValidationError", this.failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
@@ -522,8 +513,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	}
         }
         
-        //targetExtQueryFile can tell us where the html will be built. Comparing this with the imageCopyDir path
-        //we can figure out the relative path of the images to the html output. So passing the path to the content dir to the pipeline.
+        //targetExtQueryFile can tell us where the html will be built. We pass this absolute path to the
+        //pipeline so that the copy-and-transform-image step can use it to calculate where to place the images.
         String targetExtQueryFile = (String) map.get("targetExtQueryFile");
         int pos = targetExtQueryFile.lastIndexOf(File.separator);
         targetExtQueryFile = targetExtQueryFile.substring(0, pos);
