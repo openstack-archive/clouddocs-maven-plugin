@@ -89,6 +89,11 @@ make sense
 		homelist = getPathList(home);
 		filelist = getPathList(f);
 		s = matchPathLists(homelist,filelist);
+		
+		System.out.println("*************** Relative Path: ********************************");
+		System.out.println("*** home: " + home.getAbsolutePath());
+		System.out.println("*** file: " + f.getAbsolutePath());
+		System.out.println("*** path: " + s);
 
 		return s;
 	}
@@ -97,13 +102,10 @@ make sense
 	 * test the function
 	 */
 	public static void main(String args[]) {
-		if (args.length != 2) {
-			System.out.println("RelativePath <home> <file>");
-			return;
-		}
-		System.out.println("home = " + args[0]);
-		System.out.println("file = " + args[1]);
-		System.out.println("path = " + getRelativePath(new File(args[0]),new
-				File(args[1])));
+		String home = "/home/mtariq/content/myfolder";
+		String file = "/home/myfolder/figures/fig.png";
+		System.out.println("home = " + home);
+		System.out.println("file = " + file);
+		System.out.println("path = " + getRelativePath(new File(home),new File(file)));
 	}
 }

@@ -10,7 +10,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
@@ -18,6 +18,7 @@ import net.sf.saxon.s9api.XdmNode;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
@@ -36,6 +37,7 @@ import com.xmlcalabash.util.ProcessMatchingNodes;
 
 public class CopyTransformImage implements ProcessMatchingNodes {
 	private String xpath;
+	private Map<String, String> baseUriToDirMap = new HashMap<String, String>();
 	private Map<String, String> imageMap = new HashMap<String, String>();
 	private ProcessMatch matcher;
 
@@ -79,11 +81,13 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		if (!file.exists()) {
 			getLog().error("DocBook File: '" + inputDocbookName + "' - File: '" + sourceImageUri.getPath() + "' - Problem: File does not exist!");
 			//throw new XProcException(stepNode, "Cannot copy: file does not exist: " + file.getAbsolutePath());
+			return null;
 		}
 
 		if (file.isDirectory()) {
 			getLog().error("DocBook File: '" + inputDocbookName + "' - File: '" + sourceImageUri.getPath() + "' - Problem: File is a directory!");
 			//throw new XProcException(stepNode, "Cannot copy: file is a directory: " + file.getAbsolutePath());
+			return null;
 		}
 
 		return file;
@@ -107,7 +111,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 				throw new XProcException("Cannot copy: target file is a directory: " + target.getAbsolutePath());
 			}
 		}
-
+		
 		try {
 			FileInputStream src = new FileInputStream(file);
 			FileOutputStream dst = new FileOutputStream(target);
@@ -142,11 +146,94 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 	}
 
 	private String processSelectedImage(XdmNode node) {
+		URI baseUri = node.getBaseURI();
+		String fileRef = node.getStringValue();
+		URI baseDirUri = baseUri.resolve(".");
+		
+		String srcImgFilePath = FilenameUtils.normalize(baseDirUri.getPath() + File.separator + fileRef);
+		File srcImgFile = getFileHandle(srcImgFilePath);
+		
+		if (outputType.equals("pdf")) {
+			//Need to check only for the existence of the image file
+			if (! fileExists(srcImgFile)) {
+				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
+				return node.getStringValue();
+			} else {
+				return node.getStringValue();
+			}
+		}
+		else if (outputType.equals("html")) {
+			String targetDirPath = calculateTargetDirPath(baseUri.getPath(), fileRef);
+			File targetDir = makeDirs(targetDirPath);
+			//For HTML, we need a more elaborate check for missing images
+			if (fileExists(srcImgFile)) {
+				//simply copy the src file to the destination
+				File copiedFile = copyFile(srcImgFile, targetDir); 
+				return RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
+			}
+			else if (fileExists(getFileHandle(FilenameUtils.removeExtension(srcImgFilePath) + ".svg"))) {
+				//convert the svg to the relevant type and copy
+				File copiedFile = copyFile(srcImgFile, targetDir); 
+				return RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
+			}
+			else {
+				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
+				return node.getStringValue();
+			}
+		}
+		else {
+			//we only know how to handle "pdf" and "html" outputTypes so just return the value
+			return node.getStringValue();
+		}
+	}
+	
+	private String calculateTargetDirPath(String baseUriPath, String fileRef) {
+		String targetDirForBaseUri = "" + (10 + new Random().nextInt(90));
+		String targetDirForFileRef = FilenameUtils.getPathNoEndSeparator(fileRef.replaceAll("\\.\\.", "a"));
+		return targetDirForBaseUri + File.separator +
+			   targetDirForFileRef;
+	}
+
+	private File copyFile(File srcFile, File targetDir) {
+		try {
+			FileUtils.copyFileToDirectory(srcFile, targetDir);
+		} catch (IOException e) {
+			return null;
+		}
+		return new File(targetDir.getAbsolutePath() + File.separator + srcFile.getName());
+	}
+
+	private void reportImageNotFoundError(URI baseUri, String fileRef, File srcImgFile) {
+		System.out.println("**********************************************************");
+		System.out.println("File NOT found : " + baseUri.getPath());
+	}
+
+	private boolean fileExists(File file) {
+		// TODO: Check for case sensitive file names
+		return file==null ? false : file.exists();
+	}
+
+	private File makeDirs(String relativePath) {
+		//TODO: handle cases where dirPath is path to a file
+		File dir = new File(targetDirectoryUri.getPath(), relativePath);
+		if (dir.mkdir() && dir.mkdirs()) {
+			
+		}
+		return dir;
+	}
+
+	private File getFileHandle(String filePath) {
+		// TODO: Handle cases where the filePath refers to a directory
+		return new File(filePath);
+	}
+
+	private String processSelectedImageOLD(XdmNode node) {
+		System.out.println("****** Processing node: " + node.toString() + " --- baseUri="+node.getBaseURI().toString());
 		
 		String value = node.getStringValue();
 		
 		if(imageMap.containsKey(value)) {
-			//System.out.println("\n\n*********** already processed **************** "+imageMap.get(value));
+			System.out.println("\n\n*********** already processed **************** "+imageMap.get(value));
 			return imageMap.get(value);
 		}
 
@@ -182,6 +269,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 					imageMap.put(value, sourceImageFile.getAbsolutePath());
 				} 
 				else if(outputType.equals("html")) {
+					System.out.println("****** Entering elseif outputType=='html'");
 					//if the output type is html then we need to decide steps based on the image extension
 					//if the image is an SVG then transform and save a png in the html target directory
 					//if the image is a PNG then make a huge assumption that an SVG was specified in the Docbook before the png
@@ -197,7 +285,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 						}
 						sourceImageFile = getHandleToImageFile(sourceImageUri);
 						if(sourceImageFile != null) {
-
+							System.out.println("****** Case 1");
 							File copiedFile = performFileCopyAndTransformation(targetDirectoryUri, inputDocbookName, sourceImageFile);
 							String correctRelativePathToImage = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
 							imageMap.put(value, correctRelativePathToImage);
@@ -205,16 +293,21 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 							//File not found in source and target folders.
 						}
 					} else if(sourceImageFile != null && !isSVG) {
-						String correctRelativePathToImage = RelativePath.getRelativePath( new File(targetHtmlContentDirectoryUri), sourceImageFile);
+						System.out.println("****** Case 2: " + sourceImageFile);
+						File copiedFile = performFileCopyAndTransformation(targetDirectoryUri, inputDocbookName, sourceImageFile);
+						String correctRelativePathToImage = RelativePath.getRelativePath( new File(targetHtmlContentDirectoryUri), copiedFile);
 						imageMap.put(value, correctRelativePathToImage);
 						
 					} else if(sourceImageFile != null && isSVG) {
+						System.out.println("****** Case 3");
 						//There really isn't any need to copy the SVG for html output but it is being done right now. We only care about transforming it to a PNG.
 						File copiedFile = performFileCopyAndTransformation(targetDirectoryUri, inputDocbookName, sourceImageFile);
 						
 						String correctRelativePathToImage = RelativePath.getRelativePath( new File(targetHtmlContentDirectoryUri), copiedFile);
 						imageMap.put(value, correctRelativePathToImage);
-					} 
+					}
+
+					System.out.println("****** Exiting elseif outputType=='html'");
 				}
 			} catch (XProcException x) {
 				//getLog().error(x.getMessage());

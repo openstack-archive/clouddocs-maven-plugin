@@ -10,6 +10,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 
@@ -77,7 +78,8 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 
 	private URI getTargetDirectoryURI() {
 		RuntimeValue target = getOption(_target);
-		URI uri = target.getBaseURI().resolve(target.getString());
+		URI uri = target.getBaseURI().resolve(FilenameUtils.normalizeNoEndSeparator(target.getString()));
+		
 		return uri;
 	}
 
@@ -98,6 +100,8 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 
 
 	private XdmNode processInlineImages(XdmNode doc) {
+//		System.out.println("******************* getTargetDirectoryURI() = " + getTargetDirectoryURI());
+//		System.out.println("******************* getTargetHtmlConteURI() = " + getTargetHtmlContentDirectoryURI());
 		
 		CopyTransformImage xpathRepl = 
 				new CopyTransformImage(	"//*:imagedata/@fileref",

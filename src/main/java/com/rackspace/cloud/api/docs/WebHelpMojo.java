@@ -519,6 +519,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         int pos = targetExtQueryFile.lastIndexOf(File.separator);
         targetExtQueryFile = targetExtQueryFile.substring(0, pos);
         map.put("targetHtmlContentDir", baseDir+File.separator+targetExtQueryFile);
+        map.put("targetDir", baseDir.getAbsolutePath()+File.separator+"figures");
 
 
         //makePdf is a POM configuration for generate-webhelp goal to control the execution of

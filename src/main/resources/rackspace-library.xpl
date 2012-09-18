@@ -824,7 +824,7 @@
 			</p:variable>
 			
 			<cx:copy-transform name="loop">
-				<p:with-option name="target" select="concat('', 'file:///home/mtariq/Projects/rackspace/compute-api/openstack-compute-api-2/target/docbkx/webhelp/api/openstack-compute/2')"/>
+				<p:with-option name="target" select="concat('file://',$target.html.content.dir, '/../figures')"/>
 				<p:with-option name="targetHtmlContentDir" select="concat('file://',$target.html.content.dir)"/>
 				<p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
 				<p:with-option name="outputType" select="concat($output.type,'')"/>
