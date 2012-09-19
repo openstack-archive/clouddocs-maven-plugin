@@ -186,8 +186,8 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 			}
 			else if (fileExists(getFileHandle(FilenameUtils.removeExtension(srcImgFilePath) + ".svg"))) {
 				//convert the svg to the relevant type and copy
-//				File copiedFile = new TransformSVGToPNG().transformAndCopy(FilenameUtils.removeExtension(srcImgFilePath)+".svg", targetDir); 
-				File copiedFile = copyFile(srcImgFile, targetDir); 
+				File svgFile = getFileHandle(FilenameUtils.removeExtension(srcImgFilePath) + ".svg");
+				File copiedFile = new TransformSVGToPNG().transformAndCopy(svgFile, targetDir); 
 				relativePathToCopiedFile = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
 			}
 			else {
@@ -433,29 +433,27 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 			return null;
 		}
 		
-		File transformAndCopy(String origFilePath, String newFilePath) {
+		File transformAndCopy(File svgFile, File targetDir) {
+			String pngFileName = FilenameUtils.getBaseName(svgFile.getPath()) + ".png";
+			File pngFile = new File(targetDir, pngFileName);
 			PNGTranscoder t = new PNGTranscoder();
 			
 			try {
-				File origFile = new File(origFilePath);
-				File outputFile = new File(newFilePath);
+				TranscoderInput input = new TranscoderInput(svgFile.toURI().toString());
+				pngFile.createNewFile();
 				
-				TranscoderInput input = new TranscoderInput(origFile.toURI().toString());
-				outputFile.createNewFile();
-				
-				OutputStream ostream = new FileOutputStream(outputFile);
+				OutputStream ostream = new FileOutputStream(pngFile);
 				TranscoderOutput output = new TranscoderOutput(ostream);
 				
 				t.transcode(input, output);
 				ostream.flush();
 				ostream.close();
 				
-				return outputFile;
+				return pngFile;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return null;
-
 		}
 	}
 }
