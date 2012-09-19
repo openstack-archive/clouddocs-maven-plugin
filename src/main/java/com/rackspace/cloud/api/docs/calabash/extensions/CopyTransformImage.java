@@ -152,14 +152,19 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		
 		String srcImgFilePath = FilenameUtils.normalize(baseDirUri.getPath() + File.separator + fileRef);
 		File srcImgFile = getFileHandle(srcImgFilePath);
+		String relativePathToCopiedFile;
+		
+		if (this.imageMap.containsKey(srcImgFilePath)) {
+			return this.imageMap.get(srcImgFilePath);
+		}
 		
 		if (outputType.equals("pdf")) {
 			//Need to check only for the existence of the image file
 			if (! fileExists(srcImgFile)) {
 				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
-				return node.getStringValue();
+				relativePathToCopiedFile = node.getStringValue();
 			} else {
-				return node.getStringValue();
+				relativePathToCopiedFile = node.getStringValue();
 			}
 		}
 		else if (outputType.equals("html")) {
@@ -169,29 +174,39 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 			if (fileExists(srcImgFile)) {
 				//simply copy the src file to the destination
 				File copiedFile = copyFile(srcImgFile, targetDir); 
-				return RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
+				relativePathToCopiedFile = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
 			}
 			else if (fileExists(getFileHandle(FilenameUtils.removeExtension(srcImgFilePath) + ".svg"))) {
 				//convert the svg to the relevant type and copy
 				File copiedFile = copyFile(srcImgFile, targetDir); 
-				return RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
+				relativePathToCopiedFile = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
 			}
 			else {
 				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
-				return node.getStringValue();
+				relativePathToCopiedFile = node.getStringValue();
 			}
 		}
 		else {
 			//we only know how to handle "pdf" and "html" outputTypes so just return the value
-			return node.getStringValue();
+			relativePathToCopiedFile = node.getStringValue();
 		}
+
+		this.imageMap.put(srcImgFilePath, relativePathToCopiedFile);
+		return relativePathToCopiedFile;
 	}
 	
 	private String calculateTargetDirPath(String baseUriPath, String fileRef) {
-		String targetDirForBaseUri = "" + (10 + new Random().nextInt(90));
+		String targetDirForBaseUri = null;
+		if (this.baseUriToDirMap.containsKey(baseUriPath)) {
+			targetDirForBaseUri = this.baseUriToDirMap.get(baseUriPath);
+		} else {
+			//TODO: handle collisions
+			targetDirForBaseUri = "" + (10 + new Random().nextInt(90));
+			this.baseUriToDirMap.put(baseUriPath, targetDirForBaseUri);
+		}
+		
 		String targetDirForFileRef = FilenameUtils.getPathNoEndSeparator(fileRef.replaceAll("\\.\\.", "a"));
-		return targetDirForBaseUri + File.separator +
-			   targetDirForFileRef;
+		return (targetDirForBaseUri + File.separator + targetDirForFileRef);
 	}
 
 	private File copyFile(File srcFile, File targetDir) {
