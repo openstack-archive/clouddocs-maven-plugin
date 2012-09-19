@@ -17,12 +17,14 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 
+import com.rackspace.cloud.api.docs.calabash.extensions.util.RelativePath;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.util.ProcessMatch;
 import com.xmlcalabash.util.ProcessMatchingNodes;
@@ -47,6 +49,8 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 	private String outputType;
 	private XdmNode stepNode;
 	private static final int bufferSize = 8192;
+	
+	private boolean errorsFound = false;
 
 
 	private Log log = null;
@@ -65,6 +69,10 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		this.inputDocbookName = _inputDocbookName;
 		this.outputType = _outputType;
 		this.stepNode = _step;
+	}
+	
+	public boolean hasErrors() {
+		return errorsFound;
 	}
 
 	public String getXPath() {
@@ -178,6 +186,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 			}
 			else if (fileExists(getFileHandle(FilenameUtils.removeExtension(srcImgFilePath) + ".svg"))) {
 				//convert the svg to the relevant type and copy
+//				File copiedFile = new TransformSVGToPNG().transformAndCopy(FilenameUtils.removeExtension(srcImgFilePath)+".svg", targetDir); 
 				File copiedFile = copyFile(srcImgFile, targetDir); 
 				relativePathToCopiedFile = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
 			}
@@ -201,7 +210,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 			targetDirForBaseUri = this.baseUriToDirMap.get(baseUriPath);
 		} else {
 			//TODO: handle collisions
-			targetDirForBaseUri = "" + (10 + new Random().nextInt(90));
+			targetDirForBaseUri = "" + (100 + new Random().nextInt(900));
 			this.baseUriToDirMap.put(baseUriPath, targetDirForBaseUri);
 		}
 		
@@ -219,8 +228,9 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 	}
 
 	private void reportImageNotFoundError(URI baseUri, String fileRef, File srcImgFile) {
-		System.out.println("**********************************************************");
-		System.out.println("File NOT found : " + baseUri.getPath());
+		getLog().error(	"File not found: '" + srcImgFile + "'. " +
+						"File is referred in '" + baseUri.getPath() + "' fileRef='" + fileRef + "'.");
+		this.errorsFound = true; 
 	}
 
 	private boolean fileExists(File file) {
@@ -422,7 +432,31 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 			}
 			return null;
 		}
+		
+		File transformAndCopy(String origFilePath, String newFilePath) {
+			PNGTranscoder t = new PNGTranscoder();
+			
+			try {
+				File origFile = new File(origFilePath);
+				File outputFile = new File(newFilePath);
+				
+				TranscoderInput input = new TranscoderInput(origFile.toURI().toString());
+				outputFile.createNewFile();
+				
+				OutputStream ostream = new FileOutputStream(outputFile);
+				TranscoderOutput output = new TranscoderOutput(ostream);
+				
+				t.transcode(input, output);
+				ostream.flush();
+				ostream.close();
+				
+				return outputFile;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
 
+		}
 	}
 }
 

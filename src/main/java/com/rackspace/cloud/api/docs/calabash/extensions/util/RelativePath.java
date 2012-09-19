@@ -1,4 +1,4 @@
-package com.rackspace.cloud.api.docs.calabash.extensions;
+package com.rackspace.cloud.api.docs.calabash.extensions.util;
 
 import java.io.*;
 import java.util.*;
@@ -16,8 +16,8 @@ public class RelativePath {
 	 * @return a List collection with the individual elements of the path in
 reverse order
 	 */
-	private static List getPathList(File f) {
-		List l = new ArrayList();
+	private static List<String> getPathList(File f) {
+		List<String> l = new ArrayList<String>();
 		File r;
 		try {
 			r = f.getCanonicalFile();
@@ -39,7 +39,7 @@ reverse order
 	 * @param r home path
 	 * @param f path of file
 	 */
-	private static String matchPathLists(List r,List f) {
+	private static String matchPathLists(List<String> r,List<String> f) {
 		int i;
 		int j;
 		String s;
@@ -81,20 +81,10 @@ make sense
 	 * @return path from home to f as a string
 	 */
 	public static String getRelativePath(File home,File f){
-		File r;
-		List homelist;
-		List filelist;
-		String s;
-
-		homelist = getPathList(home);
-		filelist = getPathList(f);
-		s = matchPathLists(homelist,filelist);
+		List<String> homelist = getPathList(home);
+		List<String> filelist = getPathList(f);
+		String s = matchPathLists(homelist,filelist);
 		
-		System.out.println("*************** Relative Path: ********************************");
-		System.out.println("*** home: " + home.getAbsolutePath());
-		System.out.println("*** file: " + f.getAbsolutePath());
-		System.out.println("*** path: " + s);
-
 		return s;
 	}
 
@@ -102,8 +92,8 @@ make sense
 	 * test the function
 	 */
 	public static void main(String args[]) {
-		String home = "/home/mtariq/content/myfolder";
-		String file = "/home/myfolder/figures/fig.png";
+		String home = "/home/user1/content/myfolder";
+		String file = "/home/user1/figures/fig.png";
 		System.out.println("home = " + home);
 		System.out.println("file = " + file);
 		System.out.println("path = " + getRelativePath(new File(home),new File(file)));

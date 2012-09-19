@@ -73,6 +73,7 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 		XdmNode updatedDoc = processInlineImages (source.read());
 		result.write(updatedDoc);
 
+		System.out.println(updatedDoc.toString());
 		System.out.println("Leaving CopyAndTransformXProcStep!!! ");
 	}
 
@@ -97,13 +98,17 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 	private String getOutputType() {
 		return getOption(_outputType, "Unknown");
 	}
+	
+	private boolean isFailOnErrorFlagSet() {
+		return getOption(_fail_on_error, true);
+	}
 
 
 	private XdmNode processInlineImages(XdmNode doc) {
 //		System.out.println("******************* getTargetDirectoryURI() = " + getTargetDirectoryURI());
 //		System.out.println("******************* getTargetHtmlConteURI() = " + getTargetHtmlContentDirectoryURI());
 		
-		CopyTransformImage xpathRepl = 
+		CopyTransformImage copyTransform = 
 				new CopyTransformImage(	"//*:imagedata/@fileref",
 										getTargetDirectoryURI(),
 										getTargetHtmlContentDirectoryURI(),
@@ -111,11 +116,15 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 										getOutputType(), 
 										step.getNode());
 
-		matcher = new ProcessMatch(runtime, xpathRepl);
-		xpathRepl.setMatcher(matcher);
+		matcher = new ProcessMatch(runtime, copyTransform);
+		copyTransform.setMatcher(matcher);
 
-		matcher.match(doc, new RuntimeValue(xpathRepl.getXPath()));
+		matcher.match(doc, new RuntimeValue(copyTransform.getXPath()));
 		doc = matcher.getResult();
+		
+		if (copyTransform.hasErrors() && isFailOnErrorFlagSet()) {
+			throw new XProcException("One or more images refered in the docbook were not found. Please see log for details.");
+		}
 		
 		return doc;
 	}
