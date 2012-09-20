@@ -45,7 +45,7 @@
   </l:validate-transform>
 
   <cx:message>
-    <p:with-option name="message" select="'copying and transforming images'"/>
+    <p:with-option name="message" select="'Validating, copying and transforming images'"/>
   </cx:message>
   <l:copy-and-transform-images/>
 

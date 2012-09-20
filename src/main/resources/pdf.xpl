@@ -45,9 +45,9 @@
   </l:validate-transform>
 
   <cx:message>
-    <p:with-option name="message" select="'copying and transforming images'"/>
+    <p:with-option name="message" select="'Validating images'"/>
   </cx:message>
-  <l:copy-and-transform-images/>
+  <l:validate-images/>
 
   <cx:message>
     <p:with-option name="message" select="'Performing programlisting keep together'"/>

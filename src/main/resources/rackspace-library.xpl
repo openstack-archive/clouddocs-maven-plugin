@@ -784,6 +784,64 @@
         
     </p:declare-step>
     
+
+
+
+
+
+
+
+
+
+ 	<p:declare-step 
+	  xmlns:l="http://xproc.org/library" 
+	  xmlns:c="http://www.w3.org/ns/xproc-step"
+	  xml:id="validate-images"
+	  type="l:validate-images"  
+	  name="validate-images-step">
+
+          <p:input port="source" primary="true" sequence="true"/>
+          <p:output port="result" sequence="true">
+            <p:pipe step="group" port="result"/>
+          </p:output>
+
+            <p:input port="parameters" kind="parameter"/>
+            <ut:parameters name="params"/>
+            <p:sink/>
+
+            <p:group name="group">
+                <p:output port="result" primary="true">
+                    <p:pipe step="validateImages" port="result"/>
+                </p:output>
+
+                <!-- output type can be pdf of html -->
+                <p:variable name="output.type" select="//c:param[@name = 'outputType']/@value">
+                 <p:pipe step="params" port="parameters"/>
+                </p:variable>
+                <p:variable name="input.docbook.file" select="//c:param[@name = 'inputSrcFile']/@value">
+                 <p:pipe step="params" port="parameters"/>
+                </p:variable>
+
+                <cx:copy-transform name="validateImages">
+
+                    <p:input port="source">
+                        <p:pipe step="validate-images-step" port="source"/>
+                    </p:input>
+				<p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
+				<p:with-option name="outputType" select="concat($output.type,'')"/>
+                </cx:copy-transform>
+
+            </p:group>
+
+ 		</p:declare-step>
+
+
+
+
+
+
+
+
     
     
     
@@ -885,7 +943,7 @@
    		type="cx:copy-transform" 
    		xml:id="copy-transform">
       	<p:input port="source" primary="true" sequence="true"/>
-	    <p:output port="result" primary="false"/>
+	    <p:output port="result" primary="true"/>
 		<p:option name="target" required="false" cx:type="xsd:anyURI"/>
 		<p:option name="targetHtmlContentDir" required="false" cx:type="xsd:anyURI"/>
 		<p:option name="inputFileName" cx:type="xsd:string"/>
