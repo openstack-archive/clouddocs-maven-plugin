@@ -68,25 +68,27 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 
 	public void run() throws SaxonApiException {
 		super.run();
-		System.out.println("Entering CopyAndTransformXProcStep!!! ");
 
 		XdmNode updatedDoc = processInlineImages (source.read());
 		result.write(updatedDoc);
-
-		System.out.println(updatedDoc.toString());
-		System.out.println("Leaving CopyAndTransformXProcStep!!! ");
 	}
 
 	private URI getTargetDirectoryURI() {
 		RuntimeValue target = getOption(_target);
-		URI uri = target.getBaseURI().resolve(FilenameUtils.normalizeNoEndSeparator(target.getString()));
+		URI uri = null;
+		if (target != null) {
+			uri = target.getBaseURI().resolve(FilenameUtils.normalizeNoEndSeparator(target.getString()));	
+		}
 		
 		return uri;
 	}
 
 	private URI getTargetHtmlContentDirectoryURI() {
 		RuntimeValue target = getOption(_targetHtmlContentDir);
-		URI uri = target.getBaseURI().resolve(target.getString());
+		URI uri = null;
+		if (target != null) {
+			uri = target.getBaseURI().resolve(target.getString());
+		}
 		return uri;
 	}
 
@@ -119,7 +121,7 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 		matcher = new ProcessMatch(runtime, copyTransform);
 		copyTransform.setMatcher(matcher);
 
-		matcher.match(doc, new RuntimeValue(copyTransform.getXPath()));
+		matcher.match(doc, new RuntimeValue("//*:imagedata/@fileref"));
 		doc = matcher.getResult();
 		
 		if (copyTransform.hasErrors() && isFailOnErrorFlagSet()) {

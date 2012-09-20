@@ -179,20 +179,21 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 			String targetDirPath = calculateTargetDirPath(baseUri.getPath(), fileRef);
 			File targetDir = makeDirs(targetDirPath);
 			//For HTML, we need a more elaborate check for missing images
-			if (fileExists(srcImgFile)) {
-				//simply copy the src file to the destination
-				File copiedFile = copyFile(srcImgFile, targetDir); 
-				relativePathToCopiedFile = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
+			if (! fileExists(srcImgFile)) {
+				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
+				relativePathToCopiedFile = node.getStringValue();
 			}
-			else if (fileExists(getFileHandle(FilenameUtils.removeExtension(srcImgFilePath) + ".svg"))) {
+			else if ("svg".equalsIgnoreCase(FilenameUtils.getExtension(srcImgFilePath))) {
 				//convert the svg to the relevant type and copy
-				File svgFile = getFileHandle(FilenameUtils.removeExtension(srcImgFilePath) + ".svg");
-				File copiedFile = new TransformSVGToPNG().transformAndCopy(svgFile, targetDir); 
+				File svgFile = getFileHandle(srcImgFilePath);
+				File copiedFile = new TransformSVGToPNG().transformAndCopy(svgFile, targetDir);
+				//TODO: check if conversion was successful
 				relativePathToCopiedFile = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
 			}
 			else {
-				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
-				relativePathToCopiedFile = node.getStringValue();
+				//simply copy the src file to the destination
+				File copiedFile = copyFile(srcImgFile, targetDir); 
+				relativePathToCopiedFile = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
 			}
 		}
 		else {
@@ -234,14 +235,17 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 	}
 
 	private boolean fileExists(File file) {
-		// TODO: Check for case sensitive file names
-		return file==null ? false : file.exists();
+		try {
+			return file==null ? false : file.exists() &&  file.getCanonicalPath().endsWith(file.getName());
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 	private File makeDirs(String relativePath) {
 		//TODO: handle cases where dirPath is path to a file
 		File dir = new File(targetDirectoryUri.getPath(), relativePath);
-		if (dir.mkdir() && dir.mkdirs()) {
+		if (dir.mkdir() || dir.mkdirs()) {
 			
 		}
 		return dir;
