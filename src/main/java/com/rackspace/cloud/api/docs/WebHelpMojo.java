@@ -160,6 +160,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      *     default-value=true
      */
     private boolean makePdf;
+
+    /**
+     * @parameter
+     *     expression="${generate-webhelp.strictImageValidation}"
+     *     default-value=true
+     */
+    private boolean strictImageValidation;
     
     /**
      * 
@@ -472,8 +479,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("failOnValidationError", this.failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
+        map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
 
-        // Profiling attrs:        
+        // Profiling attrs:
         map.put("profileOs", this.profileOs);
         map.put("profileArch", this.profileArch);
         map.put("profileCondition", this.profileCondition);
@@ -482,7 +490,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("profileRevision", this.profileRevision);
         map.put("profileUserlevel", this.profileUserlevel);
         map.put("profileVendor", this.profileVendor);
-        
+
         int lastSlash=inputFilename.lastIndexOf("/");
         //This is the case if the path includes a relative path
         if(-1!=lastSlash){
@@ -582,7 +590,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         //this parameter will be used the copy and transform image step to decide whether to just check the existence of an image (for pdf)
         //or to check existence, transform and copy image as well (for html)
         map.put("outputType", "html");
-        
+
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
 

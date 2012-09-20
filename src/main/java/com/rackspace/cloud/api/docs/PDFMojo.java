@@ -178,6 +178,14 @@ public abstract class PDFMojo extends AbstractFoMojo {
      *     expression="${generate-pdf.security}" 
      */
     private String security;
+
+    /**
+     *
+     * @parameter
+     *     expression="${generate-pdf.strictImageValidation}"
+     *     default-value=true
+     */
+    private boolean strictImageValidation;
     
     
    // Profiling attrs:
@@ -480,8 +488,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
         map.put("profileRevision", this.profileRevision);
         map.put("profileUserlevel", this.profileUserlevel);
         map.put("profileVendor", this.profileVendor);
-        
-        //String outputDir=System.getProperty("project.build.outputDirectory ");        
+        map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
+
+        //String outputDir=System.getProperty("project.build.outputDirectory ");
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
 }

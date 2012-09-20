@@ -822,13 +822,20 @@
                  <p:pipe step="params" port="parameters"/>
                 </p:variable>
 
+                <p:variable name="strict.image.validation" select="//c:param[@name = 'strictImageValidation']/@value">
+                    <p:pipe step="params" port="parameters"/>
+                </p:variable>
+
                 <cx:copy-transform name="validateImages">
 
                     <p:input port="source">
                         <p:pipe step="validate-images-step" port="source"/>
                     </p:input>
-				<p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
-				<p:with-option name="outputType" select="concat($output.type,'')"/>
+
+                    <p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
+                    <p:with-option name="outputType" select="concat($output.type,'')"/>
+                    <p:with-option name="fail-on-error" select="concat($strict.image.validation,'')"/>
+
                 </cx:copy-transform>
 
             </p:group>
@@ -897,16 +904,25 @@
                  <p:pipe step="params" port="parameters"/>
                 </p:variable>
 
+                <p:variable name="strict.image.validation" select="//c:param[@name = 'strictImageValidation']/@value">
+                    <p:pipe step="params" port="parameters"/>
+                </p:variable>
+
+
 
                 <cx:copy-transform name="copyTransform">
 
                     <p:input port="source">
                         <p:pipe step="copy-and-transform-images-step" port="source"/>
                     </p:input>
-				<p:with-option name="target" select="concat('file://',$target.html.content.dir, '/../figures')"/>
-				<p:with-option name="targetHtmlContentDir" select="concat('file://',$target.html.content.dir)"/>
-				<p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
-				<p:with-option name="outputType" select="concat($output.type,'')"/>
+
+                    <p:with-option name="target" select="concat('file://',$target.html.content.dir, '/../figures')"/>
+                    <p:with-option name="targetHtmlContentDir" select="concat('file://',$target.html.content.dir)"/>
+                    <p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
+                    <p:with-option name="outputType" select="concat($output.type,'')"/>
+                    <p:with-option name="fail-on-error" select="concat($strict.image.validation,'')"/>
+
+
                 </cx:copy-transform>
 
             </p:group>
@@ -942,7 +958,8 @@
    <p:declare-step 
    		type="cx:copy-transform" 
    		xml:id="copy-transform">
-      	<p:input port="source" primary="true" sequence="true"/>
+
+   		<p:input port="source" primary="true" sequence="true"/>
 	    <p:output port="result" primary="true"/>
 		<p:option name="target" required="false" cx:type="xsd:anyURI"/>
 		<p:option name="targetHtmlContentDir" required="false" cx:type="xsd:anyURI"/>
@@ -955,7 +972,8 @@
    <p:declare-step 
    		type="cx:process-images" 
    		xml:id="process-images">
-      	<p:input port="source" primary="true" sequence="true"/>
+
+   		<p:input port="source" primary="true" sequence="true"/>
 	    <p:output port="result" primary="true" sequence="true"/>
 	    
 	    <p:option name="validate-only" select="'false'" cx:type="xsd:boolean" />
