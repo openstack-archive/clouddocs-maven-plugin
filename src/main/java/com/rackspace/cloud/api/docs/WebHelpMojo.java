@@ -157,9 +157,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     /**
      * @parameter 
      *     expression="${generate-webhelp.makePdf}"
-     *     default-value=""
+     *     default-value=true
      */
-    private String makePdf;
+    private boolean makePdf;
     
     /**
      * 
@@ -524,7 +524,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         //makePdf is a POM configuration for generate-webhelp goal to control the execution of
         //automatic building of pdf output
-        if(makePdf!=null && makePdf.equalsIgnoreCase("true")) {
+        if(this.makePdf) {
         	getLog().info("\n************************************* START: Automatically generating PDF for WEBHELP *************************************");
         	//Target directory for Webhelp points to ${basepath}/target/docbkx/webhelp. So get parent.
         	File baseDir = getTargetDirectory().getParentFile();
