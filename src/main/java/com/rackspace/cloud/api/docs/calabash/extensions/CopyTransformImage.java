@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
@@ -27,6 +28,7 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 
 import com.rackspace.cloud.api.docs.calabash.extensions.util.RelativePath;
 import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.util.ProcessMatch;
 import com.xmlcalabash.util.ProcessMatchingNodes;
 
@@ -155,9 +157,9 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		return target;
 	}
 
-	private String processSelectedImage(XdmNode node) {
-		final URI baseUri = node.getBaseURI();
-		final String fileRef = node.getStringValue();
+	private String processSelectedImage(XdmNode imageDataFileRef) {
+		final URI baseUri = imageDataFileRef.getBaseURI();
+		final String fileRef = imageDataFileRef.getStringValue();
 		final URI baseDirUri = baseUri.resolve(".");
 		
 		String srcImgFilePath = FilenameUtils.normalize(baseDirUri.getPath() + File.separator + fileRef);
@@ -175,17 +177,25 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		} 
 		else if (outputType.equals("pdf")) {
 			//Need to check only for the existence of the image file
-			if (! fileExists(srcImgFile)) {
+			if (isImageForHtmlOnly(imageDataFileRef.getParent())) {
+				//ignore this imagedata
+				relativePathToCopiedFile = fileRef;
+			}
+			else if (! fileExists(srcImgFile)) {
 				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
 			} 
 			relativePathToCopiedFile = fileRef;
 		}
 		else if (outputType.equals("html")) {
-			String targetDirPath = getUniqueTargetDirPath(baseUri.getPath(), fileRef);
+			String targetDirPath = calculateTargetDirPath(baseUri.getPath(), fileRef);
 			File targetDir = makeDirs(targetDirPath);
 			
 			//For HTML, we need a more elaborate check for missing images
-			if (! fileExists(srcImgFile)) {
+			if (isImageForPdfOnly(imageDataFileRef.getParent())) {
+				//ignore this imagedata
+				relativePathToCopiedFile = fileRef;
+			}
+			else if (! fileExists(srcImgFile)) {
 				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
 				relativePathToCopiedFile = fileRef;
 			}
@@ -211,7 +221,25 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		return relativePathToCopiedFile;
 	}
 	
-	private String getUniqueTargetDirPath(String baseUriPath, String fileRef) {
+	private boolean isImageForHtmlOnly(XdmNode imageDataNode) {
+		return parentRoleEquals(imageDataNode, "html"); 
+	}
+	
+	private boolean isImageForPdfOnly(XdmNode imageDataNode) {
+		return parentRoleEquals(imageDataNode, "fo") || parentRoleEquals(imageDataNode, "pdf"); 
+	}
+	
+	private boolean parentRoleEquals(XdmNode node, String role) {
+		XdmNode parent = node.getParent();
+		String parentRole = (parent==null ? null : parent.getAttributeValue(new QName("role")));
+		if (parentRole != null &&
+			parentRole.equalsIgnoreCase(role)) {
+			return true;
+		}
+		return false;
+	}
+
+	private String calculateTargetDirPath(String baseUriPath, String fileRef) {
 		String targetDirForBaseUri = null;
 		if (this.baseUriToDirMap.containsKey(baseUriPath)) {
 			targetDirForBaseUri = this.baseUriToDirMap.get(baseUriPath);
