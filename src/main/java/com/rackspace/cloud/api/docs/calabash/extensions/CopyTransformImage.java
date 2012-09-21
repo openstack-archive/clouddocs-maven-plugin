@@ -164,31 +164,32 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		
 		String srcImgFilePath = FilenameUtils.normalize(baseDirUri.getPath() + File.separator + fileRef);
 		File srcImgFile = getFileHandle(srcImgFilePath);
-		String relativePathToCopiedFile;
 		
-		if (this.imageSrcToCopiedFileMap.containsKey(srcImgFilePath)) {
-			return this.imageSrcToCopiedFileMap.get(srcImgFilePath);
-		}
-
 		if (fileRef.toLowerCase().startsWith("http://") ||
 			fileRef.toLowerCase().startsWith("https://")) {
 			getLog().warn("Found reference to an external image " + fileRef + " in " + baseUri.getPath());
-			relativePathToCopiedFile = fileRef;
+			return fileRef;
 		} 
 		else if (outputType.equals("pdf")) {
 			//Need to check only for the existence of the image file
 			if (isImageForHtmlOnly(imageDataFileRef.getParent())) {
 				//ignore this imagedata
-				relativePathToCopiedFile = fileRef;
 			}
 			else if (! fileExists(srcImgFile)) {
 				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
-			} 
-			relativePathToCopiedFile = fileRef;
+			}
+			//For pdf output always return the input fileRef
+			return fileRef;
 		}
 		else if (outputType.equals("html")) {
+			//check if we have already copied this particular image to webhelp folder
+			if (this.imageSrcToCopiedFileMap.containsKey(srcImgFilePath)) {
+				return this.imageSrcToCopiedFileMap.get(srcImgFilePath);
+			}
+
 			String targetDirPath = calculateTargetDirPath(baseUri.getPath(), fileRef);
 			File targetDir = makeDirs(targetDirPath);
+			String relativePathToCopiedFile;
 			
 			//For HTML, we need a more elaborate check for missing images
 			if (isImageForPdfOnly(imageDataFileRef.getParent())) {
@@ -211,14 +212,13 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 				File copiedFile = copyFile(srcImgFile, targetDir); 
 				relativePathToCopiedFile = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
 			}
+			this.imageSrcToCopiedFileMap.put(srcImgFilePath, relativePathToCopiedFile);
+			return relativePathToCopiedFile;
 		}
 		else {
 			//we only know how to handle "pdf" and "html" outputTypes so just return the value
-			relativePathToCopiedFile = fileRef;
+			return fileRef;
 		}
-
-		this.imageSrcToCopiedFileMap.put(srcImgFilePath, relativePathToCopiedFile);
-		return relativePathToCopiedFile;
 	}
 	
 	private boolean isImageForHtmlOnly(XdmNode imageDataNode) {
