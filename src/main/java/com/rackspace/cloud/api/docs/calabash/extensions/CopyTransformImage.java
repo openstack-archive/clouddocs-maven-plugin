@@ -9,8 +9,9 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.sf.saxon.s9api.QName;
@@ -19,7 +20,6 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -28,7 +28,6 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 
 import com.rackspace.cloud.api.docs.calabash.extensions.util.RelativePath;
 import com.xmlcalabash.core.XProcException;
-import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.util.ProcessMatch;
 import com.xmlcalabash.util.ProcessMatchingNodes;
 
@@ -44,7 +43,8 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 	private String xpath;
 	private Map<String, String> baseUriToDirMap = new HashMap<String, String>();
 	private AtomicInteger simpleUniqueNumberGenerator = new AtomicInteger();
-	private Map<String, String> imageSrcToCopiedFileMap = new HashMap<String, String>();
+	private Map<String, String> processedFilesMapForHtmlOutput = new HashMap<String, String>();
+	private Set<String> processedFilesSetForPdfOutput = new HashSet<String>(); 
 	private ProcessMatch matcher;
 
 	private URI targetDirectoryUri;
@@ -172,19 +172,23 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		} 
 		else if (outputType.equals("pdf")) {
 			//Need to check only for the existence of the image file
-			if (isImageForHtmlOnly(imageDataFileRef.getParent())) {
+			if (this.processedFilesSetForPdfOutput.contains(srcImgFilePath)) {
+				//do nothing as any errors for missing files would already have been reported
+			}
+			else if (isImageForHtmlOnly(imageDataFileRef.getParent())) {
 				//ignore this imagedata
 			}
 			else if (! fileExists(srcImgFile)) {
 				reportImageNotFoundError(baseUri, fileRef, srcImgFile);
 			}
+			this.processedFilesSetForPdfOutput.add(srcImgFilePath);
 			//For pdf output always return the input fileRef
 			return fileRef;
 		}
 		else if (outputType.equals("html")) {
 			//check if we have already copied this particular image to webhelp folder
-			if (this.imageSrcToCopiedFileMap.containsKey(srcImgFilePath)) {
-				return this.imageSrcToCopiedFileMap.get(srcImgFilePath);
+			if (this.processedFilesMapForHtmlOutput.containsKey(srcImgFilePath)) {
+				return this.processedFilesMapForHtmlOutput.get(srcImgFilePath);
 			}
 
 			String targetDirPath = calculateTargetDirPath(baseUri.getPath(), fileRef);
@@ -212,7 +216,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 				File copiedFile = copyFile(srcImgFile, targetDir); 
 				relativePathToCopiedFile = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
 			}
-			this.imageSrcToCopiedFileMap.put(srcImgFilePath, relativePathToCopiedFile);
+			this.processedFilesMapForHtmlOutput.put(srcImgFilePath, relativePathToCopiedFile);
 			return relativePathToCopiedFile;
 		}
 		else {
@@ -294,9 +298,9 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		
 		String value = node.getStringValue();
 		
-		if(imageSrcToCopiedFileMap.containsKey(value)) {
-			System.out.println("\n\n*********** already processed **************** "+imageSrcToCopiedFileMap.get(value));
-			return imageSrcToCopiedFileMap.get(value);
+		if(processedFilesMapForHtmlOutput.containsKey(value)) {
+			System.out.println("\n\n*********** already processed **************** "+processedFilesMapForHtmlOutput.get(value));
+			return processedFilesMapForHtmlOutput.get(value);
 		}
 
 		boolean isSVG = false;
@@ -328,7 +332,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 				if(outputType.equals("pdf")) {
 					//no further processing required. Already checked if the image exists or not in the above get Image call.
 					//System.out.println("*********** found **************** "+sourceImageFile.getAbsolutePath());
-					imageSrcToCopiedFileMap.put(value, sourceImageFile.getAbsolutePath());
+					processedFilesMapForHtmlOutput.put(value, sourceImageFile.getAbsolutePath());
 				} 
 				else if(outputType.equals("html")) {
 					System.out.println("****** Entering elseif outputType=='html'");
@@ -350,7 +354,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 							System.out.println("****** Case 1");
 							File copiedFile = performFileCopyAndTransformation(targetDirectoryUri, inputDocbookName, sourceImageFile);
 							String correctRelativePathToImage = RelativePath.getRelativePath(new File(targetHtmlContentDirectoryUri), copiedFile);
-							imageSrcToCopiedFileMap.put(value, correctRelativePathToImage);
+							processedFilesMapForHtmlOutput.put(value, correctRelativePathToImage);
 						} else {
 							//File not found in source and target folders.
 						}
@@ -358,7 +362,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 						System.out.println("****** Case 2: " + sourceImageFile);
 						File copiedFile = performFileCopyAndTransformation(targetDirectoryUri, inputDocbookName, sourceImageFile);
 						String correctRelativePathToImage = RelativePath.getRelativePath( new File(targetHtmlContentDirectoryUri), copiedFile);
-						imageSrcToCopiedFileMap.put(value, correctRelativePathToImage);
+						processedFilesMapForHtmlOutput.put(value, correctRelativePathToImage);
 						
 					} else if(sourceImageFile != null && isSVG) {
 						System.out.println("****** Case 3");
@@ -366,7 +370,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 						File copiedFile = performFileCopyAndTransformation(targetDirectoryUri, inputDocbookName, sourceImageFile);
 						
 						String correctRelativePathToImage = RelativePath.getRelativePath( new File(targetHtmlContentDirectoryUri), copiedFile);
-						imageSrcToCopiedFileMap.put(value, correctRelativePathToImage);
+						processedFilesMapForHtmlOutput.put(value, correctRelativePathToImage);
 					}
 
 					System.out.println("****** Exiting elseif outputType=='html'");
@@ -377,7 +381,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 			}
 		}
 
-		return imageSrcToCopiedFileMap.get(value);
+		return processedFilesMapForHtmlOutput.get(value);
 	}
 
 	@Override
