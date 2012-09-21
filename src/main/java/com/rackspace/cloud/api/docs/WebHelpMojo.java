@@ -551,10 +551,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	String srcFilename = this.projectBuildDirectory+"/docbkx/"+sourceFile.getName();
 	    	File tempHandle = new File(srcFilename);
 	    	if(tempHandle.exists()) {
-	    		System.out.println("***********************"+ srcFilename);
+	    		getLog().debug("***********************"+ srcFilename);
 	    		pdfBuilder.setSourceFilePath(srcFilename);
 	    	} else {
-	    		System.out.println("***********************"+ getSourceDirectory()+File.separator+inputFilename);
+	    		getLog().debug("***********************"+ getSourceDirectory()+File.separator+inputFilename);
 	    		pdfBuilder.setSourceFilePath(getSourceDirectory()+File.separator+inputFilename);
 	    	}
         	

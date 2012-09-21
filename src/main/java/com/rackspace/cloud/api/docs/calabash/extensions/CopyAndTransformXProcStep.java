@@ -1,10 +1,6 @@
 package com.rackspace.cloud.api.docs.calabash.extensions;
 
-import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -22,12 +18,10 @@ import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.ProcessMatch;
-import com.xmlcalabash.util.ProcessMatchingNodes;
 
 public class CopyAndTransformXProcStep extends DefaultStep {
 	private static final QName _target = new QName("target");
 	private static final QName _targetHtmlContentDir = new QName("targetHtmlContentDir");
-	private static final QName _inputFileName = new QName("inputFileName");
 	private static final QName _outputType = new QName("outputType");
 	private static final QName _fail_on_error = new QName("fail-on-error");
 
@@ -92,11 +86,6 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 		return uri;
 	}
 
-	private String getInputDocbookName() {
-		return getOption(_inputFileName, "Unknown");
-
-	}
-
 	private String getOutputType() {
 		return getOption(_outputType, "Unknown");
 	}
@@ -107,21 +96,17 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 
 
 	private XdmNode processInlineImages(XdmNode doc) {
-//		System.out.println("******************* getTargetDirectoryURI() = " + getTargetDirectoryURI());
-//		System.out.println("******************* getTargetHtmlConteURI() = " + getTargetHtmlContentDirectoryURI());
-		
+		String fileRefsXpath = "//*:imagedata/@fileref";
 		CopyTransformImage copyTransform = 
-				new CopyTransformImage(	"//*:imagedata/@fileref",
+				new CopyTransformImage(	fileRefsXpath,
 										getTargetDirectoryURI(),
 										getTargetHtmlContentDirectoryURI(),
-										getInputDocbookName(), 
-										getOutputType(), 
-										step.getNode());
+										getOutputType());
 
 		matcher = new ProcessMatch(runtime, copyTransform);
 		copyTransform.setMatcher(matcher);
 
-		matcher.match(doc, new RuntimeValue("//*:imagedata/@fileref"));
+		matcher.match(doc, new RuntimeValue(fileRefsXpath));
 		doc = matcher.getResult();
 		
 		if (copyTransform.hasErrors() && isFailOnErrorFlagSet()) {

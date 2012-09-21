@@ -382,7 +382,6 @@ public class PDFBuilder {
 	}
 
 	protected Configuration loadFOPConfig() throws MojoExecutionException {
-		System.out.println ("At load config");
 		String fontPath  = (new File(getAutopdfTargetDirectory().getParentFile(), "fonts")).getAbsolutePath();
 		StringTemplateGroup templateGroup = new StringTemplateGroup("fonts", fontPath);
 		StringTemplate template = templateGroup.getInstanceOf("fontconfig");

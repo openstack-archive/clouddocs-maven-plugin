@@ -784,27 +784,16 @@
         
     </p:declare-step>
     
-
-
-
-
-
-
-
-
-
  	<p:declare-step 
 	  xmlns:l="http://xproc.org/library" 
 	  xmlns:c="http://www.w3.org/ns/xproc-step"
 	  xml:id="validate-images"
 	  type="l:validate-images"  
 	  name="validate-images-step">
-
           <p:input port="source" primary="true" sequence="true"/>
           <p:output port="result" sequence="true">
             <p:pipe step="group" port="result"/>
           </p:output>
-
             <p:input port="parameters" kind="parameter"/>
             <ut:parameters name="params"/>
             <p:sink/>
@@ -821,13 +810,11 @@
                 <p:variable name="input.docbook.file" select="//c:param[@name = 'inputSrcFile']/@value">
                  <p:pipe step="params" port="parameters"/>
                 </p:variable>
-
                 <p:variable name="strict.image.validation" select="//c:param[@name = 'strictImageValidation']/@value">
                     <p:pipe step="params" port="parameters"/>
                 </p:variable>
 
                 <cx:copy-transform name="validateImages">
-
                     <p:input port="source">
                         <p:pipe step="validate-images-step" port="source"/>
                     </p:input>
@@ -835,34 +822,9 @@
                     <p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
                     <p:with-option name="outputType" select="concat($output.type,'')"/>
                     <p:with-option name="fail-on-error" select="concat($strict.image.validation,'')"/>
-
                 </cx:copy-transform>
-
             </p:group>
-
  		</p:declare-step>
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-
-	
-	
-	
-
-    
-    
-    
-    
     
  	<p:declare-step 
 	  xmlns:l="http://xproc.org/library" 
@@ -870,7 +832,6 @@
 	  xml:id="copy-and-transform-images"
 	  type="l:copy-and-transform-images"  
 	  name="copy-and-transform-images-step">
-
           <p:input port="source" primary="true" sequence="true"/>
           <p:output port="result" sequence="true">
             <p:pipe step="group" port="result"/>
@@ -908,10 +869,7 @@
                     <p:pipe step="params" port="parameters"/>
                 </p:variable>
 
-
-
                 <cx:copy-transform name="copyTransform">
-
                     <p:input port="source">
                         <p:pipe step="copy-and-transform-images-step" port="source"/>
                     </p:input>
@@ -921,39 +879,10 @@
                     <p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
                     <p:with-option name="outputType" select="concat($output.type,'')"/>
                     <p:with-option name="fail-on-error" select="concat($strict.image.validation,'')"/>
-
-
                 </cx:copy-transform>
-
             </p:group>
-
  		</p:declare-step>
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
    <!-- copy and transform images calabash extension -->
    <p:declare-step 
    		type="cx:copy-transform" 
@@ -965,22 +894,6 @@
 		<p:option name="targetHtmlContentDir" required="false" cx:type="xsd:anyURI"/>
 		<p:option name="inputFileName" cx:type="xsd:string"/>
 		<p:option name="outputType" cx:type="xsd:string"/>
-	    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
-   </p:declare-step>
-   
-   <!-- process images calabash extension -->
-   <p:declare-step 
-   		type="cx:process-images" 
-   		xml:id="process-images">
-
-   		<p:input port="source" primary="true" sequence="true"/>
-	    <p:output port="result" primary="true" sequence="true"/>
-	    
-	    <p:option name="validate-only" select="'false'" cx:type="xsd:boolean" />
-	    <p:option name="target-dir" required="false" cx:type="xsd:anyURI" />
-	    <p:option name="relative-to" required="false" cx:type="xsd:anyURI" />
-	    <p:option name="convert-from" select="'svg'" cx:type="xsd:string" />
-	    <p:option name="convert-to" select="'png'" cx:type="xsd:string" />
 	    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
    </p:declare-step>
     
