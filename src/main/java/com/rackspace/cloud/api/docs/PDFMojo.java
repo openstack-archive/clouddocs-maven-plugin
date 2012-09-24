@@ -180,6 +180,14 @@ public abstract class PDFMojo extends AbstractFoMojo {
     private String security;
      
     /**
+    *
+    * @parameter
+    *     expression="${generate-pdf.strictImageValidation}"
+    *     default-value=true
+    */
+    private boolean strictImageValidation;
+
+   /**
      * 
      *
      * @parameter expression="${generate-pdf.draft.status}" default-value=""

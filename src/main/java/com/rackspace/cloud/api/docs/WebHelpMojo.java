@@ -606,7 +606,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         		int index = inputFilename.lastIndexOf('.');
         		File targetDirForPdf = new File(getTargetDirectory().getAbsolutePath(),inputFilename.substring(0,index));
         		if(!targetDirForPdf.exists()) {
-        			FileUtils.mkdir(targetDirForPdf);
+        			com.rackspace.cloud.api.docs.FileUtils.mkdir(targetDirForPdf);
         		}
         		boolean moved = pdfBuilder.movePdfToWebhelpDir(pdfFile, targetDirForPdf);
         		if(moved) {
