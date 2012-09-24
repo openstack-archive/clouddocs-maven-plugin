@@ -30,6 +30,16 @@ import com.agilejava.docbkx.maven.PreprocessingFilter;
 import com.agilejava.docbkx.maven.TransformerBuilder;
 import com.rackspace.cloud.api.docs.builders.PDFBuilder;
 
+import com.rackspace.cloud.api.docs.CalabashHelper;
+import com.rackspace.cloud.api.docs.DocBookResolver;
+
+import com.agilejava.docbkx.maven.Parameter;
+import com.agilejava.docbkx.maven.FileUtils;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipOutputStream;
+
 public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     /**
      * Sets the URI for the glossary.
@@ -139,6 +149,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.pdf.url}" default-value=""
      */
     private String pdfUrl;
+    
+    /*
+     * If makePdf is set to true then just before creating the Webhelp output this variable will be set
+     * with the location of the automatically created pdf file. 
+     */
+    private String autoPdfUrl;
 
     /**
      * @parameter 
@@ -238,41 +254,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.legal.notice.url}" default-value="index.html"
      */
     private String legalNoticeUrl;
-    
-    // Profiling attrs:
+
     /**
-     * @parameter expression="${generate-webhelp.profile.os}" 
+     * 
+     *
+     * @parameter expression="${generate-webhelp.draft.status}" default-value=""
      */
-    private String profileOs;
-    /**
-     * @parameter expression="${generate-webhelp.profile.arch}" 
-     */
-    private String profileArch;
-    /**
-     * @parameter expression="${generate-webhelp.profile.condition}" 
-     */
-    private String profileCondition;
-    /**
-     * @parameter expression="${generate-webhelp.profile.audience}" 
-     */
-    private String profileAudience;
-    /**
-     * @parameter expression="${generate-webhelp.profile.conformance}" 
-     */
-    private String profileConformance;
-    /**
-     * @parameter expression="${generate-webhelp.profile.revision}" 
-     */
-    private String profileRevision;
-    /**
-     * @parameter expression="${generate-webhelp.profile.userlevel}" 
-     */
-    private String profileUserlevel;
-    /**
-     * @parameter expression="${generate-webhelp.profile.vendor}" 
-     */
-    private String profileVendor;
-    private String autoPdfUrl;
+    private String draftStatus;
 
 
     /**
@@ -332,10 +320,20 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             transformer.setParameter("legal.notice.url", legalNoticeUrl);
         }
 
+	String sysDraftStatus=System.getProperty("draft.status");
+	if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
+	    draftStatus=sysDraftStatus;
+	}
+	transformer.setParameter("draft.status", draftStatus);
+
     if(canonicalUrlBase != null){
 	transformer.setParameter("canonical.url.base",canonicalUrlBase);
     }
 
+    String sysSecurity=System.getProperty("security");
+    if(null!=sysSecurity && !sysSecurity.isEmpty()){
+	security=sysSecurity;
+    }
     if(security != null){
 	transformer.setParameter("security",security);
     }
@@ -368,14 +366,45 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         return "cloud/webhelp/profile-webhelp.xsl";
     }
 
-    public void postProcessResult(File result) throws MojoExecutionException {
+        public void postProcessResult(File result) throws MojoExecutionException {
+	
+	       super.postProcessResult(result);
+	
+	       copyTemplate(result);
+    
+           transformFeed(result);
+	
+    	   //final File targetDirectory = result.getParentFile();
+	       //com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("apiref",ApiRefMojo.class,targetDirectory);
+	       String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
 
-        super.postProcessResult(result);
+           //Zip up the war from here.
+	       String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
+	       String zipFile =   result.getParentFile().getParentFile()  + "/" + warBasename + ".war";
+	       //result.deleteOnExit();
 
-        copyTemplate(result);
+           try{
+        		//create object of FileOutputStream
+        		FileOutputStream fout = new FileOutputStream(zipFile);
+                                         
+        		//create object of ZipOutputStream from FileOutputStream
+        		ZipOutputStream zout = new ZipOutputStream(fout);
+                               
+        		//create File object from source directory
+        		File fileSource = new File(sourceDir);
+                               
+        		com.rackspace.cloud.api.docs.FileUtils.addDirectory(zout, fileSource);
+                               
+        		//close the ZipOutputStream
+        		zout.close();
+                               
+        		System.out.println("Zip file has been created!");
+                               
+        	    }catch(IOException ioe){
+            		System.out.println("IOException :" + ioe);     
+        	    }
 
-        transformFeed(result);
-    }
+            }
 
     protected void copyTemplate(File result) throws MojoExecutionException {
 
@@ -446,6 +475,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         }
 
     }
+    
 
     public void preProcess() throws MojoExecutionException {
         super.preProcess();
@@ -461,8 +491,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         // Extract all images into the image directory.
         //
         com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("cloud/war",PDFMojo.class,xslParentDirectory);
+        com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("cloud/webhelp",PDFMojo.class,xslParentDirectory);
     }
-
 
     @Override
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
@@ -479,18 +509,17 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("failOnValidationError", this.failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
-        map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
-
-        // Profiling attrs:
-        map.put("profileOs", this.profileOs);
-        map.put("profileArch", this.profileArch);
-        map.put("profileCondition", this.profileCondition);
-        map.put("profileAudience", this.profileAudience);
-        map.put("profileConformance", this.profileConformance);
-        map.put("profileRevision", this.profileRevision);
-        map.put("profileUserlevel", this.profileUserlevel);
-        map.put("profileVendor", this.profileVendor);
-
+        
+        // Profiling attrs:        
+        map.put("profile.os", getProperty("profileOs"));
+        map.put("profile.arch", getProperty("profileArch"));
+        map.put("profile.condition", getProperty("profileCondition"));
+        map.put("profile.audience", getProperty("profileAudience"));
+        map.put("profile.conformance", getProperty("profileConformance"));
+        map.put("profile.revision", getProperty("profileRevision"));
+        map.put("profile.userlevel", getProperty("profileUserlevel"));
+        map.put("profile.vendor", getProperty("profileVendor"));
+        
         int lastSlash=inputFilename.lastIndexOf("/");
         //This is the case if the path includes a relative path
         if(-1!=lastSlash){
@@ -501,7 +530,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	if(-1!=index){
             	String targetFile="target/docbkx/webhelp/"+theDirName+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
 
-            	map.put("targetExtQueryFile", targetFile);        		
+            	map.put("targetExtQueryFile", targetFile);     
+            	map.put("base.dir", "target/docbkx/webhelp/"+theDirName+theFileName.substring(0,index));   		
+            	map.put("input.filename",theDirName+theFileName.substring(0,index));
         	}
         	else{
         		//getLog().info("~~~~~~~~theFileName file has incompatible format: "+theFileName);
@@ -514,7 +545,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	int index = theFileName.indexOf('.');
         	if(-1!=index){
             	String targetFile="target/docbkx/webhelp/"+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
-            	map.put("targetExtQueryFile", targetFile);        		
+            	map.put("targetExtQueryFile", targetFile);  
+            	
+            	String targetDir="target/docbkx/webhelp/"+theFileName.substring(0,index) + "/";
+            	map.put("base.dir", targetDir);        		
+            	map.put("input.filename", theFileName.substring(0,index));  	      		
         	}
         	else{
         		//getLog().info("~~~~~~~~inputFilename file has incompatible format: "+inputFilename);

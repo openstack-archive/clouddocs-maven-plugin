@@ -178,51 +178,15 @@ public abstract class PDFMojo extends AbstractFoMojo {
      *     expression="${generate-pdf.security}" 
      */
     private String security;
-
+     
     /**
+     * 
      *
-     * @parameter
-     *     expression="${generate-pdf.strictImageValidation}"
-     *     default-value=true
+     * @parameter expression="${generate-pdf.draft.status}" default-value=""
      */
-    private boolean strictImageValidation;
-    
-    
-   // Profiling attrs:
-    /**
-     * @parameter expression="${generate-pdf.profile.os}" 
-     */
-    private String profileOs;
-    /**
-     * @parameter expression="${generate-pdf.profile.arch}" 
-     */
-    private String profileArch;
-    /**
-     * @parameter expression="${generate-pdf.profile.condition}" 
-     */
-    private String profileCondition;
-    /**
-     * @parameter expression="${generate-pdf.profile.audience}" 
-     */
-    private String profileAudience;
-    /**
-     * @parameter expression="${generate-pdf.profile.conformance}" 
-     */
-    private String profileConformance;
-    /**
-     * @parameter expression="${generate-pdf.profile.revision}" 
-     */
-    private String profileRevision;
-    /**
-     * @parameter expression="${generate-pdf.profile.userlevel}" 
-     */
-    private String profileUserlevel;
-    /**
-     * @parameter expression="${generate-pdf.profile.vendor}" 
-     */
-    private String profileVendor;
-    
-    
+    private String draftStatus;
+
+
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
     }
@@ -391,9 +355,22 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	transformer.setParameter("coverLogoTop", coverLogoTop);
 	transformer.setParameter("coverUrl", coverUrl);
 	transformer.setParameter("coverColor", coverColor);
+	
+    String sysDraftStatus=System.getProperty("draft.status");
+    getLog().info("adjustTransformer():sysDraftStatus="+sysDraftStatus);
+    if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
+    	draftStatus=sysDraftStatus;
+    }
+    
+	transformer.setParameter("draft.status", draftStatus);
 
 	transformer.setParameter("project.build.directory", projectBuildDirectory);
-
+    
+	String sysSecurity=System.getProperty("security");
+    getLog().info("adjustTransformer():sysSecurity="+sysSecurity);
+    if(null!=sysSecurity && !sysSecurity.isEmpty()){
+    	security=sysSecurity;
+    }
 	if(security != null){
 	    transformer.setParameter("security",security);
 	}
@@ -441,6 +418,14 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    if(coverColor != null){
 		transformer.setParameter("coverColor", coverColor);
 	    }
+
+	    String sysDraftStatus=System.getProperty("draft.status");
+	    if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
+	    	draftStatus=sysDraftStatus;
+	    }
+	    if(null!=draftStatus){
+		transformer.setParameter("draft.status", draftStatus);
+	    }
 	    transformer.setParameter("branding", branding);
 
             //transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
@@ -469,7 +454,11 @@ public abstract class PDFMojo extends AbstractFoMojo {
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
         Map map=new HashMap<String, String>();
-        
+	    String sysSecurity=System.getProperty("security");
+	    getLog().info("adjustTransformer():sysSecurity="+sysSecurity);
+	    if(null!=sysSecurity && !sysSecurity.isEmpty()){
+	    	security=sysSecurity;
+	    }
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("replacementsFile", replacementsFile);
@@ -477,20 +466,20 @@ public abstract class PDFMojo extends AbstractFoMojo {
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
         map.put("outputType", "pdf");
+        map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
 
         
         // Profiling attrs:        
-        map.put("profileOs", this.profileOs);
-        map.put("profileArch", this.profileArch);
-        map.put("profileCondition", this.profileCondition);
-        map.put("profileAudience", this.profileAudience);
-        map.put("profileConformance", this.profileConformance);
-        map.put("profileRevision", this.profileRevision);
-        map.put("profileUserlevel", this.profileUserlevel);
-        map.put("profileVendor", this.profileVendor);
-        map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
-
-        //String outputDir=System.getProperty("project.build.outputDirectory ");
+        map.put("profile.os", getProperty("profileOs"));
+        map.put("profile.arch", getProperty("profileArch"));
+        map.put("profile.condition", getProperty("profileCondition"));
+        map.put("profile.audience", getProperty("profileAudience"));
+        map.put("profile.conformance", getProperty("profileConformance"));
+        map.put("profile.revision", getProperty("profileRevision"));
+        map.put("profile.userlevel", getProperty("profileUserlevel"));
+        map.put("profile.vendor", getProperty("profileVendor"));
+        
+        //String outputDir=System.getProperty("project.build.outputDirectory ");        
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
     }
 }

@@ -12,6 +12,7 @@
     <xsl:param name="docbook.infile" select="'/Users/jorgew/projects/cloud-files-api-docs/src/docbkx/cfdevguide_d5.xml'"/>
     <xsl:param name="branding"/>
     <xsl:param name="coverColor"/>
+    <xsl:param name="draft.status" select="''"/>
 
     <xsl:variable name="docbook" select="document(concat('file:///',$docbook.infile))"/>
 
@@ -23,7 +24,7 @@
   </xsl:variable>
 
   <xsl:variable name="draft.text">
-      <xsl:if test="$docbook/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')]">DRAFT</xsl:if>
+      <xsl:if test="$draft.status = 'on' or ($docbook/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')] and $draft.status = '')">DRAFT</xsl:if>
   </xsl:variable>
 
   <xsl:variable name="rackspace.status.text">

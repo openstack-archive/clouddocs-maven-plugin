@@ -46,7 +46,8 @@
   <xsl:param name="alignment">start</xsl:param>
     
   <xsl:param name="security">external</xsl:param>
-  <xsl:param name="root.attr.status"><xsl:if test="/*[@status = 'draft']">draft;</xsl:if></xsl:param>
+  <xsl:param name="draft.status" select="''"/>
+  <xsl:param name="root.attr.status"><xsl:if test="$draft.status = 'on' or (/*[@status = 'draft'] and $draft.status = '')">draft;</xsl:if></xsl:param>
   <xsl:param name="profile.security">
     <xsl:choose>
       <xsl:when test="$security = 'external'"><xsl:value-of select="$root.attr.status"/>external</xsl:when>
@@ -79,7 +80,7 @@
   </xsl:param>
 
   <xsl:param name="rackspace.status.text">
-    <xsl:if test="/*[contains(translate(@status,&lowercase;,&uppercase;),'DRAFT')]">DRAFT<xsl:text>&#160;-&#160;</xsl:text></xsl:if><xsl:choose>
+    <xsl:if test="contains($root.attr.status, 'draft;')">DRAFT<xsl:text>&#160;-&#160;</xsl:text></xsl:if><xsl:choose>
   <xsl:when test="$security = 'internal'">INTERNAL<xsl:text> -&#160;</xsl:text></xsl:when>
   <xsl:when test="$security = 'reviewer'">REVIEW<xsl:text> -&#160;</xsl:text></xsl:when>
   <xsl:when test="$security = 'writeronly'">WRITERONLY<xsl:text> -&#160;</xsl:text></xsl:when>
