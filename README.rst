@@ -16,6 +16,14 @@ http://wiki.openstack.org/Documentation/HowTo#Tools_Overview
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.6.0 (September ??TBD??, 2012)
+============================================================
+- Updated Rackspace logo
+- Move profiling to early in the pipeline. This fixes bugs where content in title and revhistory weren't being profiled.
+- Fix bug where IDREFs weren't validated.
+- Support passing in -Dsecurity=internal|external|reviewer and -Ddraft.status=on|off from the command line.
+- Generate .war file version of webhelp with bookinfo.xml file to support autopublish to landing page. 
+
 clouddocs-maven-plugin 1.5.0 (August 14, 2012)
 ============================================================
 - Support build-time search and replace via a configuration file. To
