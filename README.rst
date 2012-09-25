@@ -1,13 +1,14 @@
 Introduction
 ============
 
-This project is the Rackspace/OpenStack customization of the Docbkx plugin for creating documentation artifacts for Rackspace, OpenStack, and other OpenStack projects. 
+This project is the Rackspace/OpenStack customization of the Docbkx
+plugin for creating documentation artifacts for Rackspace, OpenStack,
+and other OpenStack projects.
 
 Example output
 ==============
 http://docs.rackspace.com
 http://docs.openstack.org
-
 
 How To
 ======
@@ -18,11 +19,26 @@ Release Notes
 
 clouddocs-maven-plugin 1.6.0 (September ??TBD??, 2012)
 ============================================================
-- Updated Rackspace logo
-- Move profiling to early in the pipeline. This fixes bugs where content in title and revhistory weren't being profiled.
+- Automatically handle images:
+  + Detects if images are missing from a document and fail if an image
+    is missing. You can turn off this validation by setting
+    <strictImageValidation>false</strictImageValidation> in your
+    pom.xml.
+  + For Webhelp output, automatically converts .svg to .png. 
+  + Automatically copies images to the Webhelp output directory.
+- Automatically build pdf when building webhelp and copy pdf to
+  webhelp directory unless <makePdf>false</makePdf> is set in your
+  pom.xml.
+- Provide better error messages if incorrect DocBook version is used
+  (i.e. if DocBook 4.x is used instead of 5.x).
+- Updated Rackspace logo.
+- Move profiling to early in the pipeline. This fixes bugs where
+  content in title and revhistory weren't being profiled.
 - Fix bug where IDREFs weren't validated.
-- Support passing in -Dsecurity=internal|external|reviewer and -Ddraft.status=on|off from the command line.
-- Generate .war file version of webhelp with bookinfo.xml file to support autopublish to landing page. 
+- Support passing in -Dsecurity=internal|external|reviewer and
+  -Ddraft.status=on|off from the command line.
+- Generate .war file version of webhelp with bookinfo.xml file to
+  support autopublish to landing page.
 
 clouddocs-maven-plugin 1.5.0 (August 14, 2012)
 ============================================================
