@@ -807,8 +807,7 @@
                         <p:inline>
                             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
                                 
-                                <xsl:param name="failOnValidationError">yes</xsl:param>
-                                <xsl:param name="security"/>
+                                <xsl:variable name="failOnValidationError">yes</xsl:variable>
                                 
                                 <xsl:template match="node()|@*">
                                     <xsl:message terminate="{$failOnValidationError}">
