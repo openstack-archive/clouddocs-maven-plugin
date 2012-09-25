@@ -19,10 +19,11 @@ Release Notes
 
 clouddocs-maven-plugin 1.6.0 (September ??TBD??, 2012)
 ============================================================
-- Automatically handle images:
-  + Detects if images are missing from a document and fail if an image is missing. You can turn off this validation by setting <strictImageValidation>false</strictImageValidation> in your pom.xml.
-  + For Webhelp output, automatically converts .svg to .png. 
-  + Automatically copies images to the Webhelp output directory.
+- Automatically handle images: 
+
+ + Detects if images are missing from a document and fail if an image is missing. You can turn off this validation by setting <strictImageValidation>false</strictImageValidation> in your pom.xml.
+ + For Webhelp output, automatically converts .svg to .png.
+ + Automatically copies images to the Webhelp output directory.
 - Automatically build pdf when building webhelp and copy pdf to webhelp directory unless <makePdf>false</makePdf> is set in your pom.xml.
 - Provide better error messages if incorrect DocBook version is used (i.e. if DocBook 4.x is used instead of 5.x).
 - Updated Rackspace logo.
@@ -33,11 +34,7 @@ clouddocs-maven-plugin 1.6.0 (September ??TBD??, 2012)
 
 clouddocs-maven-plugin 1.5.0 (August 14, 2012)
 ============================================================
-- Support build-time search and replace via a configuration file. To
-  use add a parameter like the following to your pom.xml:
-  <replacementsFile>replacements.config</replacementsFile>
-  Where replacements.config is a file in the same directory as your
-  pom.xml. See the example replacements.config file for documentation
+- Support build-time search and replace via a configuration file. To use add a parameter like the following to your pom.xml: <replacementsFile>replacements.config</replacementsFile> Where replacements.config is a file in the same directory as your pom.xml. See the example replacements.config file for documentation
   on how to use it.  
 
 clouddocs-maven-plugin 1.4.0 (August 13, 2012)
