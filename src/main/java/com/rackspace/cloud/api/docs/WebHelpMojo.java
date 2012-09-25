@@ -509,6 +509,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("failOnValidationError", this.failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
+        map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
         
         // Profiling attrs:        
         map.put("profile.os", getProperty("profileOs"));
