@@ -13,7 +13,7 @@
   <xsl:import href="dist/xslt/base/common/control.xsl"/>
   <xsl:import href="dist/xslt/base/html/param.xsl"/>
 
-  <xsl:param name="preprocess" select="'profile normalize'"/>
+  <xsl:param name="preprocess" select="'profile'"/>
   <xsl:param name="body.fontset"/>
   <xsl:param name="stylesheet.result.type"/>
   <xsl:param name="VERSION"/>
