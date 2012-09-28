@@ -718,4 +718,229 @@
     </p:declare-step>
     
 
+
+	<p:declare-step
+		xmlns:l="http://xproc.org/library"
+		xmlns:c="http://www.w3.org/ns/xproc-step"
+		xml:id="validate-docbook-format"
+		type="l:validate-docbook-format"
+		name="validate-docbook-format-step">
+
+		<p:input port="source" primary="true" sequence="true"/>
+		<p:input port="parameters" kind="parameter"/>
+		<p:output port="result" primary="true">
+			<p:pipe step="tryvalidation" port="result"/>
+		</p:output>
+		<p:output port="report" sequence="true">
+			<p:pipe step="tryvalidation" port="report"/>
+		</p:output>
+		<p:option name="docbookNamespace" required="true" />
+		<!-- p:variable name="docBookVersion" select="//*:book/@version/string()"/ -->
+		<p:variable name="nameSpaceText" select="namespace-uri(/*)" />
+
+        <p:try name="tryvalidation"> 
+            <p:group> 
+                <p:output port="result"> 
+                    <p:pipe step="xmlvalidate" port="result"/>  
+                </p:output> 
+                <p:output port="report" sequence="true"> 
+                    <p:empty/> 
+                </p:output>      
+                
+                <p:choose name="xmlvalidate">
+					<p:when test="$nameSpaceText!=$docbookNamespace" >	
+						<p:output port="result">
+							<p:pipe step="bad-document" port="result"/>
+						</p:output>
+						<p:output port="report" sequence="true">
+							<p:inline>
+								<c:errors xmlns:c="http://www.w3.org/ns/xproc-step">
+								   <c:error line="1" column="1">Source XML is not a valid docbook 5 file</c:error>
+								</c:errors>
+							</p:inline>
+						</p:output>
+						<p:error xmlns:rax="http://www.rackspace.com/build/error" name="bad-document" code="rax:unsupported-version">
+						   <p:input port="source">
+							 <p:inline>
+							   <message>
+						@@@@@@@@@@@@@@@@@@@@@@
+						!!!VALIDATION ERROR!!!
+						!!!!!!!!!!!!!!!!!!!!!!
+						The input document version is not supported by this build process. 
+						Please upgrade your document to DocBook version 5. 
+						Refer to the following link for more information http://wiki.openstack.org/Documentation/HowTo#docs.openstack.org_.28DocBook_5.29
+						!!!!!!!!!!!!!!!!!!!!!!
+						!!!VALIDATION ERROR!!!                    
+						@@@@@@@@@@@@@@@@@@@@@@
+								</message>
+							 </p:inline>
+						   </p:input>
+						</p:error>
+					</p:when>
+					<p:otherwise>
+						<p:output port="result">
+							<p:pipe step="echo" port="result"/>
+						</p:output>
+						<p:output port="report" sequence="true">
+							<p:empty />
+						</p:output>
+						<p:identity name="echo">
+							<p:input port="source">
+								<p:pipe step="validate-docbook-format-step" port="source"/>
+							</p:input>
+						</p:identity>
+					</p:otherwise>
+    	        </p:choose>     	        
+            </p:group>  
+            <p:catch name="catch">  
+                <p:output port="result">  
+                    <p:pipe step="validate-docbook-format-step" port="source"/>  
+                </p:output>  
+                <p:output port="report">  
+                    <p:pipe step="id" port="result"/> 
+                </p:output>  
+                <p:xslt name="id">
+                    <p:input port="source">  
+                        <p:pipe step="catch" port="error"/>  
+                    </p:input>  
+                    <p:input port="stylesheet">
+                        <p:inline>
+                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                                
+                                <xsl:variable name="failOnValidationError">yes</xsl:variable>
+                                
+                                <xsl:template match="node()|@*">
+                                    <xsl:message terminate="{$failOnValidationError}">
+                                        <xsl:copy-of select="//message/text()"/>
+                                    </xsl:message>    
+                                    <xsl:copy>
+                                        <xsl:apply-templates select="node() | @*"/>
+                                    </xsl:copy>
+                                </xsl:template>
+                                
+                            </xsl:stylesheet>
+                        </p:inline>
+                    </p:input>
+                    <p:input port="parameters" >
+                        <p:pipe step="validate-docbook-format-step" port="parameters"/>
+                    </p:input>
+                </p:xslt>
+            </p:catch>  
+        </p:try>
+        
+    </p:declare-step>
+    
+ 	<p:declare-step 
+	  xmlns:l="http://xproc.org/library" 
+	  xmlns:c="http://www.w3.org/ns/xproc-step"
+	  xml:id="validate-images"
+	  type="l:validate-images"  
+	  name="validate-images-step">
+          <p:input port="source" primary="true" sequence="true"/>
+          <p:output port="result" sequence="true">
+            <p:pipe step="group" port="result"/>
+          </p:output>
+            <p:input port="parameters" kind="parameter"/>
+            <ut:parameters name="params"/>
+            <p:sink/>
+
+            <p:group name="group">
+                <p:output port="result" primary="true">
+                    <p:pipe step="validateImages" port="result"/>
+                </p:output>
+
+                <!-- output type can be pdf of html -->
+                <p:variable name="output.type" select="//c:param[@name = 'outputType']/@value">
+                 <p:pipe step="params" port="parameters"/>
+                </p:variable>
+                <p:variable name="input.docbook.file" select="//c:param[@name = 'inputSrcFile']/@value">
+                 <p:pipe step="params" port="parameters"/>
+                </p:variable>
+                <p:variable name="strict.image.validation" select="//c:param[@name = 'strictImageValidation']/@value">
+                    <p:pipe step="params" port="parameters"/>
+                </p:variable>
+
+                <cx:copy-transform name="validateImages">
+                    <p:input port="source">
+                        <p:pipe step="validate-images-step" port="source"/>
+                    </p:input>
+
+                    <p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
+                    <p:with-option name="outputType" select="concat($output.type,'')"/>
+                    <p:with-option name="fail-on-error" select="concat($strict.image.validation,'')"/>
+                </cx:copy-transform>
+            </p:group>
+ 		</p:declare-step>
+    
+ 	<p:declare-step 
+	  xmlns:l="http://xproc.org/library" 
+	  xmlns:c="http://www.w3.org/ns/xproc-step"
+	  xml:id="copy-and-transform-images"
+	  type="l:copy-and-transform-images"  
+	  name="copy-and-transform-images-step">
+          <p:input port="source" primary="true" sequence="true"/>
+          <p:output port="result" sequence="true">
+            <p:pipe step="group" port="result"/>
+          </p:output>
+
+            <p:input port="parameters" kind="parameter"/>
+            <ut:parameters name="params"/>
+            <p:sink/>
+
+            <p:group name="group">
+                <p:output port="result" primary="true">
+                    <p:pipe step="copyTransform" port="result"/>
+                </p:output>
+
+                <!-- output type can be pdf of html -->
+                <p:variable name="output.type" select="//c:param[@name = 'outputType']/@value">
+                 <p:pipe step="params" port="parameters"/>
+                </p:variable>
+                <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+                 <p:pipe step="params" port="parameters"/>
+                </p:variable>
+                <p:variable name="input.docbook.file" select="//c:param[@name = 'inputSrcFile']/@value">
+                 <p:pipe step="params" port="parameters"/>
+                </p:variable>
+                <p:variable name="image.copy.dir" select="//c:param[@name = 'imageCopyDir']/@value">
+                 <p:pipe step="params" port="parameters"/>
+                </p:variable>
+                <!-- this param is passed by WebhelpMojo and contains the path where final html output will be written.
+                Comparing this path with the image copy dir param, we can find the relative path of the images to html -->
+                <p:variable name="target.html.content.dir" select="//c:param[@name = 'targetHtmlContentDir']/@value">
+                 <p:pipe step="params" port="parameters"/>
+                </p:variable>
+
+                <p:variable name="strict.image.validation" select="//c:param[@name = 'strictImageValidation']/@value">
+                    <p:pipe step="params" port="parameters"/>
+                </p:variable>
+
+                <cx:copy-transform name="copyTransform">
+                    <p:input port="source">
+                        <p:pipe step="copy-and-transform-images-step" port="source"/>
+                    </p:input>
+
+                    <p:with-option name="target" select="concat('file://',$target.html.content.dir, '/../figures')"/>
+                    <p:with-option name="targetHtmlContentDir" select="concat('file://',$target.html.content.dir)"/>
+                    <p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
+                    <p:with-option name="outputType" select="concat($output.type,'')"/>
+                    <p:with-option name="fail-on-error" select="concat($strict.image.validation,'')"/>
+                </cx:copy-transform>
+            </p:group>
+ 		</p:declare-step>
+    
+   <!-- copy and transform images calabash extension -->
+   <p:declare-step 
+   		type="cx:copy-transform" 
+   		xml:id="copy-transform">
+
+   		<p:input port="source" primary="true" sequence="true"/>
+	    <p:output port="result" primary="true"/>
+		<p:option name="target" required="false" cx:type="xsd:anyURI"/>
+		<p:option name="targetHtmlContentDir" required="false" cx:type="xsd:anyURI"/>
+		<p:option name="inputFileName" cx:type="xsd:string"/>
+		<p:option name="outputType" cx:type="xsd:string"/>
+	    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
+   </p:declare-step>
+    
 </p:library>

@@ -16,6 +16,19 @@
     <p:with-option name="message" select="'Entering xproc pipeline'"/>
   </cx:message>
 
+  <cx:message>
+      <p:with-option name="message" select="'Validating DocBook version'"/>
+  </cx:message>
+
+  <l:validate-docbook-format>
+      <p:with-option name="docbookNamespace" select="'http://docbook.org/ns/docbook'"/>
+  </l:validate-docbook-format>
+
+  <l:validate-transform name="validate-pre-xinclude">
+    <p:input port="schema">
+      <p:document href="classpath:/rng/rackbook.rng"/>
+    </p:input>
+  </l:validate-transform>
 
   <p:add-xml-base/>
   
@@ -30,6 +43,11 @@
       <p:document href="classpath:/rng/rackbook.rng"/>
     </p:input>
   </l:validate-transform>
+
+  <cx:message>
+    <p:with-option name="message" select="'Validating images'"/>
+  </cx:message>
+  <l:validate-images/>
 
   <cx:message>
     <p:with-option name="message" select="'Performing programlisting keep together'"/>

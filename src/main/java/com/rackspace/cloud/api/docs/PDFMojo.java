@@ -180,6 +180,14 @@ public abstract class PDFMojo extends AbstractFoMojo {
     private String security;
      
     /**
+    *
+    * @parameter
+    *     expression="${generate-pdf.strictImageValidation}"
+    *     default-value=true
+    */
+    private boolean strictImageValidation;
+
+   /**
      * 
      *
      * @parameter expression="${generate-pdf.draft.status}" default-value=""
@@ -465,6 +473,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
         map.put("failOnValidationError", failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
+        map.put("outputType", "pdf");
+        map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
+
         
         // Profiling attrs:        
         map.put("profile.os", getProperty("profileOs"));

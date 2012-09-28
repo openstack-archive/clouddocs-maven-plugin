@@ -38,6 +38,7 @@
   </xsl:param>
   <xsl:param name="use.id.as.filename" select="1"/>
   <xsl:param name="branding">not set</xsl:param>
+  <xsl:param name="autoPdfUrl"></xsl:param>
   <xsl:param name="section.autolabel" select="1"/>
   <xsl:param name="chapter.autolabel" select="1"/>
   <xsl:param name="appendix.autolabel" select="'A'"/>
@@ -218,9 +219,14 @@ ERROR: Feedback email not set but internal comments are enabled.
       </xsl:call-template>
       </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="/*/d:info/d:releaseinfo[1]" mode="rackspace-title"/></a> 
       </p> 
-      <xsl:if test="normalize-space($pdf.url) != ''">
-	<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>	  
-      </xsl:if>
+      <xsl:choose>
+      	<xsl:when test="normalize-space($autoPdfUrl) != ''">
+      		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($autoPdfUrl)}"><img src="../common/images/pdf.png"/></a>
+      	</xsl:when>
+      	<xsl:when test="normalize-space($pdf.url) != '' and not(normalize-space($autoPdfUrl) != '')">
+      		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>
+      	</xsl:when>
+      </xsl:choose>
     <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
       &#160;
       <a href="../atom.xml"><img alt="Atom feed of this document" src="../common/images/feed-icon.png"/></a>

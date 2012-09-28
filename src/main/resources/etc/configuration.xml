@@ -257,6 +257,9 @@
 		
 <!-- Rackspace Extensions -->
 <implementation type="cx:replace-text"
-	class-name="com.rackspace.cloud.api.docs.ReplaceTextXProcStep" />
+	class-name="com.rackspace.cloud.api.docs.calabash.extensions.ReplaceTextXProcStep" />
+
+<implementation type="cx:copy-transform"
+	class-name="com.rackspace.cloud.api.docs.calabash.extensions.CopyAndTransformXProcStep" />
 
 </xproc-config>
