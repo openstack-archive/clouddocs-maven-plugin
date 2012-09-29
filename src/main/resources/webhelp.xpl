@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <p:declare-step version="1.0" xmlns:p="http://www.w3.org/ns/xproc"
+  xmlns:db="http://docbook.org/ns/docbook"
   xmlns:l="http://xproc.org/library"
   xmlns:cx="http://xmlcalabash.com/ns/extensions" name="main">
 
@@ -46,19 +47,17 @@
   </l:validate-transform>
 
   <cx:message>
-    <p:with-option name="message" select="'Validating, copying and transforming images'"/>
-  </cx:message>
-  <l:copy-and-transform-images/>
-
-  <cx:message>
-    <p:with-option name="message" select="'Performing programlisting keep together'"/>
-  </cx:message>
-  <l:programlisting-keep-together/>
-
-  <cx:message>
     <p:with-option name="message" select="'Profiling'"/>
   </cx:message>
   <l:docbook-xslt2-preprocess/>
+
+  <p:delete match="//db:imageobject[@role='fo']"/>
+  <p:delete match="//db:imageobject/@role[. ='html']"/>
+  
+  <cx:message>
+    <p:with-option name="message" select="'Validating, copying and transforming images'"/>
+  </cx:message>
+  <l:copy-and-transform-images/>
 
   <cx:message>
     <p:with-option name="message" select="'Generating bookinfo.xml'"/>

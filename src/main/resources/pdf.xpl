@@ -2,6 +2,7 @@
 
 <p:declare-step version="1.0" xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:l="http://xproc.org/library"
+  xmlns:db="http://docbook.org/ns/docbook"
   xmlns:cx="http://xmlcalabash.com/ns/extensions" name="main">
 
   <p:input port="source"/>
@@ -56,6 +57,9 @@
   <l:programlisting-keep-together/>
 
   <l:docbook-xslt2-preprocess/>
+
+  <p:delete match="//db:imageobject[@role='html']"/>
+  <p:delete match="//db:imageobject/@role[. ='fo']"/>
 
   <cx:message>
     <p:with-option name="message" select="'Adding extension info'"/>
