@@ -13,8 +13,21 @@
   <xsl:import href="graphics.xsl"/>
   <xsl:import href="../this.xsl"/>
   <xsl:param name="admon.graphics" select="1"></xsl:param>
-  <xsl:param name="admon.graphics.path">../common/images/admon/</xsl:param>
-  <xsl:param name="callout.graphics.path">../common/images/callouts/</xsl:param>
+  <xsl:param name="webhelp.war">0</xsl:param>
+  <xsl:param name="docbook.infile"/>
+  <xsl:param name="war.dirname">
+    <xsl:call-template name="basename">
+        <xsl:with-param name="filename" select="$docbook.infile"/>
+    </xsl:call-template> 
+  </xsl:param>
+  <xsl:param name="webhelp.common.dir">
+    <xsl:choose>
+      <xsl:when test="$webhelp.war != '0' and $webhelp.war != ''">/<xsl:value-of select="$war.dirname"/>/common/</xsl:when>
+      <xsl:otherwise>../common/</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="admon.graphics.path"><xsl:value-of select="$webhelp.common.dir"/>images/admon/</xsl:param>
+  <xsl:param name="callout.graphics.path"><xsl:value-of select="$webhelp.common.dir"/>images/callouts/</xsl:param>
 
   <xsl:param name="use.extensions">1</xsl:param>
   <xsl:param name="callouts.extension">1</xsl:param>
@@ -179,7 +192,7 @@ set       toc,title
 	<!-- Alternate location for SyntaxHighlighter scripts -->
 
 
-        <script type="text/javascript" src="../common/main.js">
+        <script type="text/javascript" src="{$webhelp.common.dir}main.js">
             <xsl:comment></xsl:comment>
         </script>
 	
@@ -205,7 +218,7 @@ ERROR: Feedback email not set but internal comments are enabled.
 	      </xsl:if>
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-	    <script type="text/javascript" src="../common/comments.js"><xsl:comment/></script>
+	    <script type="text/javascript" src="{$webhelp.common.dir}comments.js"><xsl:comment/></script>
 	  </div>	  
 		</xsl:otherwise>
 	      </xsl:choose>
@@ -225,15 +238,15 @@ ERROR: Feedback email not set but internal comments are enabled.
       </p> 
       <xsl:choose>
       	<xsl:when test="normalize-space($autoPdfUrl) != ''">
-      		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($autoPdfUrl)}"><img src="../common/images/pdf.png"/></a>
+      		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($autoPdfUrl)}"><img src="{$webhelp.common.dir}images/pdf.png"/></a>
       	</xsl:when>
       	<xsl:when test="normalize-space($pdf.url) != '' and not(normalize-space($autoPdfUrl) != '')">
-      		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($pdf.url)}"><img src="../common/images/pdf.png"/></a>
+      		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($pdf.url)}"><img src="{$webhelp.common.dir}images/pdf.png"/></a>
       	</xsl:when>
       </xsl:choose>
     <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
       &#160;
-      <a href="../atom.xml"><img alt="Atom feed of this document" src="../common/images/feed-icon.png"/></a>
+      <a href="../atom.xml"><img alt="Atom feed of this document" src="{$webhelp.common.dir}images/feed-icon.png"/></a>
     </xsl:if>
     <xsl:if test="$social.icons != '0' and $security = 'external' ">
 <!--social buttons-->
@@ -296,7 +309,7 @@ ERROR: Feedback email not set but internal comments are enabled.
 		<xsl:otherwise>http://www.rackspace.com</xsl:otherwise>
 	      </xsl:choose>
 	    </xsl:attribute>
-	    <img src='../common/images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" />
+	    <img src='{$webhelp.common.dir}images/{$branding}-logo.png' alt="{$brandname} Documentation" width="157" height="47" />
 	  </a>
 	  <!-- <xsl:if test="$branding = 'openstack' or $branding = 'openstackextension'"> -->
 	  <!--   <xsl:call-template name="breadcrumbs"> -->
@@ -487,7 +500,7 @@ ERROR: Feedback email not set but internal comments are enabled.
                                 </xsl:if>
                             </ul>
                             <div id="treeDiv">
-                                <img src="../common/images/loading.gif" alt="loading table of contents..."
+                                <img src="{$webhelp.common.dir}images/loading.gif" alt="loading table of contents..."
                                     id="tocLoading" style="display:block;"/>
                                 <div id="ulTreeDiv" style="display:none" class="thisisthat">
                                     <ul id="tree" class="filetree">
@@ -707,5 +720,24 @@ ERROR: Feedback email not set but internal comments are enabled.
   </xsl:if></xslo:if>
 </xsl:template>
 
+
+    <xsl:template name="basename">
+        <xsl:param name="filename" select="''"></xsl:param>
+        <xsl:choose>
+        <xsl:when test="contains($filename, '/')">
+            <xsl:call-template name="basename">
+                <xsl:with-param name="filename" select="substring-after($filename, '/')"></xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="contains($filename, '.')">
+            <xsl:call-template name="basename">
+                <xsl:with-param name="filename">
+                    <xsl:value-of select="substring-before($filename,'.')"/><xsl:if test="contains(substring-after($filename,'.'),'.')">*</xsl:if>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>    
+        <xsl:otherwise><xsl:value-of select="translate($filename,'*','.')"/></xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
 </xsl:stylesheet>

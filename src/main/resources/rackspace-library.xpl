@@ -920,7 +920,7 @@
                         <p:pipe step="copy-and-transform-images-step" port="source"/>
                     </p:input>
 
-                    <p:with-option name="target" select="concat('file://',$target.html.content.dir, '/../figures')"/>
+                    <p:with-option name="target" select="concat('file://',$target.html.content.dir, '/figures')"/>
                     <p:with-option name="targetHtmlContentDir" select="concat('file://',$target.html.content.dir)"/>
                     <p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
                     <p:with-option name="outputType" select="concat($output.type,'')"/>

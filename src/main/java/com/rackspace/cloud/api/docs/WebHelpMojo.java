@@ -68,6 +68,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${project.build.directory}"
      */
     private String projectBuildDirectory;
+    
+    /**
+     * Controls whether to build webhelp war output or not.
+     *
+     * @parameter expression="${generate-webhelp.webhelp.war}" 
+     */
+    private String webhelpWar;
 
     /**
      * Controls whether output is colorized based on revisionflag attributes.
@@ -335,6 +342,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         if (legalNoticeUrl != null) {
             transformer.setParameter("legal.notice.url", legalNoticeUrl);
         }
+        
+        
+    String sysWebhelpWar=System.getProperty("webhelp.war");
+	if(null!=sysWebhelpWar && !sysWebhelpWar.isEmpty()){
+	    webhelpWar=sysWebhelpWar;
+	}
+	transformer.setParameter("webhelp.war", webhelpWar);
 
 	String sysDraftStatus=System.getProperty("draft.status");
 	if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
@@ -389,7 +403,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	       copyTemplate(result);
     
            transformFeed(result);
-	
+	       
+	       if(null != webhelpWar && webhelpWar != "0"){
     	   //final File targetDirectory = result.getParentFile();
 	       //com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("apiref",ApiRefMojo.class,targetDirectory);
 	       String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
@@ -420,6 +435,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             		System.out.println("IOException :" + ioe);     
         	    }
 
+             }
             }
 
     protected void copyTemplate(File result) throws MojoExecutionException {
@@ -519,6 +535,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         Map<String, String> map=new HashMap<String, String>();
         
+        
+        String sysWebhelpWar=System.getProperty("webhelp.war");
+    	if(null!=sysWebhelpWar && !sysWebhelpWar.isEmpty()){
+    	    webhelpWar=sysWebhelpWar;
+    	}
+    	map.put("webhelp.war", webhelpWar);
+            
         map.put("groupId", docProject.getGroupId());
         map.put("artifactId", docProject.getArtifactId());
         map.put("docProjectVersion", docProject.getVersion());

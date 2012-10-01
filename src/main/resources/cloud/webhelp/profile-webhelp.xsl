@@ -83,7 +83,7 @@ Processing legalnotice: <xsl:value-of select="@role"/>
           <d:informalfigure>
             <d:mediaobject>
               <d:imageobject>
-                <d:imagedata fileref="../common/images/built-for-openstack.png"/>
+                <d:imagedata fileref="{$webhelp.common.dir}images/built-for-openstack.png"/>
               </d:imageobject>
             </d:mediaobject>
           </d:informalfigure>
@@ -191,7 +191,7 @@ Processing legalnotice: <xsl:value-of select="@role"/>
 			<d:mediaobject>
 			  <d:imageobject>
 			    <d:imagedata
-				fileref="../common/images/cc/{$ccid}.png"
+				fileref="{$webhelp.common.dir}images/cc/{$ccid}.png"
 				align="center" 
 				valign="middle"/>
 			  </d:imageobject>
@@ -253,8 +253,8 @@ Processing legalnotice: <xsl:value-of select="@role"/>
   <xsl:variable name="doc.title">
     <xsl:call-template name="get.doc.title"/>
   </xsl:variable>
-  <xsl:choose>
-    
+  
+  <xsl:choose>   
     <xsl:when test="false()"/>
     <!-- Can't process unless namespace removed -->
     <xsl:when test="false()"/>
