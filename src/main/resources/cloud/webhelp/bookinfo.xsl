@@ -12,18 +12,30 @@
     <xsl:param name="input.filename">cs-devguide</xsl:param>
     <xsl:param name="default.topic">index.html</xsl:param>
     <xsl:param name="IndexWar"/>
+    <xsl:param name="groupId"/>
+    <xsl:param name="artifactId"/>
+    <xsl:param name="docProjectVersion"/>
     
     <!-- We need too collect lists that contain their own raxm:metadata so we can 
         add <type>s to the bookinfo for resources mentioned in lists in the doc -->
     <xsl:variable name="resource-lists" select="//db:itemizedlist[db:info/raxm:metadata]"/> 
     
     <xsl:template match="/">
-        
+
         <xsl:apply-templates/>
         <xsl:result-document 
             href="{$base.dir}/bookinfo.xml" 
             method="xml" indent="yes" encoding="UTF-8">
             <products xmlns="">
+                <latestpdf><xsl:value-of select="$input.filename"/>.pdf</latestpdf>
+                <pdfoutname><xsl:value-of select="concat($input.filename,'-',/*/db:info/db:pubdate,'.pdf')"/></pdfoutname>
+                <docname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></docname>
+                <productName><xsl:value-of select="f:productname(//db:info/raxm:metadata/raxm:product,//db:info/raxm:metadata/raxm:product/@version)"/></productName>
+                <pominfo>
+                    <groupid><xsl:value-of select="$groupId"/></groupid>
+                    <artifactid><xsl:value-of select="$artifactId"/></artifactid>
+                    <version><xsl:value-of select="$docProjectVersion"/></version>
+                </pominfo>
                 <xsl:for-each-group select="//db:info/raxm:metadata" group-by="f:productnumber(raxm:product,raxm:product/@version)">             
                     <product>
                         <id><xsl:value-of select="current-grouping-key()"/></id>
@@ -88,7 +100,7 @@
                 </type>        
     </xsl:template>
         
-<!--    <xsl:function name="f:productname" as="xs:string">
+    <xsl:function name="f:productname" as="xs:string">
         <xsl:param name="key"/>
         <xsl:param name="version"/>
         <xsl:choose>
@@ -101,9 +113,10 @@
             <xsl:when test="$key= 'loadbalancers'">Cloud Loadbalancers</xsl:when>
             <xsl:when test="$key= 'auth'">Cloud Identity</xsl:when>
             <xsl:when test="$key= 'cdns'">Cloud DNS</xsl:when>
-            <xsl:otherwise>&#160;</xsl:otherwise>
+            <xsl:when test="$key= 'sites'">Cloud Sites</xsl:when>
+            <xsl:otherwise><xsl:value-of select="concat($key,', ',$version)"/></xsl:otherwise>
         </xsl:choose>
-    </xsl:function>-->
+    </xsl:function>
     
     <xsl:function name="f:productnumber" as="xs:string">
         <xsl:param name="key"/>

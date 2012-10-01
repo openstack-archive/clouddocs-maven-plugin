@@ -349,7 +349,10 @@ Processing legalnotice: <xsl:value-of select="@role"/>
   </xsl:if>
 
   <meta name="generator" content="DocBook {$DistroTitle} V{$VERSION}"/>
-
+  <meta name="mavenGroupId" content="{$groupId}"/>
+  <meta name="mavenArtifactId" content="{$artifactId}"/>
+  <meta name="mavenVersionId" content="{$docProjectVersion}"/>
+  
   <xsl:if test="$generate.meta.abstract != 0">
     <xsl:variable name="info" select="(d:articleinfo                                       |d:bookinfo                                       |d:prefaceinfo                                       |d:chapterinfo                                       |d:appendixinfo                                       |d:sectioninfo                                       |d:sect1info                                       |d:sect2info                                       |d:sect3info                                       |d:sect4info                                       |d:sect5info                                       |d:referenceinfo                                       |d:refentryinfo                                       |d:partinfo                                       |d:info                                       |d:docinfo)[1]"/>
     <xsl:if test="$info and $info/d:abstract">

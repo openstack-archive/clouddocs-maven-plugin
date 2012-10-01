@@ -21,6 +21,10 @@
 
   <xsl:param name="project.build.directory"/>
 
+    <xsl:param name="groupId"/>
+    <xsl:param name="artifactId"/>
+    <xsl:param name="docProjectVersion"/>
+
   <xsl:param name="feedback.email">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>

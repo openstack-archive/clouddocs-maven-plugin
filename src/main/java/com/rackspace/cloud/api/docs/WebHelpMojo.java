@@ -19,6 +19,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.maven.project.MavenProject;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
@@ -53,6 +55,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private File atomFeed;
     private File atomFeedClean;
     private static final String COPY_XSL = "cloud/webhelp/copy.xsl";
+
+      /**
+       * A reference to the project.
+       *
+       * @parameter expression="${project}"
+       * @required
+       */
+      private MavenProject docProject;
 
     /**
      * @parameter expression="${project.build.directory}"
@@ -272,6 +282,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
         super.adjustTransformer(transformer, sourceFilename, targetFile);
+                    
+                    
+    transformer.setParameter("groupId", docProject.getGroupId());
+    transformer.setParameter("artifactId", docProject.getArtifactId());
+    transformer.setParameter("docProjectVersion", docProject.getVersion());
+
                     
     if(glossaryUri != null){
 	  transformer.setParameter("glossary.uri", glossaryUri);
@@ -503,6 +519,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         Map<String, String> map=new HashMap<String, String>();
         
+        map.put("groupId", docProject.getGroupId());
+        map.put("artifactId", docProject.getArtifactId());
+        map.put("docProjectVersion", docProject.getVersion());
+
         map.put("security", this.security);
         map.put("canonicalUrlBase", this.canonicalUrlBase);
         map.put("replacementsFile", this.replacementsFile);
