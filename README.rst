@@ -20,17 +20,16 @@ Release Notes
 clouddocs-maven-plugin 1.6.0 (September ??TBD??, 2012)
 ============================================================
 - Automatically handle images: 
-
- + Detects if images are missing from a document and fail if an image is missing. You can turn off this validation by setting <strictImageValidation>false</strictImageValidation> in your pom.xml.
- + For Webhelp output, automatically converts .svg to .png.
- + Automatically copies images to the Webhelp output directory.
+ - Detects if images are missing from a document and fail if an image is missing. You can turn off this validation by setting <strictImageValidation>false</strictImageValidation> in your pom.xml.
+ - For Webhelp output, automatically converts .svg to .png.
+ - Automatically copies images to the Webhelp output directory.
 - Automatically build pdf when building webhelp and copy pdf to webhelp directory unless <makePdf>false</makePdf> is set in your pom.xml.
 - Provide better error messages if incorrect DocBook version is used (i.e. if DocBook 4.x is used instead of 5.x).
 - Updated Rackspace logo.
 - Move profiling to early in the pipeline. This fixes bugs where content in title and revhistory weren't being profiled.
 - Fix bug where IDREFs weren't validated.
 - Support passing in -Dsecurity=internal|external|reviewer and -Ddraft.status=on|off from the command line.
-- Generate .war file version of webhelp with bookinfo.xml file to support autopublish to landing page.
+- Generate .war file version of webhelp with bookinfo.xml file to support autopublish to landing page. To generate a war you must set webhelp.war. Typically this will be done from the Jenkins job that builds for autopublishing (-Dwebhelp.war=1). 
 
 clouddocs-maven-plugin 1.5.0 (August 14, 2012)
 ============================================================
