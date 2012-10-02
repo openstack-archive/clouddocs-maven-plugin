@@ -707,12 +707,19 @@
             <p:iteration-source>
                 <p:pipe step="bookinfo-xslt" port="secondary"/>
             </p:iteration-source>
-            
-            <p:store encoding="utf-8" indent="true" method="xml" 
-                omit-xml-declaration="false">
-                <p:with-option name="href" select="base-uri(/*)"/>
-            </p:store>
-            
+            <p:choose>
+                <p:when test="ends-with(base-uri(/*),'.xml')">
+                    <p:store encoding="utf-8" indent="true" method="xml" 
+                        omit-xml-declaration="false">
+                        <p:with-option name="href" select="base-uri(/*)"/>
+                    </p:store>
+                </p:when>
+                <p:otherwise>
+                    <p:store encoding="utf-8" method="text"  media-type="text">
+                        <p:with-option name="href" select="base-uri(/*)"/>
+                    </p:store>
+                </p:otherwise>
+            </p:choose>
         </p:for-each>
         
     </p:declare-step>

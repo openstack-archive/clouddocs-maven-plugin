@@ -23,6 +23,7 @@
     <xsl:template match="/">
 
         <xsl:apply-templates/>
+        
         <xsl:result-document 
             href="{$base.dir}/bookinfo.xml" 
             method="xml" indent="yes" encoding="UTF-8">
@@ -30,7 +31,8 @@
                 <latestpdf><xsl:value-of select="$input.filename"/>.pdf</latestpdf>
                 <pdfoutname><xsl:value-of select="concat($input.filename,'-',/*/db:info/db:pubdate,'.pdf')"/></pdfoutname>
                 <docname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></docname>
-                <productName><xsl:value-of select="f:productname(//db:info/raxm:metadata/raxm:product,//db:info/raxm:metadata/raxm:product/@version)"/></productName>
+                <productname><xsl:value-of select="f:productname(//db:info/raxm:metadata/raxm:product,//db:info/raxm:metadata/raxm:product/@version)"/></productname>
+                <webappname><xsl:value-of select="$input.filename"/></webappname>
                 <pominfo>
                     <groupid><xsl:value-of select="$groupId"/></groupid>
                     <artifactid><xsl:value-of select="$artifactId"/></artifactid>
@@ -72,6 +74,15 @@
                     </product>                    
                 </xsl:for-each-group>
             </products>
+        </xsl:result-document>     
+        <xsl:result-document 
+            href="{$base.dir}/bookinfo.properties" 
+            method="xml" indent="no" encoding="UTF-8">
+<c:result xmlns:c="http://www.w3.org/ns/xproc-step">
+warprefix=<xsl:value-of select="translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_')"/>
+product=<xsl:value-of select="/*/db:info/db:productname"/>
+version=<xsl:value-of select="/*/db:info/db:releaseinfo"/>            
+</c:result>
         </xsl:result-document>
     </xsl:template>
     

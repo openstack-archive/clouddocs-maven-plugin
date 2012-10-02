@@ -3,9 +3,12 @@ package com.rackspace.cloud.api.docs;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -408,10 +411,22 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     	   //final File targetDirectory = result.getParentFile();
 	       //com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("apiref",ApiRefMojo.class,targetDirectory);
 	       String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
+            
+           Properties properties = new Properties();
+           InputStream is = null;
 
+           try {
+               File f = new File(result.getParentFile().getParentFile()  + "/" + warBasename + "/bookinfo.properties");
+               is = new FileInputStream( f );
+               properties.load(is);
+            }
+            catch ( Exception e ) { 
+                System.out.println("Got an Exception: " + e.getMessage());          
+            }
+                    
            //Zip up the war from here.
 	       String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
-	       String zipFile =   result.getParentFile().getParentFile()  + "/" + warBasename + ".war";
+	       String zipFile =   result.getParentFile().getParentFile()  + "/" + properties.getProperty("warprefix","") + warBasename + ".war";
 	       //result.deleteOnExit();
 
            try{
