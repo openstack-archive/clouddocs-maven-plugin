@@ -168,6 +168,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
      * 
      * @parameter 
      *     expression="${generate-pdf.failOnValidationError}"
+     *     default-value="yes"
      */
     private String failOnValidationError;
     

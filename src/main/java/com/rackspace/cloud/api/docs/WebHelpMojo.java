@@ -208,7 +208,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * 
      * @parameter 
      *     expression="${generate-webhelp.failOnValidationError}"
-     *     default-value="0"
+     *     default-value="yes"
      */
     private String failOnValidationError;
     

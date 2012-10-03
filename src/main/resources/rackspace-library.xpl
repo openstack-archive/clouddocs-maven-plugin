@@ -62,10 +62,17 @@
                             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
                                 
                                 <xsl:param name="failOnValidationError">yes</xsl:param>
+                                <xsl:param name="failOnValidationErrorInternal">
+                                    <xsl:choose>
+                                        <xsl:when test="$failOnValidationError != 'yes' and $failOnValidationError != 'true' and $failOnValidationError != '1'">no</xsl:when>
+                                        <xsl:otherwise>yes</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:param>
+                                
                                 <xsl:param name="security"/>
                                 
                                 <xsl:template match="node()|@*">
-                                    <xsl:message terminate="{$failOnValidationError}">
+                                    <xsl:message terminate="{$failOnValidationErrorInternal}">
                                         @@@@@@@@@@@@@@@@@@@@@@
                                         !!!VALIDATION ERROR!!!
                                         !!!!!!!!!!!!!!!!!!!!!!
@@ -815,9 +822,15 @@
                             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
                                 
                                 <xsl:variable name="failOnValidationError">yes</xsl:variable>
+                                <xsl:param name="failOnValidationErrorInternal">
+                                    <xsl:choose>
+                                        <xsl:when test="$failOnValidationError != 'yes' and $failOnValidationError != 'true' and $failOnValidationError != '1'">no</xsl:when>
+                                        <xsl:otherwise>yes</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:param>
                                 
                                 <xsl:template match="node()|@*">
-                                    <xsl:message terminate="{$failOnValidationError}">
+                                    <xsl:message terminate="{$failOnValidationErrorInternal}">
                                         <xsl:copy-of select="//message/text()"/>
                                     </xsl:message>    
                                     <xsl:copy>
