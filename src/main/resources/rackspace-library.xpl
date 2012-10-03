@@ -51,9 +51,57 @@
                     <p:pipe step="main" port="source"/>  
                 </p:output>  
                 <p:output port="report">  
-                    <p:pipe step="id" port="result"/> 
+                    <p:pipe step="printerrors" port="result"/> 
                 </p:output>  
-                <p:xslt name="id">
+                <p:xslt name="printerrors">
+                    <p:input port="source">  
+                        <p:pipe step="catch" port="error"/>  
+                    </p:input>  
+                    <p:input port="stylesheet">
+                        <p:inline>
+                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+    <!--
+                                <xsl:param name="security"/>-->
+                                <xsl:param name="failOnValidationError">yes</xsl:param>
+                                <xsl:param name="failOnValidationErrorInternal">
+                                    <xsl:choose>
+                                        <xsl:when test="$failOnValidationError != 'yes' and $failOnValidationError != 'true' and $failOnValidationError != '1'">no</xsl:when>
+                                        <xsl:otherwise>yes</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:param>
+                                
+                                <xsl:template match="/">
+                                    <xsl:message>
+                                    @@@@@@@@@@@@@@@@@@@@@@
+                                    !!!VALIDATION ERRORS!!
+                                    !!!!!!!!!!!!!!!!!!!!!!
+                                    <xsl:copy-of select="*"/>
+                                    !!!!!!!!!!!!!!!!!!!!!!
+                                    !!!VALIDATION ERRORS!!                    
+                                    @@@@@@@@@@@@@@@@@@@@@@
+                                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                                    Control whether build fails or not by 
+                                    setting failOnValidationError to no
+                                    in your pom. 
+                                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                                    </xsl:message>          
+                                    <xsl:message terminate="{$failOnValidationErrorInternal}"/>
+                                </xsl:template>
+                                
+<!--                                <xsl:template match="node()|@*">
+                                    <xsl:copy>
+                                        <xsl:apply-templates select="node() | @*"/>
+                                    </xsl:copy>
+                                </xsl:template>-->
+                                
+                            </xsl:stylesheet>
+                        </p:inline>
+                    </p:input>
+                    <p:input port="parameters" >
+                        <p:pipe step="main" port="parameters"/>
+                    </p:input>  
+                </p:xslt>
+<!--                <p:xslt name="id">
                     <p:input port="source">  
                         <p:pipe step="catch" port="error"/>  
                     </p:input>  
@@ -71,19 +119,8 @@
                                 
                                 <xsl:param name="security"/>
                                 
-                                <xsl:template match="node()|@*">
-                                    <xsl:message terminate="{$failOnValidationErrorInternal}">
-                                        @@@@@@@@@@@@@@@@@@@@@@
-                                        !!!VALIDATION ERROR!!!
-                                        !!!!!!!!!!!!!!!!!!!!!!
-                                        <xsl:copy-of select="."/>
-                                        !!!!!!!!!!!!!!!!!!!!!!
-                                        !!!VALIDATION ERROR!!!                    
-                                        @@@@@@@@@@@@@@@@@@@@@@
-                                    </xsl:message>    
-                                    <xsl:copy>
-                                        <xsl:apply-templates select="node() | @*"/>
-                                    </xsl:copy>
+                                <xsl:template match="/">
+                                    <xsl:message terminate="{$failOnValidationErrorInternal}"/>
                                 </xsl:template>
                                 
                             </xsl:stylesheet>
@@ -92,7 +129,7 @@
                     <p:input port="parameters" >
                         <p:pipe step="main" port="parameters"/>
                     </p:input>
-                </p:xslt>
+                </p:xslt>-->
             </p:catch>  
         </p:try>
         
