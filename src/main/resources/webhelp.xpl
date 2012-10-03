@@ -25,13 +25,6 @@
     <p:with-option name="docbookNamespace" select="'http://docbook.org/ns/docbook'"/>
   </l:validate-docbook-format>
 
-  <l:validate-transform name="validate-pre-xinclude">
-    <p:input port="schema">
-      <p:document href="classpath:/rng/rackbook.rng"/>
-    </p:input>
-  </l:validate-transform>
-
-
   <p:add-xml-base/>
   
   <p:xinclude fixup-xml-base="true"/>
@@ -40,16 +33,17 @@
     <p:with-option name="message" select="'Validating post-xinclude'"/>
   </cx:message>
   
+  <cx:message>
+    <p:with-option name="message" select="'Profiling'"/>
+  </cx:message>
+  <l:docbook-xslt2-preprocess/>
+  
   <l:validate-transform name="validate-post-xinclude">
     <p:input port="schema">
       <p:document href="classpath:/rng/rackbook.rng"/>
     </p:input>
   </l:validate-transform>
 
-  <cx:message>
-    <p:with-option name="message" select="'Profiling'"/>
-  </cx:message>
-  <l:docbook-xslt2-preprocess/>
 
   <p:delete match="//db:imageobject[@role='fo']"/>
   <p:delete match="//db:imageobject/@role[. ='html']"/>
