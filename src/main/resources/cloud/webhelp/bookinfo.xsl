@@ -15,6 +15,7 @@
     <xsl:param name="groupId"/>
     <xsl:param name="artifactId"/>
     <xsl:param name="docProjectVersion"/>
+    <xsl:param name="security">external</xsl:param>
     
     <!-- We need too collect lists that contain their own raxm:metadata so we can 
         add <type>s to the bookinfo for resources mentioned in lists in the doc -->
@@ -79,7 +80,8 @@
             href="{$base.dir}/bookinfo.properties" 
             method="xml" indent="no" encoding="UTF-8">
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
-warprefix=<xsl:value-of select="translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_')"/>
+warprefix=<xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/>
+warsuffix=<xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if>
 product=<xsl:value-of select="/*/db:info/db:productname"/>
 version=<xsl:value-of select="/*/db:info/db:releaseinfo"/>            
 </c:result>

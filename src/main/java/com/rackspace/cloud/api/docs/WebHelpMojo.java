@@ -399,59 +399,68 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         return "cloud/webhelp/profile-webhelp.xsl";
     }
 
-        public void postProcessResult(File result) throws MojoExecutionException {
+    public void postProcessResult(File result) throws MojoExecutionException {
 	
-	       super.postProcessResult(result);
+	super.postProcessResult(result);
 	
-	       copyTemplate(result);
+	copyTemplate(result);
     
-           transformFeed(result);
+	transformFeed(result);
 	       
-	       if(null != webhelpWar && webhelpWar != "0"){
-    	   //final File targetDirectory = result.getParentFile();
-	       //com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("apiref",ApiRefMojo.class,targetDirectory);
-	       String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
-            
-           Properties properties = new Properties();
-           InputStream is = null;
 
-           try {
-               File f = new File(result.getParentFile().getParentFile()  + "/" + warBasename + "/bookinfo.properties");
-               is = new FileInputStream( f );
-               properties.load(is);
-            }
-            catch ( Exception e ) { 
-                System.out.println("Got an Exception: " + e.getMessage());          
-            }
-                    
-           //Zip up the war from here.
-	       String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
-	       String zipFile =   result.getParentFile().getParentFile()  + "/" + properties.getProperty("warprefix","") + warBasename + ".war";
-	       //result.deleteOnExit();
+	//final File targetDirectory = result.getParentFile();
+	//com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("apiref",ApiRefMojo.class,targetDirectory);
+	String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
+        
+	Properties properties = new Properties();
+	InputStream is = null;
+	
+	try {
+	    File f = new File(result.getParentFile().getParentFile()  + "/" + warBasename + "/bookinfo.properties");
+	    is = new FileInputStream( f );
+	    properties.load(is);
+	}
+	catch ( Exception e ) { 
+	    System.out.println("Got an Exception: " + e.getMessage());          
+	}
 
-           try{
-        		//create object of FileOutputStream
-        		FileOutputStream fout = new FileOutputStream(zipFile);
+	if(null != webhelpWar && webhelpWar != "0"){                    
+	    //Zip up the war from here.
+	    String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
+	    String zipFile =   result.getParentFile().getParentFile()  + "/" + properties.getProperty("warprefix","") + warBasename + properties.getProperty("warsuffix","") + ".war";
+	    //result.deleteOnExit();
+
+	    try{
+		//create object of FileOutputStream
+		FileOutputStream fout = new FileOutputStream(zipFile);
                                          
-        		//create object of ZipOutputStream from FileOutputStream
-        		ZipOutputStream zout = new ZipOutputStream(fout);
+		//create object of ZipOutputStream from FileOutputStream
+		ZipOutputStream zout = new ZipOutputStream(fout);
                                
-        		//create File object from source directory
-        		File fileSource = new File(sourceDir);
+		//create File object from source directory
+		File fileSource = new File(sourceDir);
                                
-        		com.rackspace.cloud.api.docs.FileUtils.addDirectory(zout, fileSource);
+		com.rackspace.cloud.api.docs.FileUtils.addDirectory(zout, fileSource);
                                
-        		//close the ZipOutputStream
-        		zout.close();
+		//close the ZipOutputStream
+		zout.close();
                                
-        		System.out.println("Zip file has been created!");
+		System.out.println("Zip file has been created!");
                                
-        	    }catch(IOException ioe){
-            		System.out.println("IOException :" + ioe);     
-        	    }
+	    }catch(IOException ioe){
+		System.out.println("IOException :" + ioe);     
+	    }
+	}
 
-             }
-            }
+	//	if(null == webhelpWar || webhelpWar.equals("0")){
+	    //TODO: Move dir to add warsuffix/security value
+	    String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
+	    File webhelpDirWithSecurity = new File(result.getParentFile().getParentFile()  + "/" + warBasename + properties.getProperty("warsuffix",""));
+	    File webhelpOrigDir = new File(result.getParentFile().getParentFile()  + "/" + warBasename );
+	    boolean success = webhelpOrigDir.renameTo(webhelpDirWithSecurity);
+	    System.out.println("Rename success: " + success);
+	    //}
+    }
 
     protected void copyTemplate(File result) throws MojoExecutionException {
 
