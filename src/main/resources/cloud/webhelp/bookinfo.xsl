@@ -77,13 +77,14 @@
             </products>
         </xsl:result-document>     
         <xsl:result-document 
-            href="{$base.dir}/bookinfo.properties" 
+            href="{$base.dir}/webapp/WEB-INF/bookinfo.properties" 
             method="xml" indent="no" encoding="UTF-8">
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
 warprefix=<xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/>
 warsuffix=<xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if>
 product=<xsl:value-of select="/*/db:info/db:productname"/>
-version=<xsl:value-of select="/*/db:info/db:releaseinfo"/>            
+version=<xsl:value-of select="/*/db:info/db:releaseinfo"/>
+buildtime=<xsl:value-of select="current-dateTime()"/>
 </c:result>
         </xsl:result-document>
     </xsl:template>

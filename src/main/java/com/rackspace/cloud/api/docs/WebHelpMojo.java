@@ -416,7 +416,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	InputStream is = null;
 	
 	try {
-	    File f = new File(result.getParentFile().getParentFile()  + "/" + warBasename + "/bookinfo.properties");
+	    File f = new File(result.getParentFile().getParentFile()  + "/" + warBasename + "/webapp/WEB-INF/bookinfo.properties");
 	    is = new FileInputStream( f );
 	    properties.load(is);
 	}
@@ -458,7 +458,6 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	    File webhelpDirWithSecurity = new File(result.getParentFile().getParentFile()  + "/" + warBasename + properties.getProperty("warsuffix",""));
 	    File webhelpOrigDir = new File(result.getParentFile().getParentFile()  + "/" + warBasename );
 	    boolean success = webhelpOrigDir.renameTo(webhelpDirWithSecurity);
-	    System.out.println("Rename success: " + success);
 	    //}
     }
 
