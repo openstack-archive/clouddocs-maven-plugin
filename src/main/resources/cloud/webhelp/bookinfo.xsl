@@ -32,7 +32,7 @@
                 <latestpdf><xsl:value-of select="$input.filename"/>.pdf</latestpdf>
                 <pdfoutname><xsl:value-of select="concat($input.filename,'-',/*/db:info/db:pubdate,'.pdf')"/></pdfoutname>
                 <docname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></docname>
-                <productname><xsl:value-of select="f:productname(//db:info/raxm:metadata/raxm:product,//db:info/raxm:metadata/raxm:product/@version)"/></productname>
+                <productname><xsl:value-of select="f:productname(/*/db:info/raxm:metadata/raxm:product,/*/db:info/raxm:metadata/raxm:product/@version)"/></productname>
                 <webappname><xsl:value-of select="$input.filename"/></webappname>
                 <pominfo>
                     <groupid><xsl:value-of select="$groupId"/></groupid>
