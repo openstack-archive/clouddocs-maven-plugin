@@ -44,7 +44,7 @@
     </p:input>
   </l:validate-transform>
 
-
+  <p:delete match="//@format[parent::db:imagedata and normalize-space(.) = 'SVG']"/>
   <p:delete match="//db:imageobject[@role='fo']"/>
   <p:delete match="//db:imageobject/@role[. ='html']"/>
   
