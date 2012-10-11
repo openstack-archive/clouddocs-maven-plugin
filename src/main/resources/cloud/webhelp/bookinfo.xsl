@@ -20,9 +20,14 @@
     <!-- We need too collect lists that contain their own raxm:metadata so we can 
         add <type>s to the bookinfo for resources mentioned in lists in the doc -->
     <xsl:variable name="resource-lists" select="//db:itemizedlist[db:info/raxm:metadata]"/> 
+
+    <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
+    <xsl:variable name="warsuffix"><xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
     
     <xsl:template match="/">
-
+      
+      <xsl:processing-instruction name="rax-warinfo"><xsl:value-of select="concat($warprefix,$input.filename,$warsuffix)"/></xsl:processing-instruction>
+      
         <xsl:apply-templates/>
         
         <xsl:result-document 
@@ -80,8 +85,8 @@
             href="{$base.dir}/webapp/WEB-INF/bookinfo.properties" 
             method="xml" indent="no" encoding="UTF-8">
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
-warprefix=<xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if>
-warsuffix=<xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if>
+warprefix=<xsl:value-of select="$warprefix"/>
+warsuffix=<xsl:value-of select="$warsuffix"/>
 product=<xsl:value-of select="/*/db:info/db:productname"/>
 version=<xsl:value-of select="/*/db:info/db:releaseinfo"/>
 buildtime=<xsl:value-of select="current-dateTime()"/>
@@ -146,6 +151,7 @@ buildtime=<xsl:value-of select="current-dateTime()"/>
             <xsl:when test="$key= 'auth'">7</xsl:when>
             <xsl:when test="$key= 'cdns'">8</xsl:when>   
             <xsl:when test="$key= 'sites'">10</xsl:when>
+	    <xsl:when test="$key= 'sdks'">11</xsl:when>
             <xsl:otherwise>&#160;</xsl:otherwise>
         </xsl:choose>
     </xsl:function>

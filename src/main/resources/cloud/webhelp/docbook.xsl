@@ -15,11 +15,7 @@
   <xsl:param name="admon.graphics" select="1"></xsl:param>
   <xsl:param name="webhelp.war">0</xsl:param>
   <xsl:param name="docbook.infile"/>
-  <xsl:param name="war.dirname">
-    <xsl:call-template name="basename">
-        <xsl:with-param name="filename" select="$docbook.infile"/>
-    </xsl:call-template> 
-  </xsl:param>
+  <xsl:param name="war.dirname"><xsl:value-of select="normalize-space(/processing-instruction('rax-warinfo'))"/></xsl:param>
   <xsl:param name="webhelp.common.dir">
     <xsl:choose>
       <xsl:when test="$webhelp.war != '0' and $webhelp.war != ''">/<xsl:value-of select="$war.dirname"/>/common/</xsl:when>
