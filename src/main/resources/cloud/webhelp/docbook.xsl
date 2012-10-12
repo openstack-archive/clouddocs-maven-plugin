@@ -152,7 +152,12 @@ set       toc,title
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">http://docs.openstack.org/</xsl:when>
       <xsl:when test="$branding = 'openstackextension'">http://docs-beta.rackspace.com/test/jonathan/OpenstackExtDocs/</xsl:when>
-      <xsl:otherwise>http://docs.rackspace.com/api/</xsl:otherwise>
+      <xsl:otherwise>
+	<xsl:choose>
+	  <xsl:when test="$webhelp.war != '' and $webhelp.war != '0'">/</xsl:when>
+	  <xsl:otherwise>http://docs.rackspace.com/api/</xsl:otherwise>
+	</xsl:choose>
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   
