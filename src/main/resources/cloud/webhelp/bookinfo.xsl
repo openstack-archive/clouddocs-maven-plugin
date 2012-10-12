@@ -89,7 +89,7 @@ warprefix=<xsl:value-of select="$warprefix"/>
 warsuffix=<xsl:value-of select="$warsuffix"/>
 product=<xsl:value-of select="/*/db:info/db:productname"/>
 version=<xsl:value-of select="/*/db:info/db:releaseinfo"/>
-buildtime=<xsl:value-of select="current-dateTime()"/>
+buildtime=<xsl:value-of select="format-dateTime(current-dateTime(),'[Y]-[M,2]-[D,2] [H]:[m]:[s]')"/>
 </c:result>
         </xsl:result-document>
     </xsl:template>
