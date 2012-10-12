@@ -10,7 +10,7 @@
     
     <xsl:param name="base.dir" select="'target/docbkx/xhtml/example/'"/>
     <xsl:param name="input.filename">cs-devguide</xsl:param>
-    <xsl:param name="default.topic">index.html</xsl:param>
+    <xsl:param name="default.topic"><xsl:value-of select="/*/*[self::db:chapter or self::db:preface or self::db:section or self::db:article or self::db:book or self::db:part][1]/@xml:id"/>.html</xsl:param>
     <xsl:param name="IndexWar"/>
     <xsl:param name="groupId"/>
     <xsl:param name="artifactId"/>
