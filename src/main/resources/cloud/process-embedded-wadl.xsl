@@ -89,7 +89,7 @@
 	<xsl:template match="rax:resource[parent::rax:*[./processing-instruction('rax') = 'start-sections']]" mode="generate-reference-section">
 		<xsl:param name="original.wadl.path" />
 		<xsl:variable name="rax-id" select="@rax:id"/>
-		<section xml:id="{translate(//wadl:resource[@id = $rax-id]/@path,'/{}','___')}" rax:original-wadl="{$original.wadl.path}">
+		<section xml:id="{translate(//wadl:resource[@id = $rax-id]/@path,'/{}:','___')}" rax:original-wadl="{$original.wadl.path}">
 			<title>
 				<xsl:choose>
 					<xsl:when test="//wadl:resource[@id = current()/@rax:id]/wadl:doc/@title">
@@ -420,7 +420,7 @@
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="addMethodPageBreaks" select="boolean(number($addMethodPageBreaksN))"/>
-		<xsl:variable name="replacechars">/{}</xsl:variable>
+		<xsl:variable name="replacechars">/{}:</xsl:variable>
 		<xsl:variable name="method.title">
 				<xsl:choose>
 					<xsl:when test="wadl:doc/@title">
@@ -605,7 +605,14 @@
 	</xsl:template>
 	
 	<xsl:template match="wadl:doc" mode="process-xhtml">
-		<xsl:apply-templates mode="process-xhtml"/>
+		<xsl:choose>
+			<xsl:when test="not(./*)">
+				<para><xsl:apply-templates/></para>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates mode="process-xhtml"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="*"  mode="process-shortdesc">

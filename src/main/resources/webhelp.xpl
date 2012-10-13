@@ -77,5 +77,15 @@
     <p:with-option name="message" select="'Process embedded wadls (if necessary)'"/>
   </cx:message>
   <l:process-embedded-wadl/>
-
+  
+  <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']"/>
+  
+  <l:validate-transform-idrefs name="validate-post-wadl" >
+    <p:input port="schema">
+      <p:document href="classpath:/rng/rackbook.rng"/>
+    </p:input>
+  </l:validate-transform-idrefs>
+  
+<!--  <p:identity/>-->
+  
 </p:declare-step>

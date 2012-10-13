@@ -7,11 +7,11 @@
     version="1.0">
     
     <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
-    
+
     <p:declare-step version="1.0"
         xmlns:p="http://www.w3.org/ns/xproc"
         xmlns:l="http://xproc.org/library"
-        type="l:validate-transform"
+        type="l:validate-transform-idrefs"
         name="main">
         
         <p:input port="source" /> <!--sequence="false" primary="true"-->
@@ -43,7 +43,7 @@
                     <p:input port="schema"> 
                         <p:pipe step="main" port="schema"/>  
                     </p:input>  
-                </p:validate-with-relax-ng>  
+                </p:validate-with-relax-ng> 
                 
             </p:group>  
             <p:catch name="catch">  
@@ -52,7 +52,173 @@
                 </p:output>  
                 <p:output port="report">  
                     <p:pipe step="printerrors" port="result"/> 
+                </p:output>
+                <p:xslt name="printdoc">
+                    <p:input port="source">  
+                        <p:pipe step="main" port="source"/>  
+                    </p:input>  
+                    <p:input port="stylesheet">
+                        <p:inline>
+                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                                <xsl:template match="/">
+                                    <xsl:message>
+                                        <xsl:copy-of select="*"/>
+                                    </xsl:message>          
+                                </xsl:template>
+                            </xsl:stylesheet>
+                        </p:inline>
+                    </p:input>
+                    <p:input port="parameters" >
+                        <p:pipe step="main" port="parameters"/>
+                    </p:input>  
+                </p:xslt>
+                <p:xslt name="printerrors">
+                    <p:input port="source">  
+                        <p:pipe step="catch" port="error"/>  
+                    </p:input>  
+                    <p:input port="stylesheet">
+                        <p:inline>
+                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                                <!--
+                                <xsl:param name="security"/>-->
+                                <xsl:param name="failOnValidationError">yes</xsl:param>
+                                <xsl:param name="failOnValidationErrorInternal">
+                                    <xsl:choose>
+                                        <xsl:when test="$failOnValidationError != 'yes' and $failOnValidationError != 'true' and $failOnValidationError != '1'">no</xsl:when>
+                                        <xsl:otherwise>yes</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:param>
+                                
+                                <xsl:template match="/">
+                                    <xsl:message>
+                                        @@@@@@@@@@@@@@@@@@@@@@
+                                        !!!VALIDATION ERRORS!!
+                                        !!!!!!!!!!!!!!!!!!!!!!
+                                        <xsl:copy-of select="*"/>
+                                        !!!!!!!!!!!!!!!!!!!!!!
+                                        !!!VALIDATION ERRORS!!                    
+                                        @@@@@@@@@@@@@@@@@@@@@@
+                                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                                        Control whether build fails or not by 
+                                        setting failOnValidationError to no
+                                        in your pom. 
+                                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                                    </xsl:message>          
+                                    <xsl:message terminate="{$failOnValidationErrorInternal}"/>
+                                </xsl:template>
+                                
+                                <!--                                <xsl:template match="node()|@*">
+                                    <xsl:copy>
+                                        <xsl:apply-templates select="node() | @*"/>
+                                    </xsl:copy>
+                                </xsl:template>-->
+                                
+                            </xsl:stylesheet>
+                        </p:inline>
+                    </p:input>
+                    <p:input port="parameters" >
+                        <p:pipe step="main" port="parameters"/>
+                    </p:input>  
+                </p:xslt>
+                <!--                <p:xslt name="id">
+                    <p:input port="source">  
+                        <p:pipe step="catch" port="error"/>  
+                    </p:input>  
+                    <p:input port="stylesheet">
+                        <p:inline>
+                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                                
+                                <xsl:param name="failOnValidationError">yes</xsl:param>
+                                <xsl:param name="failOnValidationErrorInternal">
+                                    <xsl:choose>
+                                        <xsl:when test="$failOnValidationError != 'yes' and $failOnValidationError != 'true' and $failOnValidationError != '1'">no</xsl:when>
+                                        <xsl:otherwise>yes</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:param>
+                                
+                                <xsl:param name="security"/>
+                                
+                                <xsl:template match="/">
+                                    <xsl:message terminate="{$failOnValidationErrorInternal}"/>
+                                </xsl:template>
+                                
+                            </xsl:stylesheet>
+                        </p:inline>
+                    </p:input>
+                    <p:input port="parameters" >
+                        <p:pipe step="main" port="parameters"/>
+                    </p:input>
+                </p:xslt>-->
+            </p:catch>  
+        </p:try>
+        
+    </p:declare-step>
+    
+
+    <p:declare-step version="1.0"
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:validate-transform"
+        name="main">
+        
+        <p:input port="source" /> <!--sequence="false" primary="true"-->
+        <p:input port="schema" sequence="true" >
+            <p:document  href="classpath:/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
+        </p:input>
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:output port="result" primary="true">  
+            <p:pipe step="tryvalidation" port="result"/>  
+        </p:output>  
+        <p:output port="report" sequence="true">  
+            <p:pipe step="tryvalidation" port="report"/>  
+        </p:output>
+        
+        <p:try name="tryvalidation"> 
+            <p:group> 
+                <p:output port="result"> 
+                    <p:pipe step="xmlvalidate" port="result"/>  
+                </p:output> 
+                <p:output port="report" sequence="true"> 
+                    <p:empty/> 
+                </p:output>      
+                
+                <p:validate-with-relax-ng name="xmlvalidate"  assert-valid="true" dtd-id-idref-warnings="false"> 
+                    <p:input port="source"> 
+                        <p:pipe step="main" port="source"/> 
+                    </p:input> 
+                    <p:input port="schema"> 
+                        <p:pipe step="main" port="schema"/>  
+                    </p:input>  
+                </p:validate-with-relax-ng> 
+
+            </p:group>  
+            <p:catch name="catch">  
+                <p:output port="result">  
+                    <p:pipe step="main" port="source"/>  
                 </p:output>  
+                <p:output port="report">  
+                    <p:pipe step="printerrors" port="result"/> 
+                </p:output>
+                <p:xslt name="printdoc">
+                    <p:input port="source">  
+                        <p:pipe step="main" port="source"/>  
+                    </p:input>  
+                    <p:input port="stylesheet">
+                        <p:inline>
+                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                                <xsl:template match="/">
+                                    <xsl:message>
+                                        <xsl:copy-of select="*"/>
+                                    </xsl:message>          
+                                </xsl:template>
+                            </xsl:stylesheet>
+                        </p:inline>
+                    </p:input>
+                    <p:input port="parameters" >
+                        <p:pipe step="main" port="parameters"/>
+                    </p:input>  
+                </p:xslt>
                 <p:xslt name="printerrors">
                     <p:input port="source">  
                         <p:pipe step="catch" port="error"/>  
