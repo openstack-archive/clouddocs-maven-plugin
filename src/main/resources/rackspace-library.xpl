@@ -53,6 +53,12 @@
                 <p:output port="report">  
                     <p:pipe step="printerrors" port="result"/> 
                 </p:output>
+                <p:store>
+                    <p:with-option name="href" select="concat('file:///tmp/invalid-', current-dateTime(),'.xml')"/>
+                    <p:input port="source">
+                        <p:pipe port="source" step="main"/>
+                    </p:input>
+                </p:store>
                 <p:xslt name="printdoc">
                     <p:input port="source">  
                         <p:pipe step="main" port="source"/>  
