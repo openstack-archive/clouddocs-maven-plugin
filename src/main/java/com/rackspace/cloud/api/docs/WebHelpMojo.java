@@ -143,6 +143,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.google.analytics.id}" default-value=""
      */
     private String googleAnalyticsId;
+    
+    /**
+     * A parameter used to control whether to include Google Analytics goo.
+     *
+     * @parameter expression="${generate-webhelp.google.analytics.domain}" default-value=""
+     */    
+    private String googleAnalyticsDomain;
 
     /**
      * A parameter used to specify the path to the pdf for download in webhelp.
@@ -278,6 +285,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         }
         if (googleAnalyticsId != null) {
             transformer.setParameter("google.analytics.id", googleAnalyticsId);
+        }
+        if(googleAnalyticsDomain != null){
+        	transformer.setParameter("google.analytics.domain", googleAnalyticsDomain);
         }
         if (pdfUrl != null) {
             transformer.setParameter("pdf.url", pdfUrl);
