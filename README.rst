@@ -19,22 +19,51 @@ Release Notes
 
 clouddocs-maven-plugin 1.6.0 (September ??TBD??, 2012)
 ============================================================
-- Automatically handle images: 
- - Detects if images are missing from a document and fail if an image is missing. You can turn off this validation by setting <strictImageValidation>false</strictImageValidation> in your pom.xml.
- - For Webhelp output, automatically converts .svg to .png.
- - Automatically copies images to the Webhelp output directory.
-- Automatically build pdf when building webhelp and copy pdf to webhelp directory unless <makePdf>false</makePdf> is set in your pom.xml.
-- Provide better error messages if incorrect DocBook version is used (i.e. if DocBook 4.x is used instead of 5.x).
-- Updated Rackspace logo.
-- Move profiling to early in the pipeline. This fixes bugs where content in title and revhistory weren't being profiled.
-- Fix bug where IDREFs weren't validated.
-- Support passing in -Dsecurity=internal|external|reviewer and -Ddraft.status=on|off from the command line.
-- Generate .war file version of webhelp with bookinfo.xml file to support autopublish to landing page. To generate a war you must set webhelp.war. Typically this will be done from the Jenkins job that builds for autopublishing (-Dwebhelp.war=1). 
+-  Automatically handle images: 
+
+   -  Detects if images are missing from a document and fail if an
+      image is missing. You can turn off this validation by setting
+      <strictImageValidation>false</strictImageValidation> in your
+      pom.xml.
+   -  For Webhelp output, automatically converts .svg to .png.
+   -  Automatically copies images to the Webhelp output directory.
+
+-  Automatically build pdf when building webhelp and copy pdf to
+   webhelp directory unless <makePdf>false</makePdf> is set in your
+   pom.xml.
+-  Provide better error messages if incorrect DocBook version is used
+   (i.e. if DocBook 4.x is used instead of 5.x).
+-  Updated Rackspace logo.
+-  Move profiling to early in the pipeline. This fixes bugs where
+   content in title and revhistory weren't being profiled.
+-  Fix bug where IDREFs weren't validated.
+-  Support passing in -Dsecurity=internal|external|reviewer and
+   -Ddraft.status=on|off from the command line.
+-  Generate .war file version of webhelp with bookinfo.xml file to
+   support autopublish to landing page. To generate a war you must set
+   webhelp.war. Typically this will be done from the Jenkins job that
+   builds for autopublishing (-Dwebhelp.war=1).
+-  It is no longer necessary to add ids to every <resource> in a wadl
+   to use the point-to-wadl method of including content from a wadl.
+-  Validation changes:
+
+   -  Documents are now validated twice. Post xinclude, the documents
+      are validated without checking IDREF integrity. Documents are
+      validated again after wadl inclusion. At this time IDREFs are
+      checked.
+   -  When a validation error is detected, a copy of the invalid
+      document is now stored in the /tmp directory with a name like
+      /tmp/invalid-2012-10-14T11:21:14.913-05:00.xml
+
 
 clouddocs-maven-plugin 1.5.0 (August 14, 2012)
 ============================================================
-- Support build-time search and replace via a configuration file. To use add a parameter like the following to your pom.xml: <replacementsFile>replacements.config</replacementsFile> Where replacements.config is a file in the same directory as your pom.xml. See the example replacements.config file for documentation
-  on how to use it.  
+-  Support build-time search and replace via a configuration file. To
+   use add a parameter like the following to your pom.xml:
+   <replacementsFile>replacements.config</replacementsFile> Where
+   replacements.config is a file in the same directory as your
+   pom.xml. See the example replacements.config file for documentation
+   on how to use it.
 
 clouddocs-maven-plugin 1.4.0 (August 13, 2012)
 ============================================================
@@ -475,11 +504,3 @@ New features and changes
    information in the toc pane.
 -  Other miscellaneous fixes.
 
-clouddocs-maven-plugin 1.4.0-SNAPSHOT (Expected in June 2012)
-============================================================
-
-New features and changes
-------------------------
-
-Bug fixes
----------
