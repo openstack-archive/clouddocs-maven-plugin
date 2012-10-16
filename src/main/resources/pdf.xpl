@@ -76,11 +76,11 @@
   <p:delete match="//@rax:original-wadl" xmlns:rax="http://docs.rackspace.com/api"/>
   <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']"/>
   
-  <l:validate-transform name="validate-post-wadl-idrefs">
+  <l:validate-transform-idrefs name="validate-post-wadl-idrefs">
     <p:input port="schema">
       <p:document href="classpath:/rng/rackbook.rng"/>
     </p:input>
-  </l:validate-transform>
+  </l:validate-transform-idrefs>
   
 <!--  <p:identity/>-->
   
