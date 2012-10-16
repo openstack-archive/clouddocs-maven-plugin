@@ -73,7 +73,7 @@
   <l:normalize-wadls />
 
   <l:process-embedded-wadl/>
-  
+  <p:delete match="//@rax:original-wadl" xmlns:rax="http://docs.rackspace.com/api"/>
   <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']"/>
   
   <l:validate-transform name="validate-post-wadl-idrefs">
