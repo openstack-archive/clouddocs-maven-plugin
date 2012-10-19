@@ -16,6 +16,7 @@
     <xsl:param name="artifactId"/>
     <xsl:param name="docProjectVersion"/>
     <xsl:param name="security">external</xsl:param>
+    <xsl:param name="autoPdfUrl"/>
     
     <!-- We need too collect lists that contain their own raxm:metadata so we can 
         add <type>s to the bookinfo for resources mentioned in lists in the doc -->
@@ -34,8 +35,11 @@
             href="{$base.dir}/bookinfo.xml" 
             method="xml" indent="yes" encoding="UTF-8">
             <products xmlns="">
-                <latestpdf><xsl:value-of select="$input.filename"/>.pdf</latestpdf>
-                <pdfoutname><xsl:value-of select="concat($input.filename,'-',/*/db:info/db:pubdate,'.pdf')"/></pdfoutname>
+                <latestpdf><xsl:choose>
+		<xsl:when test="normalize-space($autoPdfUrl) != ''"><xsl:value-of select="substring-after($autoPdfUrl,'../')"/></xsl:when><xsl:otherwise><xsl:value-of select="$input.filename"/>.pdf</xsl:otherwise></xsl:choose></latestpdf>
+                <pdfoutname><xsl:choose><xsl:when test="/*/db:info/db:pubdate"><xsl:value-of select="concat($input.filename,'-',/*/db:info/db:pubdate,'.pdf')"/></xsl:when>
+		<xsl:otherwise><xsl:value-of select="concat($input.filename,'.pdf')"/></xsl:otherwise>
+	      </xsl:choose></pdfoutname>
                 <docname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></docname>
                 <productname><xsl:value-of select="f:productname(/*/db:info/raxm:metadata/raxm:product,/*/db:info/raxm:metadata/raxm:product/@version)"/></productname>
                 <webappname><xsl:value-of select="$input.filename"/></webappname>

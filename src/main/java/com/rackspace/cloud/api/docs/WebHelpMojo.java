@@ -568,7 +568,6 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("groupId", docProject.getGroupId());
         map.put("artifactId", docProject.getArtifactId());
         map.put("docProjectVersion", docProject.getVersion());
-
         map.put("security", this.security);
         map.put("canonicalUrlBase", this.canonicalUrlBase);
         map.put("replacementsFile", this.replacementsFile);
@@ -688,7 +687,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         
         map.put("webhelp", "true");
-        
+	map.put("autoPdfUrl",autoPdfUrl);
         //this parameter will be used the copy and transform image step to decide whether to just check the existence of an image (for pdf)
         //or to check existence, transform and copy image as well (for html)
         map.put("outputType", "html");
