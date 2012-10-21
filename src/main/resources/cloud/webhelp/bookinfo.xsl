@@ -37,7 +37,7 @@
             <products xmlns="">
                 <latestpdf><xsl:choose>
 		<xsl:when test="normalize-space($autoPdfUrl) != ''"><xsl:value-of select="substring-after($autoPdfUrl,'../')"/></xsl:when><xsl:otherwise><xsl:value-of select="$input.filename"/>.pdf</xsl:otherwise></xsl:choose></latestpdf>
-                <pdfoutname><xsl:choose><xsl:when test="/*/db:info/db:pubdate"><xsl:value-of select="concat($input.filename,'-',/*/db:info/db:pubdate,'.pdf')"/></xsl:when>
+                <pdfoutname><xsl:choose><xsl:when test="/*/db:info/db:pubdate"><xsl:value-of select="concat($input.filename,'-',translate(/*/db:info/db:pubdate,'-',''),'.pdf')"/></xsl:when>
 		<xsl:otherwise><xsl:value-of select="concat($input.filename,'.pdf')"/></xsl:otherwise>
 	      </xsl:choose></pdfoutname>
                 <docname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></docname>
