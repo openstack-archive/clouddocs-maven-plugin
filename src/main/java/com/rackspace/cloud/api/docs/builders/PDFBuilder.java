@@ -228,7 +228,7 @@ public class PDFBuilder {
 			getLog().info("Absolute path is "+baseURL);
 
 			in = new FileInputStream(result);
-			targetPdfFile = new File (result.getAbsolutePath().replaceAll(".fo$",".pdf"));
+			targetPdfFile = new File (result.getAbsolutePath().replaceAll(".fo$","-latest.pdf"));
 			out = new FileOutputStream(targetPdfFile);
 			fopFactory.setUserConfig(configuration);
 			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, out);

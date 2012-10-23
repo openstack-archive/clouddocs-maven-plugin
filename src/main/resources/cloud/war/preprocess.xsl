@@ -18,6 +18,7 @@
   <xsl:param name="stylesheet.result.type"/>
   <xsl:param name="VERSION"/>
 
+  <xsl:param name="profile.audience" select="''"/>
   <xsl:param name="security">external</xsl:param>
   <xsl:param name="root.attr.status"><xsl:if test="/*[@status = 'draft']">draft;</xsl:if></xsl:param>
   <xsl:param name="profile.security">
