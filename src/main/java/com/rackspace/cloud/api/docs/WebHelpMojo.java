@@ -297,6 +297,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     transformer.setParameter("groupId", docProject.getGroupId());
     transformer.setParameter("artifactId", docProject.getArtifactId());
     transformer.setParameter("docProjectVersion", docProject.getVersion());
+    transformer.setParameter("pomProjectName", docProject.getName());
 
                     
     if(glossaryUri != null){
@@ -568,6 +569,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("groupId", docProject.getGroupId());
         map.put("artifactId", docProject.getArtifactId());
         map.put("docProjectVersion", docProject.getVersion());
+	map.put("pomProjectName", docProject.getName());
         map.put("security", this.security);
         map.put("canonicalUrlBase", this.canonicalUrlBase);
         map.put("replacementsFile", this.replacementsFile);

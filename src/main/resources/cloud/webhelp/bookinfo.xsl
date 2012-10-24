@@ -15,6 +15,7 @@
     <xsl:param name="groupId"/>
     <xsl:param name="artifactId"/>
     <xsl:param name="docProjectVersion"/>
+    <xsl:param name="pomProjectName"/>
     <xsl:param name="security">external</xsl:param>
     <xsl:param name="autoPdfUrl"/>
     
@@ -47,9 +48,13 @@
                     <groupid><xsl:value-of select="$groupId"/></groupid>
                     <artifactid><xsl:value-of select="$artifactId"/></artifactid>
                     <version><xsl:value-of select="$docProjectVersion"/></version>
+                    <name><xsl:choose>
+		      <xsl:when test="normalize-space($pomProjectName) != ''"><xsl:value-of select="$pomProjectName"/>, <xsl:value-of select="$docProjectVersion"/></xsl:when>
+		      <xsl:otherwise><xsl:value-of select="$artifactId"/>, <xsl:value-of select="$docProjectVersion"/></xsl:otherwise>
+		    </xsl:choose></name>
                 </pominfo>
                 <xsl:for-each-group select="//db:info/raxm:metadata" group-by="f:productnumber(raxm:product,raxm:product/@version)">             
-                    <product>
+		  <product>
                         <id><xsl:value-of select="current-grouping-key()"/></id>
                         <types>
                             <xsl:variable name="types">
