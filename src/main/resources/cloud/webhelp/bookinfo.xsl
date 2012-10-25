@@ -25,9 +25,9 @@
 
     <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
     <xsl:variable name="warsuffix"><xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
-    
-    <xsl:template match="/">
-      
+    <xsl:variable name="pdfsuffix"><xsl:if test="/*/db:info/db:pubdate">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
+
+    <xsl:template match="/">      
       <xsl:processing-instruction name="rax-warinfo"><xsl:value-of select="concat($warprefix,$input.filename,$warsuffix)"/></xsl:processing-instruction>
       
         <xsl:apply-templates/>
@@ -37,7 +37,7 @@
             method="xml" indent="yes" encoding="UTF-8">
             <products xmlns="">
                 <latestpdf><xsl:choose>
-		<xsl:when test="normalize-space($autoPdfUrl) != ''"><xsl:value-of select="substring-after($autoPdfUrl,'../')"/></xsl:when><xsl:otherwise><xsl:value-of select="$input.filename"/>.pdf</xsl:otherwise></xsl:choose></latestpdf>
+		<xsl:when test="normalize-space($autoPdfUrl) != ''"><xsl:value-of select="substring($autoPdfUrl,4,string-length($autoPdfUrl) - 6)"/>-latest.pdf</xsl:when><xsl:otherwise><xsl:value-of select="$input.filename"/>.pdf</xsl:otherwise></xsl:choose></latestpdf>
                 <pdfoutname><xsl:choose><xsl:when test="/*/db:info/db:pubdate"><xsl:value-of select="concat($input.filename,'-',translate(/*/db:info/db:pubdate,'-',''),'.pdf')"/></xsl:when>
 		<xsl:otherwise><xsl:value-of select="concat($input.filename,'.pdf')"/></xsl:otherwise>
 	      </xsl:choose></pdfoutname>
@@ -96,6 +96,7 @@
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
 warprefix=<xsl:value-of select="$warprefix"/>
 warsuffix=<xsl:value-of select="$warsuffix"/>
+pdfsuffix=<xsl:value-of select="$pdfsuffix"/>
 product=<xsl:value-of select="/*/db:info/db:productname"/>
 version=<xsl:value-of select="/*/db:info/db:releaseinfo"/>
 buildtime=<xsl:value-of select="format-dateTime(current-dateTime(),'[Y]-[M,2]-[D,2] [H]:[m]:[s]')"/>

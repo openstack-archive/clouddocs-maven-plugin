@@ -239,7 +239,7 @@ ERROR: Feedback email not set but internal comments are enabled.
       </p> 
       <xsl:choose>
       	<xsl:when test="normalize-space($autoPdfUrl) != ''">
-      		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($autoPdfUrl)}"><img src="{$webhelp.common.dir}images/pdf.png"/></a>
+      		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space(substring($autoPdfUrl,1,string-length($autoPdfUrl) - 3))}-latest.pdf"><img src="{$webhelp.common.dir}images/pdf.png"/></a>
       	</xsl:when>
       	<xsl:when test="normalize-space($pdf.url) != '' and not(normalize-space($autoPdfUrl) != '')">
       		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space($pdf.url)}"><img src="{$webhelp.common.dir}images/pdf.png"/></a>

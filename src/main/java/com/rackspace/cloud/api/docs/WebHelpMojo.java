@@ -683,7 +683,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         			getLog().error("Unable to move auto-generated PDF file to Webhelp target directory!");
         		}
         	}
-        	autoPdfUrl = "../"+pdfFile.getName();
+        	autoPdfUrl = "../"+foFile.getName();
         	getLog().info("************************************* END: Automatically generating PDF for WEBHELP *************************************\n");
         }
 

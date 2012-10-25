@@ -17,6 +17,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.VariableResolver;
@@ -214,6 +215,21 @@ public class PDFBuilder {
 		// First transform the cover page
 		transformCover();
 
+		// Get properties file from webhelp war
+		String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
+	
+		Properties properties = new Properties();
+		InputStream is = null;
+		
+		try {
+		    File f = new File(projectBuildDirectory  + "/autopdf/pdf.properties");
+		    is = new FileInputStream( f );
+		    properties.load(is);
+		}
+		catch ( Exception e ) { 
+		    System.out.println("Got an Exception: " + e.getMessage());          
+		}
+
 		// FOUserAgent can be used to set PDF metadata
 		Configuration configuration = loadFOPConfig();
 		InputStream in = null;
@@ -228,7 +244,8 @@ public class PDFBuilder {
 			getLog().info("Absolute path is "+baseURL);
 
 			in = new FileInputStream(result);
-			targetPdfFile = new File (result.getAbsolutePath().replaceAll(".fo$","-latest.pdf"));
+
+			targetPdfFile = new File (result.getAbsolutePath().replaceAll(".fo$", properties.getProperty("pdfsuffix","") + ".pdf"));
 			out = new FileOutputStream(targetPdfFile);
 			fopFactory.setUserConfig(configuration);
 			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, out);
