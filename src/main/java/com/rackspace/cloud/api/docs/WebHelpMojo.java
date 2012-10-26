@@ -169,12 +169,20 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.pdf.url}" default-value=""
      */
     private String pdfUrl;
-    
-    /*
+
+    /**
      * If makePdf is set to true then just before creating the Webhelp output this variable will be set
      * with the location of the automatically created pdf file. 
      */
     private String autoPdfUrl;
+
+    /**
+     * A parameter used to control whether the autoPdfUrl is changed
+     * to end with -latest.pdf instead of being the actual file name. 
+     *
+     * @parameter expression="${generate-webhelp.useLatestSuffixInPdfUrl}" 
+     */
+    private String useLatestSuffixInPdfUrl;
 
     /**
      * @parameter 
@@ -342,6 +350,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         }
         if (pdfUrl != null) {
             transformer.setParameter("pdf.url", pdfUrl);
+        }
+        if (useLatestSuffixInPdfUrl != null) {
+            transformer.setParameter("useLatestSuffixInPdfUrl", useLatestSuffixInPdfUrl);
         }
         if (legalNoticeUrl != null) {
             transformer.setParameter("legal.notice.url", legalNoticeUrl);

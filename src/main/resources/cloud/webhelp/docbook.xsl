@@ -52,6 +52,13 @@
   <xsl:param name="use.id.as.filename" select="1"/>
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="autoPdfUrl"></xsl:param>
+  <xsl:param name="useLatestSuffixInPdfUrl">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace'">1</xsl:when>
+      <xsl:when test="$branding = 'openstack'">0</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
   <xsl:param name="section.autolabel" select="1"/>
   <xsl:param name="chapter.autolabel" select="1"/>
   <xsl:param name="appendix.autolabel" select="'A'"/>
@@ -231,6 +238,7 @@ ERROR: Feedback email not set but internal comments are enabled.
 
     <xsl:template name="breadcrumbs">
       <xsl:param name="home"/>
+      <xsl:variable name="pubdate"><xsl:if test="/*/d:info/d:pubdate"><xsl:value-of select="concat('-',translate(/*/d:info/d:pubdate,'-',''))"/></xsl:if></xsl:variable>
       <p class="breadcrumbs"><a href="{$main.docs.url}"><xsl:value-of select="$brandname"/> Manuals</a>  <a><xsl:attribute name="href">
       <xsl:call-template name="href.target">
 	<xsl:with-param name="object" select="$home"/>
@@ -238,6 +246,9 @@ ERROR: Feedback email not set but internal comments are enabled.
       </xsl:attribute><xsl:value-of select="normalize-space(//d:title[1])"/><xsl:apply-templates select="/*/d:info/d:releaseinfo[1]" mode="rackspace-title"/></a> 
       </p> 
       <xsl:choose>
+      	<xsl:when test="normalize-space($autoPdfUrl) != '' and $useLatestSuffixInPdfUrl = '0'">
+      		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{concat(normalize-space(substring($autoPdfUrl,1,string-length($autoPdfUrl) - 3)), $pubdate,'.pdf')}"><img src="{$webhelp.common.dir}images/pdf.png"/></a>
+      	</xsl:when>
       	<xsl:when test="normalize-space($autoPdfUrl) != ''">
       		<a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{normalize-space(substring($autoPdfUrl,1,string-length($autoPdfUrl) - 3))}-latest.pdf"><img src="{$webhelp.common.dir}images/pdf.png"/></a>
       	</xsl:when>
