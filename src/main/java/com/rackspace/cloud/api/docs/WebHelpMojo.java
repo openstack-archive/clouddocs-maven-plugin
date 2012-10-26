@@ -647,7 +647,20 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setProject(getMavenProject());
         	pdfBuilder.setSourceDirectory(getSourceDirectory());
         	pdfBuilder.setAutopdfTargetDirectory(targetDir);
+        	
+        	pdfBuilder.setCoverColor("");
+        	pdfBuilder.setCoverLogoPath("");
+        	pdfBuilder.setSecondaryCoverLogoPath("");
+        	pdfBuilder.setCoverLogoLeft("");
+        	pdfBuilder.setCoverLogoTop("");
+        	pdfBuilder.setCoverUrl("");
+        	
         	pdfBuilder.setBranding(branding);
+        	pdfBuilder.setSecurity(security);
+        	pdfBuilder.setDraftStatus(draftStatus);
+        	pdfBuilder.setTrimWadlUriCount(trimWadlUriCount);
+        	pdfBuilder.setComputeWadlPathFromDocbookPath(computeWadlPathFromDocbookPath);
+        	
         	pdfBuilder.setIncludes(getIncludes());
         	pdfBuilder.setEntities(getEntities());
         	

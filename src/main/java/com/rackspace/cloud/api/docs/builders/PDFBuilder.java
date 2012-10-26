@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -95,8 +96,19 @@ public class PDFBuilder {
 	private File imageDirectory = null;
 	private String sourceFilePath;
 	private String projectBuildDirectory;
+	//transformer settings
+	//TODO: need to somehow pass coverLogoPath, secondaryCoverLogoPath, coverLogoLeft, coverLogoTop, coverUrl from the WebHelp flow
 	private String coverColor;
+	private String coverLogoPath;
+	private String secondaryCoverLogoPath;
+	private String coverLogoLeft;
+	private String coverLogoTop;
+	private String coverUrl;
 	private String branding;
+	private String security;
+	private String draftStatus;
+	private String trimWadlUriCount;
+	private String computeWadlPathFromDocbookPath;
 
 	/**
 	 * The location of the stylesheet customization.
@@ -314,22 +326,27 @@ public class PDFBuilder {
 		} else {
 			transformer.setParameter("builtForOpenStack", "0");
 		}
-		transformer.setParameter("coverLogoPath", null);
-		transformer.setParameter("secondaryCoverLogoPath", null);
-		transformer.setParameter("coverLogoLeft", null);
-		transformer.setParameter("coverLogoTop", null);
-		transformer.setParameter("coverUrl", null);
+		transformer.setParameter("coverLogoPath", coverLogoPath);
+		transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
+		transformer.setParameter("coverLogoLeft", coverLogoLeft);
+		transformer.setParameter("coverLogoTop", coverLogoTop);
+		transformer.setParameter("coverUrl", coverUrl);
 		transformer.setParameter("coverColor", coverColor);
 
 		transformer.setParameter("project.build.directory", projectBuildDirectory);
-
-		/*if(security != null){
+		if(security != null){
 			transformer.setParameter("security",security);
 		}
 
+		String sysDraftStatus=System.getProperty("draft.status");
+		if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
+		    draftStatus=sysDraftStatus;
+		}
+		transformer.setParameter("draft.status", draftStatus);
+
 		if(trimWadlUriCount != null){
 			transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);
-		}*/
+		}
 
 		//
 		//  Setup graphics paths
@@ -342,7 +359,7 @@ public class PDFBuilder {
 		transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
 		transformer.setParameter("source.directory",sourceDirectory);
 
-		//+++++++++++++++//		transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
+		transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
 
 		transformer.setParameter ("admon.graphics.path", imageDirectory.getAbsolutePath()+File.separator);
 		transformer.setParameter ("callout.graphics.path", calloutDirectory.getAbsolutePath()+File.separator);
@@ -479,11 +496,84 @@ public class PDFBuilder {
 		this.coverColor = coverColor;
 	}
 
+	public String getCoverLogoPath() {
+		return coverLogoPath;
+	}
+
+	public void setCoverLogoPath(String coverLogoPath) {
+		this.coverLogoPath = coverLogoPath;
+	}
+
+	public String getSecondaryCoverLogoPath() {
+		return secondaryCoverLogoPath;
+	}
+
+	public void setSecondaryCoverLogoPath(String secondaryCoverLogoPath) {
+		this.secondaryCoverLogoPath = secondaryCoverLogoPath;
+	}
+
+	public String getCoverLogoLeft() {
+		return coverLogoLeft;
+	}
+
+	public void setCoverLogoLeft(String coverLogoLeft) {
+		this.coverLogoLeft = coverLogoLeft;
+	}
+
+	public String getCoverLogoTop() {
+		return coverLogoTop;
+	}
+
+	public void setCoverLogoTop(String coverLogoTop) {
+		this.coverLogoTop = coverLogoTop;
+	}
+
+	public String getCoverUrl() {
+		return coverUrl;
+	}
+
+	public void setCoverUrl(String coverUrl) {
+		this.coverUrl = coverUrl;
+	}
+
 	public String getBranding() {
 		return branding;
 	}
 	public void setBranding(String branding) {
 		this.branding = branding;
+	}
+
+	public String getSecurity() {
+		return security;
+	}
+
+	public void setSecurity(String security) {
+		this.security = security;
+	}
+
+	public String getDraftStatus() {
+		return draftStatus;
+	}
+
+	public void setDraftStatus(String draftStatus) {
+		this.draftStatus = draftStatus;
+	}
+
+	public String getTrimWadlUriCount() {
+		return trimWadlUriCount;
+	}
+
+	public void setTrimWadlUriCount(String trimWadlUriCount) {
+		this.trimWadlUriCount = trimWadlUriCount;
+	}
+
+	public String getComputeWadlPathFromDocbookPath() {
+		return computeWadlPathFromDocbookPath;
+	}
+
+	public void setComputeWadlPathFromDocbookPath(
+			String computeWadlPathFromDocbookPath) {
+		this.computeWadlPathFromDocbookPath = computeWadlPathFromDocbookPath;
 	}
 
 	public void setIncludes(String[] includes) {
@@ -788,10 +878,17 @@ public class PDFBuilder {
 		final InputSource inputSource = new InputSource(sourceFile.getAbsolutePath());
 		Source source = new SAXSource(filter, inputSource);
 
-		map.put("outputType", "pdf");
-		map.remove("webhelp");
+		Map<String,String> localMap = new HashMap<String,String>(map); 
+		localMap.put("outputType", "pdf");
 
-		return CalabashHelper.createSource(source, pathToPipelineFile, map);
+		//removing webhelp specific settings from map
+		localMap.remove("webhelp");
+		localMap.remove("webhelp.war");
+		localMap.remove("groupId");
+		localMap.remove("artifactId");
+		localMap.remove("docProjectVersion");
+
+		return CalabashHelper.createSource(source, pathToPipelineFile, localMap);
 	}
 
 	/**
