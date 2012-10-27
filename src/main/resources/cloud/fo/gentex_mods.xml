@@ -8,7 +8,10 @@
     <l:gentext key="abstract" text=""/>
 
     <l:context name="title-numbered">
-        <l:template name="chapter" text="%n. %t"/>
+        <l:template name="chapter" text='%n. %t'/>
+    </l:context>
+    <l:context name="xref-number-and-title">
+      <l:template name="chapter" text='Chapter %n, “%t”'/>
     </l:context>
   </l:l10n>
 </l:i18n>
