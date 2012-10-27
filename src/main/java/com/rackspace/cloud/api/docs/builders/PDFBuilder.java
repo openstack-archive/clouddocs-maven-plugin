@@ -334,8 +334,13 @@ public class PDFBuilder {
 		transformer.setParameter("coverColor", coverColor);
 
 		transformer.setParameter("project.build.directory", projectBuildDirectory);
+
+		String sysSecurity=System.getProperty("security");
+		if(null!=sysSecurity && !sysSecurity.isEmpty()){
+		    security=sysSecurity;
+		}
 		if(security != null){
-			transformer.setParameter("security",security);
+		    transformer.setParameter("security",security);
 		}
 
 		String sysDraftStatus=System.getProperty("draft.status");

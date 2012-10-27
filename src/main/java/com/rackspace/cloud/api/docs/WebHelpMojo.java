@@ -93,6 +93,55 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String builtForOpenStack;
 
+
+    /**
+     * Path to an alternative cover logo.
+     *
+     * @parameter expression="${generate-pdf.coverLogoPath}" default-value=""
+     */
+    private String coverLogoPath;
+
+    /**
+     * Path to an alternative cover logo.
+     *
+     * @parameter expression="${generate-webhelp.secondaryCoverLogoPath}" default-value=""
+     */
+    private String secondaryCoverLogoPath;
+
+
+    /**
+     * Distance from the left edge of the page at which the 
+     * cover logo is displayed. 
+     *
+     * @parameter expression="${generate-webhelp.coverLogoLeft}" default-value=""
+     */
+    private String coverLogoLeft;
+
+    /**
+     * Distance from the top of the page at which teh 
+     * cover logo is displayed.
+     *
+     * @parameter expression="${generate-webhelp.coverLogoTop}" default-value=""
+     */
+    private String coverLogoTop;
+
+    /**
+     * url to display under the cover logo. 
+     *
+     * @parameter expression="${generate-webhelp.coverUrl}" default-value=""
+     */
+    private String coverUrl;
+
+    /**
+     * The color to use for the polygon on the cover
+     *
+     * @parameter expression="${generate-webhelp.coverColor}" default-value=""
+     */
+    private String coverColor;
+
+
+
+
     /**
      * Controls whether output is colorized based on revisionflag attributes.
      *
@@ -331,6 +380,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         transformer.setParameter("autoPdfUrl", autoPdfUrl);
         
         transformer.setParameter("builtForOpenStack", builtForOpenStack);
+	transformer.setParameter("coverLogoPath", coverLogoPath);
+	transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
+	transformer.setParameter("coverLogoLeft", coverLogoLeft);
+	transformer.setParameter("coverLogoTop", coverLogoTop);
+	transformer.setParameter("coverUrl", coverUrl);
+	transformer.setParameter("coverColor", coverColor);
+
         transformer.setParameter("enable.disqus", enableDisqus);
         if (disqusShortname != null) {
             transformer.setParameter("disqus.shortname", disqusShortname);
@@ -659,14 +715,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setProject(getMavenProject());
         	pdfBuilder.setSourceDirectory(getSourceDirectory());
         	pdfBuilder.setAutopdfTargetDirectory(targetDir);
-        	
-        	pdfBuilder.setCoverColor("");
-        	pdfBuilder.setCoverLogoPath("");
-        	pdfBuilder.setSecondaryCoverLogoPath("");
-        	pdfBuilder.setCoverLogoLeft("");
-        	pdfBuilder.setCoverLogoTop("");
-        	pdfBuilder.setCoverUrl("");
-        	
+        	pdfBuilder.setCoverColor(coverColor);
+        	pdfBuilder.setCoverLogoPath(coverLogoPath);
+        	pdfBuilder.setSecondaryCoverLogoPath(secondaryCoverLogoPath);
+        	pdfBuilder.setCoverLogoLeft(coverLogoLeft);
+        	pdfBuilder.setCoverLogoTop(coverLogoTop);
+        	pdfBuilder.setCoverUrl(coverUrl);
+        	        	
         	pdfBuilder.setBranding(branding);
         	pdfBuilder.setSecurity(security);
         	pdfBuilder.setDraftStatus(draftStatus);
