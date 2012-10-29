@@ -48,10 +48,10 @@
                     <groupid><xsl:value-of select="$groupId"/></groupid>
                     <artifactid><xsl:value-of select="$artifactId"/></artifactid>
                     <version><xsl:value-of select="$docProjectVersion"/></version>
-                    <name><xsl:choose>
+                    <pomname><xsl:choose>
 		      <xsl:when test="normalize-space($pomProjectName) != ''"><xsl:value-of select="$pomProjectName"/>, <xsl:value-of select="$docProjectVersion"/></xsl:when>
 		      <xsl:otherwise><xsl:value-of select="$artifactId"/>, <xsl:value-of select="$docProjectVersion"/></xsl:otherwise>
-		    </xsl:choose></name>
+		    </xsl:choose></pomname>
                 </pominfo>
                 <xsl:for-each-group select="//db:info/raxm:metadata" group-by="f:productnumber(raxm:product,raxm:product/@version)">             
 		  <product>
