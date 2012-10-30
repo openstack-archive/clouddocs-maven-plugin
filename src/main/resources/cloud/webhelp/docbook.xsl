@@ -180,9 +180,6 @@ set       toc,title
     
     <xsl:param name="use.disqus.id">1</xsl:param>
     
-    <xsl:param name="glossary.uri">http://docs-beta.rackspace.com/test/jonathan/glossary</xsl:param>
-    <xsl:param name="glossary.xml.uri"><xsl:value-of select="$glossary.uri"/>/glossary.xml</xsl:param>
-		
 	<xsl:param name="social.icons">0</xsl:param>
     <xsl:param name="legal.notice.url">index.html</xsl:param>
 	<xsl:include href="../inline.xsl"/>

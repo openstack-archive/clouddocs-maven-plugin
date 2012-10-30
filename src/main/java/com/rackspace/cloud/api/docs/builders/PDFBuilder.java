@@ -318,7 +318,13 @@ public class PDFBuilder {
 		} catch (MalformedURLException e) {
 			getLog().warn("Failed to get FO basedir", e);
 		}
+		
+		// Only set this here! Don't ever set in PdfMojo
+		transformer.setParameter("autoPdfGlossaryInfix","/..");
 
+		if(glossaryUri != null){
+		    transformer.setParameter("glossary.uri", glossaryUri);
+		}
 
 		transformer.setParameter("branding", branding);
 		if(branding=="openstack") {
