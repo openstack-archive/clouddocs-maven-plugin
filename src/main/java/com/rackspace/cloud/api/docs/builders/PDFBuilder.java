@@ -89,6 +89,8 @@ public class PDFBuilder {
 	private static final String COVER_XSL = "cloud/cover.xsl";
 
 	// configure fopFactory as desired
+	private String inputFilename = null; 
+	
 	private File autopdfTargetDirectory = null;
 	private File webhelpTargetDirectory = null;
 	private File sourceDirectory = null;
@@ -116,7 +118,6 @@ public class PDFBuilder {
 	 */
 	private String foCustomization;
 	private List customizationParameters = new ArrayList();
-	private String[] includes;
 	private List entities;
 
 
@@ -421,6 +422,10 @@ public class PDFBuilder {
 		}
 	}
 
+	public void setInputFilename(String inputFilename) {
+		this.inputFilename = inputFilename;
+	}
+
 	public MavenProject getProject() {
 		return project;
 	}
@@ -559,10 +564,6 @@ public class PDFBuilder {
 		this.computeWadlPathFromDocbookPath = computeWadlPathFromDocbookPath;
 	}
 
-	public void setIncludes(String[] includes) {
-		this.includes = includes;
-	}
-
 	public List getEntities() {
 		return entities;
 	}
@@ -611,7 +612,7 @@ public class PDFBuilder {
 	private String[] scanIncludedFiles() {
 		final DirectoryScanner scanner = new DirectoryScanner();
 		scanner.setBasedir(sourceDirectory);
-		scanner.setIncludes(includes);
+		scanner.setIncludes(new String[]{inputFilename});
 		scanner.scan();
 		return scanner.getIncludedFiles();
 	}
@@ -909,8 +910,7 @@ public class PDFBuilder {
 			pdfBuilder.setImageDirectory(targetDir.getParentFile());
 			pdfBuilder.setBranding("rackspace");
 
-			String[] includes = {"os-compute-devguide.xml"};
-			pdfBuilder.setIncludes(includes);
+			pdfBuilder.setInputFilename("os-compute-devguide.xml");
 
 			pdfBuilder.setSourceFilePath(sourceDir+"/os-compute-devguide.xml");
 			pdfBuilder.setProjectBuildDirectory(sourceDir.getParent());
