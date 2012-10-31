@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns="http://docbook.org/ns/docbook" xmlns:wadl="http://wadl.dev.java.net/2009/02"       xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:d="http://docbook.org/ns/docbook" xmlns:rax="http://docs.rackspace.com/api" 
 	exclude-result-prefixes="wadl rax d xhtml" version="2.0">
@@ -571,7 +572,7 @@
 						TODO: Chop off v2.0 or whatever...
 					-->
 					<xsl:choose>
-						<xsl:when test="$trim.wadl.uri.count &gt; 0">
+						<xsl:when test="xs:integer($trim.wadl.uri.count) &gt; 0">
 							<xsl:call-template name="trimUri">
 								<xsl:with-param name="trimCount" select="$trim.wadl.uri.count"/>
 								<xsl:with-param name="uri" select="$resource-path-computed"/>

@@ -388,7 +388,8 @@
 
   <!-- Glossary Setup -->
   <xsl:param name="glossary.as.blocks" select="1"/>
-  <xsl:param name="glossary.collection" select="concat($project.build.directory,'/mvn/com.rackspace.cloud.api/glossary/glossary.xml')"/>
+  <xsl:param name="autoPdfGlossaryInfix"/>
+  <xsl:param name="glossary.collection" select="concat($project.build.directory,$autoPdfGlossaryInfix,'/mvn/com.rackspace.cloud.api/glossary/glossary.xml')"/>
 
   <!-- Sets up the Cloud Title Page -->
   <xsl:template name="user.pagemasters">
@@ -939,5 +940,23 @@
 	</fo:block>
       </fo:block-container>
     </xsl:template>
+
+<xsl:template match="d:chapter|d:appendix" mode="insert.title.markup">
+  <xsl:param name="purpose"/>
+  <xsl:param name="xrefstyle"/>
+  <xsl:param name="title"/>
+
+  <xsl:choose>
+    <xsl:when test="$purpose = 'xref'">
+      <!-- <fo:inline font-style="italic"> -->
+        <xsl:copy-of select="$title"/>
+      <!-- </fo:inline> -->
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy-of select="$title"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 </xsl:stylesheet>

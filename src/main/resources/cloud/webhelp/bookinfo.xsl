@@ -15,6 +15,7 @@
     <xsl:param name="groupId"/>
     <xsl:param name="artifactId"/>
     <xsl:param name="docProjectVersion"/>
+    <xsl:param name="pomProjectName"/>
     <xsl:param name="security">external</xsl:param>
     <xsl:param name="autoPdfUrl"/>
     
@@ -24,9 +25,9 @@
 
     <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
     <xsl:variable name="warsuffix"><xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
-    
-    <xsl:template match="/">
-      
+    <xsl:variable name="pdfsuffix"><xsl:if test="/*/db:info/db:pubdate">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
+
+    <xsl:template match="/">      
       <xsl:processing-instruction name="rax-warinfo"><xsl:value-of select="concat($warprefix,$input.filename,$warsuffix)"/></xsl:processing-instruction>
       
         <xsl:apply-templates/>
@@ -36,7 +37,7 @@
             method="xml" indent="yes" encoding="UTF-8">
             <products xmlns="">
                 <latestpdf><xsl:choose>
-		<xsl:when test="normalize-space($autoPdfUrl) != ''"><xsl:value-of select="substring-after($autoPdfUrl,'../')"/></xsl:when><xsl:otherwise><xsl:value-of select="$input.filename"/>.pdf</xsl:otherwise></xsl:choose></latestpdf>
+		<xsl:when test="normalize-space($autoPdfUrl) != ''"><xsl:value-of select="substring($autoPdfUrl,4,string-length($autoPdfUrl) - 6)"/>-latest.pdf</xsl:when><xsl:otherwise><xsl:value-of select="$input.filename"/>.pdf</xsl:otherwise></xsl:choose></latestpdf>
                 <pdfoutname><xsl:choose><xsl:when test="/*/db:info/db:pubdate"><xsl:value-of select="concat($input.filename,'-',translate(/*/db:info/db:pubdate,'-',''),'.pdf')"/></xsl:when>
 		<xsl:otherwise><xsl:value-of select="concat($input.filename,'.pdf')"/></xsl:otherwise>
 	      </xsl:choose></pdfoutname>
@@ -47,9 +48,13 @@
                     <groupid><xsl:value-of select="$groupId"/></groupid>
                     <artifactid><xsl:value-of select="$artifactId"/></artifactid>
                     <version><xsl:value-of select="$docProjectVersion"/></version>
+                    <pomname><xsl:choose>
+		      <xsl:when test="normalize-space($pomProjectName) != ''"><xsl:value-of select="$pomProjectName"/>, <xsl:value-of select="$docProjectVersion"/></xsl:when>
+		      <xsl:otherwise><xsl:value-of select="$artifactId"/>, <xsl:value-of select="$docProjectVersion"/></xsl:otherwise>
+		    </xsl:choose></pomname>
                 </pominfo>
                 <xsl:for-each-group select="//db:info/raxm:metadata" group-by="f:productnumber(raxm:product,raxm:product/@version)">             
-                    <product>
+		  <product>
                         <id><xsl:value-of select="current-grouping-key()"/></id>
                         <types>
                             <xsl:variable name="types">
@@ -91,6 +96,7 @@
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
 warprefix=<xsl:value-of select="$warprefix"/>
 warsuffix=<xsl:value-of select="$warsuffix"/>
+pdfsuffix=<xsl:value-of select="$pdfsuffix"/>
 product=<xsl:value-of select="/*/db:info/db:productname"/>
 version=<xsl:value-of select="/*/db:info/db:releaseinfo"/>
 buildtime=<xsl:value-of select="format-dateTime(current-dateTime(),'[Y]-[M,2]-[D,2] [H]:[m]:[s]')"/>

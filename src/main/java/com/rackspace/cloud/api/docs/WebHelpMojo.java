@@ -93,6 +93,55 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String builtForOpenStack;
 
+
+    /**
+     * Path to an alternative cover logo.
+     *
+     * @parameter expression="${generate-pdf.coverLogoPath}" default-value=""
+     */
+    private String coverLogoPath;
+
+    /**
+     * Path to an alternative cover logo.
+     *
+     * @parameter expression="${generate-webhelp.secondaryCoverLogoPath}" default-value=""
+     */
+    private String secondaryCoverLogoPath;
+
+
+    /**
+     * Distance from the left edge of the page at which the 
+     * cover logo is displayed. 
+     *
+     * @parameter expression="${generate-webhelp.coverLogoLeft}" default-value=""
+     */
+    private String coverLogoLeft;
+
+    /**
+     * Distance from the top of the page at which teh 
+     * cover logo is displayed.
+     *
+     * @parameter expression="${generate-webhelp.coverLogoTop}" default-value=""
+     */
+    private String coverLogoTop;
+
+    /**
+     * url to display under the cover logo. 
+     *
+     * @parameter expression="${generate-webhelp.coverUrl}" default-value=""
+     */
+    private String coverUrl;
+
+    /**
+     * The color to use for the polygon on the cover
+     *
+     * @parameter expression="${generate-webhelp.coverColor}" default-value=""
+     */
+    private String coverColor;
+
+
+
+
     /**
      * Controls whether output is colorized based on revisionflag attributes.
      *
@@ -169,12 +218,20 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.pdf.url}" default-value=""
      */
     private String pdfUrl;
-    
-    /*
+
+    /**
      * If makePdf is set to true then just before creating the Webhelp output this variable will be set
      * with the location of the automatically created pdf file. 
      */
     private String autoPdfUrl;
+
+    /**
+     * A parameter used to control whether the autoPdfUrl is changed
+     * to end with -latest.pdf instead of being the actual file name. 
+     *
+     * @parameter expression="${generate-webhelp.useLatestSuffixInPdfUrl}" 
+     */
+    private String useLatestSuffixInPdfUrl;
 
     /**
      * @parameter 
@@ -297,6 +354,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     transformer.setParameter("groupId", docProject.getGroupId());
     transformer.setParameter("artifactId", docProject.getArtifactId());
     transformer.setParameter("docProjectVersion", docProject.getVersion());
+    transformer.setParameter("pomProjectName", docProject.getName());
 
                     
     if(glossaryUri != null){
@@ -322,6 +380,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         transformer.setParameter("autoPdfUrl", autoPdfUrl);
         
         transformer.setParameter("builtForOpenStack", builtForOpenStack);
+	transformer.setParameter("coverLogoPath", coverLogoPath);
+	transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
+	transformer.setParameter("coverLogoLeft", coverLogoLeft);
+	transformer.setParameter("coverLogoTop", coverLogoTop);
+	transformer.setParameter("coverUrl", coverUrl);
+	transformer.setParameter("coverColor", coverColor);
+
         transformer.setParameter("enable.disqus", enableDisqus);
         if (disqusShortname != null) {
             transformer.setParameter("disqus.shortname", disqusShortname);
@@ -341,6 +406,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         }
         if (pdfUrl != null) {
             transformer.setParameter("pdf.url", pdfUrl);
+        }
+        if (useLatestSuffixInPdfUrl != null) {
+            transformer.setParameter("useLatestSuffixInPdfUrl", useLatestSuffixInPdfUrl);
         }
         if (legalNoticeUrl != null) {
             transformer.setParameter("legal.notice.url", legalNoticeUrl);
@@ -568,6 +636,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("groupId", docProject.getGroupId());
         map.put("artifactId", docProject.getArtifactId());
         map.put("docProjectVersion", docProject.getVersion());
+	map.put("pomProjectName", docProject.getName());
         map.put("security", this.security);
         map.put("canonicalUrlBase", this.canonicalUrlBase);
         map.put("replacementsFile", this.replacementsFile);
@@ -575,7 +644,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
         map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
-        
+        map.put("trim.wadl.uri.count", this.trimWadlUriCount);
+
         // Profiling attrs:        
         map.put("profile.os", getProperty("profileOs"));
         map.put("profile.arch", getProperty("profileArch"));
@@ -645,14 +715,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setProject(getMavenProject());
         	pdfBuilder.setSourceDirectory(getSourceDirectory());
         	pdfBuilder.setAutopdfTargetDirectory(targetDir);
-        	
-        	pdfBuilder.setCoverColor("");
-        	pdfBuilder.setCoverLogoPath("");
-        	pdfBuilder.setSecondaryCoverLogoPath("");
-        	pdfBuilder.setCoverLogoLeft("");
-        	pdfBuilder.setCoverLogoTop("");
-        	pdfBuilder.setCoverUrl("");
-        	
+        	pdfBuilder.setCoverColor(coverColor);
+        	pdfBuilder.setCoverLogoPath(coverLogoPath);
+        	pdfBuilder.setSecondaryCoverLogoPath(secondaryCoverLogoPath);
+        	pdfBuilder.setCoverLogoLeft(coverLogoLeft);
+        	pdfBuilder.setCoverLogoTop(coverLogoTop);
+        	pdfBuilder.setCoverUrl(coverUrl);
+        	        	
         	pdfBuilder.setBranding(branding);
         	pdfBuilder.setSecurity(security);
         	pdfBuilder.setDraftStatus(draftStatus);
@@ -694,7 +763,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         			getLog().error("Unable to move auto-generated PDF file to Webhelp target directory!");
         		}
         	}
-        	autoPdfUrl = "../"+pdfFile.getName();
+        	autoPdfUrl = "../"+foFile.getName();
         	getLog().info("************************************* END: Automatically generating PDF for WEBHELP *************************************\n");
         }
 

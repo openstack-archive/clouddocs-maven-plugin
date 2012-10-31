@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.VariableResolver;
@@ -227,6 +228,21 @@ public class PDFBuilder {
 		// First transform the cover page
 		transformCover();
 
+		// Get properties file from webhelp war
+		String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
+	
+		Properties properties = new Properties();
+		InputStream is = null;
+		
+		try {
+		    File f = new File(projectBuildDirectory  + "/autopdf/pdf.properties");
+		    is = new FileInputStream( f );
+		    properties.load(is);
+		}
+		catch ( Exception e ) { 
+		    System.out.println("Got an Exception: " + e.getMessage());          
+		}
+
 		// FOUserAgent can be used to set PDF metadata
 		Configuration configuration = loadFOPConfig();
 		InputStream in = null;
@@ -241,7 +257,8 @@ public class PDFBuilder {
 			getLog().info("Absolute path is "+baseURL);
 
 			in = new FileInputStream(result);
-			targetPdfFile = new File (result.getAbsolutePath().replaceAll(".fo$","-latest.pdf"));
+
+			targetPdfFile = new File (result.getAbsolutePath().replaceAll(".fo$", properties.getProperty("pdfsuffix","") + ".pdf"));
 			out = new FileOutputStream(targetPdfFile);
 			fopFactory.setUserConfig(configuration);
 			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, out);
@@ -302,7 +319,13 @@ public class PDFBuilder {
 		} catch (MalformedURLException e) {
 			getLog().warn("Failed to get FO basedir", e);
 		}
+		
+		// Only set this here! Don't ever set in PdfMojo
+		transformer.setParameter("autoPdfGlossaryInfix","/..");
 
+		if(glossaryUri != null){
+		    transformer.setParameter("glossary.uri", glossaryUri);
+		}
 
 		transformer.setParameter("branding", branding);
 		if(branding=="openstack") {
@@ -318,8 +341,13 @@ public class PDFBuilder {
 		transformer.setParameter("coverColor", coverColor);
 
 		transformer.setParameter("project.build.directory", projectBuildDirectory);
+
+		String sysSecurity=System.getProperty("security");
+		if(null!=sysSecurity && !sysSecurity.isEmpty()){
+		    security=sysSecurity;
+		}
 		if(security != null){
-			transformer.setParameter("security",security);
+		    transformer.setParameter("security",security);
 		}
 
 		String sysDraftStatus=System.getProperty("draft.status");
