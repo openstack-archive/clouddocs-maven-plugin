@@ -26,6 +26,7 @@
     <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
     <xsl:variable name="warsuffix"><xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
     <xsl:variable name="pdfsuffix"><xsl:if test="/*/db:info/db:pubdate">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
+    <xsl:variable name="info" select="/*/db:info"/>
 
     <xsl:template match="/">      
       <xsl:processing-instruction name="rax-warinfo"><xsl:value-of select="concat($warprefix,$input.filename,$warsuffix)"/></xsl:processing-instruction>
@@ -53,7 +54,7 @@
 		      <xsl:otherwise><xsl:value-of select="$artifactId"/>, <xsl:value-of select="$docProjectVersion"/></xsl:otherwise>
 		    </xsl:choose></pomname>
                 </pominfo>
-                <xsl:for-each-group select="//db:info/raxm:metadata" group-by="f:productnumber(raxm:product,raxm:product/@version)">             
+                <xsl:for-each-group select="//db:info/raxm:metadata" group-by="f:productnumber(normalize-space(raxm:product),normalize-space(raxm:product/@version))">             
 		  <product>
                         <id><xsl:value-of select="current-grouping-key()"/></id>
                         <types>
@@ -143,27 +144,30 @@ buildtime=<xsl:value-of select="format-dateTime(current-dateTime(),'[Y]-[M,2]-[D
             <xsl:when test="$key= 'auth'">Cloud Identity</xsl:when>
             <xsl:when test="$key= 'cdns'">Cloud DNS</xsl:when>
             <xsl:when test="$key= 'sites'">Cloud Sites</xsl:when>
-            <xsl:otherwise><xsl:value-of select="concat($key,', ',$version)"/></xsl:otherwise>
+            <xsl:when test="$key= 'sdks'">SDKs</xsl:when>
+            <xsl:otherwise><xsl:value-of select="$info/db:productname"/></xsl:otherwise>
         </xsl:choose>
     </xsl:function>
     
     <xsl:function name="f:productnumber" as="xs:string">
         <xsl:param name="key"/>
         <xsl:param name="version"/>
-        <xsl:choose>
-            <xsl:when test="$key = 'servers' and $version='v2'">1</xsl:when>
-            <xsl:when test="$key = 'servers' and $version='v1.0'">9</xsl:when>
-            <xsl:when test="$key= 'cdb'">2</xsl:when>
-            <xsl:when test="$key= 'cm'">3</xsl:when>
-            <xsl:when test="$key= 'cbs'">4</xsl:when>      
-            <xsl:when test="$key= 'cloudfiles'">5</xsl:when>
-            <xsl:when test="$key= 'loadbalancers'">6</xsl:when>
-            <xsl:when test="$key= 'auth'">7</xsl:when>
-            <xsl:when test="$key= 'cdns'">8</xsl:when>   
-            <xsl:when test="$key= 'sites'">10</xsl:when>
-	    <xsl:when test="$key= 'sdks'">11</xsl:when>
-            <xsl:otherwise>&#160;</xsl:otherwise>
-        </xsl:choose>
+	<xsl:variable name="sep"><xsl:if test="not($version = '')">-</xsl:if></xsl:variable>
+	<xsl:value-of select="concat($key,$sep,$version)"/>
+        <!-- <xsl:choose> -->
+            <!-- <xsl:when test="$key = 'servers' and $version='v2'">servers-v2</xsl:when> -->
+            <!-- <xsl:when test="$key = 'servers' and $version='v1.0'">servers-v1.0</xsl:when> -->
+            <!-- <xsl:when test="$key= 'cdb'">cdb</xsl:when> -->
+            <!-- <xsl:when test="$key= 'cm'">cm</xsl:when> -->
+            <!-- <xsl:when test="$key= 'cbs'">cbs</xsl:when>       -->
+            <!-- <xsl:when test="$key= 'cloudfiles'">5</xsl:when> -->
+            <!-- <xsl:when test="$key= 'loadbalancers'">6</xsl:when> -->
+            <!-- <xsl:when test="$key= 'auth'">7</xsl:when> -->
+            <!-- <xsl:when test="$key= 'cdns'">8</xsl:when>    -->
+            <!-- <xsl:when test="$key= 'sites'">10</xsl:when> -->
+	    <!-- <xsl:when test="$key= 'sdks'">11</xsl:when> -->
+        <!--     <xsl:otherwise><xsl:value-of select="concat($key,'-',$version)"/></xsl:otherwise> -->
+        <!-- </xsl:choose> -->
     </xsl:function>
     
     <xsl:function name="f:calculatetype" as="xs:string">
