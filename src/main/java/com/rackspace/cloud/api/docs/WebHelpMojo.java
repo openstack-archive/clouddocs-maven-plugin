@@ -728,7 +728,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setTrimWadlUriCount(trimWadlUriCount);
         	pdfBuilder.setComputeWadlPathFromDocbookPath(computeWadlPathFromDocbookPath);
         	
-        	pdfBuilder.setIncludes(getIncludes());
+        	pdfBuilder.setInputFilename(inputFilename);
         	pdfBuilder.setEntities(getEntities());
         	
         	String srcFilename = this.projectBuildDirectory+"/docbkx/"+sourceFile.getName();
