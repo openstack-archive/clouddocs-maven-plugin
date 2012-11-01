@@ -9,13 +9,13 @@
 	<!-- <xsl:output indent="yes"/>    -->
 	<xsl:import href="classpath:/cloud/date.xsl"/>
 	
-	<xsl:param name="project.build.directory">/home/dcramer/rax/foundations/foundation-api-docs/bsl/target</xsl:param>
+	<!-- <xsl:param name="project.build.directory">/home/dcramer/rax/foundations/foundation-api-docs/bsl/target</xsl:param> -->
 	<xsl:param name="wadl.norequest.msg"><para>This operation does not require a request body.</para></xsl:param>
 	<xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
 	<xsl:param name="wadl.noreqresp.msg"><para>This operation does not require a request body and does not return a response body.</para></xsl:param>
-	<xsl:param name="project.directory" select="substring-before($project.build.directory,'/target')"/>
-	<xsl:param name="source.directory"/>
-	<xsl:param name="docbook.partial.path" select="concat(substring-after($source.directory,$project.directory),'/')"/>
+	<!-- <xsl:param name="project.directory" select="substring-before($project.build.directory,'/target')"/> -->
+	<!-- <xsl:param name="source.directory"/> -->
+	<!-- <xsl:param name="docbook.partial.path" select="concat(substring-after($source.directory,$project.directory),'/')"/> -->
 	<xsl:param name="security">external</xsl:param>
 	
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
