@@ -323,10 +323,6 @@ public class PDFBuilder {
 		// Only set this here! Don't ever set in PdfMojo
 		transformer.setParameter("autoPdfGlossaryInfix","/..");
 
-		if(glossaryUri != null){
-		    transformer.setParameter("glossary.uri", glossaryUri);
-		}
-
 		transformer.setParameter("branding", branding);
 		if(branding=="openstack") {
 			transformer.setParameter("builtForOpenStack", "1");
