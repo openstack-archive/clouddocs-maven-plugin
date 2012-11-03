@@ -108,6 +108,12 @@ public class PDFBuilder {
 	private String coverUrl;
 	private String branding;
 	private String security;
+
+        private String chapterAutolabel;
+        private String sectionAutolabel;
+        private String formalProcedures;
+        private String generateToc;
+
 	private String draftStatus;
 	private String trimWadlUriCount;
 	private String computeWadlPathFromDocbookPath;
@@ -336,6 +342,13 @@ public class PDFBuilder {
 		transformer.setParameter("coverUrl", coverUrl);
 		transformer.setParameter("coverColor", coverColor);
 
+
+		transformer.setParameter("section.autolabel", sectionAutolabel);
+		transformer.setParameter("chapter.autolabel", chapterAutolabel);
+		transformer.setParameter("generate.toc", generateToc);
+		transformer.setParameter("formal.procedures", formalProcedures);
+
+
 		transformer.setParameter("project.build.directory", projectBuildDirectory);
 
 		String sysSecurity=System.getProperty("security");
@@ -562,6 +575,38 @@ public class PDFBuilder {
 	public void setSecurity(String security) {
 		this.security = security;
 	}
+
+	public String getChapterAutolabel() {
+		return chapterAutolabel;
+	}
+
+	public void setChapterAutolabel(String chapterAutolabel) {
+		this.chapterAutolabel = chapterAutolabel;
+	}
+
+	public String getSectionAutolabel() {
+		return sectionAutolabel;
+	}
+
+	public void setSectionAutolabel(String sectionAutolabel) {
+		this.sectionAutolabel = sectionAutolabel;
+	}
+	public String getFormalProcedures() {
+		return formalProcedures;
+	}
+
+	public void setFormalProcedures(String formalProcedures) {
+		this.formalProcedures = formalProcedures;
+	}
+
+	public String getGenerateToc() {
+		return generateToc;
+	}
+
+	public void setGenerateToc(String generateToc) {
+		this.generateToc = generateToc;
+	}
+
 
 	public String getDraftStatus() {
 		return draftStatus;
