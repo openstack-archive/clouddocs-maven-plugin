@@ -53,6 +53,11 @@
   </cx:message>
   <l:copy-and-transform-images/>
 
+  <cx:message  name="msg4">
+    <p:with-option name="message" select="'Remove non-bold markup from inside code listings.'"/>
+  </cx:message>
+  <l:programlisting-strip-inlines/>
+
   <cx:message>
     <p:with-option name="message" select="'Generating bookinfo.xml'"/>
   </cx:message>

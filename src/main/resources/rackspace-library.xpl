@@ -335,10 +335,6 @@
                             </xsl:copy>
                         </xsl:template>
                         
-			<xsl:template match="*[(ancestor::db:programlisting and not(self::db:emphasis) and not(self::db:co)) or 
-					       (ancestor::db:screen         and not(self::db:emphasis) and not(self::db:co)) or 
-					       (ancestor::db:literallayout  and not(self::db:emphasis) and not(self::db:co))]"><xsl:apply-templates select="node() | @*"/></xsl:template>
-
                         <xsl:param name="max">15</xsl:param>
                         
                         <xsl:template match="db:programlisting">
@@ -353,6 +349,55 @@
                     </xsl:stylesheet>
                 </p:inline>
                 <!--<p:document href="cloud/code-listing-keep-together.xsl"/>-->
+            </p:input>
+            <p:input port="parameters" >
+                <p:empty/>
+            </p:input>
+        </p:xslt>
+        
+    </p:declare-step>
+
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:programlisting-strip-inlines"
+        xmlns:c="http://www.w3.org/ns/xproc-step" version="1.0"
+        name="strip-inlines">
+        
+        <p:input port="source"/>
+        <p:output port="result" primary="true">  
+            <p:pipe step="programlisting-strip-inlines-xslt" port="result"/> 
+        </p:output>  
+        
+        <p:xslt name="programlisting-strip-inlines-xslt">
+            <p:input port="source"> 
+                <p:pipe step="strip-inlines" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:inline>
+                    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:db="http://docbook.org/ns/docbook"
+                        exclude-result-prefixes="xs" version="2.0">
+                        
+                        <xsl:template match="node() | @*">
+                            <xsl:copy>
+                                <xsl:apply-templates select="node() | @*"/>
+                            </xsl:copy>
+                        </xsl:template>
+                        
+			<xsl:template match="*[(ancestor::db:programlisting and not(self::db:emphasis) and not(self::db:co)) or 
+					       (ancestor::db:screen         and not(self::db:emphasis) and not(self::db:co)) or 
+					       (ancestor::db:literallayout  and not(self::db:emphasis) and not(self::db:co))]"><xsl:apply-templates select="node() | @*"/></xsl:template>
+
+                        <xsl:template match="db:programlisting">
+                            <xsl:copy>
+                                <xsl:apply-templates select="@*"/>
+                                <xsl:apply-templates select="node()"/>
+                            </xsl:copy>
+                        </xsl:template>                                               
+                    </xsl:stylesheet>
+                </p:inline>
+
             </p:input>
             <p:input port="parameters" >
                 <p:empty/>
