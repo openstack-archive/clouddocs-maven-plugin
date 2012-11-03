@@ -49,9 +49,10 @@
       <p:input port="stylesheet">
 	<p:inline>
 	  <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+	    <xsl:param name="security"/>
 	    <xsl:template match="/">
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">	
-pdfsuffix=<xsl:if test="/*/db:info/db:pubdate">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if>
+pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if>
 </c:result>      
 	    </xsl:template>
 	  </xsl:stylesheet>

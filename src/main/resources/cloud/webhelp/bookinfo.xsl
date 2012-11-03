@@ -25,7 +25,7 @@
 
     <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
     <xsl:variable name="warsuffix"><xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
-    <xsl:variable name="pdfsuffix"><xsl:if test="/*/db:info/db:pubdate">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
+    <xsl:variable name="pdfsuffix"><xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
     <xsl:variable name="info" select="/*/db:info"/>
 
     <xsl:template match="/">      
@@ -39,9 +39,7 @@
             <products xmlns="">
                 <latestpdf><xsl:choose>
 		<xsl:when test="normalize-space($autoPdfUrl) != ''"><xsl:value-of select="substring($autoPdfUrl,4,string-length($autoPdfUrl) - 6)"/>-latest.pdf</xsl:when><xsl:otherwise><xsl:value-of select="$input.filename"/>.pdf</xsl:otherwise></xsl:choose></latestpdf>
-                <pdfoutname><xsl:choose><xsl:when test="/*/db:info/db:pubdate"><xsl:value-of select="concat($input.filename,'-',translate(/*/db:info/db:pubdate,'-',''),'.pdf')"/></xsl:when>
-		<xsl:otherwise><xsl:value-of select="concat($input.filename,'.pdf')"/></xsl:otherwise>
-	      </xsl:choose></pdfoutname>
+                <pdfoutname><xsl:value-of select="concat($input.filename,$pdfsuffix,'.pdf')"/></pdfoutname>
                 <docname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></docname>
                 <productname><xsl:value-of select="f:productname(/*/db:info/raxm:metadata/raxm:product,/*/db:info/raxm:metadata/raxm:product/@version)"/></productname>
                 <webappname><xsl:value-of select="$input.filename"/></webappname>
