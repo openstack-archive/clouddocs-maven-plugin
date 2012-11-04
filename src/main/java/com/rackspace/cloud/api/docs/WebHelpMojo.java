@@ -274,7 +274,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      *
      * @parameter 
      *     expression="${generate-webhelp.security}" 
-     *     default-value=""
+     *     default-value="external"
      */
     private String security;
  
@@ -523,7 +523,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	//	if(null == webhelpWar || webhelpWar.equals("0")){
 	    //TODO: Move dir to add warsuffix/security value
 	    String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
-	    File webhelpDirWithSecurity = new File(result.getParentFile().getParentFile()  + "/" + warBasename + properties.getProperty("warsuffix",""));
+	    File webhelpDirWithSecurity = new File(result.getParentFile().getParentFile()  + "/" + warBasename + "-" + this.security);
 	    File webhelpOrigDir = new File(result.getParentFile().getParentFile()  + "/" + warBasename );
 	    boolean success = webhelpOrigDir.renameTo(webhelpDirWithSecurity);
 	    //}
