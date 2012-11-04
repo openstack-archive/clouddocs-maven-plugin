@@ -887,6 +887,7 @@
 	    <xsl:when test="$coverUrl != ''"><xsl:value-of select="$coverUrl"/></xsl:when>
 	    <xsl:when test="$branding = 'rackspace'">docs.rackspace.com/api</xsl:when>
 	    <xsl:when test="$branding = 'openstack'">docs.openstack.org</xsl:when>
+	    <xsl:when test="$branding = 'repose'">www.openrepose.org</xsl:when>
 	  </xsl:choose>
       </xsl:variable>
 
@@ -914,6 +915,8 @@
 	    <xsl:when test="$coverLogoLeft != ''"><xsl:value-of select="$coverLogoLeft"/></xsl:when>
 	    <xsl:when test="$branding = 'rackspace'">5.6in</xsl:when>
 	    <xsl:when test="$branding = 'openstack'">5.2in</xsl:when>
+	    <xsl:when test="$branding = 'repose'">3.9in</xsl:when>
+	    <xsl:otherwise>5.6in</xsl:otherwise>
 	  </xsl:choose>
 	</xsl:attribute>
 	<xsl:attribute name="top">
@@ -921,6 +924,8 @@
 	    <xsl:when test="$coverLogoTop != ''"><xsl:value-of select="$coverLogoTop"/></xsl:when>
 	    <xsl:when test="$branding = 'rackspace'">9.28in</xsl:when>
 	    <xsl:when test="$branding = 'openstack'">9.0in</xsl:when>
+	    <xsl:when test="$branding = 'repose'">4.9in</xsl:when>
+	    <xsl:otherwise>9.0in</xsl:otherwise>
 	  </xsl:choose>
 	</xsl:attribute>
 	<fo:block>
