@@ -87,6 +87,7 @@
     <xsl:choose>
       <xsl:when test="$branding = 'rackspace'">.rackspace.com</xsl:when>
       <xsl:when test="$branding = 'openstack'">.openstack.org</xsl:when>
+      <xsl:when test="$branding = 'repose'">.openrepose.org</xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:param>
@@ -151,6 +152,7 @@ set       toc,title
   <xsl:param name="brandname">
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">OpenStack</xsl:when>
+      <xsl:when test="$branding = 'repose'">Repose</xsl:when>
       <xsl:when test="$branding = 'openstackextension'">OpenStack Extension</xsl:when>
       <xsl:otherwise>Rackspace</xsl:otherwise>
     </xsl:choose>
@@ -158,6 +160,7 @@ set       toc,title
   <xsl:param name="main.docs.url">
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">http://docs.openstack.org/</xsl:when>
+      <xsl:when test="$branding = 'repose'">http://openrepose.org/documentation.html</xsl:when>
       <xsl:when test="$branding = 'openstackextension'">http://docs-beta.rackspace.com/test/jonathan/OpenstackExtDocs/</xsl:when>
       <xsl:otherwise>
 	<xsl:choose>
@@ -314,6 +317,7 @@ ERROR: Feedback email not set but internal comments are enabled.
 	    <xsl:attribute name="href">
 	    <xsl:choose>
 		<xsl:when test="$branding = 'openstack'">http://www.openstack.org</xsl:when>
+		<xsl:when test="$branding = 'repose'">http://www.openrepose.org</xsl:when>
 	    <xsl:when test="$branding = 'openstackextension'">http://docs-beta.rackspace.com/test/jonathan/OpenStackExtDocs/</xsl:when>
 		<xsl:otherwise>http://www.rackspace.com</xsl:otherwise>
 	      </xsl:choose>
