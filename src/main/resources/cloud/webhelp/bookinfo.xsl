@@ -150,8 +150,13 @@ buildtime=<xsl:value-of select="format-dateTime(current-dateTime(),'[Y]-[M,2]-[D
     <xsl:function name="f:productnumber" as="xs:string">
         <xsl:param name="key"/>
         <xsl:param name="version"/>
-	<xsl:variable name="sep"><xsl:if test="not($version = '')">-</xsl:if></xsl:variable>
-	<xsl:value-of select="concat($key,$sep,$version)"/>
+	<xsl:variable name="sep"><xsl:if test="not($version = '')">-</xsl:if></xsl:variable>	
+	<!-- Blech: Special case to handle fact that auth docs are grouped together -->
+        <xsl:choose>
+            <xsl:when test="$key = 'auth'">auth-v1.1</xsl:when>
+            <xsl:otherwise><xsl:value-of select="concat($key,$sep,$version)"/></xsl:otherwise>
+        </xsl:choose>
+
         <!-- <xsl:choose> -->
             <!-- <xsl:when test="$key = 'servers' and $version='v2'">servers-v2</xsl:when> -->
             <!-- <xsl:when test="$key = 'servers' and $version='v1.0'">servers-v1.0</xsl:when> -->
