@@ -672,10 +672,10 @@ ERROR: Feedback email not set but internal comments are enabled.
     </xsl:template>
     
     <!-- The following templates change the color of text flagged as reviewer, internal, or writeronly -->    
-    <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';internal;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';internal;') ]"><span class="internal"><xsl:apply-imports/></span></xsl:template>
-    <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') ]"><span class="writeronly"><xsl:apply-imports/></span></xsl:template>
-    <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') ] | xref[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') ]"><span class="remark"><xsl:apply-imports/></span></xsl:template>
-    <xsl:template match="text()[ ancestor::*/@role = 'highlight' ] | xref[ ancestor::*/@role = 'highlight' ]" priority="10"><span class="remark"><xsl:apply-imports/></span></xsl:template>
+    <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';internal;') and not(ancestor::d:programlisting) ] | xref[ contains(concat(';',ancestor::*/@security,';'),';internal;') and not(ancestor::d:programlisting)]"><span class="internal"><xsl:apply-imports/></span></xsl:template>
+    <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') and not(ancestor::d:programlisting) ] | xref[ contains(concat(';',ancestor::*/@security,';'),';writeronly;') and not(ancestor::d:programlisting)]"><span class="writeronly"><xsl:apply-imports/></span></xsl:template>
+    <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') and not(ancestor::d:programlisting) ] | xref[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') and not(ancestor::d:programlisting)]"><span class="remark"><xsl:apply-imports/></span></xsl:template>
+    <xsl:template match="text()[ ancestor::*/@role = 'highlight' and not(ancestor::d:programlisting) ] | xref[ ancestor::*/@role = 'highlight' and not(ancestor::d:programlisting)]" priority="10"><span class="remark"><xsl:apply-imports/></span></xsl:template>
 
     <xsl:template match="d:parameter[@role = 'template']">
       <xsl:param name="content">
