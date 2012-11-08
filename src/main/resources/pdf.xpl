@@ -79,6 +79,8 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '')">-<x
       <p:with-option name="message" select="'Validating post-xinclude'"/>
     </cx:message>
 
+    <p:delete match="//@security[. = '']"/>
+
     <l:docbook-xslt2-preprocess/>
 
     <l:validate-transform name="validate-post-xinclude">

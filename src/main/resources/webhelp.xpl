@@ -32,6 +32,8 @@
   <cx:message>
     <p:with-option name="message" select="'Validating post-xinclude'"/>
   </cx:message>
+
+  <p:delete match="//@security[. = '']"/>
   
   <cx:message>
     <p:with-option name="message" select="'Profiling'"/>
