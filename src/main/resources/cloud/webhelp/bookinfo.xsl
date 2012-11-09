@@ -119,12 +119,12 @@ buildtime=<xsl:value-of select="format-dateTime(current-dateTime(),'[Y]-[M,2]-[D
         <xsl:param name="type" select="normalize-space(db:info//raxm:type[1])"/>
         <xsl:param name="priority" select="normalize-space(db:info//raxm:priority[1])"/>
         <xsl:variable name="idNumber" select="f:calculatetype($type)"/>
-        
+        <xsl:variable name="itemizedlistid" select="generate-id(parent::db:itemizedlist)"/>
                 <type xmlns="">
                     <id><xsl:value-of select="f:calculatetype(parent::*/db:info//raxm:type[1])"/></id>
                     <displayname><xsl:value-of select=".//db:link[1]"/></displayname>
                     <url><xsl:value-of select=".//db:link[1]/@xlink:href"/></url>
-                    <sequence><xsl:value-of select="f:calculatepriority(parent::*/db:info//raxm:priority[1]) + count(preceding::db:listitem)"/></sequence> 
+                    <sequence><xsl:value-of select="f:calculatepriority(parent::*/db:info//raxm:priority[1]) + count(preceding::db:listitem[generate-id(parent::db:itemizedlist) = $itemizedlistid])"/></sequence> 
                 </type>        
     </xsl:template>
         
