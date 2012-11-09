@@ -113,7 +113,9 @@ public class PDFBuilder {
         private String sectionAutolabel;
         private String formalProcedures;
         private String generateToc;
-
+        private String tocMaxDepth;
+        private String tocSectionDepth;
+     
 	private String draftStatus;
 	private String trimWadlUriCount;
 	private String computeWadlPathFromDocbookPath;
@@ -342,13 +344,25 @@ public class PDFBuilder {
 		transformer.setParameter("coverUrl", coverUrl);
 		transformer.setParameter("coverColor", coverColor);
 
-
-		transformer.setParameter("section.autolabel", sectionAutolabel);
-		transformer.setParameter("chapter.autolabel", chapterAutolabel);
-		transformer.setParameter("generate.toc", generateToc);
-		transformer.setParameter("formal.procedures", formalProcedures);
-
-
+		if(null != sectionAutolabel){
+		    transformer.setParameter("section.autolabel", sectionAutolabel);
+		}
+		if(null != chapterAutolabel){
+		    transformer.setParameter("chapter.autolabel", chapterAutolabel);
+		}
+		if(null != generateToc){
+		    transformer.setParameter("generate.toc", generateToc);
+		}
+		if(null != tocMaxDepth){
+		    transformer.setParameter("toc.max.depth", tocMaxDepth);
+		}
+		if(null != tocSectionDepth){
+		    transformer.setParameter("toc.section.depth", tocSectionDepth);
+		}
+		if(null != formalProcedures){
+		    transformer.setParameter("formal.procedures", formalProcedures);
+		}
+		
 		transformer.setParameter("project.build.directory", projectBuildDirectory);
 
 		String sysSecurity=System.getProperty("security");
@@ -605,6 +619,22 @@ public class PDFBuilder {
 
 	public void setGenerateToc(String generateToc) {
 		this.generateToc = generateToc;
+	}
+
+	public String getTocMaxDepth() {
+		return tocMaxDepth;
+	}
+
+	public void setTocSectionDepth(String tocSectionDepth) {
+		this.tocSectionDepth = tocSectionDepth;
+	}
+
+	public String getTocSectionDepth() {
+		return tocSectionDepth;
+	}
+
+	public void setTocMaxDepth(String tocMaxDepth) {
+		this.tocMaxDepth = tocMaxDepth;
 	}
 
 

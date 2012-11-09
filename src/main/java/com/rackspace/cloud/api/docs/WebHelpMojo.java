@@ -735,6 +735,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setSectionAutolabel(getProperty("sectionAutolabel"));
 		pdfBuilder.setFormalProcedures(getProperty("formalProcedures"));
 		pdfBuilder.setGenerateToc(getProperty("generateToc"));
+		pdfBuilder.setTocMaxDepth(getProperty("tocMaxDepth"));
+		pdfBuilder.setTocSectionDepth(getProperty("tocSectionDepth"));
 
         	String srcFilename = this.projectBuildDirectory+"/docbkx/"+sourceFile.getName();
 	    	File tempHandle = new File(srcFilename);
