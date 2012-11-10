@@ -268,6 +268,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      *     default-value="yes"
      */
     private String failOnValidationError;
+
+    /**
+     * 
+     * @parameter 
+     *     expression="${generate-webhelp.commentsPhp}"
+     */
+    private String commentsPhp;
+
     
     /**
      * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
@@ -355,8 +363,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     transformer.setParameter("artifactId", docProject.getArtifactId());
     transformer.setParameter("docProjectVersion", docProject.getVersion());
     transformer.setParameter("pomProjectName", docProject.getName());
-
-                    
+    if(commentsPhp != null){
+	transformer.setParameter("comments.php", commentsPhp);
+    }            
     if(glossaryUri != null){
 	  transformer.setParameter("glossary.uri", glossaryUri);
     }
@@ -641,6 +650,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("canonicalUrlBase", this.canonicalUrlBase);
         map.put("replacementsFile", this.replacementsFile);
         map.put("failOnValidationError", this.failOnValidationError);
+        map.put("comments.php", this.commentsPhp);
         map.put("project.build.directory", this.projectBuildDirectory);
         map.put("inputSrcFile", inputFilename);
         map.put("strictImageValidation", String.valueOf(this.strictImageValidation));

@@ -24,6 +24,12 @@
   </xsl:param>
   <xsl:param name="admon.graphics.path"><xsl:value-of select="$webhelp.common.dir"/>images/admon/</xsl:param>
   <xsl:param name="callout.graphics.path"><xsl:value-of select="$webhelp.common.dir"/>images/callouts/</xsl:param>
+  <xsl:param name="comments.php">
+    <xsl:choose>
+      <xsl:when test="$webhelp.war != '0' and $webhelp.war != ''">/hashcode/comments.php</xsl:when>
+      <xsl:otherwise>/comments.php</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
 
   <xsl:param name="use.extensions">1</xsl:param>
   <xsl:param name="callouts.extension">1</xsl:param>
@@ -213,7 +219,7 @@ set       toc,title
 ERROR: Feedback email not set but internal comments are enabled.
               </xsl:message>
           </xsl:if>
-		  <script language="JavaScript" src="/comments.php?email={$feedback.email}" type="text/javascript"><xsl:comment/></script>
+		  <script language="JavaScript" src="{$comments.php}?email={$feedback.email}" type="text/javascript"><xsl:comment/></script>
 		  <noscript>You must have JavaScript enabled to view and post comments.</noscript>
 		</xsl:when>
 		<xsl:otherwise>
