@@ -17,8 +17,11 @@ http://wiki.openstack.org/Documentation/HowTo#Tools_Overview
 Release Notes
 =============
 
-clouddocs-maven-plugin 1.6.0 (September ??TBD??, 2012)
+clouddocs-maven-plugin 1.6.0 (November 10, 2012)
 ============================================================
+
+NOTE: Still working on these release notes...not all new features are listed yet.
+
 -  Automatically handle images: 
 
    -  Detects if images are missing from a document and fail if an
@@ -31,6 +34,14 @@ clouddocs-maven-plugin 1.6.0 (September ??TBD??, 2012)
 -  Automatically build pdf when building webhelp and copy pdf to
    webhelp directory unless <makePdf>false</makePdf> is set in your
    pom.xml.
+
+   -  Generate pdf file names in the format basename-20121110.pdf where
+      basename is the base pdf name and 20121110 is the taken from
+      /*/info/pubdate in the document. If the pdf is generated with a
+      security value other than external, then put the security value
+      in the pdf file name. For example,
+      basename-internal-20121110.pdf.
+
 -  Provide better error messages if incorrect DocBook version is used
    (i.e. if DocBook 4.x is used instead of 5.x).
 -  Updated Rackspace logo.
@@ -55,6 +66,7 @@ clouddocs-maven-plugin 1.6.0 (September ??TBD??, 2012)
       document is now stored in the /tmp directory with a name like
       /tmp/invalid-2012-10-14T11:21:14.913-05:00.xml
 
+- Generate war version of Webhelp output when webhelp.war=1.
 
 clouddocs-maven-plugin 1.5.0 (August 14, 2012)
 ============================================================
