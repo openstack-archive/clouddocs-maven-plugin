@@ -41,6 +41,12 @@ NOTE: Still working on these release notes...not all new features are listed yet
       security value other than external, then put the security value
       in the pdf file name. For example,
       basename-internal-20121110.pdf.
+   -  For Rackspace branding, by default the link to the pdf is
+      changed to basename-latest.pdf to provide a permalink to the
+      latest pdf. Our landing page dynamically redirects to the file
+      name of the current pdf. To avoid this behavior and have the pdf
+      link in webhelp be to the actual pdf, set \
+      <useLatestSuffixInPdfUrl>0</useLatestSuffixInPdfUrl>.
 
 -  Provide better error messages if incorrect DocBook version is used
    (i.e. if DocBook 4.x is used instead of 5.x).
@@ -67,6 +73,9 @@ NOTE: Still working on these release notes...not all new features are listed yet
       /tmp/invalid-2012-10-14T11:21:14.913-05:00.xml
 
 - Generate war version of Webhelp output when webhelp.war=1.
+- Added support for a Repose branding (see http://openrepose.org/).
+- Bugfix: In PDF output, quote chapter names instead of italicizing them. 
+- Bugfix: IDREFs are validated now during the build.
 
 clouddocs-maven-plugin 1.5.0 (August 14, 2012)
 ============================================================
