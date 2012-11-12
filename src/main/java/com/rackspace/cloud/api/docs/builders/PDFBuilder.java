@@ -110,6 +110,7 @@ public class PDFBuilder {
 	private String security;
 
         private String chapterAutolabel;
+        private String appendixAutolabel;
         private String sectionAutolabel;
         private String formalProcedures;
         private String generateToc;
@@ -350,6 +351,10 @@ public class PDFBuilder {
 		if(null != chapterAutolabel){
 		    transformer.setParameter("chapter.autolabel", chapterAutolabel);
 		}
+		if(null != appendixAutolabel){
+		    transformer.setParameter("appendix.autolabel", appendixAutolabel);
+		}
+
 		if(null != generateToc){
 		    transformer.setParameter("generate.toc", generateToc);
 		}
@@ -597,6 +602,15 @@ public class PDFBuilder {
 	public void setChapterAutolabel(String chapterAutolabel) {
 		this.chapterAutolabel = chapterAutolabel;
 	}
+
+	public String getAppendixAutolabel() {
+		return appendixAutolabel;
+	}
+
+	public void setAppendixAutolabel(String appendixAutolabel) {
+		this.appendixAutolabel = appendixAutolabel;
+	}
+
 
 	public String getSectionAutolabel() {
 		return sectionAutolabel;
