@@ -20,8 +20,6 @@ Release Notes
 clouddocs-maven-plugin 1.6.0 (November 10, 2012)
 ============================================================
 
-NOTE: Still working on these release notes...not all new features are listed yet.
-
 -  Automatically handle images: 
 
    -  Detects if images are missing from a document and fail if an
@@ -76,6 +74,10 @@ NOTE: Still working on these release notes...not all new features are listed yet
 - Added support for a Repose branding (see http://openrepose.org/).
 - Bugfix: In PDF output, quote chapter names instead of italicizing them. 
 - Bugfix: IDREFs are validated now during the build.
+
+clouddocs-maven-plugin 1.5.0 (November 6, 2012)
+============================================================
+-  Improve the way Google Analytics is called. 
 
 clouddocs-maven-plugin 1.5.0 (August 14, 2012)
 ============================================================
