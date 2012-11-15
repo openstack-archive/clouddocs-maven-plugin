@@ -851,23 +851,42 @@
         <p:input port="source"/>
         
         <p:output port="result" primary="true">
-            <p:pipe step="docbook-xslt2-preprocess-xslt" port="result"/>
+            <p:pipe step="group" port="result"/>
         </p:output>
         
         <p:input port="parameters" kind="parameter"/>
-        
-        <p:xslt name="docbook-xslt2-preprocess-xslt">
-            <p:input port="source"> 
+	<ut:parameters name="params"/>
+        <p:sink/>
+
+        <p:group name="group">
+            <p:output port="result" primary="true">
+                <p:pipe step="docbook-xslt2-preprocess-xslt" port="result"/>
+            </p:output>
+            <p:output port="secondary" primary="false" sequence="true"/>
+
+            <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+
+	    <p:load name="preprocess.xsl">
+	      <p:with-option name="href"
+			     select="concat('file://',$project.build.directory,'/docbkx/cloud/war/preprocess.xsl')" >
+		<p:empty/>
+	      </p:with-option>		  
+	    </p:load>
+
+	    <p:xslt name="docbook-xslt2-preprocess-xslt">
+	      <p:input port="source"> 
                 <p:pipe step="docbook-xslt2-preprocess-step" port="source"/> 
-            </p:input> 
-            <p:input port="stylesheet">
-                <p:document href="target/docbkx/cloud/war/preprocess.xsl"/>
-            </p:input>
-            <p:input port="parameters" >
+	      </p:input> 
+	      <p:input port="stylesheet">
+		<p:pipe step="preprocess.xsl" port="result"/>
+	      </p:input>
+	      <p:input port="parameters" >
                 <p:pipe step="docbook-xslt2-preprocess-step" port="parameters"/>
-            </p:input>
-        </p:xslt>
-                
+	      </p:input>
+	    </p:xslt>                
+	</p:group>
     </p:declare-step>
 
     <p:declare-step 
@@ -947,17 +966,36 @@
         <p:output port="secondary" primary="false" sequence="true"/>
         
         <p:output port="result" primary="true">
-            <p:pipe step="bookinfo-xslt" port="result"/>
+            <p:pipe step="group" port="result"/>
         </p:output>
         
         <p:input port="parameters" kind="parameter"/>
+	<ut:parameters name="params"/>
+        <p:sink/>
+
+        <p:group name="group">
+            <p:output port="result" primary="true">
+                <p:pipe step="bookinfo-xslt" port="result"/>
+            </p:output>
+            <p:output port="secondary" primary="false" sequence="true"/>
+
+            <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+
+	    <p:load name="bookinfo.xsl">
+	      <p:with-option name="href"
+			     select="concat('file://',$project.build.directory,'/docbkx/cloud/webhelp/bookinfo.xsl')" >
+		<p:empty/>
+	      </p:with-option>		  
+	    </p:load>
         
         <p:xslt name="bookinfo-xslt">
             <p:input port="source"> 
                 <p:pipe step="bookinfo-step" port="source"/> 
             </p:input> 
             <p:input port="stylesheet">
-                <p:document href="target/docbkx/cloud/webhelp/bookinfo.xsl"/>
+	      <p:pipe step="bookinfo.xsl" port="result"/>
             </p:input>
             <p:input port="parameters" >
                 <p:pipe step="bookinfo-step" port="parameters"/>
@@ -982,7 +1020,7 @@
                 </p:otherwise>
             </p:choose>
         </p:for-each>
-        
+	</p:group>        
     </p:declare-step>
     
 
