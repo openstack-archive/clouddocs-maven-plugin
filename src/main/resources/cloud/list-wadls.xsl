@@ -18,12 +18,18 @@
 
     <xsl:variable name="wadls">
         <xsl:for-each select="//wadl:resource[@href]|//wadl:resources[@href]">
+            <xsl:variable name="href">
+              <xsl:choose>
+                <xsl:when test="starts-with(@href,'.') or contains(@href, '/:')"><xsl:value-of select="@href"/></xsl:when>
+                  <xsl:otherwise><xsl:value-of select="concat('./',@href)"/></xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
             <xsl:choose>
-                <xsl:when test="contains(@href,'#')">
-                    <wadl href="{resolve-uri(substring-before(@href,'#'), base-uri(.))}"/>
+                <xsl:when test="contains($href,'#')">
+                    <wadl href="{resolve-uri(substring-before(normalize-space($href),'#'), base-uri())}"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <wadl href="{resolve-uri(@href, base-uri(.))}"/>
+                    <wadl href="{resolve-uri(normalize-space($href), base-uri())}"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
