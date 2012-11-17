@@ -291,7 +291,7 @@
 				<xsl:apply-templates
 					select="document($wadl.path)//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:method"
 					mode="preprocess">
-					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
+					<xsl:with-param name="sectionId" select="ancestor::d:section[1]/@xml:id"/>
                     <xsl:with-param name="resourceLink" select="."/>
 					<xsl:with-param name="original.wadl.path" select="$original.wadl.path"/> 
 					<xsl:with-param name="resource-path" select="$resource-path"/>
@@ -323,7 +323,7 @@
 				<xsl:apply-templates select="wadl:method" mode="preprocess">
                     <xsl:with-param name="resourceLink" select="."/>
 					<xsl:with-param name="resource-path" select="$resource-path"/>
-					<xsl:with-param name="sectionId" select="ancestor::d:section/@xml:id"/>
+					<xsl:with-param name="sectionId" select="ancestor::d:section[1]/@xml:id"/>
 					<xsl:with-param name="original.wadl.path" select="$original.wadl.path"/> 
 					<xsl:with-param name="template-parameters" select="$template-parameters"/>
                 </xsl:apply-templates>
