@@ -16,7 +16,7 @@
 
     <xsl:variable name="docbook" select="document(concat('file:///',$docbook.infile))"/>
 
-  <xsl:variable name="rackspace.status.pi">
+  <xsl:variable name="status.bar.text">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="$docbook/*/processing-instruction('rax')"/>
       <xsl:with-param name="attribute" select="'status.bar.text'"/>
@@ -28,7 +28,7 @@
   </xsl:variable>
 
   <xsl:variable name="rackspace.status.text">
-      <xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/></xsl:if> 
+      <xsl:if test="not(normalize-space($status.bar.text) = '')"><xsl:value-of select="normalize-space($status.bar.text)"/></xsl:if> 
   </xsl:variable>
     
     <xsl:variable name="status.bar.text.font.size">

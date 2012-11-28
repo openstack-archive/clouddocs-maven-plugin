@@ -72,7 +72,7 @@
 
   <xsl:param name="insert.xref.page.number">yes</xsl:param>
 
-  <xsl:param name="rackspace.status.pi">
+  <xsl:param name="status.bar.text">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="/*/processing-instruction('rax')"/>
       <xsl:with-param name="attribute" select="'status.bar.text'"/>
@@ -85,7 +85,7 @@
   <xsl:when test="$security = 'reviewer'">REVIEW<xsl:text> -&#160;</xsl:text></xsl:when>
   <xsl:when test="$security = 'writeronly'">WRITERONLY<xsl:text> -&#160;</xsl:text></xsl:when>
   <xsl:when test="$security = 'external'"/>
-</xsl:choose><xsl:if test="not(normalize-space($rackspace.status.pi) = '')"><xsl:value-of select="normalize-space($rackspace.status.pi)"/><xsl:text> -&#160;</xsl:text></xsl:if> 
+</xsl:choose><xsl:if test="not(normalize-space($status.bar.text) = '')"><xsl:value-of select="normalize-space($status.bar.text)"/><xsl:text> -&#160;</xsl:text></xsl:if> 
   </xsl:param>
 
   <xsl:attribute-set name="example.properties">

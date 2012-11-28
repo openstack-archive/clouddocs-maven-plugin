@@ -195,6 +195,12 @@ public abstract class PDFMojo extends AbstractFoMojo {
      */
     private String draftStatus;
 
+    /**
+     * 
+     *
+     * @parameter expression="${generate-webhelp.draft.status}" default-value=""
+     */
+    private String statusBarText;
 
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
@@ -370,8 +376,14 @@ public abstract class PDFMojo extends AbstractFoMojo {
     if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
     	draftStatus=sysDraftStatus;
     }
-    
+
 	transformer.setParameter("draft.status", draftStatus);
+
+	String sysStatusBarText=System.getProperty("statusBarText");
+	if(null!=sysStatusBarText && !sysStatusBarText.isEmpty()){
+	    statusBarText=sysStatusBarText;
+	}
+	transformer.setParameter("statusBarText", statusBarText);
 
 	transformer.setParameter("project.build.directory", projectBuildDirectory);
     
@@ -435,6 +447,13 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    if(null!=draftStatus){
 		transformer.setParameter("draft.status", draftStatus);
 	    }
+
+	    String sysStatusBarText=System.getProperty("statusBarText");
+	    if(null!=sysStatusBarText && !sysStatusBarText.isEmpty()){
+		statusBarText=sysStatusBarText;
+	    }
+	    transformer.setParameter("status.bar.text", statusBarText);
+
 	    transformer.setParameter("branding", branding);
 
             //transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
@@ -476,7 +495,8 @@ public abstract class PDFMojo extends AbstractFoMojo {
         map.put("inputSrcFile", inputFilename);
         map.put("outputType", "pdf");
         map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
-
+        map.put("status.bar.text", getProperty("statusBarText"));
+        map.put("draft.status", getProperty("draftStatus"));
         
         // Profiling attrs:        
         map.put("profile.os", getProperty("profileOs"));

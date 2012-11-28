@@ -118,6 +118,7 @@ public class PDFBuilder {
         private String tocSectionDepth;
      
 	private String draftStatus;
+	private String statusBarText;
 	private String trimWadlUriCount;
 	private String computeWadlPathFromDocbookPath;
 
@@ -383,6 +384,12 @@ public class PDFBuilder {
 		    draftStatus=sysDraftStatus;
 		}
 		transformer.setParameter("draft.status", draftStatus);
+
+		String sysStatusBarText=System.getProperty("statusBarText");
+		if(null!=sysStatusBarText && !sysStatusBarText.isEmpty()){
+		    statusBarText=sysStatusBarText;
+		}
+		transformer.setParameter("status.bar.text", statusBarText);
 
 		if(trimWadlUriCount != null){
 			transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);
@@ -659,6 +666,15 @@ public class PDFBuilder {
 	public void setDraftStatus(String draftStatus) {
 		this.draftStatus = draftStatus;
 	}
+
+	public String getStatusBarText() {
+		return statusBarText;
+	}
+
+	public void setStatusBarText(String statusBarText) {
+		this.statusBarText = statusBarText;
+	}
+
 
 	public String getTrimWadlUriCount() {
 		return trimWadlUriCount;

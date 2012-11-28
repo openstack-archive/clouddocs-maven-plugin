@@ -347,6 +347,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String draftStatus;
 
+    /**
+     * 
+     *
+     * @parameter expression="${generate-webhelp.draft.status}" default-value=""
+     */
+    private String statusBarText;
+
 
     /**
      * DOCUMENT ME!
@@ -435,6 +442,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	    draftStatus=sysDraftStatus;
 	}
 	transformer.setParameter("draft.status", draftStatus);
+
+	String sysStatusBarText=System.getProperty("statusBarText");
+	if(null!=sysStatusBarText && !sysStatusBarText.isEmpty()){
+	    statusBarText=sysStatusBarText;
+	}
+	transformer.setParameter("status.bar.text", statusBarText);
+
 
     if(canonicalUrlBase != null){
 	transformer.setParameter("canonical.url.base",canonicalUrlBase);
@@ -655,7 +669,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("inputSrcFile", inputFilename);
         map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
         map.put("trim.wadl.uri.count", this.trimWadlUriCount);
-
+        map.put("status.bar.text", getProperty("statusBarText"));
+        map.put("draft.status", getProperty("draftStatus"));
+        
         // Profiling attrs:        
         map.put("profile.os", getProperty("profileOs"));
         map.put("profile.arch", getProperty("profileArch"));
@@ -665,7 +681,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("profile.revision", getProperty("profileRevision"));
         map.put("profile.userlevel", getProperty("profileUserlevel"));
         map.put("profile.vendor", getProperty("profileVendor"));
-        
+
         int lastSlash=inputFilename.lastIndexOf("/");
         //This is the case if the path includes a relative path
         if(-1!=lastSlash){
@@ -735,6 +751,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setBranding(branding);
         	pdfBuilder.setSecurity(security);
         	pdfBuilder.setDraftStatus(draftStatus);
+        	pdfBuilder.setStatusBarText(statusBarText);
         	pdfBuilder.setTrimWadlUriCount(trimWadlUriCount);
         	pdfBuilder.setComputeWadlPathFromDocbookPath(computeWadlPathFromDocbookPath);
         	
