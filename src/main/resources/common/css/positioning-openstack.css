@@ -377,6 +377,10 @@ div.note *, div.caution *, div.important *, div.tip *, div.warning *, div.callou
     border: inherit  !important;    
 }
 
+div.note p:first-child, div.caution p:first-child, div.important p:first-child, div.tip p:first-child, div.warning p:first-child, div.calloutlist p:first-child {
+    margin-top: 0px;
+}
+
 #content table thead, #content table th{
     background: gray;
     color: white;
