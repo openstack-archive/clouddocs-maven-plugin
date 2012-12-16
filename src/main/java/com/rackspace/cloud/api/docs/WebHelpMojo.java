@@ -661,6 +661,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("docProjectVersion", docProject.getVersion());
 	map.put("pomProjectName", docProject.getName());
         map.put("security", this.security);
+        map.put("branding", this.branding);
         map.put("canonicalUrlBase", this.canonicalUrlBase);
         map.put("replacementsFile", this.replacementsFile);
         map.put("failOnValidationError", this.failOnValidationError);

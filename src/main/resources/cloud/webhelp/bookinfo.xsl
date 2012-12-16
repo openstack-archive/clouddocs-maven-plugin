@@ -18,6 +18,14 @@
     <xsl:param name="pomProjectName"/>
     <xsl:param name="security">external</xsl:param>
     <xsl:param name="autoPdfUrl"/>
+    <xsl:param name="branding">rackspace</xsl:param>
+    <xsl:param name="includeDateInPdfFilename">
+        <xsl:choose>
+            <xsl:when test="$branding = 'openstack'">0</xsl:when>
+            <xsl:otherwise>1</xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
+   
     
     <!-- We need too collect lists that contain their own raxm:metadata so we can 
         add <type>s to the bookinfo for resources mentioned in lists in the doc -->
@@ -25,7 +33,7 @@
 
     <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
     <xsl:variable name="warsuffix"><xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
-    <xsl:variable name="pdfsuffix"><xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
+    <xsl:variable name="pdfsuffix"><xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
     <xsl:variable name="info" select="/*/db:info"/>
 
     <xsl:template match="/">      
@@ -99,6 +107,7 @@ pdfsuffix=<xsl:value-of select="$pdfsuffix"/>
 product=<xsl:value-of select="/*/db:info/db:productname"/>
 version=<xsl:value-of select="/*/db:info/db:releaseinfo"/>
 buildtime=<xsl:value-of select="format-dateTime(current-dateTime(),'[Y]-[M,2]-[D,2] [H]:[m]:[s]')"/>
+branding=<xsl:value-of select="$branding"/>
 </c:result>
         </xsl:result-document>
     </xsl:template>

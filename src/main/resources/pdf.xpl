@@ -50,9 +50,16 @@
 	<p:inline>
 	  <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 	    <xsl:param name="security"/>
+	    <xsl:param name="branding">rackspace</xsl:param>
+	    <xsl:param name="includeDateInPdfFilename">
+	      <xsl:choose>
+	        <xsl:when test="$branding = 'openstack'">0</xsl:when>
+	        <xsl:otherwise>1</xsl:otherwise>
+	      </xsl:choose>
+	    </xsl:param>
 	    <xsl:template match="/">
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">	
-pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if>
+  pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if>
 </c:result>      
 	    </xsl:template>
 	  </xsl:stylesheet>
