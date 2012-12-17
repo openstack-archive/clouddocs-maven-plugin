@@ -873,7 +873,7 @@
 
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
-                <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction> 
+               <!-- <xsl:processing-instruction name="dbfo">keep-together="always"</xsl:processing-instruction> -->
                 <caption><xsl:value-of select="concat($method.title,' ',$mode,' Parameters')"/></caption>
                 <col width="30%"/>
                 <col width="10%"/>
