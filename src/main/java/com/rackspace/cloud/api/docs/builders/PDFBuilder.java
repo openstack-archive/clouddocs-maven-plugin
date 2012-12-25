@@ -447,8 +447,12 @@ public class PDFBuilder {
 			transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
 			transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
 
-			getLog().info("SOURCE FOR COVER PAGE: "+sourceFilePath);
-			transformer.setParameter("docbook.infile", sourceFilePath);
+			// getLog().info("SOURCE FOR COVER PAGE: "+sourceFilePath);
+			// transformer.setParameter("docbook.infile", sourceFilePath);
+
+
+			getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory+"/"+inputFilename);
+			transformer.setParameter("docbook.infile", this.projectBuildDirectory+"/"+inputFilename);
 
 			transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
 		}
