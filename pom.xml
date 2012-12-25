@@ -12,7 +12,7 @@
     <packaging>maven-plugin</packaging>
 
     <properties>
-      <wadl.tools.version>1.0.7</wadl.tools.version>
+      <wadl.tools.version>1.0.10-SNAPSHOT</wadl.tools.version>
     </properties>
 
     <description>
@@ -318,7 +318,8 @@
                                         **/normalizeWadl1.xsl,
                                         **/normalizeWadl2.xsl,
                                         **/normalizeWadl3.xsl,
-                                        **/normalizeWadl4.xsl
+                                        **/normalizeWadl4.xsl,
+                                        **/normalizeWadl5.xsl
                                     </includes>
                                     <excludes>**/*.xml,**/*.xsd,**/*.dtd,**/*.sch,**/*.class,**/*.properties,**/*.MF</excludes>
                                 </artifactItem>
