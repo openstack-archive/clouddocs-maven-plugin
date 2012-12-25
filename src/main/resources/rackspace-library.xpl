@@ -1255,4 +1255,70 @@
 	    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
    </p:declare-step>
     
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:process-pubdate"
+        xmlns:c="http://www.w3.org/ns/xproc-step" version="1.0"
+        name="process-pubdate">
+        
+        <p:input port="source"/>
+        <p:output port="result" primary="true">  
+            <p:pipe step="process-pubdate-xslt" port="result"/> 
+        </p:output>  
+        
+        <p:xslt name="process-pubdate-xslt">
+            <p:input port="source"> 
+                <p:pipe step="process-pubdate" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:inline>
+                    <xsl:stylesheet 
+			xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			xmlns="http://docbook.org/ns/docbook"
+			xmlns:db="http://docbook.org/ns/docbook"
+                        exclude-result-prefixes="xs db cxf l ut c ml cx" 
+			version="2.0">
+                        
+                        <xsl:template match="node() | @*">
+                            <xsl:copy>
+                                <xsl:apply-templates select="node() | @*"/>
+                            </xsl:copy>
+                        </xsl:template>
+			
+			<xsl:template match="db:pubdate">
+			  <xsl:choose>
+			    <xsl:when test="normalize-space(.) = ''">
+			      <pubdate><xsl:value-of select="format-dateTime(current-dateTime(),'[Y]-[M,2]-[D,2]')"/></pubdate>
+			    </xsl:when>
+			    <xsl:when test="not(matches(normalize-space(.),'[0-9][0-9][0-9][0-9]\-[0-9][0-9]\-[0-9][0-9]'))">
+			      <xsl:message terminate="yes">
+				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+				% ERROR                        %                       
+				% Bad pubdate format!          %
+				% "<xsl:value-of select="."/>" %
+				% Please use YYYY-MM-DD format.%
+				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%				
+			      </xsl:message>
+			    </xsl:when>
+			    <xsl:otherwise>
+			      <xsl:copy>
+                                <xsl:apply-templates select="node() | @*"/>
+			      </xsl:copy>			      
+			    </xsl:otherwise>
+			  </xsl:choose>
+			</xsl:template>
+
+                     </xsl:stylesheet>
+                </p:inline>
+            </p:input>
+            <p:input port="parameters" >
+                <p:empty/>
+            </p:input>
+        </p:xslt>
+        
+    </p:declare-step>
+
+
 </p:library>

@@ -41,7 +41,7 @@
       </p:input>
       <p:with-option name="docbookNamespace" select="'http://docbook.org/ns/docbook'"/>
     </l:validate-docbook-format>
-
+    
     <p:xslt name="pdfprops">
       <p:input port="source">  
 	<p:pipe step="main" port="source"/>  
@@ -58,8 +58,26 @@
 	      </xsl:choose>
 	    </xsl:param>
 	    <xsl:template match="/">
+	      <xsl:variable name="pubdate">
+		<xsl:choose>
+		  <xsl:when test="/*/db:info/db:pubdate and normalize-space(/*/db:info/db:pubdate) = ''"><xsl:value-of select="format-dateTime(current-dateTime(),'[Y]-[M,2]-[D,2]')"/></xsl:when>
+		  <xsl:when test="/*/db:info/db:pubdate and not(matches(normalize-space(/*/db:info/db:pubdate),'[0-9][0-9][0-9][0-9]\-[0-9][0-9]\-[0-9][0-9]'))">
+		    <xsl:message terminate="yes">
+		      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		      % ERROR                        %                       
+		      % Bad pubdate format!          %
+		      % "<xsl:value-of select="/*/db:info/db:pubdate"/>" %
+		      % Please use YYYY-MM-DD format.%
+		      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%				
+		    </xsl:message>
+		    <xsl:value-of select="/*/db:info/db:pubdate"/>
+		  </xsl:when>
+		  <xsl:otherwise><xsl:value-of select="/*/db:info/db:pubdate"/></xsl:otherwise>
+		</xsl:choose>
+	      </xsl:variable>
+
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">	
-  pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if>
+pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate($pubdate,'-','')"/></xsl:if>
 </c:result>      
 	    </xsl:template>
 	  </xsl:stylesheet>
@@ -85,6 +103,11 @@
     <cx:message>
       <p:with-option name="message" select="'Validating post-xinclude'"/>
     </cx:message>
+
+    <cx:message>
+      <p:with-option name="message" select="'Fixing pubdate if necessary'"/>
+    </cx:message>
+    <l:process-pubdate/>
 
     <p:delete match="//@security[. = '']"/>
 

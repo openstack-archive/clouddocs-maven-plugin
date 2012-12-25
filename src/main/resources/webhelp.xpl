@@ -30,11 +30,12 @@
   <p:xinclude fixup-xml-base="true"/>
 
   <cx:message>
-    <p:with-option name="message" select="'Validating post-xinclude'"/>
+    <p:with-option name="message" select="'Fixing pubdate if necessary'"/>
   </cx:message>
+  <l:process-pubdate/>
 
   <p:delete match="//@security[. = '']"/>
-  
+
   <cx:message>
     <p:with-option name="message" select="'Profiling'"/>
   </cx:message>
