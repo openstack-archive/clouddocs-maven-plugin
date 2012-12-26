@@ -1,5 +1,6 @@
 <p:library xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:cx="http://xmlcalabash.com/ns/extensions"
+    xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
     xmlns:ml="http://xmlcalabash.com/ns/extensions/marklogic"
     xmlns:ut="http://grtjn.nl/ns/xproc/util"
@@ -16,16 +17,23 @@
         
         <p:input port="source" /> <!--sequence="false" primary="true"-->
         <p:input port="schema" sequence="true" >
-            <p:document  href="classpath:/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
+            <p:document  href="classpath:/rng/rackbook.rng"/> 
         </p:input>
-        <p:input port="parameters" kind="parameter"/>
-        
+
         <p:output port="result" primary="true">  
             <p:pipe step="tryvalidation" port="result"/>  
         </p:output>  
         <p:output port="report" sequence="true">  
             <p:pipe step="tryvalidation" port="report"/>  
         </p:output>
+
+        <p:input port="parameters" kind="parameter"/>
+        <ut:parameters name="params">
+	  <p:input port="source">
+	    <p:pipe step="main" port="parameters"/>
+	  </p:input>
+	</ut:parameters>
+        <p:sink/>
         
         <p:try name="tryvalidation"> 
             <p:group> 
@@ -53,31 +61,37 @@
                 <p:output port="report">  
                     <p:pipe step="printerrors" port="result"/> 
                 </p:output>
+   	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+		  <p:pipe step="params" port="parameters"/>
+		</p:variable>
+		<p:variable name="inputSrcFile" select="//c:param[@name = 'inputSrcFile']/@value">
+		  <p:pipe step="params" port="parameters"/>
+		</p:variable>
                 <p:store>
-                    <p:with-option name="href" select="concat('file:///tmp/invalid-', current-dateTime(),'.xml')"/>
+                    <p:with-option name="href" select="concat('file://',$project.build.directory,'/',$inputSrcFile,'-invalid-idrefs-', current-dateTime(),'.xml')"/>
                     <p:input port="source">
                         <p:pipe port="source" step="main"/>
                     </p:input>
                 </p:store>
-                <p:xslt name="printdoc">
-                    <p:input port="source">  
-                        <p:pipe step="main" port="source"/>  
-                    </p:input>  
-                    <p:input port="stylesheet">
-                        <p:inline>
-                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-                                <xsl:template match="/">
-                                    <xsl:message>
-                                        <xsl:copy-of select="*"/>
-                                    </xsl:message>          
-                                </xsl:template>
-                            </xsl:stylesheet>
-                        </p:inline>
-                    </p:input>
-                    <p:input port="parameters" >
-                        <p:pipe step="main" port="parameters"/>
-                    </p:input>  
-                </p:xslt>
+                <!-- <p:xslt name="printdoc"> -->
+                <!--     <p:input port="source">   -->
+                <!--         <p:pipe step="main" port="source"/>   -->
+                <!--     </p:input>   -->
+                <!--     <p:input port="stylesheet"> -->
+                <!--         <p:inline> -->
+                <!--             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"> -->
+                <!--                 <xsl:template match="/"> -->
+                <!--                     <xsl:message> -->
+                <!--                         <xsl:copy-of select="*"/> -->
+                <!--                     </xsl:message>           -->
+                <!--                 </xsl:template> -->
+                <!--             </xsl:stylesheet> -->
+                <!--         </p:inline> -->
+                <!--     </p:input> -->
+                <!--     <p:input port="parameters" > -->
+                <!--         <p:pipe step="main" port="parameters"/> -->
+                <!--     </p:input>   -->
+                <!-- </p:xslt> -->
                 <p:xslt name="printerrors">
                     <p:input port="source">  
                         <p:pipe step="catch" port="error"/>  
@@ -169,16 +183,23 @@
         
         <p:input port="source" /> <!--sequence="false" primary="true"-->
         <p:input port="schema" sequence="true" >
-            <p:document  href="classpath:/rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
+            <p:document  href="classpath:/rng/rackbook.rng"/> 
         </p:input>
-        <p:input port="parameters" kind="parameter"/>
-        
+
         <p:output port="result" primary="true">  
             <p:pipe step="tryvalidation" port="result"/>  
         </p:output>  
         <p:output port="report" sequence="true">  
             <p:pipe step="tryvalidation" port="report"/>  
         </p:output>
+
+        <p:input port="parameters" kind="parameter"/>
+        <ut:parameters name="params">
+	  <p:input port="source">
+	    <p:pipe step="main" port="parameters"/>
+	  </p:input>
+	</ut:parameters>
+        <p:sink/>
         
         <p:try name="tryvalidation"> 
             <p:group> 
@@ -197,7 +218,7 @@
                         <p:pipe step="main" port="schema"/>  
                     </p:input>  
                 </p:validate-with-relax-ng> 
-
+                
             </p:group>  
             <p:catch name="catch">  
                 <p:output port="result">  
@@ -206,25 +227,37 @@
                 <p:output port="report">  
                     <p:pipe step="printerrors" port="result"/> 
                 </p:output>
-                <p:xslt name="printdoc">
-                    <p:input port="source">  
-                        <p:pipe step="main" port="source"/>  
-                    </p:input>  
-                    <p:input port="stylesheet">
-                        <p:inline>
-                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-                                <xsl:template match="/">
-                                    <xsl:message>
-                                        <xsl:copy-of select="*"/>
-                                    </xsl:message>          
-                                </xsl:template>
-                            </xsl:stylesheet>
-                        </p:inline>
+   	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+		  <p:pipe step="params" port="parameters"/>
+		</p:variable>
+		<p:variable name="inputSrcFile" select="//c:param[@name = 'inputSrcFile']/@value">
+		  <p:pipe step="params" port="parameters"/>
+		</p:variable>
+                <p:store>
+                    <p:with-option name="href" select="concat('file://',$project.build.directory,'/',$inputSrcFile,'-invalid-', current-dateTime(),'.xml')"/>
+                    <p:input port="source">
+                        <p:pipe port="source" step="main"/>
                     </p:input>
-                    <p:input port="parameters" >
-                        <p:pipe step="main" port="parameters"/>
-                    </p:input>  
-                </p:xslt>
+                </p:store>
+                <!-- <p:xslt name="printdoc"> -->
+                <!--     <p:input port="source">   -->
+                <!--         <p:pipe step="main" port="source"/>   -->
+                <!--     </p:input>   -->
+                <!--     <p:input port="stylesheet"> -->
+                <!--         <p:inline> -->
+                <!--             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"> -->
+                <!--                 <xsl:template match="/"> -->
+                <!--                     <xsl:message> -->
+                <!--                         <xsl:copy-of select="*"/> -->
+                <!--                     </xsl:message>           -->
+                <!--                 </xsl:template> -->
+                <!--             </xsl:stylesheet> -->
+                <!--         </p:inline> -->
+                <!--     </p:input> -->
+                <!--     <p:input port="parameters" > -->
+                <!--         <p:pipe step="main" port="parameters"/> -->
+                <!--     </p:input>   -->
+                <!-- </p:xslt> -->
                 <p:xslt name="printerrors">
                     <p:input port="source">  
                         <p:pipe step="catch" port="error"/>  
@@ -232,7 +265,7 @@
                     <p:input port="stylesheet">
                         <p:inline>
                             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-    <!--
+                                <!--
                                 <xsl:param name="security"/>-->
                                 <xsl:param name="failOnValidationError">yes</xsl:param>
                                 <xsl:param name="failOnValidationErrorInternal">
@@ -244,23 +277,23 @@
                                 
                                 <xsl:template match="/">
                                     <xsl:message>
-                                    @@@@@@@@@@@@@@@@@@@@@@
-                                    !!!VALIDATION ERRORS!!
-                                    !!!!!!!!!!!!!!!!!!!!!!
-                                    <xsl:copy-of select="*"/>
-                                    !!!!!!!!!!!!!!!!!!!!!!
-                                    !!!VALIDATION ERRORS!!                    
-                                    @@@@@@@@@@@@@@@@@@@@@@
-                                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                                    Control whether build fails or not by 
-                                    setting failOnValidationError to no
-                                    in your pom. 
-                                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                                        @@@@@@@@@@@@@@@@@@@@@@
+                                        !!!VALIDATION ERRORS!!
+                                        !!!!!!!!!!!!!!!!!!!!!!
+                                        <xsl:copy-of select="*"/>
+                                        !!!!!!!!!!!!!!!!!!!!!!
+                                        !!!VALIDATION ERRORS!!                    
+                                        @@@@@@@@@@@@@@@@@@@@@@
+                                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                                        Control whether build fails or not by 
+                                        setting failOnValidationError to no
+                                        in your pom. 
+                                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                                     </xsl:message>          
                                     <xsl:message terminate="{$failOnValidationErrorInternal}"/>
                                 </xsl:template>
                                 
-<!--                                <xsl:template match="node()|@*">
+                                <!--                                <xsl:template match="node()|@*">
                                     <xsl:copy>
                                         <xsl:apply-templates select="node() | @*"/>
                                     </xsl:copy>
@@ -273,7 +306,7 @@
                         <p:pipe step="main" port="parameters"/>
                     </p:input>  
                 </p:xslt>
-<!--                <p:xslt name="id">
+                <!--                <p:xslt name="id">
                     <p:input port="source">  
                         <p:pipe step="catch" port="error"/>  
                     </p:input>  
@@ -303,8 +336,7 @@
                     </p:input>
                 </p:xslt>-->
             </p:catch>  
-        </p:try>
-        
+        </p:try>        
     </p:declare-step>
     
     <p:declare-step 
