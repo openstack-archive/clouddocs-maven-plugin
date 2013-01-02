@@ -160,7 +160,12 @@
   <!-- Numbering of sections and chapters -->
   <xsl:param name="chapter.autolabel" select="1"/>
   <xsl:param name="section.autolabel" select="1"/>
-  <xsl:param name="section.label.includes.component.label" select="1"/>
+  <xsl:param name="section.label.includes.component.label">
+    <xsl:choose>
+      <xsl:when test="$section.autolabel != '0'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
 
   <!-- Define hard pagebreak -->
   <xsl:template match="processing-instruction('hard-pagebreak')">

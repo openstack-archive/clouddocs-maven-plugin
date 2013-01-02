@@ -763,6 +763,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setChapterAutolabel(getProperty("chapterAutolabel"));
         	pdfBuilder.setAppendixAutolabel(getProperty("appendixAutolabel"));
         	pdfBuilder.setSectionAutolabel(getProperty("sectionAutolabel"));
+        	pdfBuilder.setSectionLabelIncludesComponentLabel(getProperty("sectionLabelIncludesComponentLabel"));
 		pdfBuilder.setFormalProcedures(getProperty("formalProcedures"));
 		pdfBuilder.setGenerateToc(getProperty("generateToc"));
 		pdfBuilder.setTocMaxDepth(getProperty("tocMaxDepth"));

@@ -112,6 +112,7 @@ public class PDFBuilder {
         private String chapterAutolabel;
         private String appendixAutolabel;
         private String sectionAutolabel;
+        private String sectionLabelIncludesComponentLabel;
         private String formalProcedures;
         private String generateToc;
         private String tocMaxDepth;
@@ -348,6 +349,9 @@ public class PDFBuilder {
 
 		if(null != sectionAutolabel){
 		    transformer.setParameter("section.autolabel", sectionAutolabel);
+		}
+		if(null != sectionLabelIncludesComponentLabel){
+		    transformer.setParameter("section.label.includes.component.label", sectionLabelIncludesComponentLabel);
 		}
 		if(null != chapterAutolabel){
 		    transformer.setParameter("chapter.autolabel", chapterAutolabel);
@@ -630,6 +634,14 @@ public class PDFBuilder {
 
 	public void setSectionAutolabel(String sectionAutolabel) {
 		this.sectionAutolabel = sectionAutolabel;
+	}
+
+	public String getSectionLabelIncludesComponentLabel() {
+		return sectionLabelIncludesComponentLabel;
+	}
+
+	public void setSectionLabelIncludesComponentLabel(String sectionLabelIncludesComponentLabel) {
+		this.sectionLabelIncludesComponentLabel = sectionLabelIncludesComponentLabel;
 	}
 	public String getFormalProcedures() {
 		return formalProcedures;
