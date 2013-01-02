@@ -389,8 +389,9 @@ public class PDFBuilder {
 		if(null!=sysStatusBarText && !sysStatusBarText.isEmpty()){
 		    statusBarText=sysStatusBarText;
 		}
-		transformer.setParameter("status.bar.text", statusBarText);
-
+		if(null != statusBarText){
+		    transformer.setParameter("status.bar.text", statusBarText);
+		}
 		if(trimWadlUriCount != null){
 			transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);
 		}

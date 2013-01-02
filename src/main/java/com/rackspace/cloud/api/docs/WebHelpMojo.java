@@ -447,8 +447,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	if(null!=sysStatusBarText && !sysStatusBarText.isEmpty()){
 	    statusBarText=sysStatusBarText;
 	}
-	transformer.setParameter("status.bar.text", statusBarText);
-
+	if(null != statusBarText){
+	    transformer.setParameter("status.bar.text", statusBarText);
+	}
 
     if(canonicalUrlBase != null){
 	transformer.setParameter("canonical.url.base",canonicalUrlBase);

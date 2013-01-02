@@ -452,8 +452,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    if(null!=sysStatusBarText && !sysStatusBarText.isEmpty()){
 		statusBarText=sysStatusBarText;
 	    }
-	    transformer.setParameter("status.bar.text", statusBarText);
-
+	    if(null != statusBarText){
+		transformer.setParameter("status.bar.text", statusBarText);
+	    }
 	    transformer.setParameter("branding", branding);
 
             //transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
