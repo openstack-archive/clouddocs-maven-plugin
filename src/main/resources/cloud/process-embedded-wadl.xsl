@@ -785,7 +785,7 @@
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="wadl:representation/@element">
-                    <xsl:value-of select="substring-after(wadl:representation/@element,':')"/>
+                    <xsl:value-of select="substring-after((wadl:representation/@element)[1],':')"/>
                     <xsl:text> (</xsl:text>
                     <xsl:call-template name="statusCodeList">
                         <xsl:with-param name="codes" select="$codes"/>
