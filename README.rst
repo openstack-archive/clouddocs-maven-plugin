@@ -17,6 +17,32 @@ http://wiki.openstack.org/Documentation/HowTo#Tools_Overview
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.6.2-SNAPSHOT (January ??, 2013)
+============================================================
+-  Autofill pubdate with current date if it is empty.
+-  Use latest version of wadl-tools
+-  When a file is invalid, put a copy of the validated file in target dir named something like: basefilename.xml-invalid-date.xml
+-  Bug fixes:
+
+   - Make it possible to pass in statusBarText from pom or command line.
+   - Reduce padding between admon title and first para in webhelp output.
+   - Omit pubdate from pdf file name when branding is openstack.
+   - Don't keep param tables together in wadl2docbook generated xml to avoid having long tables be mutilated. 
+   - Fix bug where PdfBuilder uses wrong source file for cover info.
+   - Avoid "The value of param status.bar.text must be a valid Java Object" errors.
+   - Support sectionLabelIncludesComponentLabel in autopdf.
+   - Pass in fully qualified path to webhelp output dir to bookinfo.xsl so that it will put bookinfo.xml and bookinfo.properties in the correct place even if you do "mvn -f path/to/pom.xml".
+   - Fix bug where a sequence was used as first arg of substring-after when a response has more than one representation/element.
+
+clouddocs-maven-plugin 1.6.1 (November 27, 2012)
+============================================================
+-  Bug fix release:
+
+   - Fix bug where appendix.autolabel wasn't being passed in to auto-generated pdfs from pom.
+   - Fix bug where xslts weren't found in the target directory when building doc from a parent pom.
+   - Fix problem where wadls weren't found if referred to as href="filename.wadl". Must be href="./filename.wadl". Have xsl prepend ./ when needed.
+   - Wadl processing: Avoid "7th argument of concat cannot be a sequence" error which happens when you have a response with multiple representation/@element nodes. 
+
 clouddocs-maven-plugin 1.6.0 (November 10, 2012)
 ============================================================
 
