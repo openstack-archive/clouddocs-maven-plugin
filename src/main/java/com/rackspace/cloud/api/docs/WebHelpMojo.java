@@ -695,7 +695,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             	String targetFile="target/docbkx/webhelp/"+theDirName+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
 
             	map.put("targetExtQueryFile", targetFile);     
-            	map.put("base.dir", "target/docbkx/webhelp/"+theDirName+theFileName.substring(0,index));   		
+            	map.put("base.dir", this.projectBuildDirectory+"/docbkx/webhelp/"+theDirName+theFileName.substring(0,index));   		
             	map.put("input.filename",theDirName+theFileName.substring(0,index));
         	}
         	else{
@@ -711,7 +711,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             	String targetFile="target/docbkx/webhelp/"+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
             	map.put("targetExtQueryFile", targetFile);  
             	
-            	String targetDir="target/docbkx/webhelp/"+theFileName.substring(0,index) + "/";
+            	String targetDir= this.projectBuildDirectory+"/docbkx/webhelp/"+theFileName.substring(0,index) + "/";
             	map.put("base.dir", targetDir);        		
             	map.put("input.filename", theFileName.substring(0,index));  	      		
         	}
