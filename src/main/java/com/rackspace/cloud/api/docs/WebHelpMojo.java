@@ -80,6 +80,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String webhelpWar;
 
     /**
+     * Controls whether the pubdate is included in the pdf file name.
+     * 
+     * @parameter expression="${generate-webhelp.includeDateInPdfFilename}" 
+     */
+    private String includeDateInPdfFilename;
+
+    /**
      * Controls whether output is colorized based on revisionflag attributes.
      *
      * @parameter expression="${generate-webhelp.show.changebars}"
@@ -437,6 +444,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	}
 	transformer.setParameter("webhelp.war", webhelpWar);
 
+	transformer.setParameter("includeDateInPdfFilename", includeDateInPdfFilename); 
+
 	String sysDraftStatus=System.getProperty("draft.status");
 	if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
 	    draftStatus=sysDraftStatus;
@@ -656,7 +665,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     	    webhelpWar=sysWebhelpWar;
     	}
     	map.put("webhelp.war", webhelpWar);
-            
+        map.put("includeDateInPdfFilename", includeDateInPdfFilename);    
         map.put("groupId", docProject.getGroupId());
         map.put("artifactId", docProject.getArtifactId());
         map.put("docProjectVersion", docProject.getVersion());
