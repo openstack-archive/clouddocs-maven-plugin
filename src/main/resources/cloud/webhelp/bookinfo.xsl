@@ -25,7 +25,7 @@
             <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
     </xsl:param>
-   
+    <xsl:param name="publicationNotificationEmails"/>
     
     <!-- We need too collect lists that contain their own raxm:metadata so we can 
         add <type>s to the bookinfo for resources mentioned in lists in the doc -->
@@ -40,7 +40,7 @@
       <xsl:processing-instruction name="rax-warinfo"><xsl:value-of select="concat($warprefix,$input.filename,$warsuffix)"/></xsl:processing-instruction>
       
         <xsl:apply-templates/>
-        
+
         <xsl:result-document 
             href="{$base.dir}/bookinfo.xml" 
             method="xml" indent="yes" encoding="UTF-8">
@@ -95,6 +95,21 @@
                         </types>
                     </product>                    
                 </xsl:for-each-group>
+		<emails>
+		  <email>
+		    <name>CDT Publication Events</name>
+		    <to>cdt-publication-events@lists.rackspace.com</to>
+		    <from>clouddoctoolsteam@lists.rackspace.com</from>		    
+		  </email>
+		  <xsl:if test="not($publicationNotificationEmails = '')">
+		    <xsl:for-each select="tokenize($publicationNotificationEmails,',')">
+		      <email>
+			<to><xsl:value-of select="."/></to>
+			<from>clouddoctoolsteam@lists.rackspace.com</from>		    
+		      </email>
+		    </xsl:for-each>
+		  </xsl:if>
+		</emails>
             </products>
         </xsl:result-document>     
         <xsl:result-document 

@@ -80,6 +80,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String webhelpWar;
 
     /**
+     * List of emails (comma delimited) to send a notification to when
+     * a war is deployed in autopublish.
+     *
+     * @parameter expression="${generate-webhelp.publicationNotificationEmails}" 
+     */
+    private String publicationNotificationEmails;
+
+    /**
      * Controls whether the pubdate is included in the pdf file name.
      * 
      * @parameter expression="${generate-webhelp.includeDateInPdfFilename}" 
@@ -446,6 +454,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
 	transformer.setParameter("includeDateInPdfFilename", includeDateInPdfFilename); 
 
+	transformer.setParameter("publicationNotificationEmails", publicationNotificationEmails);
+
 	String sysDraftStatus=System.getProperty("draft.status");
 	if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
 	    draftStatus=sysDraftStatus;
@@ -665,6 +675,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     	    webhelpWar=sysWebhelpWar;
     	}
     	map.put("webhelp.war", webhelpWar);
+	map.put("publicationNotificationEmails", publicationNotificationEmails);
         map.put("includeDateInPdfFilename", includeDateInPdfFilename);    
         map.put("groupId", docProject.getGroupId());
         map.put("artifactId", docProject.getArtifactId());
