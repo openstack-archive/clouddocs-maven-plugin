@@ -10,20 +10,21 @@ Example output
 http://docs.rackspace.com
 http://docs.openstack.org
 
-How To
-======
-http://wiki.openstack.org/Documentation/HowTo#Tools_Overview
+How Tos
+=======
+- http://docs.rackspace.com/writers-guide
+- http://wiki.openstack.org/Documentation/HowTo#Tools_Overview
 
 Release Notes
 =============
 
-clouddocs-maven-plugin 1.6.2-SNAPSHOT (January ??, 2013)
+clouddocs-maven-plugin 1.7.0 (January 13, 2013)
 ============================================================
 -  Support publicationNotificationEmails parameter. A comma delimited list of email addresses to which emails are sent when the document is publised. 
 -  Support includeDateInPdfFilename parameter. Set this paremeter to 0 to prevent the date from being appended to the pdf file name.
 -  Autofill pubdate with current date if it is empty.
--  Use latest version of wadl-tools
 -  When a file is invalid, put a copy of the validated file in target dir named something like: basefilename.xml-invalid-date.xml
+-  Use latest version of wadl-tools
 -  Bug fixes:
 
    - Make it possible to pass in statusBarText from pom or command line.
