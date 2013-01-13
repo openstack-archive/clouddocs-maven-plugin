@@ -104,6 +104,7 @@
 		  <xsl:if test="not($publicationNotificationEmails = '')">
 		    <xsl:for-each select="tokenize($publicationNotificationEmails,',')">
 		      <email>
+			<name>publication event subscriber</name>
 			<to><xsl:value-of select="."/></to>
 			<from>clouddoctoolsteam@lists.rackspace.com</from>		    
 		      </email>
