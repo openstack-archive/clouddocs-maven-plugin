@@ -7,8 +7,8 @@ and other OpenStack projects.
 
 Example output
 ==============
-http://docs.rackspace.com
-http://docs.openstack.org
+- http://docs.rackspace.com
+- http://docs.openstack.org
 
 How Tos
 =======
