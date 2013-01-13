@@ -19,6 +19,8 @@ Release Notes
 
 clouddocs-maven-plugin 1.6.2-SNAPSHOT (January ??, 2013)
 ============================================================
+-  Support publicationNotificationEmails parameter. A comma delimited list of email addresses to which emails are sent when the document is publised. 
+-  Support includeDateInPdfFilename parameter. Set this paremeter to 0 to prevent the date from being appended to the pdf file name.
 -  Autofill pubdate with current date if it is empty.
 -  Use latest version of wadl-tools
 -  When a file is invalid, put a copy of the validated file in target dir named something like: basefilename.xml-invalid-date.xml
