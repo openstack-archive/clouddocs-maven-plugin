@@ -28,6 +28,7 @@
   <xsl:include href="dist/xslt/base/html/chunktemp.xsl"/>
   
   <xsl:param name="local.l10n.xml" select="document('')"/>
+  <xsl:param name="profile.audience" select="''"/>
   
   <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
     <l:l10n 
