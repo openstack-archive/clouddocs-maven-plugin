@@ -95,6 +95,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String includeDateInPdfFilename;
 
     /**
+     * Base for the pdf file name. By default this is the 
+     * base of the input xml file.
+     * 
+     * @parameter expression="${generate-webhelp.pdfFilenameBase}" 
+     */
+    private String pdfFilenameBase;
+
+    /**
      * Controls whether output is colorized based on revisionflag attributes.
      *
      * @parameter expression="${generate-webhelp.show.changebars}"
@@ -452,7 +460,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	}
 	transformer.setParameter("webhelp.war", webhelpWar);
 
-	transformer.setParameter("includeDateInPdfFilename", includeDateInPdfFilename); 
+	if(null != includeDateInPdfFilename){
+	    transformer.setParameter("includeDateInPdfFilename", includeDateInPdfFilename); 
+	}
+	transformer.setParameter("pdfFilenameBase", pdfFilenameBase); 
 
 	transformer.setParameter("publicationNotificationEmails", publicationNotificationEmails);
 
@@ -677,6 +688,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     	map.put("webhelp.war", webhelpWar);
 	map.put("publicationNotificationEmails", publicationNotificationEmails);
         map.put("includeDateInPdfFilename", includeDateInPdfFilename);    
+        map.put("pdfFilenameBase", pdfFilenameBase);    
         map.put("groupId", docProject.getGroupId());
         map.put("artifactId", docProject.getArtifactId());
         map.put("docProjectVersion", docProject.getVersion());
@@ -769,6 +781,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setCoverLogoLeft(coverLogoLeft);
         	pdfBuilder.setCoverLogoTop(coverLogoTop);
         	pdfBuilder.setCoverUrl(coverUrl);
+		pdfBuilder.setPdfFilenameBase(pdfFilenameBase);
         	        	
         	pdfBuilder.setBranding(branding);
         	pdfBuilder.setSecurity(security);

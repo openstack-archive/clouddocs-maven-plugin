@@ -122,6 +122,7 @@ public class PDFBuilder {
 	private String statusBarText;
 	private String trimWadlUriCount;
 	private String computeWadlPathFromDocbookPath;
+        private String pdfFilenameBase;
 
 	/**
 	 * The location of the stylesheet customization.
@@ -194,8 +195,14 @@ public class PDFBuilder {
 				final String inputFilename = included[i];
 
 				//final String inputFilename = sourceFilePath;
-				// targetFilename is inputFilename - ".xml" + targetFile extension
-				String baseTargetFile = inputFilename.substring(0, inputFilename.length() - 4);
+				// targetFilename is inputFilename - ".xml" + targetFile extension				
+				String baseTargetFile;
+				if(null != pdfFilenameBase && pdfFilenameBase != ""){
+				    baseTargetFile = pdfFilenameBase;
+				} else {
+				    baseTargetFile = inputFilename.substring(0, inputFilename.length() - 4);
+				}
+
 				final String targetFilename = baseTargetFile + ".fo";
 
 				final File sourceFile = new File(sourceDirectory+"/"+inputFilename);
@@ -412,7 +419,8 @@ public class PDFBuilder {
 		transformer.setParameter("source.directory",sourceDirectory);
 
 		transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
-
+		transformer.setParameter("pdfFilenameBase",pdfFilenameBase)
+;
 		transformer.setParameter ("admon.graphics.path", imageDirectory.getAbsolutePath()+File.separator);
 		transformer.setParameter ("callout.graphics.path", calloutDirectory.getAbsolutePath()+File.separator);
 
@@ -709,6 +717,16 @@ public class PDFBuilder {
 			String computeWadlPathFromDocbookPath) {
 		this.computeWadlPathFromDocbookPath = computeWadlPathFromDocbookPath;
 	}
+
+	public String getPdfFilenameBase() {
+		return pdfFilenameBase;
+	}
+
+	public void setPdfFilenameBase(
+			String pdfFilenameBase) {
+		this.pdfFilenameBase = pdfFilenameBase;
+	}
+
 
 	public List getEntities() {
 		return entities;

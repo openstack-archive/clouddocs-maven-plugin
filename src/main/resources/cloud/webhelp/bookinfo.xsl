@@ -19,6 +19,7 @@
     <xsl:param name="security">external</xsl:param>
     <xsl:param name="autoPdfUrl"/>
     <xsl:param name="branding">rackspace</xsl:param>
+    <xsl:param name="pdfFilenameBase"/>   
     <xsl:param name="includeDateInPdfFilename">
         <xsl:choose>
             <xsl:when test="$branding = 'openstack'">0</xsl:when>
@@ -27,6 +28,14 @@
     </xsl:param>
     <xsl:param name="publicationNotificationEmails"/>
     
+    <xsl:variable name="pdfFilenameBaseCalculated">
+      <xsl:choose>
+	<xsl:when test="not($pdfFilenameBase='')"><xsl:value-of select="$pdfFilenameBase"/></xsl:when>
+	<xsl:when test="$autoPdfUrl != ''"><xsl:value-of select="substring($autoPdfUrl,4,string-length($autoPdfUrl) - 6)"/></xsl:when> 
+	<xsl:otherwise><xsl:value-of select="$input.filename"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <!-- We need too collect lists that contain their own raxm:metadata so we can 
         add <type>s to the bookinfo for resources mentioned in lists in the doc -->
     <xsl:variable name="resource-lists" select="//db:itemizedlist[db:info/raxm:metadata]"/> 
@@ -45,9 +54,9 @@
             href="{$base.dir}/bookinfo.xml" 
             method="xml" indent="yes" encoding="UTF-8">
             <products xmlns="">
-                <latestpdf><xsl:choose>
-		<xsl:when test="normalize-space($autoPdfUrl) != ''"><xsl:value-of select="substring($autoPdfUrl,4,string-length($autoPdfUrl) - 6)"/>-latest.pdf</xsl:when><xsl:otherwise><xsl:value-of select="$input.filename"/>.pdf</xsl:otherwise></xsl:choose></latestpdf>
-                <pdfoutname><xsl:value-of select="concat($input.filename,$pdfsuffix,'.pdf')"/></pdfoutname>
+                <latestpdf><xsl:value-of select="$pdfFilenameBaseCalculated"/>-latest.pdf</latestpdf><!-- <xsl:choose> -->
+		<!-- <xsl:when test="normalize-space($autoPdfUrl) != ''"><xsl:value-of select="substring($autoPdfUrl,4,string-length($autoPdfUrl) - 6)"/>-latest.pdf</xsl:when><xsl:otherwise><xsl:value-of select="$pdfFilenameBaseCalculated"/>.pdf</xsl:otherwise></xsl:choose> -->
+                <pdfoutname><xsl:value-of select="concat($pdfFilenameBaseCalculated,$pdfsuffix,'.pdf')"/></pdfoutname>
                 <docname><xsl:value-of select="/*/db:title|/*/db:info/db:title"/></docname>
                 <productname><xsl:value-of select="f:productname(/*/db:info/raxm:metadata/raxm:product,/*/db:info/raxm:metadata/raxm:product/@version)"/></productname>
                 <webappname><xsl:value-of select="$input.filename"/></webappname>
