@@ -103,6 +103,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     private String pdfFilenameBase;
 
     /**
+     * Base for the webhelp dir name. By default this is the 
+     * base of the input xml file.
+     * 
+     * @parameter expression="${generate-webhelp.webhelpDirname}" 
+     */
+    private String webhelpDirname;
+
+    /**
      * Controls whether output is colorized based on revisionflag attributes.
      *
      * @parameter expression="${generate-webhelp.show.changebars}"
@@ -464,6 +472,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	    transformer.setParameter("includeDateInPdfFilename", includeDateInPdfFilename); 
 	}
 	transformer.setParameter("pdfFilenameBase", pdfFilenameBase); 
+	transformer.setParameter("webhelpDirname", webhelpDirname); 
 
 	transformer.setParameter("publicationNotificationEmails", publicationNotificationEmails);
 
@@ -532,13 +541,20 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
 	//final File targetDirectory = result.getParentFile();
 	//com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("apiref",ApiRefMojo.class,targetDirectory);
-	String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
+
+	String warBasename;
+	String webhelpOutdir = result.getName().substring(0, result.getName().lastIndexOf('.'));
+	if(null != webhelpDirname && webhelpDirname != ""){					    
+	    warBasename = webhelpDirname;
+	} else {
+	    warBasename = webhelpOutdir;
+	}
         
 	Properties properties = new Properties();
 	InputStream is = null;
 	
 	try {
-	    File f = new File(result.getParentFile().getParentFile()  + "/" + warBasename + "/webapp/WEB-INF/bookinfo.properties");
+	    File f = new File(result.getParentFile().getParentFile()  + "/" + webhelpOutdir + "/webapp/WEB-INF/bookinfo.properties");
 	    is = new FileInputStream( f );
 	    properties.load(is);
 	}
@@ -548,7 +564,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
 	if(null != webhelpWar && webhelpWar != "0"){                    
 	    //Zip up the war from here.
-	    String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
+	    String sourceDir = result.getParentFile().getParentFile()  + "/" + webhelpOutdir ;
 	    String zipFile =   result.getParentFile().getParentFile()  + "/" + properties.getProperty("warprefix","") + warBasename + properties.getProperty("warsuffix","") + ".war";
 	    //result.deleteOnExit();
 
@@ -576,9 +592,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
 	//	if(null == webhelpWar || webhelpWar.equals("0")){
 	    //TODO: Move dir to add warsuffix/security value
-	    String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
+	    //String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
 	    File webhelpDirWithSecurity = new File(result.getParentFile().getParentFile()  + "/" + warBasename + "-" + this.security);
-	    File webhelpOrigDir = new File(result.getParentFile().getParentFile()  + "/" + warBasename );
+	    File webhelpOrigDir = new File(result.getParentFile().getParentFile()  + "/" + webhelpOutdir );
 	    boolean success = webhelpOrigDir.renameTo(webhelpDirWithSecurity);
 	    //}
     }
@@ -689,6 +705,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	map.put("publicationNotificationEmails", publicationNotificationEmails);
         map.put("includeDateInPdfFilename", includeDateInPdfFilename);    
         map.put("pdfFilenameBase", pdfFilenameBase);    
+        map.put("webhelpDirname", webhelpDirname);    
         map.put("groupId", docProject.getGroupId());
         map.put("artifactId", docProject.getArtifactId());
         map.put("docProjectVersion", docProject.getVersion());

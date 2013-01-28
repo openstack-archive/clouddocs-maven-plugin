@@ -17,6 +17,10 @@ How Tos
 
 Release Notes
 =============
+clouddocs-maven-plugin 1.7.1-SNAPSHOT
+============================================================
+-  Support pdfFilenameBase parameter. Use this parameter to provide an alternative name for the pdf automatically generated when producing webhelp output. By default the base name of the pdf is the base name of the input xml file.
+-  Support webhelpDirname parameter. Use the parameter to provide an alternative name for the generated webhelp directory. By default the name of the webhelp output directory is the base name of the input xml file.
 
 clouddocs-maven-plugin 1.7.0 (January 13, 2013)
 ============================================================
