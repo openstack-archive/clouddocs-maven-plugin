@@ -276,9 +276,23 @@
 				<xsl:with-param name="path" select="@href"/>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:variable name="source.wadl" select="document($wadl.path)/*"/>
+		<xsl:variable name="source.wadl" select="document($wadl.path, .)/*"/>
 		<xsl:variable name="original.wadl.path" select="$source.wadl/wadl:application/@rax:original-wadl|ancestor::*/@rax:original-wadl"/>
-		<xsl:variable name="resource-path"       select="$source.wadl//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
+		<xsl:variable name="resource-path">
+			<xsl:choose>
+				<xsl:when test="@href">
+					<xsl:value-of select="$source.wadl//wadl:resource[@id = substring-after(current()/@href,'#')]/@path"/>
+				</xsl:when>
+				<xsl:when test="@path">
+					<xsl:value-of select="@path"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:message>
+						ERROR: wadl:resource with neither @href nor @path!
+					</xsl:message>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>       
 		<xsl:variable name="template-parameters">
 		  <root>
 		  	<xsl:copy-of select="$source.wadl//wadl:resource[@id = substring-after(current()/@href,'#')]/wadl:param"/>
@@ -437,10 +451,13 @@
 					</xsl:otherwise>
 				</xsl:choose>
 		</xsl:variable>
+		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
+			
+		
         <xsl:if test="$addMethodPageBreaks">
             <xsl:processing-instruction name="hard-pagebreak"/>
         </xsl:if>
-		<section xml:id="{concat(@name,'_',@rax:id,'_',translate($resource-path, $replacechars, '___'),'_',$sectionId)}">
+		<section xml:id="{concat(@name,'_',$raxid,'_',translate($resource-path, $replacechars, '___'),'_',$sectionId)}">
 			<title><xsl:value-of select="$method.title"/></title>
 			<xsl:if test="$security = 'writeronly'">
 			  <para security="writeronly">Source wadl: <link xlink:href="{$original.wadl.path}"><xsl:value-of select="$original.wadl.path"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
