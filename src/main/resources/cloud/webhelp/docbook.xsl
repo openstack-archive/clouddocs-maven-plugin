@@ -85,7 +85,7 @@
   <xsl:param name="suppress.footer.navigation">1</xsl:param>
   <xsl:param name="enable.google.analytics">
     <xsl:choose>
-      <xsl:when test="$branding = 'rackspace'">1</xsl:when>
+      <xsl:when test="$branding = 'rackspace' and $security = 'external'">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:param>

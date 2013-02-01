@@ -314,7 +314,7 @@ These problems go away when you add this IE=7 mode meta tag.
         </script>
         <!--End of index files -->
 
-	<xsl:if test="$enable.google.analytics = '1' and not($google.analytics.id = '')">
+	<xsl:if test="$enable.google.analytics = '1' and $security = 'external' and not($google.analytics.id = '')">
 	  <script type="text/javascript">
 	    var _gaq = _gaq || [];
 	    _gaq.push(['_setAccount', '<xsl:value-of select="$google.analytics.id"/>']);
@@ -333,6 +333,7 @@ These problems go away when you add this IE=7 mode meta tag.
 	  <!--     <xsl:comment></xsl:comment> -->
 	  <!-- </script> -->
 	    <!-- Load Twitter JS-API asynchronously -->
+	    <xsl:if test="$social.icons != '0' and $security = 'external' ">
 	  <script>
 	    (function(){var twitterWidgets = document.createElement('script');
         twitterWidgets.type = 'text/javascript';
@@ -342,7 +343,8 @@ These problems go away when you add this IE=7 mode meta tag.
         twitterWidgets.onload = _ga.trackTwitter;
         document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
         })();
-      </script>
+	  </script>
+	    </xsl:if>
 	</xsl:if>
 		
     </xsl:template>
