@@ -30,6 +30,7 @@
       <xsl:otherwise>/comments.php</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
+  <xsl:param name="pdfFilenameBase"/>
     <xsl:param name="includeDateInPdfFilename">
         <xsl:choose>
             <xsl:when test="$branding = 'openstack'">0</xsl:when>
@@ -250,7 +251,7 @@ ERROR: Feedback email not set but internal comments are enabled.
 
     <xsl:template name="breadcrumbs">
       <xsl:param name="home"/>
-      <xsl:variable name="pubdate"><xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/d:info/d:pubdate and $includeDateInPdfFilename = '1'"><xsl:value-of select="concat('-',translate(/*/d:info/d:pubdate,'-',''))"/></xsl:if></xsl:variable>
+      <xsl:variable name="pubdate"><xsl:if test="not($security = 'external') and not($security = '') and $pdfFilenameBase = ''">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/d:info/d:pubdate and $includeDateInPdfFilename = '1'"><xsl:value-of select="concat('-',translate(/*/d:info/d:pubdate,'-',''))"/></xsl:if></xsl:variable>
       <p class="breadcrumbs"><a href="{$main.docs.url}"><xsl:value-of select="$brandname"/> Manuals</a>  <a><xsl:attribute name="href">
       <xsl:call-template name="href.target">
 	<xsl:with-param name="object" select="$home"/>

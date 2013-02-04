@@ -562,10 +562,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	    System.out.println("Got an Exception: " + e.getMessage());          
 	}
 
+	String warSuffix = properties.getProperty("warsuffix","");
+
 	if(null != webhelpWar && webhelpWar != "0"){                    
 	    //Zip up the war from here.
 	    String sourceDir = result.getParentFile().getParentFile()  + "/" + webhelpOutdir ;
-	    String zipFile =   result.getParentFile().getParentFile()  + "/" + properties.getProperty("warprefix","") + warBasename + properties.getProperty("warsuffix","") + ".war";
+	    String zipFile =   result.getParentFile().getParentFile()  + "/" + properties.getProperty("warprefix","") + warBasename + warSuffix + ".war";
 	    //result.deleteOnExit();
 
 	    try{
@@ -593,7 +595,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	//	if(null == webhelpWar || webhelpWar.equals("0")){
 	    //TODO: Move dir to add warsuffix/security value
 	    //String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
-	    File webhelpDirWithSecurity = new File(result.getParentFile().getParentFile()  + "/" + warBasename + "-" + this.security);
+	    File webhelpDirWithSecurity = new File(result.getParentFile().getParentFile()  + "/" + warBasename + warSuffix);
 	    File webhelpOrigDir = new File(result.getParentFile().getParentFile()  + "/" + webhelpOutdir );
 	    boolean success = webhelpOrigDir.renameTo(webhelpDirWithSecurity);
 	    //}

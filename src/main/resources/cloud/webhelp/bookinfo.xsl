@@ -20,6 +20,8 @@
     <xsl:param name="autoPdfUrl"/>
     <xsl:param name="branding">rackspace</xsl:param>
     <xsl:param name="pdfFilenameBase"/>   
+    <xsl:param name="webhelpDirname"/>
+
     <xsl:param name="includeDateInPdfFilename">
         <xsl:choose>
             <xsl:when test="$branding = 'openstack'">0</xsl:when>
@@ -41,12 +43,13 @@
     <xsl:variable name="resource-lists" select="//db:itemizedlist[db:info/raxm:metadata]"/> 
 
     <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
-    <xsl:variable name="warsuffix"><xsl:if test="not($security = 'external')">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
-    <xsl:variable name="pdfsuffix"><xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
+    <xsl:variable name="warsuffix"><xsl:if test="not($security = 'external') and $webhelpDirname = ''">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
+    <xsl:variable name="pdfsuffix"><xsl:if test="not($security = 'external') and not($security = '') and $pdfFilenameBase = ''">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
     <xsl:variable name="info" select="/*/db:info"/>
 
     <xsl:template match="/">      
       <xsl:processing-instruction name="rax-warinfo"><xsl:value-of select="concat($warprefix,$input.filename,$warsuffix)"/></xsl:processing-instruction>
+      <xsl:message>bookinfo.xsl: webhelpDirname="<xsl:value-of select="$webhelpDirname"/>"</xsl:message>
       
         <xsl:apply-templates/>
 

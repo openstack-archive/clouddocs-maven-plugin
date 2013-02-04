@@ -57,6 +57,7 @@
 	        <xsl:otherwise>1</xsl:otherwise>
 	      </xsl:choose>
 	    </xsl:param>
+	    <xsl:param name="pdfFilenameBase"/>
 	    <xsl:template match="/">
 	      <xsl:variable name="pubdate">
 		<xsl:choose>
@@ -77,7 +78,7 @@
 	      </xsl:variable>
 
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">	
-pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '')">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate($pubdate,'-','')"/></xsl:if>
+pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and $pdfFilenameBase = ''">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate($pubdate,'-','')"/></xsl:if>
 </c:result>      
 	    </xsl:template>
 	  </xsl:stylesheet>
