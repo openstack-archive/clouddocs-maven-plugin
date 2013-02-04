@@ -80,7 +80,7 @@
                                <xsl:if test="/*/db:info/raxm:metadata">
                                 <type xmlns="">
                                     <id><xsl:value-of select="f:calculatetype(/*/db:info/raxm:metadata/raxm:type)"/></id>
-                                    <displayname>
+				    <xsl:variable name="displayname">
                                         <xsl:choose>
                                             <xsl:when test="/*/db:info/raxm:metadata/raxm:displayname">
                                                 <xsl:value-of select="/*/db:info/raxm:metadata/raxm:displayname"/>
@@ -92,7 +92,8 @@
                                                 <xsl:value-of select="/*/db:title|/*/db:info/db:title"/>
                                             </xsl:otherwise>
                                         </xsl:choose>
-                                    </displayname>
+				    </xsl:variable>
+                                    <displayname><xsl:value-of select="if (not(normalize-space($displayname) = '')) then normalize-space($displayname) else '????'"/></displayname>
                                     <url><xsl:value-of select="concat($IndexWar,'/',/*/db:info/raxm:metadata/raxm:product,'/api/',/*/db:info/raxm:metadata/raxm:product/@version,'/',$input.filename,'/content/',$default.topic)"/></url>
                                     <sequence><xsl:value-of select="f:calculatepriority(/*/db:info//raxm:priority[1])"/></sequence> 
                                 </type>  
@@ -159,7 +160,7 @@ branding=<xsl:value-of select="$branding"/>
         <xsl:variable name="itemizedlistid" select="generate-id(parent::db:itemizedlist)"/>
                 <type xmlns="">
                     <id><xsl:value-of select="f:calculatetype(parent::*/db:info//raxm:type[1])"/></id>
-                    <displayname><xsl:value-of select=".//db:link[1]"/></displayname>
+                    <displayname><xsl:value-of select="if (not(normalize-space(.//db:link[1]) = '')) then .//db:link[1] else '?????'"/></displayname>
                     <url><xsl:value-of select=".//db:link[1]/@xlink:href"/></url>
                     <sequence><xsl:value-of select="f:calculatepriority(parent::*/db:info//raxm:priority[1]) + count(preceding::db:listitem[generate-id(parent::db:itemizedlist) = $itemizedlistid])"/></sequence> 
                 </type>        
