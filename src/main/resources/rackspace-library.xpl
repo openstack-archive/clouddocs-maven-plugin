@@ -900,9 +900,16 @@
                 <p:pipe step="params" port="parameters"/>
             </p:variable>
 
+            <p:variable name="targetDirectory" select="//c:param[@name = 'targetDirectory']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+
 	    <p:load name="preprocess.xsl">
 	      <p:with-option name="href"
-			     select="concat('file://',$project.build.directory,'/docbkx/cloud/war/preprocess.xsl')" >
+			     select="concat('file://',
+			     (if ($targetDirectory != '') then $targetDirectory else $project.build.directory),
+			     (if ($targetDirectory  = '') then '/docbkx' else ''),
+			     '/cloud/war/preprocess.xsl')" >
 		<p:empty/>
 	      </p:with-option>		  
 	    </p:load>
@@ -1015,9 +1022,16 @@
                 <p:pipe step="params" port="parameters"/>
             </p:variable>
 
+            <p:variable name="targetDirectory" select="//c:param[@name = 'targetDirectory']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+
 	    <p:load name="bookinfo.xsl">
 	      <p:with-option name="href"
-			     select="concat('file://',$project.build.directory,'/docbkx/cloud/webhelp/bookinfo.xsl')" >
+			     select="concat('file://',
+			     (if ($targetDirectory != '') then $targetDirectory else $project.build.directory),
+			     (if ($targetDirectory  = '') then '/docbkx' else ''),
+			     '/cloud/webhelp/bookinfo.xsl')" >
 		<p:empty/>
 	      </p:with-option>		  
 	    </p:load>

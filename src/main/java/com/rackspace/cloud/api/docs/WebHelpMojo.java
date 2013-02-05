@@ -703,6 +703,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     	if(null!=sysWebhelpWar && !sysWebhelpWar.isEmpty()){
     	    webhelpWar=sysWebhelpWar;
     	}
+	map.put("targetDirectory", this.getTargetDirectory().getParentFile().getAbsolutePath());
     	map.put("webhelp.war", webhelpWar);
 	map.put("publicationNotificationEmails", publicationNotificationEmails);
         map.put("includeDateInPdfFilename", includeDateInPdfFilename);    
