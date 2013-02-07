@@ -394,6 +394,17 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @param targetFile     DOCUMENT ME!
      */
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
+
+
+	String warBasename;
+	String webhelpOutdir = targetFile.getName().substring(0, targetFile.getName().lastIndexOf('.'));
+	if(null != webhelpDirname && webhelpDirname != ""){					    
+	    warBasename = webhelpDirname;
+	} else {
+	    warBasename = webhelpOutdir;
+	}	
+	targetFile = new File( getTargetDirectory() + "/" + warBasename + "/" + warBasename + ".xml" );
+
         super.adjustTransformer(transformer, sourceFilename, targetFile);
                     
                     
@@ -532,6 +543,15 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     public void postProcessResult(File result) throws MojoExecutionException {
 	
+	String warBasename;
+	String webhelpOutdir = result.getName().substring(0, result.getName().lastIndexOf('.'));
+	if(null != webhelpDirname && webhelpDirname != ""){					    
+	    warBasename = webhelpDirname;
+	} else {
+	    warBasename = webhelpOutdir;
+	}	
+	result = new File( getTargetDirectory() + "/" + warBasename + "/" + warBasename + ".xml" );
+
 	super.postProcessResult(result);
 	
 	copyTemplate(result);
@@ -541,20 +561,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
 	//final File targetDirectory = result.getParentFile();
 	//com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("apiref",ApiRefMojo.class,targetDirectory);
-
-	String warBasename;
-	String webhelpOutdir = result.getName().substring(0, result.getName().lastIndexOf('.'));
-	if(null != webhelpDirname && webhelpDirname != ""){					    
-	    warBasename = webhelpDirname;
-	} else {
-	    warBasename = webhelpOutdir;
-	}
         
 	Properties properties = new Properties();
 	InputStream is = null;
 	
 	try {
-	    File f = new File(result.getParentFile().getParentFile()  + "/" + webhelpOutdir + "/webapp/WEB-INF/bookinfo.properties");
+	    File f = new File(result.getParentFile()  +  "/webapp/WEB-INF/bookinfo.properties");
 	    is = new FileInputStream( f );
 	    properties.load(is);
 	}
@@ -737,17 +749,17 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("profile.vendor", getProperty("profileVendor"));
 
         int lastSlash=inputFilename.lastIndexOf("/");
-        //This is the case if the path includes a relative path
-        if(-1!=lastSlash){
+	//This is the case if the path includes a relative path
+	if (-1!=lastSlash){
         	String theFileName=inputFilename.substring(lastSlash);
         	String theDirName=inputFilename.substring(0,lastSlash);
             
         	int index = theFileName.indexOf('.');
         	if(-1!=index){
-            	String targetFile="target/docbkx/webhelp/"+theDirName+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
+            	String targetFile=  getTargetDirectory() + "/" + theDirName+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
 
             	map.put("targetExtQueryFile", targetFile);     
-            	map.put("base.dir", this.projectBuildDirectory+"/docbkx/webhelp/"+theDirName+theFileName.substring(0,index));   		
+            	map.put("base.dir", getTargetDirectory() + "/" + theDirName+theFileName.substring(0,index));   		
             	map.put("input.filename",theDirName+theFileName.substring(0,index));
         	}
         	else{
@@ -756,14 +768,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         }
         //This is the case when it's just a file name with no path information
-        else{
+        else {
         	String theFileName=inputFilename;
         	int index = theFileName.indexOf('.');
         	if(-1!=index){
-            	String targetFile="target/docbkx/webhelp/"+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
+            	String targetFile= getTargetDirectory() + "/" + theFileName.substring(0,index)+"/content/"+"ext_query.xml";
             	map.put("targetExtQueryFile", targetFile);  
             	
-            	String targetDir= this.projectBuildDirectory+"/docbkx/webhelp/"+theFileName.substring(0,index) + "/";
+            	String targetDir= getTargetDirectory() + "/" + theFileName.substring(0,index) + "/";
             	map.put("base.dir", targetDir);        		
             	map.put("input.filename", theFileName.substring(0,index));  	      		
         	}
@@ -771,15 +783,29 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         		//getLog().info("~~~~~~~~inputFilename file has incompatible format: "+inputFilename);
         	}
         }
+
+        if (null != webhelpDirname && webhelpDirname != "" ) {
+
+	    map.put("targetExtQueryFile", getTargetDirectory() + "/" + webhelpDirname + "/content/"+"ext_query.xml");     
+	    map.put("base.dir", getTargetDirectory() + "/" + webhelpDirname);   			    
+	}
+
         
         //targetExtQueryFile can tell us where the html will be built. We pass this absolute path to the
         //pipeline so that the copy-and-transform-image step can use it to calculate where to place the images.
-        String targetExtQueryFile = (String) map.get("targetExtQueryFile");
-        int pos = targetExtQueryFile.lastIndexOf(File.separator);
-        targetExtQueryFile = targetExtQueryFile.substring(0, pos);
-        map.put("targetHtmlContentDir", baseDir+File.separator+targetExtQueryFile);
+        map.put("targetHtmlContentDir", getTargetDirectory() + "/" + webhelpDirname + "/content/");
         map.put("targetDir", baseDir.getAbsolutePath()+File.separator+"figures");
 
+	getLog().info("~~~~~~~~FOOBAR~~~~~~~~~~~~~~~~:");
+	getLog().info("~~~~~~~~baseDir:" + baseDir);
+	getLog().info("~~~~~~~~projectBuildDirectory:" + projectBuildDirectory);
+	getLog().info("~~~~~~~~targetDirectory:"+ getTargetDirectory());
+	getLog().info("~~~~~~~~targetDirectory (map.put):" + this.getTargetDirectory().getParentFile().getAbsolutePath());
+	getLog().info("~~~~~~~~inputFilename:" + inputFilename);
+	getLog().info("~~~~~~~~targetExtQueryFile:" + map.get("targetExtQueryFile"));
+        getLog().info("~~~~~~~~targetHtmlContentDir:" + map.get("targetHtmlContentDir"));
+	getLog().info("~~~~~~~~targetDir:" + map.get("targetDir"));	
+	getLog().info("~~~~~~~~FOOBAR~~~~~~~~~~~~~~~~:");
 
         //makePdf is a POM configuration for generate-webhelp goal to control the execution of
         //automatic building of pdf output
@@ -842,8 +868,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	File pdfFile = pdfBuilder.postProcessResult(foFile);
         	//move PDF to where the webhelp stuff is for this docbook.
         	if(pdfFile!=null) {
-        		int index = inputFilename.lastIndexOf('.');
-        		File targetDirForPdf = new File(getTargetDirectory().getAbsolutePath(),inputFilename.substring(0,index));
+		    File targetDirForPdf = new File(map.get("targetHtmlContentDir")).getParentFile();
         		if(!targetDirForPdf.exists()) {
         			com.rackspace.cloud.api.docs.FileUtils.mkdir(targetDirForPdf);
         		}

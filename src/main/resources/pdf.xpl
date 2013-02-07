@@ -26,15 +26,10 @@
     <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
       <p:pipe step="params" port="parameters"/>
     </p:variable>
-
-    <!-- <cx:message name="msg1"> -->
-    <!--   <p:with-option name="message" select="'Entering xproc pipeline'"/> -->
-    <!-- </cx:message> -->
-
-    <!-- <cx:message name="msg2"> -->
-    <!--   <p:with-option name="message" select="'Validating DocBook version'"/> -->
-    <!-- </cx:message> -->
-
+    <p:variable name="targetDirectory" select="//c:param[@name = 'targetDirectory']/@value">
+      <p:pipe step="params" port="parameters"/>
+    </p:variable>
+    
     <l:validate-docbook-format>
       <p:input port="source">
 	<p:pipe step="main" port="source"/>
@@ -90,7 +85,10 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and 
     </p:xslt>
 
     <p:store name="store" encoding="utf-8" method="text"  media-type="text">
-      <p:with-option name="href" select="concat('file://',$project.build.directory,'/docbkx/autopdf/pdf.properties')"/>
+      <p:with-option name="href" select="concat('file://',
+					 (if ($targetDirectory != '') then $targetDirectory else $project.build.directory),
+					 (if ($targetDirectory  = '') then '/docbkx' else ''),
+					 '/autopdf/pdf.properties')"/>
     </p:store>
 
     <p:add-xml-base>
