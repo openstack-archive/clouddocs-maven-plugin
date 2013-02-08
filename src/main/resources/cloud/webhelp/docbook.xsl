@@ -80,7 +80,12 @@
   <xsl:param name="qandadiv.autolabel" select="1"/>
   <xsl:param name="webhelp.autolabel" select="1"/>
   <xsl:param name="section.autolabel.max.depth" select="100"/>
-  <xsl:param name="section.label.includes.component.label" select="0"/>
+  <xsl:param name="section.label.includes.component.label">
+    <xsl:choose>
+      <xsl:when test="$section.autolabel != '0'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
   <xsl:param name="component.label.includes.part.label" select="1"/>
   <xsl:param name="ignore.image.scaling" select="1"/>
   <xsl:param name="suppress.footer.navigation">1</xsl:param>
