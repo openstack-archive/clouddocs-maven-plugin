@@ -722,7 +722,7 @@
    	        <p:variable name="inputSrcFile" select="//c:param[@name = 'inputSrcFile']/@value">
                 <p:pipe step="params" port="parameters"/>
             </p:variable>
-   	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+   	        <p:variable name="targetDirectory" select="//c:param[@name = 'targetDirectory']/@value">
                 <p:pipe step="params" port="parameters"/>
             </p:variable>
             <p:variable name="replacementsFile" select="//c:param[@name = 'replacementsFile']/@value">
@@ -737,7 +737,7 @@
 			</cx:replace-text>
 			<p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
                <p:with-option name="href"
-                select="concat('file://',$project.build.directory,'/docbkx/',$inputSrcFile)"
+                select="concat('file://',$targetDirectory,'/',$inputSrcFile)"
                 />
             </p:store>
 		</p:group>   	        
