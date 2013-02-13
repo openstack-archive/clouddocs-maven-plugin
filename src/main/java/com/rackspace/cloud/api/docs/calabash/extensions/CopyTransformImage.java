@@ -86,7 +86,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 		final URI baseDirUri = baseUri.resolve(".");
 		
 		String srcImgFilePath = FilenameUtils.normalize(baseDirUri.getPath() + File.separator + fileRef);
-		File srcImgFile = getFileHandle(srcImgFilePath);
+		File srcImgFile = getFileHandle(srcImgFilePath.trim());
 		
 		if (fileRef.toLowerCase().startsWith("http://") ||
 			fileRef.toLowerCase().startsWith("https://")) {
