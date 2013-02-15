@@ -44,7 +44,7 @@
   <xsl:param name="callout.unicode" select="1"/>
   <xsl:param name="callout.graphics" select="0"/>
   
-  <xsl:param name="IndexWar">/new</xsl:param>
+  <xsl:param name="IndexWar">/</xsl:param>
   <xsl:param name="resource.root" select="concat($IndexWar,'/common/docbook/')"/>
   <xsl:param name="input.filename"/>
   <xsl:param name="use.id.as.filename" select="'1'"/>
@@ -436,7 +436,7 @@
     <xsl:variable name="nchunk" select="($chunk/following::h:chunk|$chunk/descendant::h:chunk)[1]"/>
     <xsl:variable name="pchunk" select="($chunk/preceding::h:chunk|$chunk/parent::h:chunk)[last()]"/>
     <xsl:variable name="uchunk" select="$chunk/ancestor::h:chunk[1]"/>
-    <xsl:variable name="prodname" select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])" />
+    <xsl:variable name="prodname" select="f:productname(string((ancestor-or-self::*/db:info//raxm:product)[1])[1])" />
 
     <!--
     <xsl:message>Creating chunk: <xsl:value-of select="concat($base.dir,$chunkfn)"/></xsl:message>
@@ -527,10 +527,10 @@
 								        <a href="#">Tutorials</a><xsl:text> &gt; </xsl:text><a href="{$IndexWar}/index.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
 								      </xsl:when>								     
 								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'concept'">
-								        <a href="#">Concepts</a><xsl:text> &gt; </xsl:text><a href="{$IndexWar}/index.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								        <a href="#">Concepts</a><xsl:text> &gt; </xsl:text><a href="{$IndexWar}/index.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string((ancestor-or-self::*/db:info//raxm:product)[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
 								      </xsl:when>
 								      <xsl:when test="(ancestor-or-self::*/db:info//raxm:type[1])[1] = 'apiref'">
-								        <a href="#">API Documentation</a><xsl:text> &gt; </xsl:text><a href="{$IndexWar}/index.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string(ancestor-or-self::*/db:info//raxm:product[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
+								        <a href="#">API Documentation</a><xsl:text> &gt; </xsl:text><a href="{$IndexWar}/index.jsp" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', 'landing.jsp', 'click', 1]);"><xsl:value-of select="f:productname(string((ancestor-or-self::*/db:info//raxm:product)[1])[1])"/></a> <xsl:if test="parent::db:chapter"><xsl:text> &gt; </xsl:text><a href="{f:href(/,key('genid', $uchunk/@xml:id))}" onclick="_gaq.push(['_trackEvent', 'Breadcrumbs', '{f:href(/,key('genid', $uchunk/@xml:id))}', 'click', 1]);"><xsl:apply-templates select="key('genid', $uchunk/@xml:id)" mode="m:object-title-markup"/></a></xsl:if>
 								      </xsl:when>
 								      <xsl:otherwise>
 								        
