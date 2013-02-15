@@ -488,6 +488,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    if(null!=sysSecurity && !sysSecurity.isEmpty()){
 	    	security=sysSecurity;
 	    }
+	map.put("targetDirectory", this.getTargetDirectory().getParentFile().getAbsolutePath());
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("replacementsFile", replacementsFile);
