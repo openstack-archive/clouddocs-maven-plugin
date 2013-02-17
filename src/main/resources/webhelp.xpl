@@ -50,7 +50,9 @@
   <p:delete match="//@format[parent::db:imagedata and matches(normalize-space(.),'[sS][vV][gG]')]"/>
   <p:delete match="//db:imageobject[@role='fo']"/>
   <p:delete match="//db:imageobject/@role[. ='html']"/>
-  
+
+  <l:normalize-space-glossterm/>
+
   <cx:message>
     <p:with-option name="message" select="'Validating, copying and transforming images'"/>
   </cx:message>

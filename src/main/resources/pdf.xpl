@@ -132,6 +132,8 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and 
     <p:delete match="//db:imageobject[@role='html']"/>
     <p:delete match="//db:imageobject/@role[. ='fo']"/>
 
+    <l:normalize-space-glossterm/>
+
     <cx:message name="msg5">
       <p:with-option name="message" select="'Adding extension info'"/>
     </cx:message>

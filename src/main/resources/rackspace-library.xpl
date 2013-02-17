@@ -1367,4 +1367,54 @@
     </p:declare-step>
 
 
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:normalize-space-glossterm"
+        xmlns:c="http://www.w3.org/ns/xproc-step" version="1.0"
+        name="normalize-space-glossterm">
+        
+        <p:input port="source"/>
+
+        <p:output port="result" primary="true">  
+            <p:pipe step="normalize-space-glossterm-xslt" port="result"/> 
+        </p:output>  
+        
+        <p:xslt name="normalize-space-glossterm-xslt">
+            <p:input port="source"> 
+                <p:pipe step="normalize-space-glossterm" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:inline>
+                    <xsl:stylesheet 
+			xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			xmlns:db="http://docbook.org/ns/docbook"
+                        exclude-result-prefixes="xs" 
+			version="2.0">
+                        
+                        <xsl:template match="node() | @*">
+                            <xsl:copy>
+                                <xsl:apply-templates select="node() | @*"/>
+                            </xsl:copy>
+                        </xsl:template>
+
+                        <xsl:template match="db:glossterm[not(parent::db:glossentry) and not(./*)]">
+                            <xsl:copy>
+                                <xsl:apply-templates select="@*"/>
+				<xsl:value-of select="normalize-space(.)"/>
+                            </xsl:copy>
+                        </xsl:template>                                               
+
+                    </xsl:stylesheet>
+                </p:inline>
+            </p:input>
+            <p:input port="parameters">
+                <p:empty/>
+            </p:input>
+        </p:xslt>
+        
+    </p:declare-step>
+
+
 </p:library>
