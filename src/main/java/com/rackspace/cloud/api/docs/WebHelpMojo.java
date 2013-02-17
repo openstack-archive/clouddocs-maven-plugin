@@ -798,16 +798,16 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         //pipeline so that the copy-and-transform-image step can use it to calculate where to place the images.
         map.put("targetDir", baseDir.getAbsolutePath()+File.separator+"figures");
 
-	getLog().info("~~~~~~~~FOOBAR~~~~~~~~~~~~~~~~:");
-	getLog().info("~~~~~~~~baseDir:" + baseDir);
-	getLog().info("~~~~~~~~projectBuildDirectory:" + projectBuildDirectory);
-	getLog().info("~~~~~~~~targetDirectory:"+ getTargetDirectory());
-	getLog().info("~~~~~~~~targetDirectory (map.put):" + this.getTargetDirectory().getParentFile().getAbsolutePath());
-	getLog().info("~~~~~~~~inputFilename:" + inputFilename);
-	getLog().info("~~~~~~~~targetExtQueryFile:" + map.get("targetExtQueryFile"));
-        getLog().info("~~~~~~~~targetHtmlContentDir:" + map.get("targetHtmlContentDir"));
-	getLog().info("~~~~~~~~targetDir:" + map.get("targetDir"));	
-	getLog().info("~~~~~~~~FOOBAR~~~~~~~~~~~~~~~~:");
+	// getLog().info("~~~~~~~~FOOBAR~~~~~~~~~~~~~~~~:");
+	// getLog().info("~~~~~~~~baseDir:" + baseDir);
+	// getLog().info("~~~~~~~~projectBuildDirectory:" + projectBuildDirectory);
+	// getLog().info("~~~~~~~~targetDirectory:"+ getTargetDirectory());
+	// getLog().info("~~~~~~~~targetDirectory (map.put):" + this.getTargetDirectory().getParentFile().getAbsolutePath());
+	// getLog().info("~~~~~~~~inputFilename:" + inputFilename);
+	// getLog().info("~~~~~~~~targetExtQueryFile:" + map.get("targetExtQueryFile"));
+        // getLog().info("~~~~~~~~targetHtmlContentDir:" + map.get("targetHtmlContentDir"));
+	// getLog().info("~~~~~~~~targetDir:" + map.get("targetDir"));	
+	// getLog().info("~~~~~~~~FOOBAR~~~~~~~~~~~~~~~~:");
 
         //makePdf is a POM configuration for generate-webhelp goal to control the execution of
         //automatic building of pdf output
