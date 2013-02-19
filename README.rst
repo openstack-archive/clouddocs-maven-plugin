@@ -20,7 +20,8 @@ Release Notes
 clouddocs-maven-plugin 1.7.1
 ============================================================
 -  Support pdfFilenameBase parameter. Use this parameter to provide an alternative name for the pdf automatically generated when producing webhelp output. By default the base name of the pdf is the base name of the input xml file.
--  Support webhelpDirname parameter. Use the parameter to provide an alternative name for the generated webhelp directory. By default the name of the webhelp output directory is the base name of the input xml file.
+-  Support webhelpDirname parameter. Use this parameter to provide an alternative name for the generated webhelp directory. By default the name of the webhelp output directory is the base name of the input xml file.
+-  Support targetDirectory parameter. Use this parameter to control where the output lands (i.e. instead of target/docbkx/webhelp).
 -  Bug fixes:
    - Only include Google Analytics and social icons if security = external. 
    - Set section.label.includes.component.label to one only if section.autolabel=1.
@@ -29,7 +30,7 @@ clouddocs-maven-plugin 1.7.1
 
 clouddocs-maven-plugin 1.7.0 (January 13, 2013)
 ============================================================
--  Support publicationNotificationEmails parameter. A comma delimited list of email addresses to which emails are sent when the document is publised. 
+-  Support publicationNotificationEmails parameter. A comma-delimited list of email addresses to which emails are sent when the document is publised. 
 -  Support includeDateInPdfFilename parameter. Set this paremeter to 0 to prevent the date from being appended to the pdf file name.
 -  Autofill pubdate with current date if it is empty.
 -  When a file is invalid, put a copy of the validated file in target dir named something like: basefilename.xml-invalid-date.xml
