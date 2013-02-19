@@ -27,6 +27,7 @@ clouddocs-maven-plugin 1.7.1
    - Set section.label.includes.component.label to one only if section.autolabel=1.
    - Fixed bug where auto-image copy failed if there was a trailing space in the value of the fileref attribute. 
    - Fixed bug where linefeeds within a glossterm prevented autoglossary from matching term with basename.
+   - Removed IE=7 meta tag from webhelp because it was causing Disqus not to work. 
 
 clouddocs-maven-plugin 1.7.0 (January 13, 2013)
 ============================================================
