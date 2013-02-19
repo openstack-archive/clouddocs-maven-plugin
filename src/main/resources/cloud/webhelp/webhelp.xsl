@@ -167,7 +167,7 @@ This avoids two problems in IE 8. We should someday figure out why this is happe
 2. If you click the show/hide toc button, the tab crashes.
 These problems go away when you add this IE=7 mode meta tag.
  -->
-	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+	<!-- <meta http-equiv="X-UA-Compatible" content="IE=7" /> -->
       	<xsl:if test=".//d:programlisting[@language] or .//d:screen[@language] or .//d:literallayout[@language]">
     <link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/> 
     <script type="text/javascript" src="scripts/shCore.js"><xsl:comment/></script>
