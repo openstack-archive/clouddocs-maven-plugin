@@ -234,7 +234,7 @@
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
                 <p:store>
-                    <p:with-option name="href" select="concat('file://',$project.build.directory,'/',$inputSrcFile,'-invalid-', current-dateTime(),'.xml')"/>
+                    <p:with-option name="href" select="concat('file:///',$project.build.directory,'/',$inputSrcFile,'-invalid-', current-dateTime(),'.xml')"/>
                     <p:input port="source">
                         <p:pipe port="source" step="main"/>
                     </p:input>
@@ -691,7 +691,7 @@
               </p:iteration-source>
               <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
                <p:with-option name="href"
-                select="concat('file://',$project.build.directory,'/generated-resources/xml/xslt/',$checksum,'-',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))"
+                select="concat('file:///',$project.build.directory,'/generated-resources/xml/xslt/',$checksum,'-',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))"
                 />
               </p:store>
             </p:for-each>
@@ -737,7 +737,7 @@
 			</cx:replace-text>
 			<p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
                <p:with-option name="href"
-                select="concat('file://',$targetDirectory,'/',$inputSrcFile)"
+                select="concat('file:///',$targetDirectory,'/',$inputSrcFile)"
                 />
             </p:store>
 		</p:group>   	        
@@ -906,7 +906,7 @@
 
 	    <p:load name="preprocess.xsl">
 	      <p:with-option name="href"
-			     select="concat('file://',
+			     select="concat('file:///',
 			     (if ($targetDirectory != '') then $targetDirectory else $project.build.directory),
 			     (if ($targetDirectory  = '') then '/docbkx' else ''),
 			     '/cloud/war/preprocess.xsl')" >
@@ -1028,7 +1028,7 @@
 
 	    <p:load name="bookinfo.xsl">
 	      <p:with-option name="href"
-			     select="concat('file://',
+			     select="concat('file:///',
 			     (if ($targetDirectory != '') then $targetDirectory else $project.build.directory),
 			     (if ($targetDirectory  = '') then '/docbkx' else ''),
 			     '/cloud/webhelp/bookinfo.xsl')" >
@@ -1278,8 +1278,8 @@
                         <p:pipe step="copy-and-transform-images-step" port="source"/>
                     </p:input>
 
-                    <p:with-option name="target" select="concat('file://',$target.html.content.dir, '/figures')"/>
-                    <p:with-option name="targetHtmlContentDir" select="concat('file://',$target.html.content.dir)"/>
+                    <p:with-option name="target" select="concat('file:///',$target.html.content.dir, '/figures')"/>
+                    <p:with-option name="targetHtmlContentDir" select="concat('file:///',$target.html.content.dir)"/>
                     <p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
                     <p:with-option name="outputType" select="concat($output.type,'')"/>
                     <p:with-option name="fail-on-error" select="concat($strict.image.validation,'')"/>

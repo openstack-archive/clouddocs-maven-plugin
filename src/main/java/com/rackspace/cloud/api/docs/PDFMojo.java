@@ -20,6 +20,7 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -31,6 +32,7 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.sax.SAXSource;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -408,7 +411,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
         File imageDirectory = getImageDirectory();
         File calloutDirectory = new File (imageDirectory, "callouts");
 
-	transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
+	transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath().replaceAll("\\\\","/"));
 	transformer.setParameter("source.directory",sourceDirectory);
 	transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
 	
@@ -460,7 +463,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
             //transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
 	    	String srcFilename = sourceDocBook.getName();
 	    	getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory+"/docbkx/"+srcFilename);
-	    	transformer.setParameter("docbook.infile", this.projectBuildDirectory+"/docbkx/"+srcFilename);
+	    	transformer.setParameter("docbook.infile", this.projectBuildDirectory.replaceAll("\\\\","/")+"/docbkx/"+srcFilename);
             transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
         }
         catch (TransformerConfigurationException e)
@@ -480,7 +483,12 @@ public abstract class PDFMojo extends AbstractFoMojo {
             throws MojoExecutionException {
 
         String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
-        Source source = super.createSource(inputFilename, sourceFile, filter);
+
+	String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replaceAll("\\\\","/");	
+	//from super
+	final InputSource inputSource = new InputSource(sourceFileNameNormalized);
+	Source source = new SAXSource(filter, inputSource);
+        //Source source = super.createSource(inputFilename, sourceFile, filter);
 
         Map map=new HashMap<String, String>();
 	    String sysSecurity=System.getProperty("security");
@@ -488,7 +496,16 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    if(null!=sysSecurity && !sysSecurity.isEmpty()){
 	    	security=sysSecurity;
 	    }
-	map.put("targetDirectory", this.getTargetDirectory().getParentFile().getAbsolutePath());
+	    
+	    String targetDirString = "";
+	    
+	    try{
+		targetDirString = this.getTargetDirectory().getParentFile().getCanonicalPath().replaceAll("\\\\","/");
+	    }catch(Exception e){
+		getLog().info("Exceptional!" + e);
+	    }
+
+	map.put("targetDirectory", targetDirString);
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("replacementsFile", replacementsFile);

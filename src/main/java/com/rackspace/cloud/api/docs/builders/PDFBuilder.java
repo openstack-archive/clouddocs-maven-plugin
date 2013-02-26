@@ -208,8 +208,6 @@ public class PDFBuilder {
 				final File sourceFile = new File(sourceDirectory+"/"+inputFilename);
 				File targetFile = new File(autopdfTargetDirectory, targetFilename);
 
-				//getLog().info("Processing input file: " + inputFilename);
-
 				final XMLReader reader = factory.newSAXParser().getXMLReader();
 				// configure XML reader
 				reader.setEntityResolver(resolver);
@@ -464,8 +462,8 @@ public class PDFBuilder {
 			// transformer.setParameter("docbook.infile", sourceFilePath);
 
 
-			getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory+"/"+inputFilename);
-			transformer.setParameter("docbook.infile", this.projectBuildDirectory+"/"+inputFilename);
+			getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory.replaceAll("\\\\","/")+"/"+inputFilename);
+			transformer.setParameter("docbook.infile", this.projectBuildDirectory.replaceAll("\\\\","/")+"/"+inputFilename);
 
 			transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
 		}
@@ -1022,8 +1020,9 @@ public class PDFBuilder {
 			throws MojoExecutionException {
 		String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
 
+		String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replaceAll("\\\\","/");
 		//from super
-		final InputSource inputSource = new InputSource(sourceFile.getAbsolutePath());
+		final InputSource inputSource = new InputSource(sourceFileNameNormalized);
 		Source source = new SAXSource(filter, inputSource);
 
 		Map<String,String> localMap = new HashMap<String,String>(map); 

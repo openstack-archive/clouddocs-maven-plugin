@@ -1,5 +1,6 @@
 package com.rackspace.cloud.api.docs;
 
+import java.net.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -21,6 +22,7 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.sax.SAXSource;
 
 import org.apache.maven.project.MavenProject;
 
@@ -706,7 +708,12 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             throws MojoExecutionException {
 
         String pathToPipelineFile = "classpath:/webhelp.xpl"; //use "classpath:/path" for this to work
-        Source source = super.createSource(inputFilename, sourceFile, filter);
+
+	String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replaceAll("\\\\","/");
+	//from super
+	final InputSource inputSource = new InputSource(sourceFileNameNormalized);
+	Source source = new SAXSource(filter, inputSource);
+	//Source source = super.createSource(inputFilename, sourceFile, filter);
 
         Map<String, String> map=new HashMap<String, String>();
         
@@ -715,6 +722,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     	if(null!=sysWebhelpWar && !sysWebhelpWar.isEmpty()){
     	    webhelpWar=sysWebhelpWar;
     	}
+
+	String targetDirString = "";
+	
+	try{
+	    targetDirString = this.getTargetDirectory().getParentFile().getCanonicalPath().replaceAll("\\\\","/");
+	}catch(Exception e){
+	    getLog().info("Exceptional!" + e);
+	}
 	map.put("targetDirectory", this.getTargetDirectory().getParentFile().getAbsolutePath());
     	map.put("webhelp.war", webhelpWar);
 	map.put("publicationNotificationEmails", publicationNotificationEmails);
@@ -796,7 +811,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         
         //targetExtQueryFile can tell us where the html will be built. We pass this absolute path to the
         //pipeline so that the copy-and-transform-image step can use it to calculate where to place the images.
-        map.put("targetDir", baseDir.getAbsolutePath()+File.separator+"figures");
+
+	map.put("targetDir", baseDir.getAbsolutePath()+File.separator+"figures");
+	// String targetDirFiguresString = baseDir.getAbsolutePath()+File.separator+"figures";
+        // map.put("targetDir", targetDirFiguresString.replaceAll("\\\\","/").replace("file:/", "file:///"));
 
 	// getLog().info("~~~~~~~~FOOBAR~~~~~~~~~~~~~~~~:");
 	// getLog().info("~~~~~~~~baseDir:" + baseDir);

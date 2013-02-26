@@ -70,7 +70,13 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 	private URI getTargetDirectoryURI() {
 		RuntimeValue target = getOption(_target);
 		URI uri = null;
+
 		if (target != null) {
+
+		    String targetFixed = FilenameUtils.normalizeNoEndSeparator(target.getString()).replaceAll("\\\\","/").replace("file:/", "file:///");
+		
+		    uri = target.getBaseURI().resolve(targetFixed);	
+
 			uri = target.getBaseURI().resolve(FilenameUtils.normalizeNoEndSeparator(target.getString()));	
 		}
 		
@@ -81,7 +87,7 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 		RuntimeValue target = getOption(_targetHtmlContentDir);
 		URI uri = null;
 		if (target != null) {
-			uri = target.getBaseURI().resolve(target.getString());
+			uri = target.getBaseURI().resolve(target.getString().replaceAll("\\\\","/"));
 		}
 		return uri;
 	}

@@ -17,6 +17,11 @@ How Tos
 
 Release Notes
 =============
+
+clouddocs-maven-plugin 1.7.2-SNAPSHOT
+============================================================
+-  Support building docs on Windows.
+
 clouddocs-maven-plugin 1.7.1
 ============================================================
 -  Support pdfFilenameBase parameter. Use this parameter to provide an alternative name for the pdf automatically generated when producing webhelp output. By default the base name of the pdf is the base name of the input xml file.
