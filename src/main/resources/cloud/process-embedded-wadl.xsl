@@ -481,13 +481,13 @@
 				</tbody>
 			</informaltable>
 
-			<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2')]">
+			<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
                 <simpara>
                     Normal Response Code(s):
 					<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
                 </simpara>
 			</xsl:if>
-			<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2'))]">
+			<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
                 <simpara>
                     Error Response Code(s):
                     <!--
@@ -780,7 +780,7 @@
 
 	<xsl:template match="wadl:response" mode="preprocess-normal">
         <xsl:variable name="normStatus" select="normalize-space(@status)"/>
-		<xsl:if test="starts-with($normStatus,'2')">
+		<xsl:if test="starts-with($normStatus,'2') or starts-with($normStatus,'3')">
             <xsl:call-template name="statusCodeList">
                 <xsl:with-param name="codes" select="$normStatus"/>
             </xsl:call-template>
@@ -789,7 +789,7 @@
 
 	<xsl:template match="wadl:response" mode="preprocess-faults">
 		<xsl:if
-			test="(not(@status) or not(starts-with(normalize-space(@status),'2')))">
+			test="(not(@status) or not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')))">
             <xsl:variable name="codes">
                 <xsl:choose>
                     <xsl:when test="@status">
