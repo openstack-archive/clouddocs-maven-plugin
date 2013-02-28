@@ -21,6 +21,9 @@ Release Notes
 clouddocs-maven-plugin 1.7.2-SNAPSHOT
 ============================================================
 -  Support building docs on Windows.
+-  Bug fixes:
+
+  - When producing documentation from WADL, do not list 3xx responses as error codes.  
 
 clouddocs-maven-plugin 1.7.1 (February 19, 2013)
 ============================================================
