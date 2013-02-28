@@ -396,6 +396,8 @@ div.note p:first-child, div.caution p:first-child, div.important p:first-child, 
 
 #content table caption{
     font-weight: bold;
+    text-align: left;
+    margin-bottom: 0.25em;
 }
 
 #content table td, #content table {
