@@ -577,11 +577,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	}
 
 	String warSuffix = properties.getProperty("warsuffix","");
-
+	String warSuffixForWar = warSuffix.equals("-external") ? "" : warSuffix;
 	if(null != webhelpWar && webhelpWar != "0"){                    
 	    //Zip up the war from here.
 	    String sourceDir = result.getParentFile().getParentFile()  + "/" + webhelpOutdir ;
-	    String zipFile =   result.getParentFile().getParentFile()  + "/" + properties.getProperty("warprefix","") + warBasename + warSuffix + ".war";
+	    String zipFile =   result.getParentFile().getParentFile()  + "/" + properties.getProperty("warprefix","") + warBasename + warSuffixForWar + ".war";
 	    //result.deleteOnExit();
 
 	    try{

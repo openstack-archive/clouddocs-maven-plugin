@@ -43,7 +43,7 @@
     <xsl:variable name="resource-lists" select="//db:itemizedlist[db:info/raxm:metadata]"/> 
 
     <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
-    <xsl:variable name="warsuffix"><xsl:if test="not($security = 'external') and $webhelpDirname = ''">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
+    <xsl:variable name="warsuffix"><xsl:if test="$webhelpDirname = ''">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
     <xsl:variable name="pdfsuffix"><xsl:if test="not($security = 'external') and not($security = '') and $pdfFilenameBase = ''">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
     <xsl:variable name="info" select="/*/db:info"/>
 
