@@ -72,12 +72,7 @@
     <p:with-option name="message" select="'Adding extension info'"/>
   </cx:message>
   <l:extensions-info/>
-  
-  <cx:message>
-    <p:with-option name="message" select="'Making replacements'"/>
-  </cx:message>
-  <l:search-and-replace/>
-    
+      
   <cx:message>
     <p:with-option name="message" select="'Normalize wadls (if necessary)'"/>
   </cx:message>
@@ -91,6 +86,11 @@
   <p:delete match="//@rax:original-wadl" xmlns:rax="http://docs.rackspace.com/api"/>
   <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']"/>
   
+  <cx:message>
+    <p:with-option name="message" select="'Making replacements'"/>
+  </cx:message>
+  <l:search-and-replace/>
+
   <l:validate-transform-idrefs name="validate-post-wadl" >
     <p:input port="schema">
       <p:document href="classpath:/rng/rackbook.rng"/>
