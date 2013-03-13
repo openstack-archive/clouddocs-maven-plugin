@@ -238,10 +238,12 @@ ERROR: Feedback email not set but internal comments are enabled.
 
 	  <div id="disqus_thread">
 	    <script type="text/javascript">
-	      var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>';
+	      if(window.location.protocol.substring(0,4) == 'http'){
+	        var disqus_shortname = '<xsl:value-of select="$disqus.shortname"/>';
 	      <xsl:if test="$use.disqus.id != '0'">
-	      var disqus_identifier = '<xsl:value-of select="$disqus_identifier"/><xsl:value-of select="$version.for.disqus"/><xsl:value-of select="@xml:id"/>';
+	        var disqus_identifier = '<xsl:value-of select="$disqus_identifier"/><xsl:value-of select="$version.for.disqus"/><xsl:value-of select="@xml:id"/>';
 	      </xsl:if>
+	      }
 	    </script>
 	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	    <script type="text/javascript" src="{$webhelp.common.dir}comments.js"><xsl:comment/></script>
