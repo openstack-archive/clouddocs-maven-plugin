@@ -23,7 +23,9 @@ clouddocs-maven-plugin 1.7.2-SNAPSHOT
 -  Support building docs on Windows.
 -  Bug fixes:
 
-  - When producing documentation from WADL, do not list 3xx responses as error codes.  
+   - When producing documentation from WADL, do not list 3xx responses as error codes.  
+   - Do build-time search-and-replace AFTER resolving wadls so search-and-replace works on wadl-genereated content.
+   - Left-align table titles for html tables
 
 clouddocs-maven-plugin 1.7.1 (February 19, 2013)
 ============================================================
