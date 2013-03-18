@@ -314,6 +314,13 @@ These problems go away when you add this IE=7 mode meta tag.
         </script>
         <!--End of index files -->
 
+	<xsl:if test="$enable.coremetrics = '1' and not($coremetrics.id = '')">
+	  <script type="text/javascript" src="//libs.coremetrics.com/eluminate.js"><xsl:comment/></script>
+	  <script type="text/javascript">
+	    cmSetClientID("<xsl:value-of select="$coremetrics.id"/>",true,"dc.rackspace.com","docs.rackspace.com");
+	  </script>
+	</xsl:if>
+
 	<xsl:if test="$enable.google.analytics = '1' and $security = 'external' and not($google.analytics.id = '')">
 	  <script type="text/javascript">
 	    var _gaq = _gaq || [];
@@ -710,6 +717,14 @@ These problems go away when you add this IE=7 mode meta tag.
         <script type="text/javascript" src="{$webhelp.common.dir}main.js">
             <xsl:comment></xsl:comment>
         </script>
+	<xsl:if test="$enable.coremetrics = '1' and not($coremetrics.id = '')">
+	  <script type="text/javascript">
+	    if(window.location.protocol.substring(0,4) == 'http'){
+	      var pathArray = window.location.pathname.split( '/' );
+	      cmCreatePageviewTag(pathArray[pathArray.length - 3] + '/' + pathArray[pathArray.length - 1] +', '+pathArray[1]+'/'+pathArray[3]);
+	    }
+	  </script>
+	</xsl:if>
     </xsl:template>
 
     <xsl:template name="index.html">
