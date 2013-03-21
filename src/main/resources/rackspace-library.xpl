@@ -64,34 +64,15 @@
    	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
-		<p:variable name="inputSrcFile" select="//c:param[@name = 'inputSrcFile']/@value">
+		<p:variable name="invalidFile" select="concat('file:///',$project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-idrefs', current-dateTime(),'.xml')">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
                 <p:store>
-                    <p:with-option name="href" select="concat('file://',$project.build.directory,'/',$inputSrcFile,'-invalid-idrefs-', current-dateTime(),'.xml')"/>
+                    <p:with-option name="href" select="$invalidFile"/>
                     <p:input port="source">
                         <p:pipe port="source" step="main"/>
                     </p:input>
                 </p:store>
-                <!-- <p:xslt name="printdoc"> -->
-                <!--     <p:input port="source">   -->
-                <!--         <p:pipe step="main" port="source"/>   -->
-                <!--     </p:input>   -->
-                <!--     <p:input port="stylesheet"> -->
-                <!--         <p:inline> -->
-                <!--             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"> -->
-                <!--                 <xsl:template match="/"> -->
-                <!--                     <xsl:message> -->
-                <!--                         <xsl:copy-of select="*"/> -->
-                <!--                     </xsl:message>           -->
-                <!--                 </xsl:template> -->
-                <!--             </xsl:stylesheet> -->
-                <!--         </p:inline> -->
-                <!--     </p:input> -->
-                <!--     <p:input port="parameters" > -->
-                <!--         <p:pipe step="main" port="parameters"/> -->
-                <!--     </p:input>   -->
-                <!-- </p:xslt> -->
                 <p:xslt name="printerrors">
                     <p:input port="source">  
                         <p:pipe step="catch" port="error"/>  
@@ -99,8 +80,8 @@
                     <p:input port="stylesheet">
                         <p:inline>
                             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-                                <!--
-                                <xsl:param name="security"/>-->
+
+                                <xsl:param name="invalidFile"/>
                                 <xsl:param name="failOnValidationError">yes</xsl:param>
                                 <xsl:param name="failOnValidationErrorInternal">
                                     <xsl:choose>
@@ -108,37 +89,43 @@
                                         <xsl:otherwise>yes</xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:param>
-                                
                                 <xsl:template match="/">
-                                    <xsl:message>
-                                        @@@@@@@@@@@@@@@@@@@@@@
-                                        !!!VALIDATION ERRORS!!
-                                        !!!!!!!!!!!!!!!!!!!!!!
-                                        <xsl:copy-of select="*"/>
-                                        !!!!!!!!!!!!!!!!!!!!!!
-                                        !!!VALIDATION ERRORS!!                    
-                                        @@@@@@@@@@@@@@@@@@@@@@
-                                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                                        Control whether build fails or not by 
-                                        setting failOnValidationError to no
-                                        in your pom. 
-                                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                                    </xsl:message>          
-                                    <xsl:message terminate="{$failOnValidationErrorInternal}"/>
-                                </xsl:template>
-                                
-                                <!--                                <xsl:template match="node()|@*">
-                                    <xsl:copy>
-                                        <xsl:apply-templates select="node() | @*"/>
-                                    </xsl:copy>
-                                </xsl:template>-->
+<xsl:message><xsl:text>
+
+
+@@@@@@@@@@@@@@@@@@@@@@
+!!!VALIDATION ERRORS!!
+!!!!!!!!!!!!!!!!!!!!!!
+
+Note: Open the temporary file:
+
+</xsl:text><xsl:value-of select="$invalidFile"/><xsl:text>
+
+to see all the errors in context. 
+You must correct the errors in the original 
+source DocBook or wadl files however.
+
+You can control whether build fails or not by 
+setting failOnValidationError to no in your pom. 
+
+</xsl:text><xsl:value-of select="concat('lineNumber: ', substring-after(c:errors,'lineNumber:'))"/><xsl:text>
+
+!!!!!!!!!!!!!!!!!!!!!!
+!!!VALIDATION ERRORS!!                    
+@@@@@@@@@@@@@@@@@@@@@@
+
+</xsl:text>
+</xsl:message>          
+<xsl:message terminate="{$failOnValidationErrorInternal}"/>
+				</xsl:template>
                                 
                             </xsl:stylesheet>
                         </p:inline>
                     </p:input>
                     <p:input port="parameters" >
                         <p:pipe step="main" port="parameters"/>
-                    </p:input>  
+                    </p:input>
+		    <p:with-param port="parameters" name="invalidFile" select="$invalidFile"/>    
                 </p:xslt>
                 <!--                <p:xslt name="id">
                     <p:input port="source">  
@@ -181,7 +168,7 @@
         type="l:validate-transform"
         name="main">
         
-        <p:input port="source" /> <!--sequence="false" primary="true"-->
+        <p:input port="source" /> 
         <p:input port="schema" sequence="true" >
             <p:document  href="classpath:/rng/rackbook.rng"/> 
         </p:input>
@@ -208,8 +195,7 @@
                 </p:output> 
                 <p:output port="report" sequence="true"> 
                     <p:empty/> 
-                </p:output>      
-                
+                </p:output>                      
                 <p:validate-with-relax-ng name="xmlvalidate"  assert-valid="true" dtd-id-idref-warnings="false"> 
                     <p:input port="source"> 
                         <p:pipe step="main" port="source"/> 
@@ -217,8 +203,7 @@
                     <p:input port="schema"> 
                         <p:pipe step="main" port="schema"/>  
                     </p:input>  
-                </p:validate-with-relax-ng> 
-                
+                </p:validate-with-relax-ng>                 
             </p:group>  
             <p:catch name="catch">  
                 <p:output port="result">  
@@ -230,34 +215,15 @@
    	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
-		<p:variable name="inputSrcFile" select="//c:param[@name = 'inputSrcFile']/@value">
+		<p:variable name="invalidFile" select="concat('file:///',$project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-', current-dateTime(),'.xml')">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
                 <p:store>
-                    <p:with-option name="href" select="concat('file:///',$project.build.directory,'/',$inputSrcFile,'-invalid-', current-dateTime(),'.xml')"/>
+                    <p:with-option name="href" select="$invalidFile"/>
                     <p:input port="source">
                         <p:pipe port="source" step="main"/>
                     </p:input>
                 </p:store>
-                <!-- <p:xslt name="printdoc"> -->
-                <!--     <p:input port="source">   -->
-                <!--         <p:pipe step="main" port="source"/>   -->
-                <!--     </p:input>   -->
-                <!--     <p:input port="stylesheet"> -->
-                <!--         <p:inline> -->
-                <!--             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"> -->
-                <!--                 <xsl:template match="/"> -->
-                <!--                     <xsl:message> -->
-                <!--                         <xsl:copy-of select="*"/> -->
-                <!--                     </xsl:message>           -->
-                <!--                 </xsl:template> -->
-                <!--             </xsl:stylesheet> -->
-                <!--         </p:inline> -->
-                <!--     </p:input> -->
-                <!--     <p:input port="parameters" > -->
-                <!--         <p:pipe step="main" port="parameters"/> -->
-                <!--     </p:input>   -->
-                <!-- </p:xslt> -->
                 <p:xslt name="printerrors">
                     <p:input port="source">  
                         <p:pipe step="catch" port="error"/>  
@@ -265,76 +231,51 @@
                     <p:input port="stylesheet">
                         <p:inline>
                             <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-                                <!--
-                                <xsl:param name="security"/>-->
+                                <xsl:param name="invalidFile"/>
                                 <xsl:param name="failOnValidationError">yes</xsl:param>
                                 <xsl:param name="failOnValidationErrorInternal">
                                     <xsl:choose>
                                         <xsl:when test="$failOnValidationError != 'yes' and $failOnValidationError != 'true' and $failOnValidationError != '1'">no</xsl:when>
                                         <xsl:otherwise>yes</xsl:otherwise>
                                     </xsl:choose>
-                                </xsl:param>
-                                
+                                </xsl:param>                                
                                 <xsl:template match="/">
-                                    <xsl:message>
-                                        @@@@@@@@@@@@@@@@@@@@@@
-                                        !!!VALIDATION ERRORS!!
-                                        !!!!!!!!!!!!!!!!!!!!!!
-                                        <xsl:copy-of select="*"/>
-                                        !!!!!!!!!!!!!!!!!!!!!!
-                                        !!!VALIDATION ERRORS!!                    
-                                        @@@@@@@@@@@@@@@@@@@@@@
-                                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                                        Control whether build fails or not by 
-                                        setting failOnValidationError to no
-                                        in your pom. 
-                                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                                    </xsl:message>          
+<xsl:message><xsl:text>
+
+
+@@@@@@@@@@@@@@@@@@@@@@
+!!!VALIDATION ERRORS!!
+!!!!!!!!!!!!!!!!!!!!!!
+
+Note: Open the temporary file:
+
+</xsl:text><xsl:value-of select="$invalidFile"/><xsl:text>
+
+to see all the errors in context. 
+You must correct the errors in the original 
+source DocBook or wadl files however.
+
+You can control whether build fails or not by 
+setting failOnValidationError to no in your pom. 
+
+</xsl:text><xsl:value-of select="concat('lineNumber: ', substring-after(c:errors,'lineNumber:'))"/><xsl:text>
+
+!!!!!!!!!!!!!!!!!!!!!!
+!!!VALIDATION ERRORS!!                    
+@@@@@@@@@@@@@@@@@@@@@@
+
+</xsl:text>
+</xsl:message>          
                                     <xsl:message terminate="{$failOnValidationErrorInternal}"/>
-                                </xsl:template>
-                                
-                                <!--                                <xsl:template match="node()|@*">
-                                    <xsl:copy>
-                                        <xsl:apply-templates select="node() | @*"/>
-                                    </xsl:copy>
-                                </xsl:template>-->
-                                
+                                </xsl:template>                                
                             </xsl:stylesheet>
                         </p:inline>
                     </p:input>
                     <p:input port="parameters" >
                         <p:pipe step="main" port="parameters"/>
                     </p:input>  
+		    <p:with-param port="parameters" name="invalidFile" select="$invalidFile"/>  
                 </p:xslt>
-                <!--                <p:xslt name="id">
-                    <p:input port="source">  
-                        <p:pipe step="catch" port="error"/>  
-                    </p:input>  
-                    <p:input port="stylesheet">
-                        <p:inline>
-                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-                                
-                                <xsl:param name="failOnValidationError">yes</xsl:param>
-                                <xsl:param name="failOnValidationErrorInternal">
-                                    <xsl:choose>
-                                        <xsl:when test="$failOnValidationError != 'yes' and $failOnValidationError != 'true' and $failOnValidationError != '1'">no</xsl:when>
-                                        <xsl:otherwise>yes</xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:param>
-                                
-                                <xsl:param name="security"/>
-                                
-                                <xsl:template match="/">
-                                    <xsl:message terminate="{$failOnValidationErrorInternal}"/>
-                                </xsl:template>
-                                
-                            </xsl:stylesheet>
-                        </p:inline>
-                    </p:input>
-                    <p:input port="parameters" >
-                        <p:pipe step="main" port="parameters"/>
-                    </p:input>
-                </p:xslt>-->
             </p:catch>  
         </p:try>        
     </p:declare-step>
