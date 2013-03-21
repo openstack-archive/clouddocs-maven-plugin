@@ -64,7 +64,7 @@
    	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
-		<p:variable name="invalidFile" select="concat('file:///',$project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-idrefs', current-dateTime(),'.xml')">
+		<p:variable name="invalidFile" select="concat('file:///',$project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-idrefs-', current-dateTime(),'.xml')">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
                 <p:store>
