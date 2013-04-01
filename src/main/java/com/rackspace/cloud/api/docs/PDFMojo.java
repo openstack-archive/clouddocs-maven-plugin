@@ -149,6 +149,13 @@ public abstract class PDFMojo extends AbstractFoMojo {
      */
     private String omitCover;
 
+    /**
+     * Double sided pdfs?
+     *
+     * @parameter expression="${generate-pdf.doubleSided}" default-value=""
+     */
+    private String doubleSided;
+
 
     /**
      * The greeting to display.
@@ -405,6 +412,10 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	if(null != omitCover){ 	
 	    transformer.setParameter("omitCover", omitCover); 
 	}
+	if(null != doubleSided){ 	
+	    transformer.setParameter("double.sided", doubleSided); 
+	}
+
 
     String sysDraftStatus=System.getProperty("draft.status");
     getLog().info("adjustTransformer():sysDraftStatus="+sysDraftStatus);

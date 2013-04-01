@@ -104,6 +104,7 @@ public class PDFBuilder {
 	private String pageWidth;
 	private String pageHeight;
 	private String omitCover;
+        private String doubleSided;
 	private String coverLogoPath;
 	private String secondaryCoverLogoPath;
 	private String coverLogoLeft;
@@ -364,6 +365,10 @@ public class PDFBuilder {
 		if(null != omitCover){ 	
 		    transformer.setParameter("omitCover", omitCover); 
 		}
+		if(null != doubleSided){ 	
+		    transformer.setParameter("double.sided", doubleSided); 
+		}
+
 
 		if(null != sectionAutolabel){
 		    transformer.setParameter("section.autolabel", sectionAutolabel);
@@ -636,11 +641,18 @@ public class PDFBuilder {
 		this.pageHeight = pageHeight;
 	}
 
- 	public String getOmitCover() {
+  	public String getOmitCover() {
 		return omitCover;
 	}
 	public void setOmitCover(String omitCover) {
 		this.omitCover = omitCover;
+	}
+
+  	public String getDoubleSided() {
+		return doubleSided;
+	}
+	public void setDoubleSided(String doubleSided) {
+		this.doubleSided = doubleSided;
 	}
 
 

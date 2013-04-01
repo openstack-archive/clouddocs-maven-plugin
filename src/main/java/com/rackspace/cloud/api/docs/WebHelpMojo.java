@@ -192,6 +192,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String omitCover;
 
+    /**
+     * Double sided pdfs?
+     *
+     * @parameter expression="${generate-pdf.doubleSided}" default-value=""
+     */
+    private String doubleSided;
+
 
     /**
      * Controls whether output is colorized based on revisionflag attributes.
@@ -473,6 +480,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	}
 	if(null != omitCover){ 	
 	    transformer.setParameter("omitCover", omitCover); 
+	}
+	if(null != doubleSided){ 	
+	    transformer.setParameter("double.sided", doubleSided); 
 	}
 
 
@@ -875,6 +885,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setPageWidth(pageWidth);
         	pdfBuilder.setPageHeight(pageHeight);
         	pdfBuilder.setOmitCover(omitCover);
+        	pdfBuilder.setOmitCover(doubleSided);
 
         	pdfBuilder.setCoverLogoPath(coverLogoPath);
         	pdfBuilder.setSecondaryCoverLogoPath(secondaryCoverLogoPath);
