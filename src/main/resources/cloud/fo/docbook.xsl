@@ -404,10 +404,9 @@
 
   <!-- Sets up the Cloud Title Page -->
   <xsl:template name="user.pagemasters">
-    <xsl:if test="$omitCover = '0'">
     <fo:simple-page-master master-name="cloudpage-first"
-                           page-width="8.5in"
-                           page-height="11in"
+                           page-width="{$page.width}"
+                           page-height="{$page.height}"
                            margin-top="0.0in"
                            margin-bottom="0.0in"
                            margin-left="0.0in"
@@ -425,11 +424,13 @@
       <xsl:element name="fo:region-before">
           <xsl:attribute name="extent">11.0in</xsl:attribute>
           <xsl:attribute name="display-align">before</xsl:attribute>
-          <xsl:attribute name="background-image">
-              <xsl:text>url(</xsl:text>
+	  <xsl:if test="$omitCover = '0'">
+	    <xsl:attribute name="background-image">
+	      <xsl:text>url(</xsl:text>
               <xsl:value-of select="$cloud.api.background.image"/>
               <xsl:text>)</xsl:text>
-          </xsl:attribute>
+	    </xsl:attribute>
+	  </xsl:if>
           <xsl:attribute name="background-repeat">no-repeat</xsl:attribute>
           <xsl:attribute name="background-position-horizontal">0%</xsl:attribute>
           <xsl:attribute name="background-position-vertical">0%</xsl:attribute>
@@ -441,8 +442,14 @@
       <fo:repeatable-page-master-alternatives>
         <fo:conditional-page-master-reference master-reference="blank"
                                               blank-or-not-blank="blank"/>
-        <fo:conditional-page-master-reference master-reference="cloudpage-first"
-                                              page-position="first"/>
+        <fo:conditional-page-master-reference page-position="first">
+	  <xsl:attribute name="master-reference">
+	    <xsl:choose>
+	      <xsl:when test="$omitCover = '0'">cloudpage-first</xsl:when>
+	      <xsl:otherwise>titlepage-first</xsl:otherwise>
+	    </xsl:choose>
+	  </xsl:attribute>
+	</fo:conditional-page-master-reference>
         <fo:conditional-page-master-reference master-reference="titlepage-odd"
                                               odd-or-even="odd"/>
         <fo:conditional-page-master-reference 
@@ -456,7 +463,6 @@
         </fo:conditional-page-master-reference>
       </fo:repeatable-page-master-alternatives>
     </fo:page-sequence-master>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template name="select.user.pagemaster">
@@ -465,7 +471,7 @@
     <xsl:param name="default-pagemaster"/>
 
     <xsl:choose>
-      <xsl:when test="$default-pagemaster = 'titlepage' and $omitCover = '0'">
+      <xsl:when test="$default-pagemaster = 'titlepage'">
         <xsl:value-of select="'cloud-titlepage'" />
       </xsl:when>
       <xsl:otherwise>
@@ -918,7 +924,7 @@
 	  </fo:block>
 	</fo:block-container>
       </xsl:if>
-
+      <xsl:if test="$omitCover = '0'">
       <fo:block-container absolute-position="fixed" 
 			  left="5.6in" top="9.28in" 
 			  width="2.25in"
@@ -957,6 +963,7 @@
 	  <fo:basic-link external-destination="url(http://{$url})"><xsl:value-of select="$url"/></fo:basic-link>
 	</fo:block>
       </fo:block-container>
+      </xsl:if>
     </xsl:template>
 
 <xsl:template match="d:chapter|d:appendix" mode="insert.title.markup">
