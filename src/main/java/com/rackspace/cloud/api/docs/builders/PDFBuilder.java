@@ -101,6 +101,9 @@ public class PDFBuilder {
 	//transformer settings
 	//TODO: need to somehow pass coverLogoPath, secondaryCoverLogoPath, coverLogoLeft, coverLogoTop, coverUrl from the WebHelp flow
 	private String coverColor;
+	private String pageWidth;
+	private String pageHeight;
+	private String omitCover;
 	private String coverLogoPath;
 	private String secondaryCoverLogoPath;
 	private String coverLogoLeft;
@@ -351,6 +354,16 @@ public class PDFBuilder {
 		transformer.setParameter("coverLogoTop", coverLogoTop);
 		transformer.setParameter("coverUrl", coverUrl);
 		transformer.setParameter("coverColor", coverColor);
+
+		if(null != pageWidth){
+		    transformer.setParameter("page.width", pageWidth);
+		}
+		if(null != pageHeight){
+		    transformer.setParameter("page.height", pageHeight);
+		}
+		if(null != omitCover){ 	
+		    transformer.setParameter("omitCover", omitCover); 
+		}
 
 		if(null != sectionAutolabel){
 		    transformer.setParameter("section.autolabel", sectionAutolabel);
@@ -608,6 +621,28 @@ public class PDFBuilder {
 	public void setBranding(String branding) {
 		this.branding = branding;
 	}
+
+	public String getPageWidth() {
+		return pageWidth;
+	}
+	public void setPageWidth(String pageWidth) {
+		this.pageWidth = pageWidth;
+	}
+
+ 	public String getPageHeight() {
+		return pageHeight;
+	}
+	public void setPageHeight(String pageHeight) {
+		this.pageHeight = pageHeight;
+	}
+
+ 	public String getOmitCover() {
+		return omitCover;
+	}
+	public void setOmitCover(String omitCover) {
+		this.omitCover = omitCover;
+	}
+
 
 	public String getSecurity() {
 		return security;

@@ -40,7 +40,7 @@
   <xsl:param name="coverLogoTop"/>
   <xsl:param name="coverUrl"/>
   <xsl:param name="secondaryCoverLogoPath"/>
-
+  <xsl:param name="omitCover"/>
   <xsl:param name="draft.mode">no</xsl:param>
 
   <xsl:param name="alignment">start</xsl:param>
@@ -299,6 +299,12 @@
     </fo:block>
   </xsl:template>
 
+  <xsl:template name="book.titlepage.before.verso">
+    <xsl:if test="$omitCover = '0'">
+      <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" break-after="page"/>
+    </xsl:if>
+  </xsl:template>
+
   <!-- Page Number Format -->
   <xsl:template name="page.number.format">
     <xsl:param name="element" select="local-name(.)"/>
@@ -398,6 +404,7 @@
 
   <!-- Sets up the Cloud Title Page -->
   <xsl:template name="user.pagemasters">
+    <xsl:if test="$omitCover = '0'">
     <fo:simple-page-master master-name="cloudpage-first"
                            page-width="8.5in"
                            page-height="11in"
@@ -449,6 +456,7 @@
         </fo:conditional-page-master-reference>
       </fo:repeatable-page-master-alternatives>
     </fo:page-sequence-master>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="select.user.pagemaster">
@@ -457,7 +465,7 @@
     <xsl:param name="default-pagemaster"/>
 
     <xsl:choose>
-      <xsl:when test="$default-pagemaster = 'titlepage'">
+      <xsl:when test="$default-pagemaster = 'titlepage' and $omitCover = '0'">
         <xsl:value-of select="'cloud-titlepage'" />
       </xsl:when>
       <xsl:otherwise>

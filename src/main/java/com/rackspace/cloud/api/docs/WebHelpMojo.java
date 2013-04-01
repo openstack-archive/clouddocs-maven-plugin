@@ -172,7 +172,25 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      */
     private String coverColor;
 
+    /**
+     * 
+     *
+     * @parameter expression="${generate-pdf.pageWidth}" default-value=""
+     */
+    private String pageWidth;
 
+    /**
+     * 
+     *
+     * @parameter expression="${generate-pdf.pageHeight}" default-value=""
+     */
+    private String pageHeight;
+    /**
+     * Should cover be omitted?
+     *
+     * @parameter expression="${generate-pdf.omitCover}" default-value=""
+     */
+    private String omitCover;
 
 
     /**
@@ -446,6 +464,17 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	transformer.setParameter("coverLogoTop", coverLogoTop);
 	transformer.setParameter("coverUrl", coverUrl);
 	transformer.setParameter("coverColor", coverColor);
+
+	if(null != pageWidth){ 	
+	    transformer.setParameter("page.width", pageWidth); 
+	}
+	if(null != pageHeight){ 	
+	    transformer.setParameter("page.height", pageHeight); 
+	}
+	if(null != omitCover){ 	
+	    transformer.setParameter("omitCover", omitCover); 
+	}
+
 
         transformer.setParameter("enable.disqus", enableDisqus);
         if (disqusShortname != null) {
@@ -842,6 +871,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setSourceDirectory(getSourceDirectory());
         	pdfBuilder.setAutopdfTargetDirectory(targetDir);
         	pdfBuilder.setCoverColor(coverColor);
+
+        	pdfBuilder.setPageWidth(pageWidth);
+        	pdfBuilder.setPageHeight(pageHeight);
+        	pdfBuilder.setOmitCover(omitCover);
+
         	pdfBuilder.setCoverLogoPath(coverLogoPath);
         	pdfBuilder.setSecondaryCoverLogoPath(secondaryCoverLogoPath);
         	pdfBuilder.setCoverLogoLeft(coverLogoLeft);

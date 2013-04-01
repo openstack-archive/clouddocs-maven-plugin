@@ -129,6 +129,28 @@ public abstract class PDFMojo extends AbstractFoMojo {
     private String coverColor;
 
     /**
+     * 
+     *
+     * @parameter expression="${generate-pdf.pageWidth}" default-value=""
+     */
+    private String pageWidth;
+
+    /**
+     * 
+     *
+     * @parameter expression="${generate-pdf.pageHeight}" default-value=""
+     */
+    private String pageHeight;
+
+    /**
+     * Should cover be omitted?
+     *
+     * @parameter expression="${generate-pdf.omitCover}" default-value=""
+     */
+    private String omitCover;
+
+
+    /**
      * The greeting to display.
      *
      * @parameter expression="${generate-pdf.variablelistAsBlocks}" 
@@ -373,7 +395,17 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	transformer.setParameter("coverLogoTop", coverLogoTop);
 	transformer.setParameter("coverUrl", coverUrl);
 	transformer.setParameter("coverColor", coverColor);
-	
+
+	if(null != pageWidth){ 	
+	    transformer.setParameter("page.width", pageWidth); 
+	}
+	if(null != pageHeight){ 	
+	    transformer.setParameter("page.height", pageHeight); 
+	}
+	if(null != omitCover){ 	
+	    transformer.setParameter("omitCover", omitCover); 
+	}
+
     String sysDraftStatus=System.getProperty("draft.status");
     getLog().info("adjustTransformer():sysDraftStatus="+sysDraftStatus);
     if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
