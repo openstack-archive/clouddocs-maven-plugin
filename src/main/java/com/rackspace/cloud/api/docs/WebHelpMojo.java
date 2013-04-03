@@ -885,7 +885,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setPageWidth(pageWidth);
         	pdfBuilder.setPageHeight(pageHeight);
         	pdfBuilder.setOmitCover(omitCover);
-        	pdfBuilder.setOmitCover(doubleSided);
+        	pdfBuilder.setDoubleSided(doubleSided);
 
         	pdfBuilder.setCoverLogoPath(coverLogoPath);
         	pdfBuilder.setSecondaryCoverLogoPath(secondaryCoverLogoPath);
