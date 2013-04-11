@@ -85,6 +85,7 @@
 
   <p:delete match="//@rax:original-wadl" xmlns:rax="http://docs.rackspace.com/api"/>
   <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']"/>
+  <p:add-attribute match="//db:table[not(@role) and .//db:td]" attribute-name="rules" attribute-value="all"/>
   
   <cx:message>
     <p:with-option name="message" select="'Making replacements'"/>
