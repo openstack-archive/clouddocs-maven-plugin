@@ -231,15 +231,15 @@ function showSelected(selectorId, optionId){
           </xsl:template>
           
           <xsl:template match="d:preface|d:chapter">
-            <div class="container">
-              <h2><xsl:value-of select="d:title"/></h2>
+            <div class="container" id="{@xml:id}">
+              <h2><xsl:value-of select="d:title"/> <a class="headerlink" title="Permalink to this headline" href="#{@xml:id}">¶</a></h2>
               <xsl:apply-templates/>
             </div>
           </xsl:template>
 
           <xsl:template match="d:section">
-            <div>
-              <h3><xsl:value-of select="d:title"/></h3>
+            <div  id="{@xml:id}">
+              <h3><xsl:value-of select="d:title"/> <a class="headerlink" title="Permalink to this headline" href="#{@xml:id}">¶</a></h3>
               <xsl:apply-templates select="d:*"/>
               <xsl:apply-templates select=".//wadl:method"/>
             </div>

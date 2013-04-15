@@ -845,6 +845,21 @@ p.nobody{
  padding-bottom: 10px;   
 }
 
+a.headerlink {
+    color: #DDDDDD;
+    padding-left: 0.3em;
+    visibility: hidden;
+}
+
+h1:hover > a.headerlink,
+h2:hover > a.headerlink,
+h3:hover > a.headerlink,
+h4:hover > a.headerlink,
+h5:hover > a.headerlink,
+h6:hover > a.headerlink,
+dt:hover > a.headerlink {
+  visibility: visible;
+}
 
 /* @end */
 
