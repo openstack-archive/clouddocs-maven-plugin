@@ -207,7 +207,7 @@ function showSelected(selectorId, optionId){
                     </div>
 		    <div id="toc">
 		      <ul>
-			<xsl:apply-templates mode="toc"/>
+			<xsl:apply-templates select="d:chapter" mode="toc"/>
 		      </ul>
 		    </div>
                     <div id="body">
@@ -252,13 +252,19 @@ function showSelected(selectorId, optionId){
 
 	  <!-- toc mode -->
 	  <xsl:template match="d:preface|d:chapter|d:section" mode="toc">
-	    <li><a href="#{@xml:id}"><xsl:value-of select="d:title"/></a></li>
+	    <li>
+	      <a href="#{@xml:id}"><xsl:value-of select="d:title"/></a>
+	      <xsl:if test="d:chapter or d:section or d:preface">
+		<ul>
+		  <xsl:apply-templates mode="toc"/>
+		</ul>
+	      </xsl:if>	      
+	    </li>
 	  </xsl:template>
 	  
-	  <xsl:template match="*|text()" mode="toc">
-	    <xsl:apply-templates/>
+	  <xsl:template match="@*|node()" mode="toc">
+	    <xsl:apply-templates mode="toc"/>
 	  </xsl:template>
-	  
 	  <!-- end toc mode -->
           
           <xsl:template match="wadl:method">
