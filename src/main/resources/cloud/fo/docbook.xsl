@@ -40,7 +40,7 @@
   <xsl:param name="coverLogoTop"/>
   <xsl:param name="coverUrl"/>
   <xsl:param name="secondaryCoverLogoPath"/>
-  <xsl:param name="omitCover"/>
+  <xsl:param name="omitCover">0</xsl:param>
   <xsl:param name="draft.mode">no</xsl:param>
 
   <xsl:param name="alignment">start</xsl:param>
