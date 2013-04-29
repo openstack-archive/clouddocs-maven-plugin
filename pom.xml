@@ -12,7 +12,7 @@
     <packaging>maven-plugin</packaging>
 
     <properties>
-      <wadl.tools.version>1.0.12</wadl.tools.version>
+      <wadl.tools.version>1.0.13</wadl.tools.version>
     </properties>
 
     <description>
