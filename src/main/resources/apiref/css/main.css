@@ -83,6 +83,12 @@ h1, h2 {
 	  color: #264d69;
 }
 
+h3 {
+	  font-family: 'PT Sans', sans-serif;
+	  font-style: normal;
+	  color: black;
+}
+
 h1 {
     font-size: 24px;
 }
