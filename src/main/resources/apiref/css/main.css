@@ -361,7 +361,7 @@ a.button:hover, input.action:hover {
 }
 
 a.button:active, input.action:active {
-  background: #ababab;
+    background: #ababab;
   	box-shadow: none;
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
@@ -967,7 +967,9 @@ option.color {
 }
 
 a.color {
-    color: black;
+     font-family: 'PT Sans', sans-serif;
+	 font-style: normal;
+	 color: #264d69; 
 }
 
 /* @end */
