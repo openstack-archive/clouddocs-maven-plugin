@@ -18,6 +18,14 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.8.0
+============================================================
+-  Improvements to the api reference output: floating toc and anchors for each heading.
+-  Support support for additional DocBook params: pageWidth, pageHeight, doubleSided, and omitCover so OpenStack can use it for their ops guide.
+-  Improve formatting of tables by adding rules="all" if not there already. 
+-  Fixed formatting of variablelists in html output
+-  Depend on latest version of wadl-tools
+
 clouddocs-maven-plugin 1.7.2
 ============================================================
 -  Support building docs on Windows.
