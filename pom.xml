@@ -235,7 +235,7 @@
        
 
     <scm>
-        <connection>scm:git:ssh://git@github.com/rackspace/clouddocs-maven-plugin.git</connection>
+        <connection>scm:git:ssh://git@github.com/rackerlabs/clouddocs-maven-plugin.git</connection>
 
 
     </scm>
