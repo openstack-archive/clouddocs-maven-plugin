@@ -59,9 +59,12 @@
         </dependency>
 
         <dependency>
-            <groupId>com.xmlcalabash</groupId>
-            <artifactId>calabash</artifactId>
-            <version>0.9.38</version>
+	  <groupId>com.xmlcalabash</groupId>
+	  <artifactId>xmlcalabash</artifactId>
+	  <version>1.0.9</version>
+            <!-- <groupId>com.xmlcalabash</groupId> -->
+            <!-- <artifactId>calabash</artifactId> -->
+            <!-- <version>0.9.38</version> -->
 	    <!-- <version>1.0.2-94</version> -->
         </dependency>
 
