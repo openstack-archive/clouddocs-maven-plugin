@@ -1,0 +1,120 @@
+----------------------------------------------------------------------
+Takao Fonts 003.02.01 and Takao Ex Fonts 001.01.01
+                                 (c) 2010 Takao Fonts Maintainers Team
+----------------------------------------------------------------------
+The Takao Fonts are a font family based on the IPA Fonts and the IPAex
+Fonts. Its purpose is to make it possible to maintain and release the
+fonts by the community with changing their names.
+See https://launchpad.net/takao-fonts for detail.
+
+This version of Takao Fonts are based on IPA Fonts version 003.02 and
+IPAex Fonts version 001.01.
+IPA Fonts are downloaded from http://ossipedia.ipa.go.jp/ipafont/.
+
+
+Available Fonts
+---------------
+Font Name      File Name          based on
+=============--=================--================
+TakaoGothic    TakaoGothic.otf    IPAGothic
+Takao PGothic  TakaoPGothic.otf   IPA PGothic
+TakaoMincho    TakaoMincho.otf    IPAMincho
+Takao PMincho  TakaoPMincho.otf   IPA PMincho
+TakaoExGothic  TakaoExGothic.otf  IPAexGothic
+TakaoExMincho  TakaoExMincho.otf  IPAexMincho
+
+
+License
+-------
+According to IPA Font License Agreement v1.0, derived programs of IPA 
+Fonts must be licensed under the terms and conditions of the same 
+agreement. For that reason, Takao Fonts are licensed under the IPA 
+Font License Agreement v1.0. The file 
+IPA_Font_License_Agreement_v1.0.txt includes the whole sentence of the 
+agreement.
+
+
+Install
+-------
+Takao Fonts can be installed with the same way as IPA Fonts.
+Installation examples are on 
+http://ossipedia.ipa.go.jp/ipafont/fontinstall.html.
+
+
+Modifications to IPA Fonts and IPAex Fonts
+------------------------------------------
+ * Change names of fonts "IPA" to "Takao" to fulfil Article 3 
+   Paragraph 1 (4) of the IPA Font License Agreement v1.0.
+ * Change value of underlinePosition in post table to -20 to fix the 
+   problem underlines are hidden inputting Japanese characters with 
+   ibus-anthy or scim-anthy.
+ * Add the URL of Takao Font Project to name table.
+ * Add the copyright notice of Takao Font to name table.
+
+These modifications are made by a script made from one for ORCA Font 
+developed by Good-Day, Inc(http://www.good-day.co.jp)
+
+
+Developing programs and created files in addition to fonts
+----------------------------------------------------------
+According to Article 3 Paragraph 1 (1) of the IPA Font License 
+Agreement v1.0, we must distribute "(b)any additional file created by 
+the font developing program in the course of creating the Derived 
+Program that can be used for further modification of the Derived 
+Program" together with derived fonts or be made available online or 
+mailing to distribute derived fonts of IPA Fonts. We distribute the 
+script described above and files created by the script in another 
+archive file. It can be downloaded from following URL. It's named 
+"takao-fonts-additions-<version>.tar.gz".
+
+  https://launchpad.net/takao-fonts/+download
+
+
+How to replace Takao Fonts to IPA Fonts
+---------------------------------------
+According to Article 3 Paragraph 1 (2) of the IPA Font License 
+Agreement, we must enable the recipients to replace the derived fonts 
+to IPA Fonts. To fulfil this restriction, replace instructions as 
+below.
+
+ 1. Access http://ossipedia.ipa.go.jp/ipafont/
+ 2. Click  "同意する/Accept"
+ 3. Download IPA Fonts ver.003.02 and IPAex Fonts ver.001.01
+ 4. Install these fonts. Installation examples are on
+    http://ossipedia.ipa.go.jp/ipafont/fontinstall.html.
+ 5. Uninstall Takao Fonts.
+ 6. Change settings in your OS and/or applications to use IPA Fonts if 
+    needed. See manuals of them to know the way.
+
+Additionally you can install both IPA Fonts, IPAex Fonts and Takao 
+Fonts and switch them as you like on many OS.
+
+If you install Takao Fonts with package management system built in 
+your OS, see the document of Takao Font package file used by your 
+system.
+
+
+Redistribution
+--------------
+You can redistribute Takao Fonts under the IPA Font License Agreement 
+v1.0. Be sure to fulfill Article 3 Paragraph 1.
+If you create packages for package management systems, provide a 
+method for install the IPA Fonts and IPAex Fonts using the same 
+package management system.
+
+
+History of this document
+------------------------
+2010-03-05  Jun Kobayashi  <jkbys@ubuntu.com>
+
+        * Update for Takao Fonts version 003.02.01 and
+	  Takao Ex Fonts version 001.01.01
+
+2010-02-15  Jun Kobayashi  <jkbys@ubuntu.com>
+
+	* Update for version 003.01.20100214.1
+
+2010-02-09  Jun Kobayashi  <jkbys@ubuntu.com>
+
+	* Write for version 003.01.20100207.1
+

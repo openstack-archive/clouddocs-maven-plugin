@@ -1,0 +1,17 @@
+2010-03-05  Jun Kobayashi  <jkbys@ubuntu.com>
+
+	* Update Takao Fonts based on newly released IPA Fonts ver.003.02 and 
+	  IPAex Fonts ver.001.01.
+
+2010-02-14  Jun Kobayashi  <jkbys@ubuntu.com>
+
+	* Add modifying width of .notdef to 500 to print well with JMA Receipt 
+	  Software.
+
+2010-02-08  Jun Kobayashi  <jkbys@ubuntu.com>
+
+	* Generate Takao Fonts with ipa2takao.sh script.
+	  This script is based on fixwidth.sh included in ttf-orcafont released 
+	  by Good-Day, Inc. Thanks!
+	* Write README and README.ja
+

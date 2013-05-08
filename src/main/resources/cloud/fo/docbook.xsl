@@ -24,7 +24,16 @@
   <xsl:param name="rackspace.font">
     <xsl:choose>
       <xsl:when test="starts-with(/*/@xml:lang, 'zh')">AR-PL-New-Sung</xsl:when>
+      <xsl:when test="starts-with(/*/@xml:lang, 'ja')">TakaoGothic</xsl:when>
       <xsl:otherwise>CartoGothic Std</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+  <xsl:param name="monospace.font.family">
+    <xsl:choose>
+      <xsl:when test="starts-with(/*/@xml:lang, 'zh')">AR-PL-New-Sung</xsl:when>
+      <xsl:when test="starts-with(/*/@xml:lang, 'ja')">TakaoGothic</xsl:when>
+      <xsl:otherwise>monospace</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
 
