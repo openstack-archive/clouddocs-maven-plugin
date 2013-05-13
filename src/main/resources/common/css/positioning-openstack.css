@@ -16,7 +16,7 @@ span.off     {  }
 
 
 body { font: 12px Verdana, Geneva, sans-serif; }
-p, ul, ol, li { font: 10pt Verdana, Geneva, sans-serif; }
+p, ul, ol, li, td { font: 10pt Verdana, Geneva, sans-serif; }
 h1 { font: 15pt Arial, Helvetica, geneva;
 	color: #cf2f19;
 }
