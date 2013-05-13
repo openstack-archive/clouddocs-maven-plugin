@@ -624,7 +624,7 @@
 	
 	<xsl:template match="wadl:doc" mode="process-xhtml">
 		<xsl:choose>
-			<xsl:when test="not(./*)">
+			<xsl:when test="not(./xhtml:p) and not(./db:para) and not(./db:formalpara)">
 				<para><xsl:apply-templates/></para>
 			</xsl:when>
 			<xsl:otherwise>
