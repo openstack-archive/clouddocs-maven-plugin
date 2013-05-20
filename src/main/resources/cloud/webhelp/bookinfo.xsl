@@ -77,7 +77,7 @@
                         <id><xsl:value-of select="current-grouping-key()"/></id>
                         <types>
                             <xsl:variable name="types">
-                               <xsl:if test="/*/db:info/raxm:metadata">
+                               <xsl:if test="/*/db:info/raxm:metadata[not(@role = 'hidden')]">
                                 <type xmlns="">
                                     <id><xsl:value-of select="f:calculatetype(/*/db:info/raxm:metadata/raxm:type)"/></id>
 				    <xsl:variable name="displayname">
