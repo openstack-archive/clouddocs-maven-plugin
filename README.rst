@@ -18,6 +18,15 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.8.1-SNAPSHOT
+============================================================
+-  It is now possible to filter wadl content using the security attribute. Note that in the wadl the security attribute must be in the DocBook namespace. For example declare xmlns:db="http://docbook.org/ns/docbook" on the root element and then put the db:security on any element (for example, a method).
+-  You can now add role="hidden" on the rax:metadata element to cause the document not to appear on the docs.rackspace.com landing page. 
+-  Add support for Japanese fonts in pdfs. 
+-  Bug Fixes:
+   - Be consistent about wrapping wadl:doc contents in paras even if it contains inline markup. 
+
+
 clouddocs-maven-plugin 1.8.0
 ============================================================
 -  Improvements to the api reference output: floating toc and anchors for each heading.
