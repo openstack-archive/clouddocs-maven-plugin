@@ -623,6 +623,29 @@ setting failOnValidationError to no in your pom.
                             <p:pipe step="normalize-wadls-step" port="parameters"/>
                         </p:input>
                     </p:xslt>
+		    <p:xslt>
+		      <!-- Filter normalized wadl based on security attr -->
+                      <p:input port="source">
+                        <p:pipe port="result" step="normalize-wadl"/>
+                      </p:input>
+                        <p:input port="stylesheet">
+			  <p:inline>
+			    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+			      <xsl:param name="security">external</xsl:param>
+			      <xsl:template match="@*|node()">
+				<xsl:if test="not(@security) or @security = $security">
+				  <xsl:copy>
+				    <xsl:apply-templates select="@*|node()"/>
+				  </xsl:copy>
+				</xsl:if>
+			      </xsl:template>
+			    </xsl:stylesheet>
+			  </p:inline>
+                        </p:input>
+                        <p:input port="parameters">
+                            <p:pipe step="normalize-wadls-step" port="parameters"/>
+                        </p:input>		      
+		    </p:xslt>
                   <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
                    <p:with-option name="href" select="$newhref"/>
                   </p:store>
