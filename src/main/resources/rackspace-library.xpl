@@ -630,10 +630,12 @@ setting failOnValidationError to no in your pom.
                       </p:input>
                         <p:input port="stylesheet">
 			  <p:inline>
-			    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+			    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+					    xmlns:db="http://docbook.org/ns/docbook"
+					    version="2.0">
 			      <xsl:param name="security">external</xsl:param>
 			      <xsl:template match="@*|node()">
-				<xsl:if test="not(@security) or @security = $security">
+				<xsl:if test="not(@db:security) or @db:security = $security">
 				  <xsl:copy>
 				    <xsl:apply-templates select="@*|node()"/>
 				  </xsl:copy>
