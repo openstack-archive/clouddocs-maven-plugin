@@ -63,6 +63,9 @@
   </cx:message>
   <l:programlisting-strip-inlines/>
 
+  <p:delete match="//raxm:metadata[./raxm:type = 'tutorial']" 
+	    xmlns:raxm="http://docs.rackspace.com/api/metadata"/>
+
   <cx:message>
     <p:with-option name="message" select="'Generating bookinfo.xml'"/>
   </cx:message>
@@ -97,7 +100,5 @@
       <p:document href="classpath:/rng/rackbook.rng"/>
     </p:input>
   </l:validate-transform-idrefs>
-  
-<!--  <p:identity/>-->
   
 </p:declare-step>
