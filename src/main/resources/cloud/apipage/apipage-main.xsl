@@ -287,6 +287,8 @@ function showSelected(selectorId, optionId){
                       <thead>
                         <tr>
                           <th>Parameter</th>
+			  <th>Style</th>
+			  <th>Type</th>
                           <th>Description</th>
                         </tr>
                       </thead>
@@ -445,6 +447,8 @@ function showSelected(selectorId, optionId){
           <xsl:template match="wadl:param" mode="param2tr">
             <tr>
               <td><xsl:value-of select="@name"/><xsl:if test="not(@required = 'true') and not(@style = 'template') and not(@style = 'matrix')"> (Optional)</xsl:if></td>
+	      <td><xsl:value-of select="@style"/></td>
+	      <td><xsl:value-of select="@type"/></td>
               <td><xsl:apply-templates select="./wadl:doc/*|./wadl:doc/text()"/></td>
             </tr>
           </xsl:template>
