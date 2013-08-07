@@ -265,7 +265,7 @@
                             <xsl:value-of select="/*/d:info/d:releaseinfo"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:call-template name="shortDate">
+                            <xsl:call-template name="longDate">
                                 <xsl:with-param name="in"  select="/*/d:info/d:pubdate"/>
                             </xsl:call-template>
                         </xsl:otherwise>
@@ -273,7 +273,7 @@
                 </xsl:when>
                 <xsl:when test="$position = 'center'">
                     <xsl:if test="/*/d:info/d:releaseinfo">
-                        <xsl:call-template name="shortDate">
+                        <xsl:call-template name="longDate">
                             <xsl:with-param name="in" select="/*/d:info/d:pubdate"/>
                         </xsl:call-template>
                     </xsl:if>

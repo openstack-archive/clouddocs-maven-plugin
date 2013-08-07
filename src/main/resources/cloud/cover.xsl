@@ -116,7 +116,7 @@
     <xsl:variable name="pubdate">
         <xsl:choose>
             <xsl:when test="$docbook//d:info[1]/d:pubdate">
-                <xsl:call-template name="shortDate">
+                <xsl:call-template name="longDate">
                     <xsl:with-param name="in" select="$docbook//d:info[1]/d:pubdate"/>
                 </xsl:call-template>
             </xsl:when>
@@ -263,6 +263,77 @@
       </xsl:choose>
     </xsl:template>
     
+  <xsl:template name="longDate">
+      <xsl:param name="in"/>
+      <xsl:choose>
+          <xsl:when test="$in">
+	    <xsl:variable name="year" select="normalize-space(substring-before(string($in),'-'))"/>
+	    <xsl:variable name="rest" select="substring-after(string($in),'-')"/>
+	    <xsl:variable name="month" select="normalize-space(substring-before($rest,'-'))"/>
+	    <xsl:variable name="day"   select="normalize-space(substring-before(concat(substring-after($rest,'-'),'T'),'T'))"/>
+              <xsl:choose>
+                  <xsl:when test="$month = '01'">
+                      <xsl:text>January</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '02'">
+                      <xsl:text>February</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '03'">
+                      <xsl:text>March</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '04'">
+                      <xsl:text>April</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '05'">
+                      <xsl:text>May</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '06'">
+                      <xsl:text>June</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '07'">
+                      <xsl:text>July</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '08'">
+                      <xsl:text>August</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '09'">
+                      <xsl:text>September</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '10'">
+                      <xsl:text>October</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '11'">
+                      <xsl:text>November</xsl:text>
+                  </xsl:when>
+                  <xsl:when test="$month = '12'">
+                      <xsl:text>December</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                      <xsl:message terminate="yes">
+		      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		      Bad Month value in "<xsl:value-of select="$in"/>"
+		      Please use the format 2011-12-31 for
+		      dates.
+		      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		      </xsl:message>
+                  </xsl:otherwise>
+              </xsl:choose>
+              <xsl:text> </xsl:text>
+              <xsl:choose>
+                  <xsl:when test="starts-with($day, '0')">
+                      <xsl:value-of select="substring($day, 2)"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                      <xsl:value-of select="$day"/>
+                  </xsl:otherwise>
+              </xsl:choose>
+              <xsl:text>, </xsl:text>
+              <xsl:value-of select="$year"/>
+          </xsl:when>
+          <xsl:otherwise/>
+      </xsl:choose>
+  </xsl:template>
+
     <!-- DWC: This template comes from the DocBook xsls (MIT-style license) -->
     <xsl:template name="pi-attribute">
         <xsl:param name="pis" select="processing-instruction('BOGUS_PI')"></xsl:param>

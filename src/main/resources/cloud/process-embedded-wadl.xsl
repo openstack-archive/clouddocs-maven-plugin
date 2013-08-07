@@ -1049,7 +1049,7 @@
 		<tr>
 			<td valign="top">
 				<para>
-					<xsl:call-template name="shortDate">
+					<xsl:call-template name="longDate">
 						<xsl:with-param name="in"  select="d:date"/>
 					</xsl:call-template>
 				</para>
