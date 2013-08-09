@@ -32,13 +32,13 @@
     <xsl:template match="db:revhistory">
         <xsl:variable name="escapechars"> &amp;"'&lt;?</xsl:variable>
         <feed xmlns="http://www.w3.org/2005/Atom">
-            <title><xsl:value-of select="concat((exslt:node-set($profiled-nodes)/*//db:title)[1],' ', exslt:node-set($profiled-nodes)/*/db:info/db:releaseinfo[1])"/> revision history</title>
+            <title><xsl:value-of select="concat((exslt:node-set($profiled-nodes)//db:title)[1],' ', exslt:node-set($profiled-nodes)/*/db:info/db:releaseinfo[1])"/> revision history</title>
             <link href="{substring-before($canonical.url.base,'/content')}/atom.xml" rel="self"/>
             <link href="{$canonical.url.base}/index.html"/>
             <id>
                 <xsl:choose>
                     <xsl:when test="/*/@xml:id"><xsl:value-of select="/*/@xml:id"/></xsl:when>
-                    <xsl:otherwise><xsl:value-of select="translate(exslt:node-set($profiled-nodes)//title[1],$escapechars,'_')"/></xsl:otherwise>
+                    <xsl:otherwise><xsl:value-of select="translate(exslt:node-set($profiled-nodes)//db:title[1],$escapechars,'_')"/></xsl:otherwise>
                 </xsl:choose>
                 </id>
             <updated>
