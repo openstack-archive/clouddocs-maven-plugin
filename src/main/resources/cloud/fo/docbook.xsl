@@ -53,7 +53,6 @@
   <xsl:param name="draft.mode">no</xsl:param>
 
   <xsl:param name="alignment">start</xsl:param>
-    
   <xsl:param name="security">external</xsl:param>
   <xsl:param name="draft.status" select="''"/>
   <xsl:param name="root.attr.status"><xsl:if test="$draft.status = 'on' or (/*[@status = 'draft'] and $draft.status = '')">draft;</xsl:if></xsl:param>
@@ -412,6 +411,12 @@
   <xsl:param name="glossary.as.blocks" select="1"/>
   <xsl:param name="autoPdfGlossaryInfix"/>
   <xsl:param name="glossary.collection" select="concat($project.build.directory,$autoPdfGlossaryInfix,'/mvn/com.rackspace.cloud.api/glossary/glossary.xml')"/>
+
+
+  <xsl:param name="current.docid" select="/*/@xml:id"/>
+  <xsl:param name="target.database.document" select="concat('file:///',$project.build.directory, '/../olink.db')"/>
+  <xsl:param name="olink.doctitle">yes</xsl:param> 
+  <xsl:param name="activate.external.olinks" select="0"/>
 
   <!-- Sets up the Cloud Title Page -->
   <xsl:template name="user.pagemasters">

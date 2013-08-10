@@ -15,6 +15,7 @@
   <xsl:param name="admon.graphics" select="1"></xsl:param>
   <xsl:param name="webhelp.war">0</xsl:param>
   <xsl:param name="docbook.infile"/>
+
   <xsl:param name="war.dirname"><xsl:value-of select="normalize-space(/processing-instruction('rax-warinfo'))"/></xsl:param>
   <xsl:param name="webhelp.common.dir">
     <xsl:choose>
@@ -42,6 +43,11 @@
   <xsl:param name="callouts.extension">1</xsl:param>
 
   <xsl:param name="project.build.directory"/>
+
+  <xsl:param name="current.docid" select="/*/@xml:id"/>
+  <xsl:param name="target.database.document" select="concat('file:///',$project.build.directory, '/olink.db')"/>
+  <xsl:param name="olink.doctitle">yes</xsl:param> 
+  <xsl:param name="activate.external.olinks" select="0"/>
 
     <xsl:param name="groupId"/>
     <xsl:param name="artifactId"/>
