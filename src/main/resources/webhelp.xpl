@@ -29,6 +29,8 @@
   
   <p:xinclude fixup-xml-base="true"/>
 
+  <l:normalize-olinks/>
+
   <cx:message>
     <p:with-option name="message" select="'Fixing pubdate if necessary'"/>
   </cx:message>
@@ -94,6 +96,7 @@
     <p:with-option name="message" select="'Making replacements'"/>
   </cx:message>
   <l:search-and-replace/>
+
 
   <l:validate-transform-idrefs name="validate-post-wadl" >
     <p:input port="schema">

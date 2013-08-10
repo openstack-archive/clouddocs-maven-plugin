@@ -1383,4 +1383,56 @@ setting failOnValidationError to no in your pom.
     </p:declare-step>
 
 
+    <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library" type="l:normalize-olinks"
+        xmlns:c="http://www.w3.org/ns/xproc-step" version="1.0"
+        name="normalize-olinks">
+
+        <p:documentation>This step turns olinks to xref if the
+            targetdoc is the same as the current doc id. This assumes
+            that we use the root element's xml:id as the current doc
+            id. </p:documentation>
+
+        <p:input port="source"/>
+
+        <p:output port="result" primary="true">
+            <p:pipe step="normalize-olinks-xslt" port="result"/>
+        </p:output>
+
+        <p:xslt name="normalize-olinks-xslt">
+            <p:input port="source">
+                <p:pipe step="normalize-olinks" port="source"/>
+            </p:input>
+            <p:input port="stylesheet">
+                <p:inline>
+                    <xsl:stylesheet
+                        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                        xmlns:db="http://docbook.org/ns/docbook"
+                        xmlns="http://docbook.org/ns/docbook"
+                        exclude-result-prefixes="db cx cxf l xsd c ml ut"
+                        version="2.0">
+
+                        <xsl:template match="node() | @*">
+                            <xsl:copy>
+                                <xsl:apply-templates
+                                   select="node() | @*"/>
+                            </xsl:copy>
+                        </xsl:template>
+
+                        <xsl:template
+                            match="db:olink[@targetdoc = /*/@xml:id]">
+                            <xref linkend="{@targetptr}"/>
+                        </xsl:template>
+
+                    </xsl:stylesheet>
+                </p:inline>
+            </p:input>
+            <p:input port="parameters">
+                <p:empty/>
+            </p:input>
+        </p:xslt>
+
+    </p:declare-step>
+
+
 </p:library>

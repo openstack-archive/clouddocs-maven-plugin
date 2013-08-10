@@ -99,6 +99,8 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and 
     
     <p:xinclude fixup-xml-base="true"/>
 
+    <l:normalize-olinks/>
+
     <cx:message>
       <p:with-option name="message" select="'Validating post-xinclude'"/>
     </cx:message>
