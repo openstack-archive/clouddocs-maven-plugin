@@ -20,12 +20,18 @@ Release Notes
 
 clouddocs-maven-plugin 1.8.1-SNAPSHOT
 ============================================================
+-  Added support for olinks and the olink-maven-plugin.
+   - By default, the olink database is assumed to be in target/olink.db. 
+   - olinks to the same document are converted to xrefs.
+   - Currently, olinks are never hot.
+-  Change the presentation of dates in pdf and webhelp so that the full month name is used.
+-  Add param style and type to tables in apiref page. 
 -  It is now possible to filter wadl content using the security attribute. Note that in the wadl the security attribute must be in the DocBook namespace. For example declare xmlns:db="http://docbook.org/ns/docbook" on the root element and then put the db:security on any element (for example, a method).
 -  You can now add role="hidden" on the rax:metadata element to cause the document not to appear on the docs.rackspace.com landing page. 
 -  Add support for Japanese fonts in pdfs. 
 -  Bug Fixes:
    - Be consistent about wrapping wadl:doc contents in paras even if it contains inline markup. 
-
+   - Support book/info/title when generating atom.xml.
 
 clouddocs-maven-plugin 1.8.0
 ============================================================
