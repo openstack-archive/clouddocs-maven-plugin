@@ -471,6 +471,9 @@ body div#content div.navfooter table tbody td, body div#content div.navfooter ta
 }
 
 
+.olinkdocname{ font-style: italic; }
+
+
 @media print {
 
     body * {

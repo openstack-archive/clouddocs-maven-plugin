@@ -477,6 +477,14 @@ body div#content div.navfooter table tbody td, body div#content div.navfooter ta
     border: 0px solid black; 
 }
 
+#content .variablelist table, #content .variablelist table td {
+    border-style: hidden;
+}
+
+
+.olinkdocname{ font-style: italic; }
+
+
 @media print {
 
     body * {
