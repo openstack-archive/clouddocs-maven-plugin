@@ -18,6 +18,12 @@
   <xsl:import href="../this.xsl"/>
   <xsl:import href="verbatim.xsl"/>
   <xsl:include href="../inline.xsl"/>
+  <!-- 
+       DWC: Hack to keep olinks from being hot for now
+       You should be able to remove this once the base xsls
+       have been upgraded.
+  -->
+  <xsl:include href="xref.xsl"/>
 
   <xsl:variable name="profiled-nodes" select="exslt:node-set($profiled-content)"/>
 

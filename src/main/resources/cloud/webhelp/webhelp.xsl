@@ -14,7 +14,13 @@ xmlns:exsl="http://exslt.org/common"
 
     <!-- <xsl:import href="../../xhtml/chunk.xsl"/> -->
     <xsl:import href="urn:docbkx:stylesheet-base/xhtml/docbook.xsl" />
-
+    <!-- 
+	 DWC: Hack to keep olinks from being hot for now
+	 You should be able to remove this once the base xsls
+	 have been upgraded.
+    -->
+    <xsl:import href="xref.xsl"/>
+  
     <xsl:output
             method="html"
             encoding="utf-8"
