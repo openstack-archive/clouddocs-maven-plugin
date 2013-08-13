@@ -18,7 +18,7 @@ How Tos
 Release Notes
 =============
 
-clouddocs-maven-plugin 1.8.1-SNAPSHOT
+clouddocs-maven-plugin 1.9.0 (August 13, 2013)
 ============================================================
 -  Added support for olinks and the olink-maven-plugin.
    - By default, the olink database is assumed to be in target/olink.db. 
