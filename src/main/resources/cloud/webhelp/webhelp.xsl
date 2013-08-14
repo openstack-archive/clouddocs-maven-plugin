@@ -771,7 +771,7 @@ These problems go away when you add this IE=7 mode meta tag.
 	
 	<xsl:variable name="brush">
 	  <xsl:choose>
-	    <xsl:when test="@language = 'bash' or @language = 'BASH' or @language = 'sh'">bash</xsl:when>
+	    <xsl:when test="@language = 'bash' or @language = 'BASH' or @language = 'sh' or @language = 'ini' or @language = 'INI'">bash</xsl:when>
 	    <xsl:when test="@language = 'javascript' or @language = 'JAVASCRIPT' or @language = 'js' or @language = 'JavaScript'">javascript</xsl:when>
 	    <xsl:when test="@language = 'xml' or @language = 'XML'">xml</xsl:when>
 	    <xsl:when test="@language = 'java' or @language = 'JAVA'">java</xsl:when>
