@@ -408,7 +408,7 @@ div.note p:first-child, div.caution p:first-child, div.important p:first-child, 
 
 #content table {
 	margin-bottom: 20px;
-
+	border-collapse: collapse;
 }
 
 *[align = 'center']{

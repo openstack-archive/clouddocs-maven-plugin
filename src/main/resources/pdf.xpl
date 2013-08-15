@@ -150,16 +150,18 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and 
 
     <l:process-embedded-wadl/>
     <p:delete match="//@rax:original-wadl" xmlns:rax="http://docs.rackspace.com/api"/>
-    <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']"/>
 
     <cx:message name="msg6">
       <p:with-option name="message" select="'Making replacements'"/>
     </cx:message>
     <l:search-and-replace/>
     
+    <p:add-attribute match="//db:table[not(@role) and .//db:td]|//db:informaltable[not(@role) and .//db:td]" attribute-name="rules" attribute-value="all"/>
+    <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']"/>
+    
     <l:validate-transform-idrefs name="validate-post-wadl-idrefs">
       <p:input port="schema">
-	<p:document href="classpath:/rng/rackbook.rng"/>
+	       <p:document href="classpath:/rng/rackbook.rng"/>
       </p:input>
     </l:validate-transform-idrefs>
 
