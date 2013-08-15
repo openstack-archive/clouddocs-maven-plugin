@@ -18,6 +18,10 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.9.1 (August 15, 2013)
+============================================================
+-  Support language="ini" for syntax highlighting on code listings.
+
 clouddocs-maven-plugin 1.9.0 (August 13, 2013)
 ============================================================
 -  Added support for olinks and the olink-maven-plugin.
