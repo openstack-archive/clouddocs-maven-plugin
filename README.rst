@@ -18,6 +18,12 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.9.2 (August 19, 2013)
+============================================================
+-  Bug fixes:
+   - Improve presentation of informaltables and CALS tables generally.
+   - Format <replaceable> as italic inside screen, programlisting, and literallayout. 
+
 clouddocs-maven-plugin 1.9.1 (August 15, 2013)
 ============================================================
 -  Support language="ini" for syntax highlighting on code listings.
