@@ -780,7 +780,7 @@ These problems go away when you add this IE=7 mode meta tag.
 	    <xsl:otherwise>
 	      <xsl:message>
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		WARNING: Unsupported langague on a <xsl:value-of select="local-name()"/>
+		WARNING: Unsupported language on a <xsl:value-of select="local-name()"/>
 		         element: <xsl:value-of select="@language"/>
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	      </xsl:message>
