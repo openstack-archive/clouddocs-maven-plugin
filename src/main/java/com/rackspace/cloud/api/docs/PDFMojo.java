@@ -454,7 +454,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
         File imageDirectory = getImageDirectory();
         File calloutDirectory = new File (imageDirectory, "callouts");
 
-	transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath().replaceAll("\\\\","/"));
+	transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath().replace(File.separatorChar, '/'));
 	transformer.setParameter("source.directory",sourceDirectory);
 	transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
 	
@@ -506,7 +506,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
             //transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
 	    	String srcFilename = sourceDocBook.getName();
 	    	getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory+"/docbkx/"+srcFilename);
-	    	transformer.setParameter("docbook.infile", this.projectBuildDirectory.replaceAll("\\\\","/")+"/docbkx/"+srcFilename);
+	    	transformer.setParameter("docbook.infile", this.projectBuildDirectory.replace(File.separatorChar, '/')+"/docbkx/"+srcFilename);
             transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
         }
         catch (TransformerConfigurationException e)
@@ -527,7 +527,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
         String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
 
-	String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replaceAll("\\\\","/");	
+	String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replace(File.separatorChar, '/');	
 	//from super
 	final InputSource inputSource = new InputSource(sourceFileNameNormalized);
 	Source source = new SAXSource(filter, inputSource);
@@ -543,7 +543,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    String targetDirString = "";
 	    
 	    try{
-		targetDirString = this.getTargetDirectory().getParentFile().getCanonicalPath().replaceAll("\\\\","/");
+		targetDirString = this.getTargetDirectory().getParentFile().getCanonicalPath().replace(File.separatorChar, '/');
 	    }catch(Exception e){
 		getLog().info("Exceptional!" + e);
 	    }

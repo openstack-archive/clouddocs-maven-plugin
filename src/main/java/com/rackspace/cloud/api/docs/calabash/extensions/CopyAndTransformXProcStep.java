@@ -1,5 +1,6 @@
 package com.rackspace.cloud.api.docs.calabash.extensions;
 
+import java.io.File;
 import java.net.URI;
 
 import net.sf.saxon.s9api.QName;
@@ -72,12 +73,7 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 		URI uri = null;
 
 		if (target != null) {
-
-		    String targetFixed = FilenameUtils.normalizeNoEndSeparator(target.getString()).replaceAll("\\\\","/").replace("file:/", "file:///");
-		
-		    uri = target.getBaseURI().resolve(targetFixed);	
-
-			uri = target.getBaseURI().resolve(FilenameUtils.normalizeNoEndSeparator(target.getString()));	
+			uri = target.getBaseURI().resolve(FilenameUtils.normalizeNoEndSeparator(target.getString()).replace(File.separatorChar, '/'));	
 		}
 		
 		return uri;
@@ -87,7 +83,7 @@ public class CopyAndTransformXProcStep extends DefaultStep {
 		RuntimeValue target = getOption(_targetHtmlContentDir);
 		URI uri = null;
 		if (target != null) {
-			uri = target.getBaseURI().resolve(target.getString().replaceAll("\\\\","/"));
+			uri = target.getBaseURI().resolve(target.getString().replace(File.separatorChar, '/'));
 		}
 		return uri;
 	}
