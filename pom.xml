@@ -12,6 +12,7 @@
     <packaging>maven-plugin</packaging>
 
     <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <wadl.tools.version>1.0.13</wadl.tools.version>
     </properties>
 
