@@ -14,6 +14,9 @@
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <wadl.tools.version>1.0.13</wadl.tools.version>
+      <!-- Need to exclude this because the description includes Unicode characters,
+           and docbkx-tools doesn't support specifying the encoding. -->
+      <excluded.properties>annotation.graphic.close</excluded.properties>
     </properties>
 
     <description>
