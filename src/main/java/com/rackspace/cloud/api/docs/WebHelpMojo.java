@@ -748,7 +748,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         String pathToPipelineFile = "classpath:/webhelp.xpl"; //use "classpath:/path" for this to work
 
-	String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replaceAll("\\\\","/");
+	String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replace(File.separatorChar, '/');
 	//from super
 	final InputSource inputSource = new InputSource(sourceFileNameNormalized);
 	Source source = new SAXSource(filter, inputSource);
@@ -765,7 +765,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	String targetDirString = "";
 	
 	try{
-	    targetDirString = this.getTargetDirectory().getParentFile().getCanonicalPath().replaceAll("\\\\","/");
+	    targetDirString = this.getTargetDirectory().getParentFile().getCanonicalPath().replace(File.separatorChar, '/');
 	}catch(Exception e){
 	    getLog().info("Exceptional!" + e);
 	}
@@ -853,7 +853,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
 	map.put("targetDir", baseDir.getAbsolutePath()+File.separator+"figures");
 	// String targetDirFiguresString = baseDir.getAbsolutePath()+File.separator+"figures";
-        // map.put("targetDir", targetDirFiguresString.replaceAll("\\\\","/").replace("file:/", "file:///"));
+        // map.put("targetDir", targetDirFiguresString.replace(File.separatorChar, '/').replace("file:/", "file:///"));
 
 	// getLog().info("~~~~~~~~FOOBAR~~~~~~~~~~~~~~~~:");
 	// getLog().info("~~~~~~~~baseDir:" + baseDir);

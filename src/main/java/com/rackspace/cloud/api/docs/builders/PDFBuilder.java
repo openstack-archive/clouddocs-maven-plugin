@@ -480,8 +480,8 @@ public class PDFBuilder {
 			// transformer.setParameter("docbook.infile", sourceFilePath);
 
 
-			getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory.replaceAll("\\\\","/")+"/"+inputFilename);
-			transformer.setParameter("docbook.infile", this.projectBuildDirectory.replaceAll("\\\\","/")+"/"+inputFilename);
+			getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory.replace(File.separatorChar, '/')+"/"+inputFilename);
+			transformer.setParameter("docbook.infile", this.projectBuildDirectory.replace(File.separatorChar, '/')+"/"+inputFilename);
 
 			transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
 		}
@@ -1067,7 +1067,7 @@ public class PDFBuilder {
 			throws MojoExecutionException {
 		String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
 
-		String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replaceAll("\\\\","/");
+		String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replace(File.separatorChar, '/');
 		//from super
 		final InputSource inputSource = new InputSource(sourceFileNameNormalized);
 		Source source = new SAXSource(filter, inputSource);
