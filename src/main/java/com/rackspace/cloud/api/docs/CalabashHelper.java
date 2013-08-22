@@ -10,6 +10,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -20,6 +21,13 @@ import java.util.Set;
 
 public class CalabashHelper {
     private static Source run(final String pipelineURI, final InputSource inputSource, final Map<String, String>map) throws FileNotFoundException {
+        // Transform Windows absolute paths from \ to / directory separators
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (entry.getValue() != null && entry.getValue().matches("^\\w:\\\\.*$")) {
+                entry.setValue(entry.getValue().replace(File.separatorChar, '/'));
+            }
+        }
+
         Pipeline pipeline = new CalabashPipelineBuilder(false, true).build(pipelineURI);
 
 //        <c:param-set xmlns:c="http://www.w3.org/ns/xproc-step">
