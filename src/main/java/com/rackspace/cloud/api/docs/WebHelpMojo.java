@@ -425,7 +425,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
 	String warBasename;
 	String webhelpOutdir = targetFile.getName().substring(0, targetFile.getName().lastIndexOf('.'));
-	if(null != webhelpDirname && webhelpDirname != ""){					    
+	if(null != webhelpDirname && !webhelpDirname.isEmpty()){
 	    warBasename = webhelpDirname;
 	} else {
 	    warBasename = webhelpOutdir;
@@ -586,7 +586,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	
 	String warBasename;
 	String webhelpOutdir = result.getName().substring(0, result.getName().lastIndexOf('.'));
-	if(null != webhelpDirname && webhelpDirname != ""){					    
+	if(null != webhelpDirname && !webhelpDirname.isEmpty()){
 	    warBasename = webhelpDirname;
 	} else {
 	    warBasename = webhelpOutdir;
@@ -617,7 +617,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
 	String warSuffix = properties.getProperty("warsuffix","");
 	String warSuffixForWar = warSuffix.equals("-external") ? "" : warSuffix;
-	if(null != webhelpWar && webhelpWar != "0"){                    
+	if(null != webhelpWar && !"0".equals(webhelpWar)){
 	    //Zip up the war from here.
 	    File sourceDir = new File(result.getParentFile().getParentFile(), webhelpOutdir);
 	    File zipFile = new File(result.getParentFile().getParentFile(), properties.getProperty("warprefix","") + warBasename + warSuffixForWar + ".war");
@@ -837,7 +837,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	}
         }
 
-        if (null != webhelpDirname && webhelpDirname != "" ) {
+        if (null != webhelpDirname && !webhelpDirname.isEmpty() ) {
 
 	    map.put("targetExtQueryFile", new File(getTargetDirectory(), webhelpDirname + "/content/ext_query.xml"));
 	    map.put("base.dir", new File(getTargetDirectory(), webhelpDirname));
