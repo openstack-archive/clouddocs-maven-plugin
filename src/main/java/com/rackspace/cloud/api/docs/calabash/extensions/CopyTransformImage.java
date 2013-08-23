@@ -185,7 +185,7 @@ public class CopyTransformImage implements ProcessMatchingNodes {
 			getLog().error("Unable to copy file: " + srcFile.getAbsolutePath() + " to " + targetDir.getAbsolutePath());
 			throw new XProcException(e);
 		}
-		return new File(targetDir.getAbsolutePath() + File.separator + srcFile.getName());
+		return new File(targetDir.getAbsolutePath(), srcFile.getName());
 	}
 
 	private void reportImageNotFoundError(URI baseUri, String fileRef, File srcImgFile) {

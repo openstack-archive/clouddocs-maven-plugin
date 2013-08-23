@@ -14,7 +14,7 @@
     <xsl:param name="coverColor"/>
     <xsl:param name="draft.status" select="''"/>
 
-    <xsl:variable name="docbook" select="document(concat('file:///',$docbook.infile))"/>
+    <xsl:variable name="docbook" select="document($docbook.infile)"/>
 
   <xsl:variable name="status.bar.text">
     <xsl:call-template name="pi-attribute">

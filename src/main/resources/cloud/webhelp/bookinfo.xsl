@@ -54,7 +54,7 @@
         <xsl:apply-templates/>
 
         <xsl:result-document 
-            href="file:///{$base.dir}/bookinfo.xml" 
+            href="{$base.dir}/bookinfo.xml" 
             method="xml" indent="yes" encoding="UTF-8">
             <products xmlns="">
                 <latestpdf><xsl:value-of select="$pdfFilenameBaseCalculated"/>-latest.pdf</latestpdf><!-- <xsl:choose> -->
@@ -127,7 +127,7 @@
             </products>
         </xsl:result-document>     
         <xsl:result-document 
-            href="file:///{$base.dir}/webapp/WEB-INF/bookinfo.properties" 
+            href="{$base.dir}/webapp/WEB-INF/bookinfo.properties" 
             method="xml" indent="no" encoding="UTF-8">
 <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
 warprefix=<xsl:value-of select="$warprefix"/>

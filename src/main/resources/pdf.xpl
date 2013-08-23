@@ -85,7 +85,7 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and 
     </p:xslt>
 
     <p:store name="store" encoding="utf-8" method="text"  media-type="text">
-      <p:with-option name="href" select="concat('file:///',
+      <p:with-option name="href" select="concat(
 					 (if ($targetDirectory != '') then $targetDirectory else $project.build.directory),
 					 (if ($targetDirectory  = '') then '/docbkx' else ''),
 					 '/autopdf/pdf.properties')"/>

@@ -17,7 +17,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
     /**
      * @parameter expression="${project.build.directory}"
      */
-    private String projectBuildDirectory;
+    private File projectBuildDirectory;
 
     /**
      * @parameter 
