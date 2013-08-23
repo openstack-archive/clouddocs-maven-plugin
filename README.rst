@@ -18,11 +18,17 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.9.3-SNAPSHOT 
+============================================================
+-  Bug fixes:
+   - Fix path issues that prevented building documents on Windows.
+   - Add zero-width spaces after underscore characters in template paramters in the api-ref.html output to allow for wrapping of long paths.
+
 clouddocs-maven-plugin 1.9.2 (August 19, 2013)
 ============================================================
 -  Bug fixes:
    - Improve presentation of informaltables and CALS tables generally.
-   - Format <replaceable> as italic inside screen, programlisting, and literallayout. 
+   - Format <replaceable> as italic inside screen, programlisting, and literallayout.
 
 clouddocs-maven-plugin 1.9.1 (August 15, 2013)
 ============================================================
