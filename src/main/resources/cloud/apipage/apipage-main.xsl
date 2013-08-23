@@ -220,7 +220,7 @@ function showSelected(selectorId, optionId){
                 <span class="label success"><xsl:value-of select="@name"/></span>
               </div>
               <div class="span5">
-                <xsl:value-of select="ancestor::wadl:resource/@path"/>
+                <xsl:value-of select="replace(replace(ancestor::wadl:resource/@path, '\}','}&#8203;'), '\{','&#8203;{')"/>
               </div>
               <div class="span6">
                 <xsl:choose>
