@@ -44,7 +44,7 @@ public abstract class HTMLMojo extends AbstractHtmlMojo {
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
             throws MojoExecutionException {
 
-        String pathToPipelineFile = "classpath:/wadl2html.xpl"; //use "classpath:/path" for this to work
+        String pathToPipelineFile = "classpath:///wadl2html.xpl"; //use "classpath:///path" for this to work
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
         Map map=new HashMap<String, String>();

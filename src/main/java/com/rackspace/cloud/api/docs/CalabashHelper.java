@@ -1,8 +1,8 @@
 package com.rackspace.cloud.api.docs;
 
-import com.rackspace.papi.components.translation.xproc.Pipeline;
-import com.rackspace.papi.components.translation.xproc.PipelineInput;
-import com.rackspace.papi.components.translation.xproc.calabash.CalabashPipelineBuilder;
+import com.rackspace.cloud.api.docs.pipeline.CalabashPipelineBuilder;
+import com.rackspace.cloud.api.docs.pipeline.Pipeline;
+import com.rackspace.cloud.api.docs.pipeline.PipelineInput;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.xml.sax.InputSource;
 

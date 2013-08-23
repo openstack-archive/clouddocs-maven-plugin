@@ -8,7 +8,7 @@
     xmlns:rax="http://docs.rackspace.com/api" 
     exclude-result-prefixes="wadl rax d xhtml" version="2.0">
 
-    <xsl:import href="classpath:/cloud/date.xsl"/>
+    <xsl:import href="classpath:///cloud/date.xsl"/>
     
     <xsl:template match="/">
 		<xsl:apply-templates mode="preprocess"/>

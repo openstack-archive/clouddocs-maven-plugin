@@ -289,7 +289,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
             throws MojoExecutionException {
 
-        String pathToPipelineFile = "classpath:/war.xpl"; //use "classpath:/path" for this to work
+        String pathToPipelineFile = "classpath:///war.xpl"; //use "classpath:///path" for this to work
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
         Map<String, Object> map=new HashMap<String, Object>();

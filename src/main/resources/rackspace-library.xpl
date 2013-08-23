@@ -18,7 +18,7 @@
         
         <p:input port="source" /> <!--sequence="false" primary="true"-->
         <p:input port="schema" sequence="true" >
-            <p:document  href="classpath:/rng/rackbook.rng"/> 
+            <p:document  href="classpath:///rng/rackbook.rng"/> 
         </p:input>
 
         <p:output port="result" primary="true">  
@@ -171,7 +171,7 @@ setting failOnValidationError to no in your pom.
         
         <p:input port="source" /> 
         <p:input port="schema" sequence="true" >
-            <p:document  href="classpath:/rng/rackbook.rng"/> 
+            <p:document  href="classpath:///rng/rackbook.rng"/> 
         </p:input>
 
         <p:output port="result" primary="true">  
@@ -510,7 +510,7 @@ setting failOnValidationError to no in your pom.
                 <p:pipe step="extensions-info-step" port="source"/> 
             </p:input> 
             <p:input port="stylesheet">
-                <p:document href="classpath:/cloud/extensions.xsl"/>
+                <p:document href="classpath:///cloud/extensions.xsl"/>
             </p:input>
             <p:input port="parameters" >
                 <p:pipe step="extensions-info-step" port="parameters"/>
@@ -566,7 +566,7 @@ setting failOnValidationError to no in your pom.
                     <p:pipe step="normalize-wadls-step" port="source"/>
                 </p:input>
                 <p:input port="stylesheet">
-                    <p:document href="classpath:/cloud/list-wadls.xsl"/>
+                    <p:document href="classpath:///cloud/list-wadls.xsl"/>
                 </p:input>
                 <p:input port="parameters">
                     <p:pipe step="normalize-wadls-step" port="parameters"/>
@@ -617,7 +617,7 @@ setting failOnValidationError to no in your pom.
                             <p:pipe port="result" step="wadl"/>
                         </p:input>
                         <p:input port="stylesheet">
-                            <p:document href="classpath:/cloud/normalizeWadl/normalizeWadl.xsl"/>
+                            <p:document href="classpath:///cloud/normalizeWadl/normalizeWadl.xsl"/>
                         </p:input>
                         <p:with-param name="checksum" select="$checksum"/>
                         <p:input port="parameters">
@@ -812,7 +812,7 @@ setting failOnValidationError to no in your pom.
                 <p:pipe step="process-embedded-wadl-step" port="source"/> 
             </p:input> 
             <p:input port="stylesheet">
-                <p:document href="classpath:/cloud/process-embedded-wadl-1.xsl"/>
+                <p:document href="classpath:///cloud/process-embedded-wadl-1.xsl"/>
             </p:input>
             <p:input port="parameters" >
                 <p:pipe step="process-embedded-wadl-step" port="parameters"/>
@@ -824,7 +824,7 @@ setting failOnValidationError to no in your pom.
                 <p:pipe step="process-embedded-wadl-xslt-1" port="result"/> 
             </p:input> 
             <p:input port="stylesheet">
-                <p:document href="classpath:/cloud/process-embedded-wadl-2.xsl"/>
+                <p:document href="classpath:///cloud/process-embedded-wadl-2.xsl"/>
             </p:input>
             <p:input port="parameters" >
                 <p:pipe step="process-embedded-wadl-step" port="parameters"/>
@@ -836,7 +836,7 @@ setting failOnValidationError to no in your pom.
                 <p:pipe step="process-embedded-wadl-xslt-2" port="result"/> 
             </p:input> 
             <p:input port="stylesheet">
-                <p:document href="classpath:/cloud/process-embedded-wadl-3.xsl"/>
+                <p:document href="classpath:///cloud/process-embedded-wadl-3.xsl"/>
             </p:input>
             <p:input port="parameters" >
                 <p:pipe step="process-embedded-wadl-step" port="parameters"/>
@@ -987,7 +987,7 @@ setting failOnValidationError to no in your pom.
                 <p:pipe step="process-embedded-wadl-step-war" port="source"/> 
             </p:input> 
             <p:input port="stylesheet">
-                <p:document href="classpath:/cloud/process-embedded-wadl-standalone.xsl"/>
+                <p:document href="classpath:///cloud/process-embedded-wadl-standalone.xsl"/>
             </p:input>
             <p:input port="parameters" >
                 <p:pipe step="process-embedded-wadl-step-war" port="parameters"/>
@@ -1019,7 +1019,7 @@ setting failOnValidationError to no in your pom.
                 <p:pipe step="add-stop-chunking-pis-step" port="source"/> 
             </p:input> 
             <p:input port="stylesheet">
-                <p:document href="classpath:/cloud/war/add-stop-chunking-pis.xsl"/>
+                <p:document href="classpath:///cloud/war/add-stop-chunking-pis.xsl"/>
             </p:input>
             <p:input port="parameters" >
                 <p:pipe step="add-stop-chunking-pis-step" port="parameters"/>

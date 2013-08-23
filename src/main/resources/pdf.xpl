@@ -6,7 +6,7 @@
 		xmlns:c="http://www.w3.org/ns/xproc-step"
 		xmlns:cx="http://xmlcalabash.com/ns/extensions" name="main">
 
-  <p:import href="classpath:/rackspace-library.xpl"/><!-- classpath:/ -->
+  <p:import href="classpath:///rackspace-library.xpl"/><!-- classpath:/// -->
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 
   <p:input port="source"/>
@@ -115,7 +115,7 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and 
 
     <l:validate-transform name="validate-post-xinclude">
       <p:input port="schema">
-	<p:document href="classpath:/rng/rackbook.rng"/>
+	<p:document href="classpath:///rng/rackbook.rng"/>
       </p:input>
     </l:validate-transform>
 
@@ -160,7 +160,7 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and 
     
     <l:validate-transform-idrefs name="validate-post-wadl-idrefs">
       <p:input port="schema">
-	       <p:document href="classpath:/rng/rackbook.rng"/>
+	       <p:document href="classpath:///rng/rackbook.rng"/>
       </p:input>
     </l:validate-transform-idrefs>
 

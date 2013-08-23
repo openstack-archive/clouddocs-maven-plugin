@@ -67,7 +67,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
             throws MojoExecutionException {
 
-        String pathToPipelineFile = "classpath:/wadl2html.xpl"; //use "classpath:/path" for this to work
+        String pathToPipelineFile = "classpath:///wadl2html.xpl"; //use "classpath:///path" for this to work
 
         final InputSource inputSource = new InputSource(sourceFile.toURI().toString());
         Source source = new SAXSource(filter, inputSource);
