@@ -51,9 +51,9 @@ public class CalabashHelper {
 
                 strBuff
                     .append("<c:param name=\"")
-                    .append(entry.getKey())
+                    .append(escapeXmlAttribute(entry.getKey()))
                     .append("\" namespace=\"\" value=\"")
-                    .append(rawValue)
+                    .append(escapeXmlAttribute(rawValue))
                     .append("\"/>");
             }
         }
@@ -72,6 +72,18 @@ public class CalabashHelper {
         List<Source> sources = pipeline.getResultPort("result"); // result of xinclude;
 
         return sources.get(0);
+    }
+
+    private static String escapeXmlAttribute(String value) {
+        if (value == null) {
+            return "";
+        }
+
+        return value
+            .replace("&", "&amp;")
+            .replace("\"", "&quot;")
+            .replace("'", "&apos;")
+            .replace("%", "&#37;");
     }
 
     /**
