@@ -533,7 +533,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	Source source = new SAXSource(filter, inputSource);
         //Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        Map map=new HashMap<String, String>();
+        Map<String, Object> map=new HashMap<String, Object>();
 	    String sysSecurity=System.getProperty("security");
 	    getLog().info("adjustTransformer():sysSecurity="+sysSecurity);
 	    if(null!=sysSecurity && !sysSecurity.isEmpty()){

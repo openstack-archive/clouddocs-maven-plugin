@@ -167,7 +167,7 @@ public class PDFBuilder {
 		FileUtils.extractJaredDirectory("fonts",PDFBuilder.class,imageParentDirectory);
 	}
 
-	public File processSources(Map<String,String> map) throws MojoExecutionException{
+	public File processSources(Map<String, Object> map) throws MojoExecutionException {
 		final String[] included = scanIncludedFiles();
 		// configure a resolver for catalog files
 		final CatalogManager catalogManager = createCatalogManager();
@@ -1063,7 +1063,7 @@ public class PDFBuilder {
 		return filter;
 	}
 
-	protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter, Map<String,String> map)
+	protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter, Map<String, Object> map)
 			throws MojoExecutionException {
 		String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
 
@@ -1072,7 +1072,7 @@ public class PDFBuilder {
 		final InputSource inputSource = new InputSource(sourceFileNameNormalized);
 		Source source = new SAXSource(filter, inputSource);
 
-		Map<String,String> localMap = new HashMap<String,String>(map); 
+		Map<String, Object> localMap = new HashMap<String, Object>(map);
 		localMap.put("outputType", "pdf");
 
 		//removing webhelp specific settings from map

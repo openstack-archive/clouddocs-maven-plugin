@@ -754,7 +754,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	Source source = new SAXSource(filter, inputSource);
 	//Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        Map<String, String> map=new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         
         
         String sysWebhelpWar=System.getProperty("webhelp.war");

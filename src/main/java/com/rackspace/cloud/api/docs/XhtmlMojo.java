@@ -292,7 +292,7 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
         String pathToPipelineFile = "classpath:/war.xpl"; //use "classpath:/path" for this to work
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        Map map=new HashMap<String, String>();
+        Map<String, Object> map=new HashMap<String, Object>();
         
         map.put("failOnValidationError", failOnValidationError);
         map.put("transform.dir", transformDir);        
