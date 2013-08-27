@@ -27,6 +27,7 @@ clouddocs-maven-plugin 1.9.3-SNAPSHOT
 clouddocs-maven-plugin 1.9.2 (August 19, 2013)
 ============================================================
 -  Bug fixes:
+
    - Improve presentation of informaltables and CALS tables generally.
    - Format <replaceable> as italic inside screen, programlisting, and literallayout.
 
@@ -37,6 +38,7 @@ clouddocs-maven-plugin 1.9.1 (August 15, 2013)
 clouddocs-maven-plugin 1.9.0 (August 13, 2013)
 ============================================================
 -  Added support for olinks and the olink-maven-plugin.
+
    - By default, the olink database is assumed to be in target/olink.db. 
    - olinks to the same document are converted to xrefs.
    - Currently, olinks are never hot.

@@ -321,7 +321,7 @@ These problems go away when you add this IE=7 mode meta tag.
         <!--End of index files -->
 
 	<xsl:if test="$enable.coremetrics = '1' and not($coremetrics.id = '')">
-	  <script type="text/javascript" src="//libs.coremetrics.com/eluminate.js"><xsl:comment/></script>
+	  <script type="text/javascript" src="https://libs.coremetrics.com/eluminate.js"><xsl:comment/></script>
 	  <script type="text/javascript">
 	    cmSetClientID("<xsl:value-of select="$coremetrics.id"/>",true,"dc.rackspace.com","docs.rackspace.com");
 	  </script>
