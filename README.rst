@@ -7,8 +7,19 @@ and other OpenStack projects.
 
 Example output
 ==============
-- http://docs.rackspace.com
-- http://docs.openstack.org
+Rackspace output: 
+
+- http://docs.rackspace.com/files/api/v1/cf-devguide/content/Overview-d1e70.html
+
+OpenStack output:
+
+- http://docs.openstack.org/user-guide/content/
+- http://api.openstack.org/api-ref.html
+
+OpenStack source files:
+
+- https://github.com/openstack/openstack-manuals/tree/master/doc/user-guide/src
+- https://github.com/openstack/api-site/tree/master/api-ref
 
 How Tos
 =======
