@@ -4398,7 +4398,7 @@ public abstract class EpubMojo
     /**
      * @parameter expression="${project.build.directory}"
      */
-    private String projectBuildDirectory;
+    private File projectBuildDirectory;
 
     /**
      * Controls how the path to the wadl is calculated. If 0 or not set, then
@@ -4414,7 +4414,7 @@ public abstract class EpubMojo
         super.adjustTransformer(transformer, sourceFilename, targetFile);
 
 	transformer.setParameter("branding", branding);
-	transformer.setParameter("project.build.directory", projectBuildDirectory);
+	transformer.setParameter("project.build.directory", projectBuildDirectory.toURI().toString());
 
 	if(security != null){
 	    transformer.setParameter("security",security);
@@ -4432,12 +4432,12 @@ public abstract class EpubMojo
         File imageDirectory = getImageDirectory();
         File calloutDirectory = new File (imageDirectory, "callouts");
 
-	transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
-	transformer.setParameter("source.directory",sourceDirectory);
+	transformer.setParameter("docbook.infile",sourceDocBook.toURI().toString());
+	transformer.setParameter("source.directory",sourceDirectory.toURI().toString());
 	transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
 
-        transformer.setParameter ("admon.graphics.path", imageDirectory.getAbsolutePath()+File.separator);
-        transformer.setParameter ("callout.graphics.path", calloutDirectory.getAbsolutePath()+File.separator);
+        transformer.setParameter ("admon.graphics.path", imageDirectory.toURI().toString());
+        transformer.setParameter ("callout.graphics.path", calloutDirectory.toURI().toString());
 
         //
         //  Setup the background image file
@@ -4449,8 +4449,8 @@ public abstract class EpubMojo
 
 	coverImageTemplate = new File (cloudSub, branding + "-cover.st");
 
-        transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
-        transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
+        transformer.setParameter ("cloud.api.background.image", coverImage.toURI().toString());
+        transformer.setParameter ("cloud.api.cc.image.dir", ccSub.toURI().toString());
     }
   protected void transformCover() throws MojoExecutionException {
         try {

@@ -4,10 +4,12 @@ import com.agilejava.docbkx.maven.AbstractHtmlMojo;
 import com.agilejava.docbkx.maven.PreprocessingFilter;
 import com.agilejava.docbkx.maven.TransformerBuilder;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.xml.sax.InputSource;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
@@ -17,7 +19,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
     /**
      * @parameter expression="${project.build.directory}"
      */
-    private String projectBuildDirectory;
+    private File projectBuildDirectory;
 
     /**
      * @parameter 
@@ -66,9 +68,11 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
             throws MojoExecutionException {
 
         String pathToPipelineFile = "classpath:/wadl2html.xpl"; //use "classpath:/path" for this to work
-        Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        Map map=new HashMap<String, String>();
+        final InputSource inputSource = new InputSource(sourceFile.toURI().toString());
+        Source source = new SAXSource(filter, inputSource);
+
+        Map<String, Object> map = new HashMap<String, Object>();
         
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);

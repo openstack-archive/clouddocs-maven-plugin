@@ -40,7 +40,7 @@
             <xsl:for-each
                 select="distinct-values($wadls/wadl/@href)">
                 <xsl:variable name="checksum" select="rax:checksum(.)"/>
-                <xsl:variable name="newhref" select="concat('file:///',translate($project.build.directory,'\','/'),'/generated-resources/xml/xslt/',$checksum,'-',replace(., '^(.*/)?([^/]+)$', '$2'))"/>
+                <xsl:variable name="newhref" select="concat($project.build.directory,'/generated-resources/xml/xslt/',$checksum,'-',replace(., '^(.*/)?([^/]+)$', '$2'))"/>
                 <!-- Only add this wadl to the list if the new wadl does not already exist -->
                 <xsl:choose>
                     <xsl:when test="unparsed-text-available(.)">

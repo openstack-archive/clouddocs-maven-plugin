@@ -96,8 +96,8 @@ public class PDFBuilder {
 	private File webhelpTargetDirectory = null;
 	private File sourceDirectory = null;
 	private File imageDirectory = null;
-	private String sourceFilePath;
-	private String projectBuildDirectory;
+	private File sourceFilePath;
+	private File projectBuildDirectory;
 	//transformer settings
 	//TODO: need to somehow pass coverLogoPath, secondaryCoverLogoPath, coverLogoLeft, coverLogoTop, coverUrl from the WebHelp flow
 	private String coverColor;
@@ -167,7 +167,7 @@ public class PDFBuilder {
 		FileUtils.extractJaredDirectory("fonts",PDFBuilder.class,imageParentDirectory);
 	}
 
-	public File processSources(Map<String,String> map) throws MojoExecutionException{
+	public File processSources(Map<String, Object> map) throws MojoExecutionException {
 		final String[] included = scanIncludedFiles();
 		// configure a resolver for catalog files
 		final CatalogManager catalogManager = createCatalogManager();
@@ -209,7 +209,7 @@ public class PDFBuilder {
 
 				final String targetFilename = baseTargetFile + ".fo";
 
-				final File sourceFile = new File(sourceDirectory+"/"+inputFilename);
+				final File sourceFile = new File(sourceDirectory, inputFilename);
 				File targetFile = new File(autopdfTargetDirectory, targetFilename);
 
 				final XMLReader reader = factory.newSAXParser().getXMLReader();
@@ -252,10 +252,10 @@ public class PDFBuilder {
 		String warBasename = result.getName().substring(0, result.getName().lastIndexOf('.'));
 	
 		Properties properties = new Properties();
-		InputStream is = null;
+		InputStream is;
 		
 		try {
-		    File f = new File(projectBuildDirectory  + "/autopdf/pdf.properties");
+		    File f = new File(projectBuildDirectory, "autopdf/pdf.properties");
 		    is = new FileInputStream( f );
 		    properties.load(is);
 		}
@@ -396,7 +396,7 @@ public class PDFBuilder {
 		    transformer.setParameter("formal.procedures", formalProcedures);
 		}
 		
-		transformer.setParameter("project.build.directory", projectBuildDirectory);
+		transformer.setParameter("project.build.directory", projectBuildDirectory.toURI().toString());
 
 		String sysSecurity=System.getProperty("security");
 		if(null!=sysSecurity && !sysSecurity.isEmpty()){
@@ -431,14 +431,14 @@ public class PDFBuilder {
 		File imageDirectory = getImageDirectory();
 		File calloutDirectory = new File (imageDirectory, "callouts");
 
-		transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
-		transformer.setParameter("source.directory",sourceDirectory);
+		transformer.setParameter("docbook.infile",sourceDocBook.toURI().toString());
+		transformer.setParameter("source.directory",sourceDirectory.toURI().toString());
 
 		transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
 		transformer.setParameter("pdfFilenameBase",pdfFilenameBase)
 ;
-		transformer.setParameter ("admon.graphics.path", imageDirectory.getAbsolutePath()+File.separator);
-		transformer.setParameter ("callout.graphics.path", calloutDirectory.getAbsolutePath()+File.separator);
+		transformer.setParameter ("admon.graphics.path", imageDirectory.toURI().toString());
+		transformer.setParameter ("callout.graphics.path", calloutDirectory.toURI().toString());
 
 		//
 		//  Setup the background image file
@@ -450,8 +450,8 @@ public class PDFBuilder {
 
 		coverImageTemplate = new File (cloudSub, "rackspace-cover.st");
 
-		transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
-		transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
+		transformer.setParameter ("cloud.api.background.image", coverImage.toURI().toString());
+		transformer.setParameter ("cloud.api.cc.image.dir", ccSub.toURI().toString());
 
 	}
 
@@ -473,15 +473,15 @@ public class PDFBuilder {
 			coverImageTemplate = new File (cloudSub, COVER_IMAGE_TEMPLATE_NAME);
 			coverImageTemplate = new File (cloudSub, "rackspace-cover.st");
 
-			transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
-			transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
+			transformer.setParameter ("cloud.api.background.image", coverImage.toURI().toString());
+			transformer.setParameter ("cloud.api.cc.image.dir", ccSub.toURI().toString());
 
 			// getLog().info("SOURCE FOR COVER PAGE: "+sourceFilePath);
-			// transformer.setParameter("docbook.infile", sourceFilePath);
+			// transformer.setParameter("docbook.infile", sourceFilePath.toURI().toString());
 
 
-			getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory.replace(File.separatorChar, '/')+"/"+inputFilename);
-			transformer.setParameter("docbook.infile", this.projectBuildDirectory.replace(File.separatorChar, '/')+"/"+inputFilename);
+			getLog().info("SOURCE FOR COVER PAGE: " + new File(projectBuildDirectory, inputFilename).getAbsolutePath());
+			transformer.setParameter("docbook.infile", new File(projectBuildDirectory, inputFilename).toURI().toString());
 
 			transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
 		}
@@ -559,17 +559,17 @@ public class PDFBuilder {
 		this.imageDirectory = imageDirectory;
 	}
 
-	public String getSourceFilePath() {
+	public File getSourceFilePath() {
 		return sourceFilePath;
 	}
-	public void setSourceFilePath(String sourceDocBook) {
+	public void setSourceFilePath(File sourceDocBook) {
 		this.sourceFilePath = sourceDocBook;
 	}
 
-	public String getProjectBuildDirectory() {
+	public File getProjectBuildDirectory() {
 		return projectBuildDirectory;
 	}
-	public void setProjectBuildDirectory(String projectBuildDirectory) {
+	public void setProjectBuildDirectory(File projectBuildDirectory) {
 		this.projectBuildDirectory = projectBuildDirectory;
 	}
 
@@ -1063,16 +1063,16 @@ public class PDFBuilder {
 		return filter;
 	}
 
-	protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter, Map<String,String> map)
+	protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter, Map<String, Object> map)
 			throws MojoExecutionException {
 		String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
 
-		String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replace(File.separatorChar, '/');
+		String sourceFileNameNormalized = sourceFile.toURI().toString();
 		//from super
 		final InputSource inputSource = new InputSource(sourceFileNameNormalized);
 		Source source = new SAXSource(filter, inputSource);
 
-		Map<String,String> localMap = new HashMap<String,String>(map); 
+		Map<String, Object> localMap = new HashMap<String, Object>(map);
 		localMap.put("outputType", "pdf");
 
 		//removing webhelp specific settings from map
@@ -1114,7 +1114,7 @@ public class PDFBuilder {
 			System.out.println("Transforming...");
 
 			PDFBuilder pdfBuilder = new PDFBuilder();
-			File targetDir = new File(baseDir.getAbsolutePath()+"/target/docbkx/pdf1");
+			File targetDir = new File(baseDir, "target/docbkx/pdf1");
 			pdfBuilder.setSourceDirectory(sourceDir);
 			pdfBuilder.setAutopdfTargetDirectory(targetDir);
 			pdfBuilder.setImageDirectory(targetDir.getParentFile());
@@ -1122,8 +1122,8 @@ public class PDFBuilder {
 
 			pdfBuilder.setInputFilename("os-compute-devguide.xml");
 
-			pdfBuilder.setSourceFilePath(sourceDir+"/os-compute-devguide.xml");
-			pdfBuilder.setProjectBuildDirectory(sourceDir.getParent());
+			pdfBuilder.setSourceFilePath(new File(sourceDir, "os-compute-devguide.xml"));
+			pdfBuilder.setProjectBuildDirectory(sourceDir.getParentFile());
 
 			pdfBuilder.preProcess();
 			//File fofile = pdfBuilder.processSources();

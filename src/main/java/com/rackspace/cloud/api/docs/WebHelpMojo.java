@@ -72,7 +72,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     /**
      * @parameter expression="${project.build.directory}"
      */
-    private String projectBuildDirectory;
+    private File projectBuildDirectory;
     
     /**
      * Controls whether to build webhelp war output or not.
@@ -458,7 +458,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         if (useVersionForDisqus != null) {
             transformer.setParameter("use.version.for.disqus", useVersionForDisqus);
         }
-        transformer.setParameter("project.build.directory", projectBuildDirectory);
+        transformer.setParameter("project.build.directory", projectBuildDirectory.toURI().toString());
         transformer.setParameter("branding", branding);
         
         //if the pdf is generated automatically with webhelp then this will be set.
@@ -567,8 +567,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
    sourceDocBook = new File(sourceFilename);
    sourceDirectory = sourceDocBook.getParentFile();
-   transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
-   transformer.setParameter("source.directory",sourceDirectory);
+   transformer.setParameter("docbook.infile",sourceDocBook.toURI().toString());
+   transformer.setParameter("source.directory",sourceDirectory.toURI().toString());
    transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
 
     }
@@ -607,7 +607,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	InputStream is = null;
 	
 	try {
-	    File f = new File(result.getParentFile()  +  "/webapp/WEB-INF/bookinfo.properties");
+	    File f = new File(result.getParentFile(), "webapp/WEB-INF/bookinfo.properties");
 	    is = new FileInputStream( f );
 	    properties.load(is);
 	}
@@ -619,8 +619,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	String warSuffixForWar = warSuffix.equals("-external") ? "" : warSuffix;
 	if(null != webhelpWar && webhelpWar != "0"){                    
 	    //Zip up the war from here.
-	    String sourceDir = result.getParentFile().getParentFile()  + "/" + webhelpOutdir ;
-	    String zipFile =   result.getParentFile().getParentFile()  + "/" + properties.getProperty("warprefix","") + warBasename + warSuffixForWar + ".war";
+	    File sourceDir = new File(result.getParentFile().getParentFile(), webhelpOutdir);
+	    File zipFile = new File(result.getParentFile().getParentFile(), properties.getProperty("warprefix","") + warBasename + warSuffixForWar + ".war");
 	    //result.deleteOnExit();
 
 	    try{
@@ -630,10 +630,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 		//create object of ZipOutputStream from FileOutputStream
 		ZipOutputStream zout = new ZipOutputStream(fout);
                                
-		//create File object from source directory
-		File fileSource = new File(sourceDir);
-                               
-		com.rackspace.cloud.api.docs.FileUtils.addDirectory(zout, fileSource);
+		com.rackspace.cloud.api.docs.FileUtils.addDirectory(zout, sourceDir);
                                
 		//close the ZipOutputStream
 		zout.close();
@@ -648,8 +645,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	//	if(null == webhelpWar || webhelpWar.equals("0")){
 	    //TODO: Move dir to add warsuffix/security value
 	    //String sourceDir = result.getParentFile().getParentFile()  + "/" + warBasename ;
-	    File webhelpDirWithSecurity = new File(result.getParentFile().getParentFile()  + "/" + warBasename + warSuffix);
-	    File webhelpOrigDir = new File(result.getParentFile().getParentFile()  + "/" + webhelpOutdir );
+	    File webhelpDirWithSecurity = new File(result.getParentFile().getParentFile(), warBasename + warSuffix);
+	    File webhelpOrigDir = new File(result.getParentFile().getParentFile(), webhelpOutdir );
 	    boolean success = webhelpOrigDir.renameTo(webhelpDirWithSecurity);
 	    //}
     }
@@ -748,13 +745,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         String pathToPipelineFile = "classpath:/webhelp.xpl"; //use "classpath:/path" for this to work
 
-	String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replace(File.separatorChar, '/');
+	String sourceFileNameNormalized = sourceFile.toURI().toString();
 	//from super
 	final InputSource inputSource = new InputSource(sourceFileNameNormalized);
 	Source source = new SAXSource(filter, inputSource);
 	//Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        Map<String, String> map=new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         
         
         String sysWebhelpWar=System.getProperty("webhelp.war");
@@ -769,7 +766,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	}catch(Exception e){
 	    getLog().info("Exceptional!" + e);
 	}
-	map.put("targetDirectory", this.getTargetDirectory().getParentFile().getAbsolutePath());
+	map.put("targetDirectory", getTargetDirectory().getParentFile());
     	map.put("webhelp.war", webhelpWar);
 	map.put("publicationNotificationEmails", publicationNotificationEmails);
         map.put("includeDateInPdfFilename", includeDateInPdfFilename);    
@@ -813,8 +810,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             	String targetFile=  getTargetDirectory() + "/" + theDirName+theFileName.substring(0,index)+"/content/"+"ext_query.xml";
 
             	map.put("targetExtQueryFile", targetFile);     
-		map.put("targetHtmlContentDir", getTargetDirectory() + "/" + theDirName+theFileName.substring(0,index) + "/content/");	
-            	map.put("base.dir", getTargetDirectory() + "/" + theDirName+theFileName.substring(0,index));   		
+		map.put("targetHtmlContentDir", new File(getTargetDirectory(), theDirName+theFileName.substring(0,index) + "/content/"));
+            	map.put("base.dir", new File(getTargetDirectory(), theDirName+theFileName.substring(0,index)));
             	map.put("input.filename",theDirName+theFileName.substring(0,index));
         	}
         	else{
@@ -827,11 +824,11 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	String theFileName=inputFilename;
         	int index = theFileName.indexOf('.');
         	if(-1!=index){
-            	String targetFile= getTargetDirectory() + "/" + theFileName.substring(0,index)+"/content/"+"ext_query.xml";
+            	File targetFile= new File(getTargetDirectory(), theFileName.substring(0,index)+"/content/ext_query.xml");
             	map.put("targetExtQueryFile", targetFile);  
-		map.put("targetHtmlContentDir", getTargetDirectory() + "/" + theFileName.substring(0,index) + "/content/");	
+		map.put("targetHtmlContentDir", new File(getTargetDirectory(), theFileName.substring(0,index) + "/content/"));
             	
-            	String targetDir= getTargetDirectory() + "/" + theFileName.substring(0,index) + "/";
+            	File targetDir = new File(getTargetDirectory(), theFileName.substring(0,index) + "/");
             	map.put("base.dir", targetDir);        		
             	map.put("input.filename", theFileName.substring(0,index));  	      		
         	}
@@ -842,18 +839,16 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         if (null != webhelpDirname && webhelpDirname != "" ) {
 
-	    map.put("targetExtQueryFile", getTargetDirectory() + "/" + webhelpDirname + "/content/"+"ext_query.xml");     
-	    map.put("base.dir", getTargetDirectory() + "/" + webhelpDirname);   			    
-	    map.put("targetHtmlContentDir", getTargetDirectory() + "/" + webhelpDirname + "/content/");	
+	    map.put("targetExtQueryFile", new File(getTargetDirectory(), webhelpDirname + "/content/ext_query.xml"));
+	    map.put("base.dir", new File(getTargetDirectory(), webhelpDirname));
+	    map.put("targetHtmlContentDir", new File(getTargetDirectory(), webhelpDirname + "/content/"));
 	}
 
         
         //targetExtQueryFile can tell us where the html will be built. We pass this absolute path to the
         //pipeline so that the copy-and-transform-image step can use it to calculate where to place the images.
 
-	map.put("targetDir", baseDir.getAbsolutePath()+File.separator+"figures");
-	// String targetDirFiguresString = baseDir.getAbsolutePath()+File.separator+"figures";
-        // map.put("targetDir", targetDirFiguresString.replace(File.separatorChar, '/').replace("file:/", "file:///"));
+	map.put("targetDir", new File(baseDir, "figures"));
 
 	// getLog().info("~~~~~~~~FOOBAR~~~~~~~~~~~~~~~~:");
 	// getLog().info("~~~~~~~~baseDir:" + baseDir);
@@ -873,7 +868,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	//Target directory for Webhelp points to ${basepath}/target/docbkx/webhelp. So get parent.
         	File baseDir = getTargetDirectory().getParentFile();
         	//The point FO/PDF file output to be generated at ${basepath}/target/docbkx/autopdf.
-        	File targetDir = new File(baseDir.getAbsolutePath()+"/autopdf");
+        	File targetDir = new File(baseDir.getAbsolutePath(), "autopdf");
         	//Create a new instance of PDFBuilder class and set config variables.
         	PDFBuilder pdfBuilder = new PDFBuilder();
         	
@@ -913,17 +908,16 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 		pdfBuilder.setTocMaxDepth(getProperty("tocMaxDepth"));
 		pdfBuilder.setTocSectionDepth(getProperty("tocSectionDepth"));
 
-        	String srcFilename = this.projectBuildDirectory+"/docbkx/"+sourceFile.getName();
-	    	File tempHandle = new File(srcFilename);
-	    	if(tempHandle.exists()) {
+        	File srcFilename = new File(this.projectBuildDirectory, "docbkx/"+sourceFile.getName());
+	    	if(srcFilename.exists()) {
 	    		getLog().debug("***********************"+ srcFilename);
 	    		pdfBuilder.setSourceFilePath(srcFilename);
 	    	} else {
 	    		getLog().debug("***********************"+ getSourceDirectory()+File.separator+inputFilename);
-	    		pdfBuilder.setSourceFilePath(getSourceDirectory()+File.separator+inputFilename);
+	    		pdfBuilder.setSourceFilePath(new File(getSourceDirectory(), inputFilename));
 	    	}
         	
-        	pdfBuilder.setProjectBuildDirectory(baseDir.getAbsolutePath());
+        	pdfBuilder.setProjectBuildDirectory(baseDir);
         	//setup fonts and images 
         	pdfBuilder.preProcess();
         	//process input docbook to create FO file
@@ -933,7 +927,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	File pdfFile = pdfBuilder.postProcessResult(foFile);
         	//move PDF to where the webhelp stuff is for this docbook.
         	if(pdfFile!=null) {
-		    File targetDirForPdf = new File(map.get("targetHtmlContentDir")).getParentFile();
+		    File targetDirForPdf = ((File)map.get("targetHtmlContentDir")).getParentFile();
         		if(!targetDirForPdf.exists()) {
         			com.rackspace.cloud.api.docs.FileUtils.mkdir(targetDirForPdf);
         		}

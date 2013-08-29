@@ -64,7 +64,7 @@
    	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
-		<p:variable name="invalidFile" select="concat('file:///',$project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-idrefs-', current-dateTime(),'.xml')">
+		<p:variable name="invalidFile" select="concat($project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-idrefs-', current-dateTime(),'.xml')">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
                 <p:store>
@@ -215,7 +215,7 @@ setting failOnValidationError to no in your pom.
    	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
-		<p:variable name="invalidFile" select="concat('file:///',$project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-', current-dateTime(),'.xml')">
+		<p:variable name="invalidFile" select="concat($project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-', current-dateTime(),'.xml')">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
                 <p:store>
@@ -657,7 +657,7 @@ setting failOnValidationError to no in your pom.
               </p:iteration-source>
               <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
                <p:with-option name="href"
-                select="concat('file:///',$project.build.directory,'/generated-resources/xml/xslt/',$checksum,'-',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))"
+                select="concat($project.build.directory,'/generated-resources/xml/xslt/',$checksum,'-',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))"
                 />
               </p:store>
             </p:for-each>
@@ -703,7 +703,7 @@ setting failOnValidationError to no in your pom.
 			</cx:replace-text>
 			<p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
                <p:with-option name="href"
-                select="concat('file:///',$targetDirectory,'/',$inputSrcFile)"
+                select="concat($targetDirectory,'/',$inputSrcFile)"
                 />
             </p:store>
 		</p:group>   	        
@@ -872,7 +872,7 @@ setting failOnValidationError to no in your pom.
 
 	    <p:load name="preprocess.xsl">
 	      <p:with-option name="href"
-			     select="concat('file:///',
+			     select="concat(
 			     (if ($targetDirectory != '') then $targetDirectory else $project.build.directory),
 			     (if ($targetDirectory  = '') then '/docbkx' else ''),
 			     '/cloud/war/preprocess.xsl')" >
@@ -994,7 +994,7 @@ setting failOnValidationError to no in your pom.
 
 	    <p:load name="bookinfo.xsl">
 	      <p:with-option name="href"
-			     select="concat('file:///',
+			     select="concat(
 			     (if ($targetDirectory != '') then $targetDirectory else $project.build.directory),
 			     (if ($targetDirectory  = '') then '/docbkx' else ''),
 			     '/cloud/webhelp/bookinfo.xsl')" >
@@ -1244,8 +1244,8 @@ setting failOnValidationError to no in your pom.
                         <p:pipe step="copy-and-transform-images-step" port="source"/>
                     </p:input>
 
-                    <p:with-option name="target" select="concat('file:///',$target.html.content.dir, '/figures')"/>
-                    <p:with-option name="targetHtmlContentDir" select="concat('file:///',$target.html.content.dir)"/>
+                    <p:with-option name="target" select="concat($target.html.content.dir, '/figures')"/>
+                    <p:with-option name="targetHtmlContentDir" select="$target.html.content.dir"/>
                     <p:with-option name="inputFileName" select="concat($input.docbook.file,'')"/>
                     <p:with-option name="outputType" select="concat($output.type,'')"/>
                     <p:with-option name="fail-on-error" select="concat($strict.image.validation,'')"/>

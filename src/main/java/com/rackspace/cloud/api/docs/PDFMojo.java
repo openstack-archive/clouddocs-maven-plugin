@@ -65,7 +65,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
     /**
      * @parameter expression="${project.build.directory}"
      */
-    private String projectBuildDirectory;
+    private File projectBuildDirectory;
 
     /**
      * The greeting to display.
@@ -365,11 +365,11 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
     protected Configuration loadFOPConfig() throws MojoExecutionException {
         System.out.println ("At load config");
-        String fontPath  = (new File(getTargetDirectory().getParentFile(), "fonts")).getAbsolutePath();
-        StringTemplateGroup templateGroup = new StringTemplateGroup("fonts", fontPath);
+        File fontPath = new File(getTargetDirectory().getParentFile(), "fonts");
+        StringTemplateGroup templateGroup = new StringTemplateGroup("fonts", fontPath.getAbsolutePath());
         StringTemplate template = templateGroup.getInstanceOf("fontconfig");
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-        template.setAttribute ("fontPath",fontPath);
+        template.setAttribute ("fontPath",fontPath.toURI().toString());
         final String config = template.toString();
         if (getLog().isDebugEnabled()) {
             getLog().debug(config);
@@ -431,7 +431,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	}
 	transformer.setParameter("statusBarText", statusBarText);
 
-	transformer.setParameter("project.build.directory", projectBuildDirectory);
+	transformer.setParameter("project.build.directory", projectBuildDirectory.toURI().toString());
     
 	String sysSecurity=System.getProperty("security");
     getLog().info("adjustTransformer():sysSecurity="+sysSecurity);
@@ -454,12 +454,12 @@ public abstract class PDFMojo extends AbstractFoMojo {
         File imageDirectory = getImageDirectory();
         File calloutDirectory = new File (imageDirectory, "callouts");
 
-	transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath().replace(File.separatorChar, '/'));
-	transformer.setParameter("source.directory",sourceDirectory);
+	transformer.setParameter("docbook.infile",sourceDocBook.toURI().toString());
+	transformer.setParameter("source.directory",sourceDirectory.toURI().toString());
 	transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
 	
-        transformer.setParameter ("admon.graphics.path", imageDirectory.getAbsolutePath()+File.separator);
-        transformer.setParameter ("callout.graphics.path", calloutDirectory.getAbsolutePath()+File.separator);
+        transformer.setParameter ("admon.graphics.path", imageDirectory.toURI().toString());
+        transformer.setParameter ("callout.graphics.path", calloutDirectory.toURI().toString());
 
         //
         //  Setup the background image file
@@ -471,8 +471,8 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
 	coverImageTemplate = new File (cloudSub, "rackspace-cover.st");
 
-        transformer.setParameter ("cloud.api.background.image", coverImage.getAbsolutePath());
-        transformer.setParameter ("cloud.api.cc.image.dir", ccSub.getAbsolutePath());
+        transformer.setParameter ("cloud.api.background.image", coverImage.toURI().toString());
+        transformer.setParameter ("cloud.api.cc.image.dir", ccSub.toURI().toString());
     }
 
     protected void transformCover() throws MojoExecutionException {
@@ -503,10 +503,10 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    }
 	    transformer.setParameter("branding", branding);
 
-            //transformer.setParameter("docbook.infile",sourceDocBook.getAbsolutePath());
+            //transformer.setParameter("docbook.infile",sourceDocBook.toURI().toString());
 	    	String srcFilename = sourceDocBook.getName();
 	    	getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory+"/docbkx/"+srcFilename);
-	    	transformer.setParameter("docbook.infile", this.projectBuildDirectory.replace(File.separatorChar, '/')+"/docbkx/"+srcFilename);
+	    	transformer.setParameter("docbook.infile", new File(this.projectBuildDirectory, "docbkx/"+srcFilename).toURI().toString());
             transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
         }
         catch (TransformerConfigurationException e)
@@ -527,28 +527,20 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
         String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
 
-	String sourceFileNameNormalized = "file:///" + sourceFile.getAbsolutePath().replace(File.separatorChar, '/');	
+	String sourceFileNameNormalized = sourceFile.toURI().toString();
 	//from super
 	final InputSource inputSource = new InputSource(sourceFileNameNormalized);
 	Source source = new SAXSource(filter, inputSource);
         //Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        Map map=new HashMap<String, String>();
+        Map<String, Object> map=new HashMap<String, Object>();
 	    String sysSecurity=System.getProperty("security");
 	    getLog().info("adjustTransformer():sysSecurity="+sysSecurity);
 	    if(null!=sysSecurity && !sysSecurity.isEmpty()){
 	    	security=sysSecurity;
 	    }
-	    
-	    String targetDirString = "";
-	    
-	    try{
-		targetDirString = this.getTargetDirectory().getParentFile().getCanonicalPath().replace(File.separatorChar, '/');
-	    }catch(Exception e){
-		getLog().info("Exceptional!" + e);
-	    }
 
-	map.put("targetDirectory", targetDirString);
+	map.put("targetDirectory", getTargetDirectory().getParentFile());
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("replacementsFile", replacementsFile);
