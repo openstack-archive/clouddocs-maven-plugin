@@ -663,6 +663,53 @@ setting failOnValidationError to no in your pom.
             </p:for-each>
            </p:for-each>
         </p:group>
+        
+    </p:declare-step>
+
+    <p:declare-step 
+        xmlns:l="http://xproc.org/library" 
+        xml:id="search-and-replace"
+        xmlns:c="http://www.w3.org/ns/xproc-step" 
+        type="l:write-temp-file"  
+        name="write-temp-file-step">
+        
+        
+        <p:option name="prefix" cx:type="xsd:string" required="true"/>
+        
+        <p:input port="source" primary="true" sequence="true"/>
+        
+        <p:output port="result" sequence="true">
+            <p:pipe step="group" port="result"/>
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        <ut:parameters name="params"/>
+        <p:sink/>
+        
+        <p:group name="group">
+            <p:output port="result" primary="true">
+                <p:pipe step="ident" port="result"/>
+            </p:output>
+            <p:output port="secondary" primary="false" sequence="true"/>
+            
+            <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+            
+            <p:identity name="ident">
+                <p:input port="source">
+                    <p:pipe step="write-temp-file-step" port="source"/>
+                </p:input>
+            </p:identity>
+            
+            <p:store encoding="utf-8" indent="true" omit-xml-declaration="false" name="store">
+                <p:input port="source">
+                    <p:pipe step="write-temp-file-step" port="source"/>
+                </p:input>
+                <p:with-option name="href" select="concat($project.build.directory, $prefix,'-',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))" />
+            </p:store>
+            
+        </p:group>
     </p:declare-step>
 
 	<p:declare-step 
@@ -754,17 +801,41 @@ setting failOnValidationError to no in your pom.
         <p:input port="source"/>
         
         <p:output port="result" primary="true">
-            <p:pipe step="process-embedded-wadl-xslt" port="result"/>
+            <p:pipe step="process-embedded-wadl-xslt-3" port="result"/>
         </p:output>
         
         <p:input port="parameters" kind="parameter"/>
         
-        <p:xslt name="process-embedded-wadl-xslt">
+        <p:xslt name="process-embedded-wadl-xslt-1">
             <p:input port="source"> 
                 <p:pipe step="process-embedded-wadl-step" port="source"/> 
             </p:input> 
             <p:input port="stylesheet">
-                <p:document href="classpath:/cloud/process-embedded-wadl.xsl"/>
+                <p:document href="classpath:/cloud/process-embedded-wadl-1.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="process-embedded-wadl-step" port="parameters"/>
+            </p:input>
+        </p:xslt>          
+        
+        <p:xslt name="process-embedded-wadl-xslt-2">
+            <p:input port="source"> 
+                <p:pipe step="process-embedded-wadl-xslt-1" port="result"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="classpath:/cloud/process-embedded-wadl-2.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="process-embedded-wadl-step" port="parameters"/>
+            </p:input>
+        </p:xslt>
+ 
+        <p:xslt name="process-embedded-wadl-xslt-3">
+            <p:input port="source"> 
+                <p:pipe step="process-embedded-wadl-xslt-2" port="result"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="classpath:/cloud/process-embedded-wadl-3.xsl"/>
             </p:input>
             <p:input port="parameters" >
                 <p:pipe step="process-embedded-wadl-step" port="parameters"/>
