@@ -176,9 +176,8 @@
 	</xsl:template>
 	
 	<xsl:template match="wadl:method">
-		<xsl:param name="sectionId"/>
-<!--		<xsl:param name="sectionId" select="ancestor::d:section[1]/@xml:id"/>
--->        <xsl:variable name="id" select="@rax:id"/>
+		<xsl:param name="sectionId" select="ancestor::d:section[1]/@xml:id"/>
+	    <xsl:variable name="id" select="@rax:id"/>
 		
         <!-- Handle skipText PIs -->
         <xsl:variable name="skipNoRequestTextN">
@@ -294,7 +293,7 @@
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 
             <!-- About the request -->
-			<xsl:if test="wadl:request//wadl:param[@style = 'header']">
+			<xsl:if test="wadl:request//wadl:param[@style = 'header'] or parent::wadl:resource/wadl:param[@style = 'header']">
 				<xsl:call-template name="paramTable">
 					<xsl:with-param name="mode" select="'Request'"/>
 					<xsl:with-param name="method.title" select="$method.title"/>
@@ -317,11 +316,20 @@
                 	<xsl:with-param name="style" select="'query'"/>
                 </xsl:call-template>
             </xsl:if>
+			
+			<xsl:if test="wadl:request//wadl:param[@style = 'plain']">
+				<xsl:call-template name="paramTable">
+					<xsl:with-param name="mode" select="'Request'"/>
+					<xsl:with-param name="method.title" select="$method.title"/>
+					<xsl:with-param name="style" select="'plain'"/>
+				</xsl:call-template>
+			</xsl:if>
 
 			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:* | wadl:request/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
-            <!-- we allow no request text and there is no request... -->
-	    <!-- Note that wadl:request[@mediaType = 'application/xml' and not(@element)] is there to catch the situation where -->
-	    <!-- a request exists only to insert a header sample with no body -->
+			
+            <!-- We allow no request text and there is no request... -->
+	   		<!-- Note that wadl:request[@mediaType = 'application/xml' and not(@element)] is there to catch the situation where -->
+	    	<!-- a request exists only to insert a header sample with no body -->
             <xsl:if test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]])">
                 <!-- ...and we have a valid response OR we are skipping response text -->
                 <xsl:if test="wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation or $skipNoResponseText">
@@ -331,16 +339,27 @@
 
             <!-- About the response -->
 
-			<xsl:if test="wadl:response/wadl:param">
+			<xsl:if test="wadl:response/wadl:param[@style = 'header']">
                 <xsl:call-template name="paramTable">
                     <xsl:with-param name="mode" select="'Response'"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
+                	<xsl:with-param name="style" select="'header'"/>
                 </xsl:call-template>
             </xsl:if>
+			
+			<xsl:if test="wadl:response//wadl:param[@style = 'plain']">
+				<xsl:call-template name="paramTable">
+					<xsl:with-param name="mode" select="'Response'"/>
+					<xsl:with-param name="method.title" select="$method.title"/>
+					<xsl:with-param name="style" select="'plain'"/>
+				</xsl:call-template>
+			</xsl:if>
+			
 			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:* | wadl:response/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
+			
             <!-- we allow no response text and we dont have a 200 level response with a representation -->
             <xsl:if test="not($skipNoResponseText) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
-                <!-- if we are also missing request text and it's not
+                <!-- If we are also missing request text and it's not
                      supressed then output the noreqresp message,
                      otherwise output the noresponse message -->
                 <xsl:choose>
@@ -356,7 +375,7 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:param">
-		<xsl:variable name="default.param.type" select="'String'"/>
+		<xsl:variable name="default.param.type" select="if (@style != 'plain') then 'String' else ''"/>
 	  <xsl:variable name="type">
 	  	<xsl:value-of select="if (@type and contains(@type, ':')) then substring-after(@type,':') else $default.param.type"/>
 	  </xsl:variable>
@@ -366,28 +385,22 @@
                 <xsl:otherwise> parameter </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-		<xsl:if test="@style != 'plain'">
+
 		<!-- TODO: Get more info from the xsd about these params-->
 		<tr>
 			<td align="left">
 				<code role="hyphenate-true"><xsl:value-of select="concat(if (@style = 'template') then '{' else '', @name, if (@style = 'template') then '}' else '')"/></code>
 			</td>
-<!--			<td align="left">
-				<xsl:value-of
-					select="concat(translate(substring(@style,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring(@style,2))"
-				/>
-			</td>-->
-			<xsl:if test="@style != 'template'">
-				<td align="left">
-					<xsl:call-template name="hyphenate.camelcase">
-						<xsl:with-param name="content">
-							<xsl:value-of select="concat(translate(substring($type,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($type,2))"/>
-						</xsl:with-param>
-					</xsl:call-template>
-				</td>
-			</xsl:if>
+			<td align="left">
+				<xsl:call-template name="hyphenate.camelcase">
+					<xsl:with-param name="content">
+						<xsl:value-of select="concat(translate(substring($type,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($type,2))"/>
+					</xsl:with-param>
+				</xsl:call-template>
+			</td>			
 			<td>
 				<xsl:apply-templates select="wadl:doc/*"/>
+				<xsl:if test="not(wadl:doc/d:para) and not(wadl:doc/d:formalpara) and not(wadl:doc/d:itemizedlist)"><para><xsl:value-of select="."/></para></xsl:if>
 				<xsl:if test="wadl:option or @style != 'template'">
 				<para>
                     <xsl:if test="wadl:option"> Possible values: <xsl:for-each
@@ -413,7 +426,7 @@
 				</xsl:if>
             </td>
 		</tr>
-		</xsl:if>
+		
 	</xsl:template>
 
 	<xsl:template match="wadl:response" mode="preprocess-normal">
@@ -495,21 +508,21 @@
     	<xsl:param name="method.title"/>
     	<xsl:param name="style"/>
     	<xsl:param name="styleCapitalized">
-    		<xsl:value-of select="concat(translate(substring($style,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($style,2))"/></xsl:param>
+    		<xsl:choose>
+    			<xsl:when test="$style != 'plain'"><xsl:value-of select="concat(translate(substring($style,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($style,2))"/></xsl:when>
+    			<xsl:otherwise>Body</xsl:otherwise>
+    		</xsl:choose>
+    	</xsl:param>
         <xsl:if test="$mode='Request' or $mode='Response'">
             <table rules="all">
                 <caption><xsl:value-of select="concat($method.title,' ',$mode, ' ', $styleCapitalized, ' Parameters')"/></caption>
                 <col width="30%"/>
-            	<xsl:if test="$style != 'template'">
-                	<col width="10%"/>
-            	</xsl:if>
+                <col width="10%"/>
                 <col width="40%"/>
                 <thead>
                     <tr>
                         <th align="center">Name</th>
-                    	<xsl:if test="$style != 'template'">
-	                        <th align="center">Type</th>
-                    	</xsl:if>
+	                    <th align="center">Type</th>
                         <th align="center">Description</th>
                     </tr>
                 </thead>
