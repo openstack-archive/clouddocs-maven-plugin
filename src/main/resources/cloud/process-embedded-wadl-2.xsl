@@ -4,14 +4,13 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns="http://docbook.org/ns/docbook" 
 	xmlns:wadl="http://wadl.dev.java.net/2009/02"       
-	xmlns:xhtml="http://www.w3.org/1999/xhtml" 
 	xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:d="http://docbook.org/ns/docbook" 
 	xmlns:rax="http://docs.rackspace.com/api" 
+	xmlns:xhtml="http://www.w3.org/1999/xhtml"
 	exclude-result-prefixes="wadl rax d xhtml" 
 	version="2.0">
 		
-	<xsl:import href="classpath:/cloud/date.xsl"/>
 
 	<!-- <xsl:output indent="yes"/> -->
 	
@@ -38,7 +37,7 @@
 		</xsl:copy>
 	</xsl:template>
 	
-	<xsl:template match="wadl:doc">
+	<xsl:template match="wadl:doc[parent::wadl:method[ancestor::wadl:application]]">
 		<xsl:param name="doc"/>
 		<xsl:variable name="content">
 			<xsl:if test="$doc">
@@ -49,7 +48,7 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
 			<xsl:choose>
-				<xsl:when test="not($content//xhtml:p) and not($content//d:para) and not($content//d:formalpara)">
+				<xsl:when test="not($content//d:para) and not($content//d:formalpara) ">
 					<para><xsl:copy-of select="$content"/></para>
 				</xsl:when>
 				<xsl:otherwise>
@@ -57,6 +56,10 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:copy>
+	</xsl:template>
+
+	<xsl:template match="wadl:doc[ancestor::wadl:doc]">
+		<xsl:apply-templates/>
 	</xsl:template>
 
 	<xsl:template match="wadl:method[@href]">
@@ -99,16 +102,18 @@
 			
 			<xsl:apply-templates select="wadl:method"/>
         </xsl:copy>
-		<xsl:apply-templates select="wadl:resource"/>		
-	</xsl:template>
 		
+	</xsl:template>
+	
+	<!-- xhtml2docbook -->
+	
 	<xsl:template match="xhtml:p">
 		<para>
-			<xsl:apply-templates />
+			<xsl:apply-templates select="@*|node()"/>
 		</para>
 	</xsl:template>
 	
-	<xsl:template match="@class">
+	<xsl:template match="@class[parent::xhtml:*]">
 		<xsl:attribute name="role" select="."/>
 	</xsl:template>
 	
@@ -176,50 +181,6 @@
 		<programlisting>
 			<xsl:apply-templates />
 		</programlisting>
-	</xsl:template>
-	
-	
-	<!-- Unrelated stuff -->
-	
-	<xsl:template match="processing-instruction('rax')[normalize-space(.) = 'fail']">
-		<xsl:message terminate="yes">
-			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			&lt;?rax fail?> found in the document.
-			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		</xsl:message>
-	</xsl:template>
-	
-	<xsl:template match="processing-instruction('rax')[normalize-space(.) = 'revhistory']" >
-		<xsl:if test="//d:revhistory[1]/d:revision">
-			<informaltable rules="all">
-				<col width="20%"/>
-				<col width="80%"/>
-				<thead>
-					<tr>
-						<td align="center">Revision Date</td>
-						<td align="center">Summary of Changes</td>
-					</tr>
-				</thead>
-				<tbody>
-					<xsl:apply-templates select="//d:revhistory[1]/d:revision" mode="revhistory"/>        	
-				</tbody>
-			</informaltable>
-		</xsl:if>
-	</xsl:template>
-	
-	<xsl:template match="d:revision" mode="revhistory">
-		<tr>
-			<td valign="top">
-				<para>
-					<xsl:call-template name="longDate">
-						<xsl:with-param name="in"  select="d:date"/>
-					</xsl:call-template>
-				</para>
-			</td>
-			<td>
-				<xsl:copy-of select="d:revdescription/*"/>
-			</td>
-		</tr>
 	</xsl:template>
 	
 </xsl:stylesheet>

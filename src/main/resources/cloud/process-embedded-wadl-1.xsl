@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:wadl="http://wadl.dev.java.net/2009/02"
-	xmlns:rax="http://docs.rackspace.com/api"
+	xmlns:rax="http://docs.rackspace.com/api" 
+	xmlns:d="http://docbook.org/ns/docbook" 
 	xmlns="http://docbook.org/ns/docbook" 
-	exclude-result-prefixes="wadl rax" version="2.0">
+	exclude-result-prefixes="wadl rax d" version="2.0">
+
+	<xsl:import href="classpath:/cloud/date.xsl"/>
 
 	<doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
 		<desc> 
@@ -22,7 +25,7 @@
 
 	<xsl:template match="@*|node()">
 		<xsl:copy>
-			<xsl:if test="self::wadl:method">
+			<xsl:if test="self::wadl:method[ancestor::wadl:application]">
 				<xsl:attribute name="rax:original-wadl" select="ancestor::wadl:application/@rax:original-wadl"/>
 			</xsl:if>
 			<xsl:apply-templates select="@*|node()"/>
@@ -30,7 +33,6 @@
 	</xsl:template>
 
 	<xsl:template match="wadl:resources[@href]">
-
 		<xsl:apply-templates select="document(@href)//rax:resources"/>
 	</xsl:template>
 
@@ -90,5 +92,50 @@
 			select="//wadl:resource[@id = current()/@rax:id]"/>
 		<xsl:apply-templates select="rax:resource" mode="continue-section"/>
 	</xsl:template>
+	
+	<!-- Unrelated stuff: Doesn't really belong here -->
+	
+	<xsl:template match="processing-instruction('rax')[normalize-space(.) = 'fail']">
+		<xsl:message terminate="yes">
+			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			&lt;?rax fail?> found in the document.
+			!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		</xsl:message>
+	</xsl:template>
+	
+	<xsl:template match="processing-instruction('rax')[normalize-space(.) = 'revhistory']" >
+		<xsl:if test="//d:revhistory[1]/d:revision">
+			<informaltable rules="all">
+				<col width="20%"/>
+				<col width="80%"/>
+				<thead>
+					<tr>
+						<td align="center">Revision Date</td>
+						<td align="center">Summary of Changes</td>
+					</tr>
+				</thead>
+				<tbody>
+					<xsl:apply-templates select="//d:revhistory[1]/d:revision" mode="revhistory"/>        	
+				</tbody>
+			</informaltable>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="d:revision" mode="revhistory">
+		<tr>
+			<td valign="top">
+				<para>
+					<xsl:call-template name="longDate">
+						<xsl:with-param name="in"  select="d:date"/>
+					</xsl:call-template>
+				</para>
+			</td>
+			<td>
+				<xsl:copy-of select="d:revdescription/*"/>
+			</td>
+		</tr>
+	</xsl:template>
+	
+	
 
 </xsl:stylesheet>
