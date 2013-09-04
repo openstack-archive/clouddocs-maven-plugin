@@ -400,8 +400,10 @@
 				</xsl:call-template>
 			</td>			
 			<td>
-				<xsl:apply-templates select="wadl:doc/*"/>
-				<xsl:if test="not(wadl:doc/d:para) and not(wadl:doc/d:formalpara) and not(wadl:doc/d:itemizedlist)"><para><xsl:value-of select="."/></para></xsl:if>
+				<xsl:choose>
+					<xsl:when test="not(wadl:doc/d:para) and not(wadl:doc/d:formalpara) and not(wadl:doc/d:itemizedlist)"><para><xsl:apply-templates select="wadl:doc/node()"/></para></xsl:when>
+					<xsl:otherwise><xsl:apply-templates select="wadl:doc/*"/></xsl:otherwise>
+				</xsl:choose>
 				<xsl:if test="wadl:option or @style != 'template'">
 				<para>
                     <xsl:if test="wadl:option"> Possible values: <xsl:for-each
