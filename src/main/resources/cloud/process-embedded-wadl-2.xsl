@@ -100,7 +100,7 @@
 				<xsl:with-param name="doc" select="$doc"/>
 			</xsl:apply-templates>
 			
-			<xsl:apply-templates select="wadl:method"/>
+			<xsl:apply-templates select="wadl:method|wadl:resource"/>
         </xsl:copy>
 		
 	</xsl:template>
