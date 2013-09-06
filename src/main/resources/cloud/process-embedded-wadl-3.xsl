@@ -352,7 +352,7 @@
 	    	<!-- a request exists only to insert a header sample with no body -->
             <xsl:if test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]])">
                     <xsl:copy-of select="$wadl.norequest.msg"/>
-            </xsl:if>
+                </xsl:if>
 			</section>
 			<section xml:id="{$sectionIdComputed}-Response">
 				<title>Response</title>
