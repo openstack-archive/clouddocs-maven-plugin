@@ -18,11 +18,15 @@ How Tos
 Release Notes
 =============
 
-clouddocs-maven-plugin 1.9.3-SNAPSHOT 
+clouddocs-maven-plugin 1.9.3 (September 5, 2013)
 ============================================================
 -  Bug fixes:
+
+   - Fix encoding issues that prevented building the plugin on Windows. 
    - Fix path issues that prevented building documents on Windows.
+   - Fix issue where documents would not build with a space in the path. 
    - Add zero-width spaces after underscore characters in template paramters in the api-ref.html output to allow for wrapping of long paths.
+   - Use https:// to refer to eluminate.js to avoid long loads when loading from file system in some browsers.
 
 clouddocs-maven-plugin 1.9.2 (August 19, 2013)
 ============================================================
