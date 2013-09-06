@@ -351,10 +351,7 @@
 	   		<!-- Note that wadl:request[@mediaType = 'application/xml' and not(@element)] is there to catch the situation where -->
 	    	<!-- a request exists only to insert a header sample with no body -->
             <xsl:if test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]])">
-                <!-- ...and we have a valid response OR we are skipping response text -->
-                <xsl:if test="wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation or $skipNoResponseText">
                     <xsl:copy-of select="$wadl.norequest.msg"/>
-                </xsl:if>
             </xsl:if>
 			</section>
 			<section xml:id="{$sectionIdComputed}-Response">
@@ -379,15 +376,8 @@
                 <!-- If we are also missing request text and it's not
                      supressed then output the noreqresp message,
                      otherwise output the noresponse message -->
-                <xsl:choose>
-                    <xsl:when test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]])">
-                        <xsl:copy-of select="$wadl.noreqresp.msg"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:copy-of select="$wadl.noresponse.msg"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:if>
+            	<xsl:copy-of select="$wadl.noresponse.msg"/>
+             </xsl:if>
 			</section>
 		</section>
 	</xsl:template>
