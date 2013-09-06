@@ -8,7 +8,8 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:d="http://docbook.org/ns/docbook" 
 	xmlns:rax="http://docs.rackspace.com/api" 
-	exclude-result-prefixes="wadl rax d xhtml" 
+	xmlns:xsdxt="http://docs.rackspacecloud.com/xsd-ext/v1.0"
+	exclude-result-prefixes="wadl rax d xhtml xsdxt" 
 	version="2.0">
 	
 	<!--<xsl:output indent="yes"/>-->
@@ -127,6 +128,18 @@
 		<xsl:apply-templates select="*[1]"/>
 	</xsl:template>
 	
+	<xsl:template match="xsdxt:samples">
+		<xsl:apply-templates/>
+	</xsl:template>
+	
+	<xsl:template match="xsdxt:sample">
+		<xsl:apply-templates/>
+	</xsl:template>
+	
+	<xsl:template match="xsdxt:code">
+		<xsl:apply-templates/>
+	</xsl:template>
+	
 	<!-- ======================================================= -->
 	
 	
@@ -237,12 +250,14 @@
 				</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
+		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
 			
 		
         <xsl:if test="$addMethodPageBreaks">
             <xsl:processing-instruction name="hard-pagebreak"/>
         </xsl:if>
-		<section xml:id="{concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)}">
+		<section xml:id="{$sectionIdComputed}">
+			<xsl:processing-instruction name="dbhtml">stop-chunking</xsl:processing-instruction>
 			<title><xsl:value-of select="$method.title"/></title>
 			<anchor xml:id="{concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')}" xreflabel="{$method.title}"/>
 			<xsl:if test="$security = 'writeronly'">
@@ -284,7 +299,7 @@
 
             <!-- Method Docs -->
 			<xsl:choose>
-				<xsl:when test="wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
+			  <xsl:when test="wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
 			    <xsl:apply-templates select="wadl:doc/*[not(@role='shortdesc')]"/>
 			  </xsl:when>
 			  <xsl:otherwise>
@@ -292,7 +307,8 @@
 			  </xsl:otherwise>
 			</xsl:choose>
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
-
+			<section xml:id="{$sectionIdComputed}-Request">
+				<title>Request</title>
             <!-- About the request -->
 			<xsl:if test="wadl:request//wadl:param[@style = 'header'] or parent::wadl:resource/wadl:param[@style = 'header']">
 				<xsl:call-template name="paramTable">
@@ -318,15 +334,18 @@
                 </xsl:call-template>
             </xsl:if>
 			
-			<xsl:if test="wadl:request//wadl:param[@style = 'plain']">
+<!--			<xsl:if test="wadl:request//wadl:param[@style = 'plain']">
 				<xsl:call-template name="paramTable">
 					<xsl:with-param name="mode" select="'Request'"/>
 					<xsl:with-param name="method.title" select="$method.title"/>
 					<xsl:with-param name="style" select="'plain'"/>
 				</xsl:call-template>
-			</xsl:if>
+			</xsl:if>-->
 
-			<xsl:copy-of select="wadl:request/wadl:representation/wadl:doc/db:* | wadl:request/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
+			<!-- TODO: Refactor to generate one example for each representation.-->
+			<xsl:apply-templates select=".//wadl:representation[parent::wadl:request]">
+				<xsl:with-param name="method.title" select="$method.title"/>
+			</xsl:apply-templates>
 			
             <!-- We allow no request text and there is no request... -->
 	   		<!-- Note that wadl:request[@mediaType = 'application/xml' and not(@element)] is there to catch the situation where -->
@@ -337,7 +356,9 @@
                     <xsl:copy-of select="$wadl.norequest.msg"/>
                 </xsl:if>
             </xsl:if>
-
+			</section>
+			<section xml:id="{$sectionIdComputed}-Response">
+				<title>Response</title>
             <!-- About the response -->
 
 			<xsl:if test="wadl:response/wadl:param[@style = 'header']">
@@ -348,15 +369,10 @@
                 </xsl:call-template>
             </xsl:if>
 			
-			<xsl:if test="wadl:response//wadl:param[@style = 'plain']">
-				<xsl:call-template name="paramTable">
-					<xsl:with-param name="mode" select="'Response'"/>
-					<xsl:with-param name="method.title" select="$method.title"/>
-					<xsl:with-param name="style" select="'plain'"/>
-				</xsl:call-template>
-			</xsl:if>
-			
-			<xsl:copy-of select="wadl:response/wadl:representation/wadl:doc/db:* | wadl:response/wadl:representation/wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />
+			<!-- TODO: Refactor to generate one example for each representation.-->
+				<xsl:apply-templates select=".//wadl:representation[parent::wadl:response[starts-with(normalize-space(@status),'2')]]">
+				<xsl:with-param name="method.title" select="$method.title"/>
+			</xsl:apply-templates>
 			
             <!-- we allow no response text and we dont have a 200 level response with a representation -->
             <xsl:if test="not($skipNoResponseText) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
@@ -372,9 +388,149 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:if>
+			</section>
 		</section>
 	</xsl:template>
+	
+	<xsl:template match="wadl:representation">
+		<xsl:param name="method.title"/>
+		<xsl:variable name="plainParams">
+		<xsl:if test="wadl:param[@style = 'plain']">
+			<xsl:call-template name="paramTable">
+				<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
+				<xsl:with-param name="method.title" select="$method.title"/>
+				<xsl:with-param name="style" select="'plain'"/>
+			</xsl:call-template>
+		</xsl:if>
+		</xsl:variable>
+		<xsl:apply-templates select="wadl:doc" mode="representation">
+			<xsl:with-param name="plainParams" select="$plainParams"/>
+		</xsl:apply-templates>
 
+	</xsl:template>
+
+ 	<xsl:template match="wadl:doc" mode="representation">
+ 		<xsl:param name="plainParams"/>
+ 		<!--
+            In order to create a DocBook example from a sample of code there are,
+            three variables we must determine: the media type of the example,
+            a human readable title, and the content of the example itself.
+            
+            We try to determine as much as we can from context.
+        -->
+ 		<xsl:variable
+ 			name="type"
+ 			as="xs:string"
+ 			select="if (.//xsdxt:code/@type) 
+ 			then .//xsdxt:code[1]/@type (: Legacy stuff? :)
+ 			else if (ancestor::wadl:representation/@mediaType)
+ 			then ancestor::wadl:representation/@mediaType
+ 			else 'application/xml'"/> <!-- xml is the default -->
+ 		<xsl:variable
+ 			name="title"
+ 			as="xs:string"
+ 			select="if (.//xsdxt:code/@title) then .//xsdxt:code[1]/@title
+ 			else if (.//xsdxt:sample/@title) then .//xsdxt:sample[1]/@title
+ 			else if (wadl:doc/@title) then wadl:doc/@title
+ 			else ''"/> <!-- a defualt title will be computed below in this case -->
+ 		<xsl:variable name="title-calculated">
+ 			<xsl:choose>
+ 				<xsl:when test="string-length($title) != 0"><xsl:value-of select="$title"/></xsl:when>
+ 				<xsl:otherwise>
+ 					<xsl:if test="ancestor::wadl:method/wadl:doc/@title">
+ 						<xsl:value-of select="ancestor::wadl:method/wadl:doc/@title"/>
+ 					</xsl:if>
+ 					<xsl:choose>
+ 						<xsl:when test="ancestor::wadl:response"> Response</xsl:when>
+ 						<xsl:when test="ancestor::wadl:request"> Request</xsl:when>
+ 					</xsl:choose>
+ 					<xsl:choose>
+ 						<xsl:when test="$type = 'application/xml'">: XML</xsl:when>
+ 						<xsl:when test="$type = 'application/json'">: JSON</xsl:when>
+ 						<xsl:when test="$type = 'application/atom+xml'">: ATOM</xsl:when>
+ 						<xsl:otherwise>: <xsl:value-of select="$type"/></xsl:otherwise>
+ 					</xsl:choose>
+ 				</xsl:otherwise>
+ 			</xsl:choose>
+ 		</xsl:variable>
+ 		
+ 		<xsl:choose>
+ 			<xsl:when test=".//xsdxt:samples">
+ 				<xsl:apply-templates select=".//xsdxt:samples/xsdxt:sample" mode="sample"/>
+ 			</xsl:when>
+ 			<xsl:when test=".//xsdxt:sample">
+ 				<xsl:apply-templates mode="sample"/>
+ 			</xsl:when>
+ 			<xsl:when test=".//xsdxt:code">
+ 				<example>
+ 					<title><xsl:value-of select="$title-calculated"/></title>
+ 					<xsl:apply-templates mode="sample"/>
+ 				</example>
+ 			</xsl:when>
+ 			<xsl:otherwise>
+ 				<xsl:apply-templates mode="sample"/>
+ 			</xsl:otherwise>
+ 		</xsl:choose>
+ 		<xsl:copy-of select="$plainParams"/>
+ 	</xsl:template>
+	
+	<xsl:template match="xsdxt:sample" mode="sample">
+		<!--
+            In order to create a DocBook example from a sample of code there are,
+            three variables we must determine: the media type of the example,
+            a human readable title, and the content of the example itself.
+            
+            We try to determine as much as we can from context.
+        -->
+		<xsl:variable
+			name="type"
+			as="xs:string"
+			select="if (ancestor::wadl:representation/@mediaType)
+			then ancestor::wadl:representation/@mediaType
+			else 'application/xml'"/> <!-- xml is the default -->
+		<xsl:variable
+			name="title"
+			as="xs:string"
+			select="if (@title) then @title
+			else if (.//xsdxt:code/@title) then .//xsdxt:code[1]/@title
+			else ''"/> <!-- a defualt title will be computed below in this case -->
+		<xsl:variable name="title-calculated">
+			<xsl:choose>
+				<xsl:when test="string-length($title) != 0"><xsl:value-of select="$title"/></xsl:when>
+				<xsl:otherwise>
+					<xsl:if test="ancestor::wadl:method/wadl:doc/@title">
+						<xsl:value-of select="ancestor::wadl:method/wadl:doc/@title"/>
+					</xsl:if>
+					<xsl:choose>
+						<xsl:when test="ancestor::wadl:response"> Response</xsl:when>
+						<xsl:when test="ancestor::wadl:request"> Request</xsl:when>
+					</xsl:choose>
+					<xsl:choose>
+						<xsl:when test="$type = 'application/xml'">: XML</xsl:when>
+						<xsl:when test="$type = 'application/json'">: JSON</xsl:when>
+						<xsl:when test="$type = 'application/atom+xml'">: ATOM</xsl:when>
+						<xsl:otherwise>: <xsl:value-of select="$type"/></xsl:otherwise>
+					</xsl:choose>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<example>
+			<title><xsl:value-of select="$title-calculated"/></title>
+			<xsl:apply-templates mode="sample"/>
+		</example>
+	</xsl:template>
+	
+	<xsl:template match="xsdxt:code" mode="sample">
+		<xsl:apply-templates mode="sample"/>
+	</xsl:template>
+	
+	<xsl:template match="node() | @*" mode="sample">
+		<xsl:copy>
+			<xsl:apply-templates select="node() | @*" mode="sample"/>
+		</xsl:copy>
+	</xsl:template>
+	
 	<xsl:template match="wadl:param">
 		<xsl:variable name="default.param.type" select="if (@style != 'plain') then 'String' else ''"/>
 	  <xsl:variable name="type">
@@ -516,9 +672,11 @@
     			<xsl:otherwise>Body</xsl:otherwise>
     		</xsl:choose>
     	</xsl:param>
+    	<xsl:variable name="tableType" select="(: if($style = 'plain') then 'informaltable' else :)'table'"/>
         <xsl:if test="$mode='Request' or $mode='Response'">
-            <table rules="all">
-                <caption><xsl:value-of select="concat($method.title,' ',$mode, ' ', $styleCapitalized, ' Parameters')"/></caption>
+            <xsl:element name="{$tableType}">
+            	<xsl:attribute name="rules">all</xsl:attribute>
+                <xsl:if test="$tableType = 'table'"><caption><xsl:value-of select="concat($method.title,' ',$mode, ' ', $styleCapitalized, ' Parameters')"/></caption></xsl:if>
                 <col width="30%"/>
                 <col width="10%"/>
                 <col width="40%"/>
@@ -531,6 +689,9 @@
                 </thead>
                 <tbody>
                     <xsl:choose>
+                    	<xsl:when test="$style = 'plain'">
+                    		<xsl:apply-templates select="wadl:param[@style = 'plain']"/>
+                    	</xsl:when>
                         <xsl:when test="$mode = 'Request'">
                             <xsl:apply-templates select="wadl:request//wadl:param[@style = $style]|parent::wadl:resource/wadl:param[@style = $style]"/>
                         </xsl:when>
@@ -545,7 +706,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </tbody>
-            </table>
+            </xsl:element>
         </xsl:if>
     </xsl:template>
 	
