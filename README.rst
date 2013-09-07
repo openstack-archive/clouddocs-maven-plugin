@@ -18,6 +18,15 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.9.4-SNAPSHOT
+============================================================
+- Bug fixes
+
+   - Fixed "Failed to load image" messages from DocBook xsls on stdout.
+   - Fixed invalid css rules.
+   - Generate table from plain parameters when documenting requests/response and no longer suppress documentation related to code samples embedded with requests/responses in wadls.
+   - Show error codes in apiref.html output.
+
 clouddocs-maven-plugin 1.9.3 (September 5, 2013)
 ============================================================
 -  Bug fixes:
