@@ -42,7 +42,7 @@
 				<xsl:apply-templates select="rax:resource"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:apply-templates select="wadl:resources"/>
+				<xsl:apply-templates select="//wadl:resources"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

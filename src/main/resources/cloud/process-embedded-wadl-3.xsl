@@ -259,7 +259,9 @@
 		<section xml:id="{$sectionIdComputed}">
 			<xsl:processing-instruction name="dbhtml">stop-chunking</xsl:processing-instruction>
 			<title><xsl:value-of select="$method.title"/></title>
-			<anchor xml:id="{concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')}" xreflabel="{$method.title}"/>
+			<xsl:if test="$sectionIdComputed != concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')">
+				<anchor xml:id="{concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')}" xreflabel="{$method.title}"/>
+			</xsl:if>
 			<xsl:if test="$security = 'writeronly'">
 				<para security="writeronly">Source wadl: <link xlink:href="{@rax:original-wadl}"><xsl:value-of select="@rax:original-wadl"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
 			</xsl:if>
