@@ -234,7 +234,13 @@
             <version>${wadl.tools.version}</version>
             <scope>provided</scope>
         </dependency> 
-        
+
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>3.0.0.201306101825-r</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
        
 

@@ -392,6 +392,8 @@ public abstract class PDFMojo extends AbstractFoMojo {
     }
 
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
+        GitHelper.addCommitProperties(transformer, projectBuildDirectory, 7, getLog());
+
         super.adjustTransformer(transformer, sourceFilename, targetFile);
 
 	transformer.setParameter("branding", branding);

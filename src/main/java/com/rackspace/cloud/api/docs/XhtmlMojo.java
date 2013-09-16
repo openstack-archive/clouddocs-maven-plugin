@@ -16,6 +16,7 @@ import javax.xml.transform.URIResolver;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipOutputStream;
+import javax.xml.transform.Transformer;
 
 public abstract class XhtmlMojo extends AbstractHtmlMojo {
 
@@ -207,6 +208,12 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
     
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
         return super.createTransformerBuilder (new DocBookResolver (resolver, getType()));
+    }
+
+    @Override
+    public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
+        GitHelper.addCommitProperties(transformer, baseDir, 7, getLog());
+        super.adjustTransformer(transformer, sourceFilename, targetFile);
     }
 
     protected String getNonDefaultStylesheetLocation() {

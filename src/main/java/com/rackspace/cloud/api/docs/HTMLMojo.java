@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
 
 public abstract class HTMLMojo extends AbstractHtmlMojo {
 
@@ -54,5 +55,11 @@ public abstract class HTMLMojo extends AbstractHtmlMojo {
         map.put("failOnValidationError", failOnValidationError);
         
         return CalabashHelper.createSource(source, pathToPipelineFile, map);
+    }
+
+    @Override
+    public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
+        GitHelper.addCommitProperties(transformer, new File(sourceFilename), 7, getLog());
+        super.adjustTransformer(transformer, sourceFilename, targetFile);
     }
 }
