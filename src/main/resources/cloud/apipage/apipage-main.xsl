@@ -151,7 +151,7 @@ function showSelected(selectorId, optionId){
                         <!-- add this later once bug 1225105 is merged -->
                         <a class="color" href="api-ref-identity.html">Identity Service
                           APIs</a>
-                        <a class="color" href="api-ref-compute.html">Compute API Extensions</a>
+                        <a class="color" href="api-ref-compute.html">Compute API and Extensions</a>
                         <a class="color" href="api-ref-image.html">Image Service APIs</a>
                         <a class="color" href="api-ref-blockstorage.html">Block Storage
                           Service API</a>
