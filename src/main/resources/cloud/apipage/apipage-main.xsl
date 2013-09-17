@@ -500,56 +500,6 @@ function showSelected(selectorId, optionId){
               <xsl:apply-templates select="@*|node()"/>
             </xsl:copy>
           </xsl:template>
-  <xsl:template match="wadl:response" mode="preprocess-normal">
-    <xsl:variable name="normStatus" select="normalize-space(@status)"/>
-    <xsl:if
-      test="starts-with($normStatus,'2') or starts-with($normStatus,'3')">
-      <xsl:call-template name="statusCodeList">
-        <xsl:with-param name="codes" select="$normStatus"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="wadl:response" mode="preprocess-faults">
-    <xsl:if
-      test="(not(@status) or not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')))">
-      <xsl:variable name="codes">
-        <xsl:choose>
-          <xsl:when test="@status">
-            <xsl:value-of select="normalize-space(@status)"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="'400 500 &#x2026;'"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="wadl:representation/@element">
-          <xsl:value-of
-            select="substring-after((wadl:representation/@element)[1],':')"/>
-          <xsl:text> (</xsl:text><xsl:call-template name="statusCodeList">
-            <xsl:with-param name="codes" select="$codes"/>
-            <xsl:with-param name="inError" select="true()"/>
-          </xsl:call-template>
-          <xsl:text>)</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="statusCodeList">
-            <xsl:with-param name="codes" select="$codes"/>
-            <xsl:with-param name="inError" select="true()"/>
-          </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="following-sibling::wadl:response">
-          <xsl:text>,&#x0a; </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>&#x0a; </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
-  </xsl:template>
 
   <xsl:template name="trimUri">
     <!-- Trims elements -->
