@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <fop version="1.0">
     <!-- Base URL for resolving relative URLs -->
     <base>.</base>

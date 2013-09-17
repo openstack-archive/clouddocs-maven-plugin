@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <p:library xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:cx="http://xmlcalabash.com/ns/extensions"
     xmlns:c="http://www.w3.org/ns/xproc-step"

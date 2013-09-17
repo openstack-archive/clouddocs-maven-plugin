@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <p:declare-step version='1.0' name="main"
     xmlns:cx="http://xmlcalabash.com/ns/extensions"
     xmlns:p="http://www.w3.org/ns/xproc"
