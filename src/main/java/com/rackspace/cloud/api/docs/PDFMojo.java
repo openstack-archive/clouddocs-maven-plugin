@@ -525,7 +525,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
     protected Source createSource(String inputFilename, File sourceFile, PreprocessingFilter filter)
             throws MojoExecutionException {
 
-        String pathToPipelineFile = "classpath:/pdf.xpl"; //use "classpath:/path" for this to work
+        String pathToPipelineFile = "classpath:///pdf.xpl"; //use "classpath:///path" for this to work
 
 	String sourceFileNameNormalized = sourceFile.toURI().toString();
 	//from super

@@ -8,7 +8,7 @@
   <p:input port="parameters" kind="parameter"/>
   <p:output port="result"/>
     
-  <p:import href="classpath:/rackspace-library.xpl"/><!-- classpath:/ -->
+  <p:import href="classpath:///rackspace-library.xpl"/><!-- classpath:/// -->
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 
 
@@ -44,7 +44,7 @@
   
   <l:validate-transform name="validate-post-xinclude">
     <p:input port="schema">
-      <p:document href="classpath:/rng/rackbook.rng"/>
+      <p:document href="classpath:///rng/rackbook.rng"/>
     </p:input>
   </l:validate-transform>
 
@@ -99,7 +99,7 @@
   
   <l:validate-transform-idrefs name="validate-post-wadl" >
     <p:input port="schema">
-      <p:document href="classpath:/rng/rackbook.rng"/>
+      <p:document href="classpath:///rng/rackbook.rng"/>
     </p:input>
   </l:validate-transform-idrefs>
   

@@ -11,7 +11,7 @@
   <p:output port="result"/>
 
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
-  <p:import href="classpath:/rackspace-library.xpl"/>
+  <p:import href="classpath:///rackspace-library.xpl"/>
   
   <cx:message>
     <p:with-option name="message" select="'Entering xproc pipeline'"/>
@@ -19,7 +19,7 @@
   
   <l:validate-transform name="validate-pre-xinclude">
     <p:input port="schema" >
-      <p:document href="classpath:/rng/rackbook.rng"/>
+      <p:document href="classpath:///rng/rackbook.rng"/>
     </p:input>
   </l:validate-transform>
  
@@ -32,7 +32,7 @@
   
   <l:validate-transform name="validate-post-xinclude">
     <p:input port="schema" >
-      <p:document  href="classpath:/rng/rackbook.rng"/> 
+      <p:document  href="classpath:///rng/rackbook.rng"/> 
     </p:input>
   </l:validate-transform>
   
@@ -43,7 +43,7 @@
       <p:pipe step="normalize" port="result"/> 
     </p:input> 
     <p:input port="stylesheet">
-      <p:document href="classpath:/cloud/apipage/process-embedded-wadl-apipage.xsl"/>
+      <p:document href="classpath:///cloud/apipage/process-embedded-wadl-apipage.xsl"/>
     </p:input>
     <p:input port="parameters" >
       <p:empty/>
@@ -61,7 +61,7 @@
       <p:pipe step="process-embedded-wadl" port="result"/> 
     </p:input> 
     <p:input port="stylesheet">
-      <p:document href="classpath:/cloud/apipage/apipage-main.xsl"/>
+      <p:document href="classpath:///cloud/apipage/apipage-main.xsl"/>
     </p:input>
     <p:input port="parameters" >
       <p:empty/>

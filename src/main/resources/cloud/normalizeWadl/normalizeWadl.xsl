@@ -23,7 +23,7 @@
 		exclude-result-prefixes="xs wadl xsd xsdxt" 
 		version="2.0">
 
-    <xsl:import href="classpath:/cloud/normalizeWadl/normalizeWadl1.xsl"/>
+    <xsl:import href="classpath:///cloud/normalizeWadl/normalizeWadl1.xsl"/>
 
     <xsl:param name="format">path-format</xsl:param>
 

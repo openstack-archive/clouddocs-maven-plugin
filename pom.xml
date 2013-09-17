@@ -59,7 +59,7 @@
         <dependency>
             <groupId>com.rackspace.papi.components</groupId>
             <artifactId>translation</artifactId>
-            <version>1.0.6</version>
+            <version>2.9.0</version>
         </dependency>
 
         <dependency>
@@ -71,8 +71,8 @@
 
         <dependency>
             <groupId>net.sf.saxon</groupId>
-            <artifactId>saxon</artifactId>
-            <version>9.3</version>
+            <artifactId>saxon-ee</artifactId>
+            <version>9.4.0.6</version>
         </dependency>
 
         <dependency>
@@ -342,7 +342,7 @@
 		  <phase>initialize</phase>
 		  <configuration>		    
 		    <target>
-		      <replace file="target/classes/cloud/normalizeWadl/normalizeWadl1.xsl" token="href=&quot;normalizeWadl" value="href=&quot;classpath:/cloud/normalizeWadl/normalizeWadl" />
+		      <replace file="target/classes/cloud/normalizeWadl/normalizeWadl1.xsl" token="href=&quot;normalizeWadl" value="href=&quot;classpath:///cloud/normalizeWadl/normalizeWadl" />
 		    </target>		    
 		  </configuration>
 		  <goals>

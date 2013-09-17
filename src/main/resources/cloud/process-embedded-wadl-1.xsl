@@ -6,7 +6,7 @@
 	xmlns="http://docbook.org/ns/docbook" 
 	exclude-result-prefixes="wadl rax d" version="2.0">
 
-	<xsl:import href="classpath:/cloud/date.xsl"/>
+	<xsl:import href="classpath:///cloud/date.xsl"/>
 
 	<doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
 		<desc> 
