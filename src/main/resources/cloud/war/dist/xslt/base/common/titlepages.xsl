@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:db="http://docbook.org/ns/docbook"
 		xmlns:ghost="http://docbook.org/ns/docbook/ephemeral"
