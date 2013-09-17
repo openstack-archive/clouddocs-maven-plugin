@@ -9,7 +9,7 @@
   <p:import href="classpath:///rackspace-library.xpl"/><!-- classpath:/// -->
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 
-  <p:input port="source"/>
+  <p:input port="source" primary="true"/>
   <p:output port="result"/>
 
   <p:input port="parameters" kind="parameter"/>

@@ -332,7 +332,7 @@
       <p:output port="result" sequence="true"/>
    </p:declare-step>
    <p:declare-step type="p:xsl-formatter" xml:id="xsl-formatter">
-      <p:input port="source"/>
+      <p:input port="source" primary="true"/>
       <p:input port="parameters" kind="parameter"/>
       <p:output port="result" primary="false"/>
       <p:option name="href" required="true" cx:type="xsd:anyURI"/>

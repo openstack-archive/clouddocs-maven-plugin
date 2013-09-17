@@ -6,7 +6,7 @@
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
   name="main">
   
-  <p:input port="source"/> 
+  <p:input port="source" primary="true"/> 
   <p:input port="parameters" kind="parameter"/>
   <p:output port="result"/>
 
