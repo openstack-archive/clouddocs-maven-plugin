@@ -29,14 +29,20 @@ How Tos
 Release Notes
 =============
 
-clouddocs-maven-plugin 1.9.4-SNAPSHOT
+clouddocs-maven-plugin 1.10.0
 ============================================================
-- Bug fixes
+-  New formatting for api-ref.html output
+-  Refactored API reference page layout to include plain parameters and longform doc of media type. 
+-  Bug fixes
 
    - Fixed "Failed to load image" messages from DocBook xsls on stdout.
    - Fixed invalid css rules.
    - Generate table from plain parameters when documenting requests/response and no longer suppress documentation related to code samples embedded with requests/responses in wadls.
    - Show error codes in apiref.html output.
+   - No longer include timestamp in file names for intermediate invalid file generated in target directory. 
+   - Fixed bug where it was impossible to refer to a wadl by URL.
+   - Refactored wadl2docbook code for improved readability.
+  
 
 clouddocs-maven-plugin 1.9.3 (September 5, 2013)
 ============================================================
