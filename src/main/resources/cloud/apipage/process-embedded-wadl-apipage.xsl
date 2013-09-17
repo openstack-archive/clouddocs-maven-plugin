@@ -14,7 +14,9 @@
     </xsl:template>
     
     <xsl:param name="compute.wadl.path.from.docbook.path">0</xsl:param>
-    
+
+    <xsl:param name="project.build.directory"/>
+
     <xsl:template match="wadl:resources[@href]">
         <xsl:variable name="wadl.path">
             <xsl:call-template name="wadlPath">
@@ -88,7 +90,7 @@
             <xsl:when
                 test="$compute.wadl.path.from.docbook.path = '0'">
                 <xsl:value-of
-                    select="concat('target/generated-resources/xml/xslt/',$path)"
+                    select="concat($project.build.directory, '/generated-resources/xml/xslt/', $path)"
                 />
             </xsl:when>
             <xsl:otherwise>
