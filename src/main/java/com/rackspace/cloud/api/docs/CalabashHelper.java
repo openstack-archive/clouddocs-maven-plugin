@@ -1,8 +1,11 @@
 package com.rackspace.cloud.api.docs;
 
 import com.rackspace.cloud.api.docs.pipeline.CalabashPipelineBuilder;
+import com.rackspace.cloud.api.docs.pipeline.MavenXProcMessageListener;
 import com.rackspace.cloud.api.docs.pipeline.Pipeline;
 import com.rackspace.cloud.api.docs.pipeline.PipelineInput;
+import com.xmlcalabash.core.XProcMessageListener;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.xml.sax.InputSource;
 
@@ -20,8 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 public class CalabashHelper {
-    private static Source run(final String pipelineURI, final InputSource inputSource, final Map<String, Object> map) throws FileNotFoundException {
-        Pipeline pipeline = new CalabashPipelineBuilder(false, true).build(pipelineURI);
+    private static Source run(final Log log, final String pipelineURI, final InputSource inputSource, final Map<String, Object> map) throws FileNotFoundException {
+        XProcMessageListener messageListener = log != null ? new MavenXProcMessageListener(log) : null;
+        Pipeline pipeline = new CalabashPipelineBuilder(false, true, messageListener).build(pipelineURI);
 
 //        <c:param-set xmlns:c="http://www.w3.org/ns/xproc-step">
 //            <c:param name="username" namespace="" value="user"/>
@@ -106,7 +110,7 @@ public class CalabashHelper {
      * @return
      * @throws MojoExecutionException 
      */
-    public static Source createSource(Source source, String pipelineURI, Map<String, Object> map)
+    public static Source createSource(Log log, Source source, String pipelineURI, Map<String, Object> map)
             throws MojoExecutionException {
 
         try {
@@ -115,7 +119,7 @@ public class CalabashHelper {
             }
             SAXSource saxSource = (SAXSource) source;
 
-            return run(pipelineURI, saxSource.getInputSource(),map);
+            return run(log, pipelineURI, saxSource.getInputSource(),map);
         } catch (FileNotFoundException e) {
             throw new MojoExecutionException("Failed to find source.", e);
         }

@@ -401,6 +401,6 @@ public abstract class XhtmlMojo extends AbstractHtmlMojo {
         }
 
 
-        return CalabashHelper.createSource(source, pathToPipelineFile, map);
+        return CalabashHelper.createSource(getLog(), source, pathToPipelineFile, map);
     }
 }

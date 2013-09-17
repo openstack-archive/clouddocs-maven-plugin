@@ -949,7 +949,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         //or to check existence, transform and copy image as well (for html)
         map.put("outputType", "html");
 
-        return CalabashHelper.createSource(source, pathToPipelineFile, map);
+        return CalabashHelper.createSource(getLog(), source, pathToPipelineFile, map);
     }
 
 }

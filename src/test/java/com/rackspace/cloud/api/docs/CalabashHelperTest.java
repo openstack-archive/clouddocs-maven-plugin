@@ -28,7 +28,7 @@ public class CalabashHelperTest {
 
         @Test (expected=MojoExecutionException.class)
         public void shouldThrowSAXSourceError() throws Exception {
-            CalabashHelper.createSource(source, null,null);
+            CalabashHelper.createSource(null, source, null,null);
         }
     }
 }

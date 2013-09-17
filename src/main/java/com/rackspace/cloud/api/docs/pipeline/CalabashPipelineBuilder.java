@@ -3,6 +3,7 @@ package com.rackspace.cloud.api.docs.pipeline;
 import com.rackspace.papi.components.translation.resolvers.ClassPathUriResolver;
 import com.rackspace.papi.components.translation.resolvers.InputStreamUriParameterResolver;
 import com.xmlcalabash.core.XProcConfiguration;
+import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XPipeline;
 import com.xmlcalabash.util.XProcURIResolver;
@@ -13,6 +14,7 @@ import javax.xml.transform.URIResolver;
 public class CalabashPipelineBuilder implements PipelineBuilder {
    private final boolean schemaAware;
    private final boolean legacySourceOutput;
+   private XProcMessageListener messageListener;
    
    public CalabashPipelineBuilder() {
       this(true, false);
@@ -27,11 +29,21 @@ public class CalabashPipelineBuilder implements PipelineBuilder {
       this.legacySourceOutput = legacySourceOutput;
    }
    
+   public CalabashPipelineBuilder(boolean schemaAware, boolean legacySourceOutput, XProcMessageListener messageListener) {
+      this.schemaAware = schemaAware;
+      this.legacySourceOutput = legacySourceOutput;
+      this.messageListener = messageListener;
+   }
+
    @Override
    public Pipeline build(String pipelineUri) {
       try {
          XProcConfiguration config = new XProcConfiguration(schemaAware);
          XProcRuntime runtime = new XProcRuntime(config);
+         if (messageListener != null) {
+             runtime.setMessageListener(messageListener);
+         }
+
          InputStreamUriParameterResolver resolver = new InputStreamUriParameterResolver(new XProcURIResolver(runtime));
          resolver.addResolver(new ClassPathUriResolver());
          runtime.setURIResolver(resolver);

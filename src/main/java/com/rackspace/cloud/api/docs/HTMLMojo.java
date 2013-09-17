@@ -53,6 +53,6 @@ public abstract class HTMLMojo extends AbstractHtmlMojo {
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("failOnValidationError", failOnValidationError);
         
-        return CalabashHelper.createSource(source, pathToPipelineFile, map);
+        return CalabashHelper.createSource(getLog(), source, pathToPipelineFile, map);
     }
 }
