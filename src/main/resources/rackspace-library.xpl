@@ -64,7 +64,7 @@
    	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
-		<p:variable name="invalidFile" select="concat($project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-idrefs-', current-dateTime(),'.xml')">
+		<p:variable name="invalidFile" select="concat($project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-idrefs.xml')">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
                 <p:store>
@@ -215,7 +215,7 @@ setting failOnValidationError to no in your pom.
    	        <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
-		<p:variable name="invalidFile" select="concat($project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid-', current-dateTime(),'.xml')">
+		<p:variable name="invalidFile" select="concat($project.build.directory,'/',//c:param[@name = 'inputSrcFile']/@value,'-invalid.xml')">
 		  <p:pipe step="params" port="parameters"/>
 		</p:variable>
                 <p:store>
