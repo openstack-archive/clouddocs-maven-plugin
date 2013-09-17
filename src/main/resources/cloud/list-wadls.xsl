@@ -20,7 +20,7 @@
         <xsl:for-each select="//wadl:resource[@href]|//wadl:resources[@href]">
             <xsl:variable name="href">
               <xsl:choose>
-                <xsl:when test="starts-with(@href,'.') or contains(@href, '/:')"><xsl:value-of select="@href"/></xsl:when>
+                <xsl:when test="starts-with(@href,'.') or contains(@href, ':/')"><xsl:value-of select="@href"/></xsl:when>
                   <xsl:otherwise><xsl:value-of select="concat('./',@href)"/></xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
