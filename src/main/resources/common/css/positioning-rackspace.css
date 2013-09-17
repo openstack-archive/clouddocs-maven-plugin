@@ -20,7 +20,7 @@ h1 { font: 15pt Arial, Helvetica, geneva;
      color: black !important;
 }
 h2 { font: normal 12pt Arial, Helvetica, geneva;
-	color: black! important;
+	color: black !important;
 }
 
 #header {
@@ -75,7 +75,7 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
     z-index: 1500;
     border-right:1px solid #bbc4c5;
     padding: 0px;
-    background-color: #f0f0f0!important;
+    background-color: #f0f0f0 !important;
 }
 
 #treeDiv {
@@ -362,7 +362,7 @@ body #content {
     position: fixed;
     top: 35px;
     left: -15px;
-    color: white!important;
+    color: white !important;
 }
 
 body.sidebar #toolbar{
@@ -381,7 +381,7 @@ div#toolbar-left img {
 div.note *, div.caution *, div.important *, div.tip *, div.warning *, div.calloutlist * {
     background: inherit !important;
     color: inherit !important;
-    border: inherit  !important;    
+    border: inherit !important;    
 }
 
 div.note p:first-child, div.caution p:first-child, div.important p:first-child, div.tip p:first-child, div.warning p:first-child, div.calloutlist p:first-child {
