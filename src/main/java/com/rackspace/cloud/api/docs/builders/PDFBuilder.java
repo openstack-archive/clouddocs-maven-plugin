@@ -201,7 +201,7 @@ public class PDFBuilder {
 				//final String inputFilename = sourceFilePath;
 				// targetFilename is inputFilename - ".xml" + targetFile extension				
 				String baseTargetFile;
-				if(null != pdfFilenameBase && pdfFilenameBase != ""){
+				if(null != pdfFilenameBase && !pdfFilenameBase.isEmpty()){
 				    baseTargetFile = pdfFilenameBase;
 				} else {
 				    baseTargetFile = inputFilename.substring(0, inputFilename.length() - 4);
@@ -344,7 +344,7 @@ public class PDFBuilder {
 		transformer.setParameter("autoPdfGlossaryInfix","/..");
 
 		transformer.setParameter("branding", branding);
-		if(branding=="openstack") {
+		if("openstack".equals(branding)) {
 			transformer.setParameter("builtForOpenStack", "1");
 		} else {
 			transformer.setParameter("builtForOpenStack", "0");
