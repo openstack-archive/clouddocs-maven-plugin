@@ -142,13 +142,27 @@ function showSelected(selectorId, optionId){
                     </div>
                     <div id="body">
                       <p>&#160;</p>
-
-		      <div class="floating-menu">
-            <h3 class="subhead">Jump to...</h3>
-  			    <xsl:apply-templates select="d:chapter" mode="toc"/>
-		        <a class="color" href="#top">Top of page</a>
-		      </div>
-
+                      <div class="floating-menu">
+                        <h3 class="subhead">Jump to...</h3>
+                        <xsl:apply-templates select="d:chapter" mode="toc"/>
+                        <hr/>
+                        <a class="color" href="#top">Top of page</a>
+                        <hr/>
+                        <!-- add this later once bug 1225105 is merged -->
+                        <a class="color" href="api-ref-identity.html">Identity Service
+                          APIs</a>
+                        <a class="color" href="api-ref-compute.html">Compute API Extensions</a>
+                        <a class="color" href="api-ref-image.html">Image Service APIs</a>
+                        <a class="color" href="api-ref-blockstorage.html">Block Storage
+                          Service API</a>
+                        <a class="color" href="api-ref-networking.html">Networking API</a>
+                        <a class="color" href="api-ref-objectstorage.html">Object Storage
+                          API</a>
+                        <a class="color" href="api-ref-orchestration.html">Orchestration
+                          API</a>
+                        <hr/>
+                        <a class="color" href="api-ref.html">API Reference Home</a>
+                      </div>
                       <p>&#160;</p>
                       <xsl:apply-templates/>
                       
@@ -486,56 +500,6 @@ function showSelected(selectorId, optionId){
               <xsl:apply-templates select="@*|node()"/>
             </xsl:copy>
           </xsl:template>
-  <xsl:template match="wadl:response" mode="preprocess-normal">
-    <xsl:variable name="normStatus" select="normalize-space(@status)"/>
-    <xsl:if
-      test="starts-with($normStatus,'2') or starts-with($normStatus,'3')">
-      <xsl:call-template name="statusCodeList">
-        <xsl:with-param name="codes" select="$normStatus"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="wadl:response" mode="preprocess-faults">
-    <xsl:if
-      test="(not(@status) or not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')))">
-      <xsl:variable name="codes">
-        <xsl:choose>
-          <xsl:when test="@status">
-            <xsl:value-of select="normalize-space(@status)"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="'400 500 &#x2026;'"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="wadl:representation/@element">
-          <xsl:value-of
-            select="substring-after((wadl:representation/@element)[1],':')"/>
-          <xsl:text> (</xsl:text><xsl:call-template name="statusCodeList">
-            <xsl:with-param name="codes" select="$codes"/>
-            <xsl:with-param name="inError" select="true()"/>
-          </xsl:call-template>
-          <xsl:text>)</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="statusCodeList">
-            <xsl:with-param name="codes" select="$codes"/>
-            <xsl:with-param name="inError" select="true()"/>
-          </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="following-sibling::wadl:response">
-          <xsl:text>,&#x0a; </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>&#x0a; </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
-  </xsl:template>
 
   <xsl:template name="trimUri">
     <!-- Trims elements -->

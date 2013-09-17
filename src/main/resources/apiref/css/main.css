@@ -376,7 +376,7 @@ a.button:active, input.action:active {
 	background: -webkit-gradient(linear, left top, left bottom, from(#bebebe), to(#dddddd));
 	background: -moz-linear-gradient(top,  #bebebe,  #eeeeee);	
 	-webkit-transition:none;
-	padding: 4px 29px 2px 31px!important;
+	padding: 4px 29px 2px 31px !important;
 }
 
 
@@ -709,7 +709,7 @@ div.floating-menu {
     position: fixed;
     left: 0;
     top: 25%;
-    width: 190px;
+    width: 200px;
     margin-top: -2.5em;
     border:1px solid #ffffff;
     z-index:100;
