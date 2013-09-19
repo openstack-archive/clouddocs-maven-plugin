@@ -1,6 +1,6 @@
 package com.rackspace.cloud.api.docs.pipeline;
 
-import com.rackspace.papi.components.translation.resolvers.InputStreamUriParameterResolver;
+import com.rackspace.cloud.api.docs.pipeline.resolvers.InputStreamUriParameterResolver;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.model.RuntimeValue;

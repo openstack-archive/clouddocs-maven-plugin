@@ -1,7 +1,7 @@
 package com.rackspace.cloud.api.docs.pipeline;
 
-import com.rackspace.papi.components.translation.resolvers.ClassPathUriResolver;
-import com.rackspace.papi.components.translation.resolvers.InputStreamUriParameterResolver;
+import com.rackspace.cloud.api.docs.pipeline.resolvers.ClassPathUriResolver;
+import com.rackspace.cloud.api.docs.pipeline.resolvers.InputStreamUriParameterResolver;
 import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRuntime;
