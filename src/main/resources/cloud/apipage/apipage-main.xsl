@@ -35,10 +35,10 @@
           <xsl:template match="wadl:method" mode="processDetailsBtn">
             <xsl:variable name="id" select="generate-id()"/>
             processADetailBtn(theText,'<xsl:value-of select="$id"/>_btn','\<xsl:comment><xsl:value-of select="$id"/>_btn_section START</xsl:comment>','\<xsl:comment><xsl:value-of select="$id"/>_btn_section END</xsl:comment>','<xsl:value-of select="$id"/>');           
-            <xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc/d:example and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
+            <xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc//xsdxt:code and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc//xsdxt:code">
               processSelection(theText,'\<xsl:comment><xsl:value-of select="$id"/>_req_xml_selection START</xsl:comment>','\<xsl:comment><xsl:value-of select="$id"/>_req_xml_selection END</xsl:comment>','<xsl:value-of select="$id"/>','<xsl:value-of select="$id"/>_req_xml');
             </xsl:if>
-            <xsl:if test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc/d:example and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
+            <xsl:if test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc//xsdxt:code and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc//xsdxt:code">
             processSelection(theText,'\<xsl:comment><xsl:value-of select="$id"/>_resp_xml_selection START</xsl:comment>','\<xsl:comment><xsl:value-of select="$id"/>_resp_xml_selection END</xsl:comment>','<xsl:value-of select="$id"/>','<xsl:value-of select="$id"/>_resp_xml');
             </xsl:if>
           </xsl:template>
@@ -47,11 +47,11 @@
             <xsl:variable name="id" select="generate-id()"/>
             
             $("#<xsl:value-of select="$id"/>").hide();  
-            <xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc/d:example and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
+            <xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc//xsdxt:code and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc//xsdxt:code">
             $("#<xsl:value-of select="$id"/>_resp_select").val("json");
             $("#<xsl:value-of select="$id"/>_resp_xml").hide();
             </xsl:if>
-            <xsl:if test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc/d:example and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
+            <xsl:if test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc//xsdxt:code and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc//xsdxt:code">
             $("#<xsl:value-of select="$id"/>_req_select").val("json");
             $("#<xsl:value-of select="$id"/>_req_xml").hide();
             </xsl:if>
@@ -60,7 +60,7 @@
           <xsl:template match="wadl:method" mode="showSelected">
             <xsl:variable name="id" select="generate-id()"/>
             <xsl:if test="position() != 1">else </xsl:if> if(selectorId=='<xsl:value-of select="$id"/>_req_select'){         
-            <xsl:if test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc/d:example and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
+            <xsl:if test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc//xsdxt:code and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc//xsdxt:code">
                 if(optionId=='xml'){
                   $("#<xsl:value-of select="$id"/>_req_json").hide();
                   $("#<xsl:value-of select="$id"/>_req_xml").show();
@@ -68,7 +68,7 @@
                   $("#<xsl:value-of select="$id"/>_req_xml").hide();
                   $("#<xsl:value-of select="$id"/>_req_json").show();                     
               }</xsl:if>
-            } <xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc/d:example and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example"> else </xsl:if><xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc">if(selectorId=='<xsl:value-of select="$id"/>_resp_select'){
+            } <xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc//xsdxt:code and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc//xsdxt:code"> else </xsl:if><xsl:if test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml')]/wadl:doc and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc">if(selectorId=='<xsl:value-of select="$id"/>_resp_select'){
                 if(optionId=='xml'){
                  $("#<xsl:value-of select="$id"/>_resp_json").hide();
                  $("#<xsl:value-of select="$id"/>_resp_xml").show();
@@ -349,8 +349,8 @@ function showSelected(selectorId, optionId){
               <!-- Examples -->
               <xsl:choose>
                 <xsl:when
-                  test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc/d:example 
-                        and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
+                  test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc//xsdxt:code 
+                        and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc//xsdxt:code">
                   <select id="{$id}_req_select"
                     onchange="toggleSelection('{$id}_req_select','{concat(ancestor::wadl:resource/@path,'-',@name)}');">
                     <option value="xml" selected="selected">Request XML</option>
@@ -362,7 +362,7 @@ function showSelected(selectorId, optionId){
                   <xsl:comment><xsl:value-of select="concat($id,'_req_xml_selection START')"/></xsl:comment><xsl:text>                    
                   </xsl:text>
                   <div class="example" id="{concat($id,'_req_xml')}">
-                    <xsl:apply-templates select="wadl:request/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc/d:example"/>
+                    <xsl:apply-templates select="wadl:request/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc//xsdxt:code"/>
                   </div>
                   <xsl:comment><xsl:value-of select="concat($id,'_req_xml_selection END')"/></xsl:comment><xsl:text>                    
                   </xsl:text>
@@ -373,7 +373,7 @@ function showSelected(selectorId, optionId){
                   <xsl:comment><xsl:value-of select="concat($id,'_req_json_selection START')"/></xsl:comment><xsl:text>                    
                   </xsl:text>
                   <div class="example" id="{concat($id,'_req_json')}">
-                    <xsl:apply-templates select="wadl:request/wadl:representation[ends-with(@mediaType,'/json') ]/wadl:doc/d:example"/>
+                    <xsl:apply-templates select="wadl:request/wadl:representation[ends-with(@mediaType,'/json') ]/wadl:doc//xsdxt:code"/>
                   </div>
                   <xsl:comment><xsl:value-of select="concat($id,'_req_json_selection END')"/></xsl:comment><xsl:text>                    
                   </xsl:text>
@@ -381,13 +381,13 @@ function showSelected(selectorId, optionId){
                   </xsl:text>
                 </xsl:when>
                 <xsl:otherwise> 
-                  <xsl:apply-templates select="wadl:request/wadl:representation/wadl:doc/d:example"/>
+                  <xsl:apply-templates select="wadl:request/wadl:representation/wadl:doc//xsdxt:code"/>
                 </xsl:otherwise>
               </xsl:choose>
               <xsl:choose>
                 <xsl:when
-                  test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc/d:example 
-                  and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc/d:example">
+                  test="wadl:response/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc//xsdxt:code 
+                  and wadl:response/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc//xsdxt:code">
                   <select id="{$id}_resp_select"
                     onchange="toggleSelection('{$id}_resp_select');">
                     <option value="xml" selected="selected">Response XML</option>
@@ -397,7 +397,7 @@ function showSelected(selectorId, optionId){
                   <xsl:comment> Do not delete or edit the next comment </xsl:comment>
                   <xsl:comment><xsl:value-of select="concat($id,'_resp_xml_selection START')"/></xsl:comment>
                   <div class="example" id="{concat($id,'_resp_xml')}">
-                    <xsl:apply-templates select="wadl:response/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc/d:example"/>
+                    <xsl:apply-templates select="wadl:response/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc//xsdxt:code"/>
                   </div><xsl:text>                    
                   </xsl:text>
                   <xsl:comment><xsl:value-of select="concat($id,'_resp_xml_selection END')"/></xsl:comment><xsl:text>                    
@@ -409,7 +409,7 @@ function showSelected(selectorId, optionId){
                   <xsl:comment><xsl:value-of select="concat($id,'_resp_json_selection START')"/></xsl:comment><xsl:text>                    
                   </xsl:text>
                   <div class="example" id="{concat($id,'_resp_json')}">
-                    <xsl:apply-templates select="wadl:response/wadl:representation[ends-with(@mediaType,'/json') ]/wadl:doc/d:example"/>
+                    <xsl:apply-templates select="wadl:response/wadl:representation[ends-with(@mediaType,'/json') ]/wadl:doc//xsdxt:code"/>
                   </div>
                   <xsl:comment><xsl:value-of select="concat($id,'_resp_json_selection END')"/></xsl:comment><xsl:text>                    
                   </xsl:text>
@@ -417,7 +417,7 @@ function showSelected(selectorId, optionId){
                   </xsl:text>
                 </xsl:when>
                 <xsl:otherwise> 
-                  <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc/d:example"/>
+                  <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc//xsdxt:code"/>
                 </xsl:otherwise>
               </xsl:choose>      
               
@@ -462,7 +462,7 @@ function showSelected(selectorId, optionId){
             <b><xsl:apply-templates/></b>
           </xsl:template>
           
-          <xsl:template match="d:example">
+          <xsl:template match="d:example|xsdxt:code">
             <div class="example">
               <xsl:apply-templates/>
             </div>
