@@ -2,6 +2,7 @@
 <p:declare-step version="1.0"
   xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:l="http://xproc.org/library"
+  xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:classpath="http://docs.rackspace.com/api"
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
   name="main">
@@ -45,9 +46,7 @@
     <p:input port="stylesheet">
       <p:document href="classpath:///cloud/apipage/process-embedded-wadl-apipage.xsl"/>
     </p:input>
-    <p:input port="parameters" >
-      <p:empty/>
-    </p:input>
+    <p:with-param name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value"/>
   </p:xslt>
   
 <!--  <l:xhtml2docbook name="xhtml2docbook"/>   -->
