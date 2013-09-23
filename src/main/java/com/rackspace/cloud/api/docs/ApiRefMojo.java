@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.URIResolver;
 
 public abstract class ApiRefMojo extends AbstractHtmlMojo {
@@ -47,6 +48,12 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
 	
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
         return super.createTransformerBuilder (new DocBookResolver (resolver, getType()));
+    }
+
+    @Override
+    public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
+        GitHelper.addCommitProperties(transformer, projectBuildDirectory, 7, getLog());
+        super.adjustTransformer(transformer, sourceFilename, targetFile);
     }
 
     protected String getNonDefaultStylesheetLocation() {

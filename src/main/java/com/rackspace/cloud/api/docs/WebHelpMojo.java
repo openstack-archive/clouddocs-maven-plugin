@@ -421,7 +421,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @param targetFile     DOCUMENT ME!
      */
     public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
-
+        GitHelper.addCommitProperties(transformer, baseDir, 7, getLog());
 
 	String warBasename;
 	String webhelpOutdir = targetFile.getName().substring(0, targetFile.getName().lastIndexOf('.'));
