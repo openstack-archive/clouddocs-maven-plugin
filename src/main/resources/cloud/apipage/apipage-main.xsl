@@ -266,7 +266,7 @@ function showSelected(selectorId, optionId){
             </xsl:text>
               <xsl:comment><xsl:value-of select="concat($id,'_btn_section START')"/></xsl:comment><xsl:text>
             </xsl:text>
-              <div class="row">
+              <div>
                 <!-- Description of method -->
                 <xsl:if test="wadl:doc//d:*[@role = 'shortdesc'] or wadl:doc//xhtml:*[@class='shortdesc']">
                  <xsl:apply-templates
@@ -274,32 +274,33 @@ function showSelected(selectorId, optionId){
                 </xsl:if>
               </div>
               <!-- process response codes -->
-              <div class="row">
-                <div class="span16">
-                  <!-- Don't output if there are no status codes -->
-                  <xsl:if
-                    test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
+              <xsl:if
+                  test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
+		
+		<div class="row">
+                  <div class="span16">
+                    <!-- Don't output if there are no status codes -->
                     <p>
                       <b>Normal Response Codes </b>&#8212;<xsl:apply-templates
-                        select="wadl:response" mode="preprocess-normal"/>
+                      select="wadl:response" mode="preprocess-normal"/>
                     </p>
-                  </xsl:if>
                 </div>
               </div>
-              <div class="row">
-                <div class="span16">
-                  <xsl:if
-                    test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
+	      </xsl:if>
+              <xsl:if
+                  test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">		    
+		<div class="row">
+                  <div class="span16">
                     <p>
                       <b>Error Response Codes </b>&#8212; <xsl:apply-templates
                         select="wadl:response[not(@status)]"
                         mode="preprocess-faults"/>
                       <xsl:apply-templates select="wadl:response[(@status)]"
-                        mode="preprocess-faults"/>
+					   mode="preprocess-faults"/>
                     </p>
-                  </xsl:if>
                 </div>
               </div>
+              </xsl:if>
               <div class="row">
                 <div class="span16">
                   <!-- Don't output if there are no params -->
