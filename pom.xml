@@ -38,6 +38,10 @@
 
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <java6.home>${env.JAVA6_HOME}</java6.home>
+      <bootclasspath.java6>${java6.home}/lib/rt.jar</bootclasspath.java6>
+      <bootclasspath.compile>${bootclasspath.java6}</bootclasspath.compile>
+      <bootclasspath.testCompile>${bootclasspath.java6}</bootclasspath.testCompile>
       <!-- Need to exclude this because the description includes Unicode characters,
            and docbkx-tools doesn't support specifying the encoding. -->
       <excluded.properties>annotation.graphic.close</excluded.properties>
@@ -251,6 +255,49 @@
       <developerConnection>scm:git:git@github.com:rackerlabs/clouddocs-maven-plugin.git</developerConnection>
     </scm>
 
+    <profiles>
+      <profile>
+        <id>sonatype-oss-release</id>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                <source>1.6</source>
+                <target>1.6</target>
+                <showWarnings>true</showWarnings>
+                <showDeprecation>true</showDeprecation>
+              </configuration>
+              <executions>
+                <execution>
+                  <id>default-compile</id>
+                  <configuration>
+                    <compilerArgs>
+                      <arg>-Xlint</arg>
+                      <arg>-Xlint:-serial</arg>
+                      <arg>-bootclasspath</arg>
+                      <arg>${bootclasspath.compile}</arg>
+                    </compilerArgs>
+                  </configuration>
+                </execution>
+                <execution>
+                  <id>default-testCompile</id>
+                  <configuration>
+                    <compilerArgs>
+                      <arg>-Xlint</arg>
+                      <arg>-Xlint:-serial</arg>
+                      <arg>-bootclasspath</arg>
+                      <arg>${bootclasspath.testCompile}</arg>
+                    </compilerArgs>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+    </profiles>
 
     <build>
         <resources>
@@ -496,6 +543,12 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                    <compilerArgs>
+                      <arg>-Xlint</arg>
+                      <arg>-Xlint:-serial</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
