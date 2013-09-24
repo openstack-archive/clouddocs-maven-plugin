@@ -67,7 +67,7 @@ public class CalabashHelper {
         final InputStream paramsStream = new ByteArrayInputStream(params.getBytes());
         
         //System.out.println("~!~!~!~!~!~!~!~!~!Sending: \n"+params+"\n");
-        List<PipelineInput> pipelineInputs = new ArrayList<PipelineInput>() {{
+        List<PipelineInput<?>> pipelineInputs = new ArrayList<PipelineInput<?>>() {{
             add(PipelineInput.port("source", inputSource));
             add(PipelineInput.port("parameters", new InputSource(paramsStream)));
         }};

@@ -22,12 +22,12 @@ public abstract class AbstractPipeline implements Pipeline {
    
    protected abstract <T>void addOption(PipelineInput<T> input);
    
-   protected void handleInputs(PipelineInput... inputs) {
+   protected void handleInputs(PipelineInput<?>... inputs) {
       handleInputs(Arrays.asList(inputs));
    }
    
-   protected void handleInputs(List<PipelineInput> inputs) {
-      for (PipelineInput input: inputs) {
+   protected void handleInputs(List<PipelineInput<?>> inputs) {
+      for (PipelineInput<?> input: inputs) {
          switch (input.getType()) {
             case PORT:
                addPort(input);
@@ -64,13 +64,13 @@ public abstract class AbstractPipeline implements Pipeline {
       }
    }
    
-   protected void clearParameters(PipelineInput... inputs) {
+   protected void clearParameters(PipelineInput<?>... inputs) {
       clearParameters(Arrays.asList(inputs));
    }
    
-   protected void clearParameters(List<PipelineInput> inputs) {
+   protected void clearParameters(List<PipelineInput<?>> inputs) {
       
-      for (PipelineInput input: inputs) {
+      for (PipelineInput<?> input: inputs) {
          switch (input.getType()) {
             case PARAMETER:
                clearParameter(input);
@@ -82,7 +82,7 @@ public abstract class AbstractPipeline implements Pipeline {
    }
    
    @Override
-   public void run(PipelineInput... inputs) {
+   public void run(PipelineInput<?>... inputs) {
       run(Arrays.asList(inputs));
    }
    

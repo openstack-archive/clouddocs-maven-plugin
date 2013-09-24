@@ -61,7 +61,7 @@ public class CalabashPipeline extends AbstractPipeline implements Pipeline {
    }
    
    @Override
-   protected void addOption(PipelineInput input) {
+   protected <T> void addOption(PipelineInput<T> input) {
       pipeline.setOption(new QName(input.getName()), getRuntimeValue(input));
    }
    
@@ -89,7 +89,7 @@ public class CalabashPipeline extends AbstractPipeline implements Pipeline {
       
    
    @Override
-   public void run(List<PipelineInput> inputs) {
+   public void run(List<PipelineInput<?>> inputs) {
       try {
          reset();
          handleInputs(inputs);

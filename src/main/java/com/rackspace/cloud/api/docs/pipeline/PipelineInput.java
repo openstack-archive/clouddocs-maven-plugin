@@ -5,15 +5,15 @@ public class PipelineInput<T> {
    private final PipelineInputType type;
    private final T source;
    
-   public static <P> PipelineInput parameter(String name, P source) {
+   public static <P> PipelineInput<P> parameter(String name, P source) {
       return new PipelineInput<P>(name, PipelineInputType.PARAMETER, source);
    }
    
-   public static <P> PipelineInput port(String name, P source) {
+   public static <P> PipelineInput<P> port(String name, P source) {
       return new PipelineInput<P>(name, PipelineInputType.PORT, source);
    }
    
-   public static <P> PipelineInput option(String name, P source) {
+   public static <P> PipelineInput<P> option(String name, P source) {
       return new PipelineInput<P>(name, PipelineInputType.OPTION, source);
    }
 
