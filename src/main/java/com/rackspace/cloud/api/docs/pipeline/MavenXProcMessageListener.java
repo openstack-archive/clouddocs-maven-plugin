@@ -99,32 +99,44 @@ public class MavenXProcMessageListener implements XProcMessageListener {
 
     @Override
     public void warning(XProcRunnable step, XdmNode node, String message) {
-        log.warn(message(step, node, message));
+        if (log.isWarnEnabled()) {
+            log.warn(message(step, node, message));
+        }
     }
 
     @Override
     public void warning(Throwable exception) {
-        log.warn(exceptionMessage(exception) + exception.getMessage());
+        if (log.isWarnEnabled()) {
+            log.warn(exceptionMessage(exception) + exception.getMessage());
+        }
     }
 
     @Override
     public void info(XProcRunnable step, XdmNode node, String message) {
-        log.info(message(step, node, message));
+        if (log.isInfoEnabled()) {
+            log.info(message(step, node, message));
+        }
     }
 
     @Override
     public void fine(XProcRunnable step, XdmNode node, String message) {
-        log.debug(message(step, node, message));
+        if (log.isDebugEnabled()) {
+            log.debug(message(step, node, message));
+        }
     }
 
     @Override
     public void finer(XProcRunnable step, XdmNode node, String message) {
-        log.debug(message(step, node, message));
+        if (log.isDebugEnabled()) {
+            log.debug(message(step, node, message));
+        }
     }
 
     @Override
     public void finest(XProcRunnable step, XdmNode node, String message) {
-        log.debug(message(step, node, message));
+        if (log.isDebugEnabled()) {
+            log.debug(message(step, node, message));
+        }
     }
 
     private String message(XProcRunnable step, XdmNode node, String message) {
