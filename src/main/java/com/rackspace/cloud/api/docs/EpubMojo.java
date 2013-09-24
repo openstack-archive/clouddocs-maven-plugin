@@ -4508,7 +4508,7 @@ public abstract class EpubMojo
          //                    new Float(.8));
 
         // Create the transcoder input.
-        String svgURI = new File("/Users/nare4013/epub/rackspace-template/rackspace-template/target/docbkx/images/cloud/cover.svg").toURL().toString();
+        String svgURI = new File("/Users/nare4013/epub/rackspace-template/rackspace-template/target/docbkx/images/cloud/cover.svg").toURI().toURL().toString();
         TranscoderInput input = new TranscoderInput(svgURI);
 
         // Create the transcoder output.

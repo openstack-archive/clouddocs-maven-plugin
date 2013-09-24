@@ -270,7 +270,7 @@ public class PDFBuilder {
 		File targetPdfFile = null;
 		try
 		{
-			String baseURL = sourceDirectory.toURL().toExternalForm();
+			String baseURL = sourceDirectory.toURI().toURL().toExternalForm();
 			baseURL = baseURL.replace("file:/", "file:///");
 
 			userAgent.setBaseURL(baseURL);
@@ -335,7 +335,7 @@ public class PDFBuilder {
 	public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
 		String baseUrl;
 		try {
-			final String str = (new File(sourceFilename)).getParentFile().toURL().toExternalForm();
+			final String str = (new File(sourceFilename)).getParentFile().toURI().toURL().toExternalForm();
 			baseUrl = str.replace("file:/", "file:///");
 		} catch (MalformedURLException e) {
 			getLog().warn("Failed to get FO basedir", e);
@@ -1000,7 +1000,7 @@ public class PDFBuilder {
 				if (getStylesheetLocation().startsWith("http://")) {
 					return new URL(getStylesheetLocation());
 				}
-				return new File(getStylesheetLocation()).toURL();
+				return new File(getStylesheetLocation()).toURI().toURL();
 			} catch (MalformedURLException mue) {
 				return null;
 			}

@@ -292,7 +292,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
         try
             {
-                String baseURL = sourceDirectory.toURL().toExternalForm();
+                String baseURL = sourceDirectory.toURI().toURL().toExternalForm();
                 baseURL = baseURL.replace("file:/", "file:///");
 
                 userAgent.setBaseURL(baseURL);
