@@ -11,38 +11,23 @@
   <p:import href="classpath:///rackspace-library.xpl"/><!-- classpath:/// -->
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 
-
-  <cx:message>
-    <p:with-option name="message" select="'Entering xproc pipeline'"/>
-  </cx:message>
-
-  <cx:message>
-    <p:with-option name="message" select="'Validating DocBook version'"/>
-  </cx:message>
-
-  <l:validate-docbook-format>
+  <l:validate-docbook-format  name="validate-docbook-format-webhelp">
     <p:with-option name="docbookNamespace" select="'http://docbook.org/ns/docbook'"/>
   </l:validate-docbook-format>
 
-  <p:add-xml-base/>
+  <p:add-xml-base name="adding-xml-base-webhelp"/>
   
-  <p:xinclude fixup-xml-base="true"/>
+  <p:xinclude fixup-xml-base="true" name="xincluding"/>
 
-  <l:normalize-olinks/>
+  <l:normalize-olinks name="normalize-olinks"/>
 
-  <cx:message>
-    <p:with-option name="message" select="'Fixing pubdate if necessary'"/>
-  </cx:message>
-  <l:process-pubdate/>
+  <l:process-pubdate name="process-pubdate-webhelp"/>
 
-  <p:delete match="//@security[. = '']"/>
+  <p:delete match="//@security[. = '']" name="delete-emtpy-security-attrs-webhelp"/>
 
-  <cx:message>
-    <p:with-option name="message" select="'Profiling'"/>
-  </cx:message>
-  <l:docbook-xslt2-preprocess/>
+  <l:docbook-xslt2-preprocess name="preprocess-docbook-xslt2-webhelp"/>
   
-  <l:validate-transform name="validate-post-xinclude">
+  <l:validate-transform name="validate-post-xinclude-webhelp">
     <p:input port="schema">
       <p:document href="classpath:///rng/rackbook.rng"/>
     </p:input>
@@ -54,50 +39,29 @@
 
   <l:normalize-space-glossterm/>
 
-  <cx:message>
-    <p:with-option name="message" select="'Validating, copying and transforming images'"/>
-  </cx:message>
   <l:copy-and-transform-images/>
 
-  <cx:message  name="msg4">
-    <p:with-option name="message" select="'Remove non-bold markup from inside code listings.'"/>
-  </cx:message>
   <l:programlisting-strip-inlines/>
 
   <p:delete match="//raxm:metadata[./raxm:type = 'tutorial']" 
 	    xmlns:raxm="http://docs.rackspace.com/api/metadata"/>
 
-  <cx:message>
-    <p:with-option name="message" select="'Generating bookinfo.xml'"/>
-  </cx:message>
   <l:bookinfo/>
 
-  <cx:message>
-    <p:with-option name="message" select="'Adding extension info'"/>
-  </cx:message>
   <l:extensions-info/>
       
-  <cx:message>
-    <p:with-option name="message" select="'Normalize wadls (if necessary)'"/>
-  </cx:message>
   <l:normalize-wadls />
   
-  <cx:message>
-    <p:with-option name="message" select="'Process embedded wadls (if necessary)'"/>
-  </cx:message>
   <l:process-embedded-wadl/>
 
   <p:delete match="//@rax:original-wadl" xmlns:rax="http://docs.rackspace.com/api"/>
  
-  <cx:message>
-    <p:with-option name="message" select="'Making replacements'"/>
-  </cx:message>
   <l:search-and-replace/>
 
   <p:add-attribute match="//db:table[not(@role) and .//db:td]|//db:informaltable[not(@role) and .//db:td]" attribute-name="rules" attribute-value="all"/>
   <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']"/>
   
-  <l:validate-transform-idrefs name="validate-post-wadl" >
+  <l:validate-transform-idrefs name="validate-post-wadl-pdf" >
     <p:input port="schema">
       <p:document href="classpath:///rng/rackbook.rng"/>
     </p:input>

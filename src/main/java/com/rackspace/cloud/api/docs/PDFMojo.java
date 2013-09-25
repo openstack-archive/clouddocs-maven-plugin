@@ -420,7 +420,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
 
     String sysDraftStatus=System.getProperty("draft.status");
-    getLog().info("adjustTransformer():sysDraftStatus="+sysDraftStatus);
+    if (getLog().isDebugEnabled()) {
+	getLog().info("adjustTransformer():sysDraftStatus="+sysDraftStatus);
+    }
     if(null!=sysDraftStatus && !sysDraftStatus.isEmpty()){
     	draftStatus=sysDraftStatus;
     }
@@ -436,7 +438,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	transformer.setParameter("project.build.directory", projectBuildDirectory.toURI().toString());
     
 	String sysSecurity=System.getProperty("security");
-    getLog().info("adjustTransformer():sysSecurity="+sysSecurity);
+	if (getLog().isDebugEnabled()) {
+	    getLog().info("adjustTransformer():sysSecurity="+sysSecurity);
+	}
     if(null!=sysSecurity && !sysSecurity.isEmpty()){
     	security=sysSecurity;
     }
@@ -507,7 +511,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
             //transformer.setParameter("docbook.infile",sourceDocBook.toURI().toString());
 	    	String srcFilename = sourceDocBook.getName();
-	    	getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory+"/docbkx/"+srcFilename);
+		if (getLog().isDebugEnabled()) {
+		    getLog().info("SOURCE FOR COVER PAGE: "+this.projectBuildDirectory+"/docbkx/"+srcFilename);
+		}
 	    	transformer.setParameter("docbook.infile", new File(this.projectBuildDirectory, "docbkx/"+srcFilename).toURI().toString());
             transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
         }

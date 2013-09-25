@@ -571,12 +571,7 @@ setting failOnValidationError to no in your pom.
                 <p:input port="parameters">
                     <p:pipe step="normalize-wadls-step" port="parameters"/>
                 </p:input>
-            </p:xslt>
-            
-            <cx:message>
-                <p:with-option name="message" select="'About to iterate over wadls'"/>
-            </cx:message>
-            
+            </p:xslt>                        
             
             <p:for-each>
                 <p:iteration-source select="//wadl-missing-file">

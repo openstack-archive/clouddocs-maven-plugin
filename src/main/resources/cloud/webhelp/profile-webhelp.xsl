@@ -59,11 +59,6 @@
   </xsl:template>
 
   <xsl:template match="d:legalnotice" mode="preprocess">
-    <xsl:message>
-########################################
-Processing legalnotice: <xsl:value-of select="@role"/>
-########################################
-    </xsl:message>
     <d:legalnotice>
       <xsl:apply-templates select="@*" mode="preprocess"/>
       <xsl:choose>

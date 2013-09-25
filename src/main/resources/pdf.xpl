@@ -18,7 +18,7 @@
 
   <p:group name="group">
     <p:output port="result" primary="true">
-      <p:pipe step="validate-post-wadl-idrefs" port="result"/>
+      <p:pipe step="validate-post-wadl-idrefs-pdf" port="result"/>
     </p:output>
     <p:output port="secondary" primary="false" sequence="true"/>
     
@@ -29,7 +29,7 @@
       <p:pipe step="params" port="parameters"/>
     </p:variable>
     
-    <l:validate-docbook-format>
+    <l:validate-docbook-format name="validate-docbook-format">
       <p:input port="source">
 	<p:pipe step="main" port="source"/>
       </p:input>
@@ -90,75 +90,50 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and 
 					 '/autopdf/pdf.properties')"/>
     </p:store>
 
-    <p:add-xml-base>
+    <p:add-xml-base name="adding-xml-base-pdf">
       <p:input port="source">
 	<p:pipe step="main" port="source"/>
       </p:input>
     </p:add-xml-base>
     
-    <p:xinclude fixup-xml-base="true"/>
+    <p:xinclude fixup-xml-base="true" name="xincluding-pdf"/>
 
-    <l:normalize-olinks/>
+    <l:normalize-olinks name="normalize-olinks-pdf"/>
 
-    <cx:message>
-      <p:with-option name="message" select="'Validating post-xinclude'"/>
-    </cx:message>
+    <l:process-pubdate name="process-pubdate-pdf"/>
 
-    <cx:message>
-      <p:with-option name="message" select="'Fixing pubdate if necessary'"/>
-    </cx:message>
-    <l:process-pubdate/>
+    <p:delete match="//@security[. = '']" name="delete-emtpy-security-attrs-pdf"/>
 
-    <p:delete match="//@security[. = '']"/>
+    <l:docbook-xslt2-preprocess name="preprocess-docbook-xslt2-pdf"/>
 
-    <l:docbook-xslt2-preprocess/>
-
-    <l:validate-transform name="validate-post-xinclude">
+    <l:validate-transform name="validate-post-xinclude-pdf">
       <p:input port="schema">
 	<p:document href="classpath:///rng/rackbook.rng"/>
       </p:input>
     </l:validate-transform>
 
-    <cx:message  name="msg3">
-      <p:with-option name="message" select="'Validating images'"/>
-    </cx:message>
-    <l:validate-images/>
+    <l:validate-images name="validate-images-pdf"/>
 
-    <cx:message  name="msg4">
-      <p:with-option name="message" select="'Performing programlisting keep together'"/>
-    </cx:message>
+    <l:programlisting-keep-together name="add-keep-togethers-to-codelistings-pdf"/>
 
-    <l:programlisting-keep-together/>
+    <p:delete match="//db:imageobject[@role='html']" name="remove-imageobject-role-html-pdf"/>
+    <p:delete match="//db:imageobject/@role[. ='fo']" name="remove-imageobject-role-attrs-fo-pdf"/>
 
-    <p:delete match="//db:imageobject[@role='html']"/>
-    <p:delete match="//db:imageobject/@role[. ='fo']"/>
+    <l:normalize-space-glossterm name="clean-glossterm-spaces-pdf"/>
 
-    <l:normalize-space-glossterm/>
-
-    <cx:message name="msg5">
-      <p:with-option name="message" select="'Adding extension info'"/>
-    </cx:message>
-    
-    <l:extensions-info/>
+    <l:extensions-info name="add-extensions-info-pdf"/>
         
-    <cx:message name="msg7">
-      <p:with-option name="message" select="'Normalize wadls'"/>
-    </cx:message>
+    <l:normalize-wadls name="normalize-wadls-pdf"/>
 
-    <l:normalize-wadls />
+    <l:process-embedded-wadl name="process-embedded-wadls-pdf"/>
+    <p:delete match="//@rax:original-wadl" xmlns:rax="http://docs.rackspace.com/api" name="remove-rax-original-wadl-attr-pdf"/>
 
-    <l:process-embedded-wadl/>
-    <p:delete match="//@rax:original-wadl" xmlns:rax="http://docs.rackspace.com/api"/>
-
-    <cx:message name="msg6">
-      <p:with-option name="message" select="'Making replacements'"/>
-    </cx:message>
-    <l:search-and-replace/>
+    <l:search-and-replace name="search-and-replace-pdf"/>
     
-    <p:add-attribute match="//db:table[not(@role) and .//db:td]|//db:informaltable[not(@role) and .//db:td]" attribute-name="rules" attribute-value="all"/>
-    <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']"/>
+    <p:add-attribute match="//db:table[not(@role) and .//db:td]|//db:informaltable[not(@role) and .//db:td]" attribute-name="rules" attribute-value="all" name="add-rules-attr-to-tables-pdf"/>
+    <p:delete match="//db:td/db:para[not(./*) and normalize-space(.) ='']" name="delete-empty-paras"/>
     
-    <l:validate-transform-idrefs name="validate-post-wadl-idrefs">
+    <l:validate-transform-idrefs name="validate-post-wadl-idrefs-pdf">
       <p:input port="schema">
 	       <p:document href="classpath:///rng/rackbook.rng"/>
       </p:input>
