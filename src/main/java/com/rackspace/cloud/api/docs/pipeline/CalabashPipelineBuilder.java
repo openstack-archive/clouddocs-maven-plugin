@@ -6,6 +6,7 @@ import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XPipeline;
+import com.xmlcalabash.util.Input;
 import com.xmlcalabash.util.XProcURIResolver;
 import net.sf.saxon.s9api.SaxonApiException;
 
@@ -47,7 +48,7 @@ public class CalabashPipelineBuilder implements PipelineBuilder {
          InputStreamUriParameterResolver resolver = new InputStreamUriParameterResolver(new XProcURIResolver(runtime));
          resolver.addResolver(new ClassPathUriResolver());
          runtime.setURIResolver(resolver);
-         XPipeline pipeline = runtime.load(pipelineUri);
+         XPipeline pipeline = runtime.load(new Input(pipelineUri));
          return new CalabashPipeline(pipeline, runtime, resolver, legacySourceOutput);
       } catch (SaxonApiException ex) {
          // TODO: Should we log the exception here?
@@ -66,7 +67,7 @@ public class CalabashPipelineBuilder implements PipelineBuilder {
             streamResolver.addResolver(resolver);
          }
          runtime.setURIResolver(streamResolver);
-         XPipeline pipeline = runtime.load(pipelineUri);
+         XPipeline pipeline = runtime.load(new Input(pipelineUri));
          return new CalabashPipeline(pipeline, runtime, streamResolver);
       } catch (SaxonApiException ex) {
          // TODO: Should we log the exception here?

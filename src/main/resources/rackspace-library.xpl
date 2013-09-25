@@ -16,7 +16,7 @@
         type="l:validate-transform-idrefs"
         name="main">
         
-        <p:input port="source" /> <!--sequence="false" primary="true"-->
+        <p:input port="source" primary="true"/> <!--sequence="false" primary="true"-->
         <p:input port="schema" sequence="true" >
             <p:document  href="classpath:///rng/rackbook.rng"/> 
         </p:input>
@@ -169,7 +169,7 @@ setting failOnValidationError to no in your pom.
         type="l:validate-transform"
         name="main">
         
-        <p:input port="source" /> 
+        <p:input port="source" primary="true" /> 
         <p:input port="schema" sequence="true" >
             <p:document  href="classpath:///rng/rackbook.rng"/> 
         </p:input>
@@ -496,7 +496,7 @@ setting failOnValidationError to no in your pom.
         version="1.0"
         name="extensions-info-step">
         
-        <p:input port="source"/>
+        <p:input port="source" primary="true"/>
         
         <p:output port="secondary" primary="false" sequence="true"/>
         <p:output port="result" primary="true" >
@@ -540,7 +540,7 @@ setting failOnValidationError to no in your pom.
             * Test with api.openstack.org xpl
         -->
 
-        <p:input port="source"/>
+        <p:input port="source" primary="true"/>
 
         <p:output port="result" primary="true">
             <p:pipe step="group" port="result"/>
@@ -799,7 +799,7 @@ setting failOnValidationError to no in your pom.
         version="1.0"
         name="process-embedded-wadl-step">
         
-        <p:input port="source"/>
+        <p:input port="source" primary="true"/>
         
         <p:output port="result" primary="true">
             <p:pipe step="process-embedded-wadl-xslt-3" port="result"/>
@@ -918,7 +918,7 @@ setting failOnValidationError to no in your pom.
         version="1.0"
         name="docbook-xslt2-preprocess-step">
         
-        <p:input port="source"/>
+        <p:input port="source" primary="true"/>
         
         <p:output port="result" primary="true">
             <p:pipe step="group" port="result"/>
@@ -974,7 +974,7 @@ setting failOnValidationError to no in your pom.
         version="1.0"
         name="process-embedded-wadl-step-war">
         
-        <p:input port="source"/>
+        <p:input port="source" primary="true"/>
         
         <p:output port="result" primary="true">
             <p:pipe step="process-embedded-wadl-xslt" port="result"/>
@@ -1006,7 +1006,7 @@ setting failOnValidationError to no in your pom.
         version="1.0"
         name="add-stop-chunking-pis-step">
         
-        <p:input port="source"/>
+        <p:input port="source" primary="true"/>
         
         <p:output port="result" primary="true">
             <p:pipe step="add-stop-chunking-pis-xslt" port="result"/>
@@ -1038,7 +1038,7 @@ setting failOnValidationError to no in your pom.
         version="1.0"
         name="bookinfo-step">
         
-        <p:input port="source"/>
+        <p:input port="source" primary="true"/>
         
         <p:output port="secondary" primary="false" sequence="true"/>
         
@@ -1465,7 +1465,7 @@ setting failOnValidationError to no in your pom.
             that we use the root element's xml:id as the current doc
             id. </p:documentation>
 
-        <p:input port="source"/>
+        <p:input port="source" primary="true"/>
 
         <p:output port="result" primary="true">
             <p:pipe step="normalize-olinks-xslt" port="result"/>

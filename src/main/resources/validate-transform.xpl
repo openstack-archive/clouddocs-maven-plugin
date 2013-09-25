@@ -5,7 +5,7 @@
   type="l:validate-transform"
   name="main">
   
-  <p:input port="source" /> <!--sequence="false" primary="true"-->
+  <p:input port="source" primary="true"/> <!--sequence="false" primary="true"-->
   <p:input port="schema" sequence="true" >
     <p:document  href="classpath:///rng/rackbook.rng"/> <!--http://docs-beta.rackspace.com/oxygen/13.1/mac/author/frameworks/rackbook/5.0/-->
   </p:input>
