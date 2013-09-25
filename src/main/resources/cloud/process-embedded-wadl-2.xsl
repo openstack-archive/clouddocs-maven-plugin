@@ -182,5 +182,10 @@
 			<xsl:apply-templates />
 		</programlisting>
 	</xsl:template>
-	
+
+	<xsl:template match="d:SXXP0005">
+	  <!-- This stupid template is here to avoid SXXP0005 errors from Saxon -->
+	  <xsl:apply-templates/>
+	</xsl:template>
+
 </xsl:stylesheet>

@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:wadl="http://wadl.dev.java.net/2009/02"
+    xmlns:d="http://docbook.org/ns/docbook" 
     xmlns:rax="http://docs.rackspace.com/api"
     exclude-result-prefixes="xs" version="2.0">
 
@@ -120,5 +121,11 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
+
+	<xsl:template match="d:SXXP0005">
+	  <!-- This stupid template is here to avoid SXXP0005 errors from Saxon -->
+	  <xsl:apply-templates/>
+	</xsl:template>
+
     
 </xsl:stylesheet>
