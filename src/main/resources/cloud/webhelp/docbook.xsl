@@ -325,7 +325,9 @@ ERROR: Feedback email not set but internal comments are enabled.
       <a href="../atom.xml"><img alt="Atom feed of this document" src="{$webhelp.common.dir}images/feed-icon.png"/></a>
     </xsl:if>
     <xsl:if test="$branding = 'openstack' and $social.icons = '0'">
-      <div id="gplusone"><a id="logABugLink1" href="" target="_blank"><img title="Log a bug against this page" src="../common/images/launchpad.png"/></a></div>
+      <div id="gplusone">
+	<a id="logABugLink1" href="" target="_blank" title="Log a bug against this page"><i class="icon-bug"><xsl:comment/></i></a>
+      </div>
     </xsl:if>
     <xsl:if test="$social.icons != '0' and $security = 'external' ">
 <!--social buttons-->
