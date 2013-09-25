@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet exclude-result-prefixes="d g date"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:date="http://exslt.org/dates-and-times" 
+                xmlns:date="http://exslt.org/dates-and-times" 
                 xmlns:d="http://docbook.org/ns/docbook"
-		xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:g="http://www.google.com"		
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:g="http://www.google.com"         
                 version="1.1">
 
   <!-- <xsl:import href="urn:docbkx:stylesheet-orig/xsl/webhelp.xsl" /> -->
