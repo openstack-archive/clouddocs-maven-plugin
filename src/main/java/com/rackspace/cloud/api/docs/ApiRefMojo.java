@@ -86,6 +86,6 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
         map.put("failOnValidationError", failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
         
-        return CalabashHelper.createSource(source, pathToPipelineFile, map);
+        return CalabashHelper.createSource(getLog(), source, pathToPipelineFile, map);
     }
 }

@@ -565,6 +565,6 @@ public abstract class PDFMojo extends AbstractFoMojo {
         map.put("profile.vendor", getProperty("profileVendor"));
         
         //String outputDir=System.getProperty("project.build.outputDirectory ");        
-        return CalabashHelper.createSource(source, pathToPipelineFile, map);
+        return CalabashHelper.createSource(getLog(), source, pathToPipelineFile, map);
     }
 }

@@ -1082,7 +1082,7 @@ public class PDFBuilder {
 		localMap.remove("artifactId");
 		localMap.remove("docProjectVersion");
 
-		return CalabashHelper.createSource(source, pathToPipelineFile, localMap);
+		return CalabashHelper.createSource(getLog(), source, pathToPipelineFile, localMap);
 	}
 
 	/**
