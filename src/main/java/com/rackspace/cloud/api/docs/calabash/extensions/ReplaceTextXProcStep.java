@@ -84,7 +84,9 @@ public class ReplaceTextXProcStep extends DefaultStep {
         if(fileLength>0){
         	BufferedReader br = null;
         	try {
+		    if (getLog().isDebugEnabled()) {
         		getLog().info("REPLACEMENTS FILE = " + replacementsFile.getAbsolutePath());
+		    }
         		br = new BufferedReader(new FileReader(replacementsFile));
         		
         		String line;
@@ -107,8 +109,7 @@ public class ReplaceTextXProcStep extends DefaultStep {
         				//ignore input line
         			}
         		}
-        		
-        		if (xpathReplacements.size()==0) {
+        		if (xpathReplacements.size()==0 && getLog().isDebugEnabled()) {
                 	getLog().info("SKIPPING REPLACEMENTS: Replacements file is empty or was not found at specified location '"+fileName+ "'.");
                 }
         	} catch (IOException e) {
@@ -120,7 +121,7 @@ public class ReplaceTextXProcStep extends DefaultStep {
         			getLog().error("Unable to release/close replacements config file", e);
         		}
         	}
-        } else {
+        } else if(getLog().isDebugEnabled()) {
         	getLog().info("SKIPPING REPLACEMENTS: Replacements file is empty or was not found at specified location '"+fileName+ "'.");
         }
         

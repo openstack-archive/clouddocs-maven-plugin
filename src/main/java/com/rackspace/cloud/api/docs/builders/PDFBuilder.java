@@ -226,9 +226,9 @@ public class PDFBuilder {
 				final Result result = new StreamResult(targetFile.getAbsolutePath());
 
 				transformer.transform(xmlSource, result);
-
-				getLog().info(targetFile + " has been generated.");
-
+				if (getLog().isDebugEnabled()) {
+				    getLog().debug(targetFile + " has been generated.");
+				}
 				return targetFile;
 			} catch (SAXException saxe) {
 				throw new MojoExecutionException("Failed to parse " + sourceFilePath + ".", saxe);
@@ -274,8 +274,9 @@ public class PDFBuilder {
 			baseURL = baseURL.replace("file:/", "file:///");
 
 			userAgent.setBaseURL(baseURL);
-			getLog().info("Absolute path is "+baseURL);
-
+			if (getLog().isDebugEnabled()) {
+			    getLog().debug("Absolute path is "+baseURL);
+			}
 			in = new FileInputStream(result);
 
 			targetPdfFile = new File (result.getAbsolutePath().replaceAll(".fo$", properties.getProperty("pdfsuffix","") + ".pdf"));
@@ -475,12 +476,14 @@ public class PDFBuilder {
 
 			transformer.setParameter ("cloud.api.background.image", coverImage.toURI().toString());
 			transformer.setParameter ("cloud.api.cc.image.dir", ccSub.toURI().toString());
-
-			// getLog().info("SOURCE FOR COVER PAGE: "+sourceFilePath);
+			if (getLog().isDebugEnabled()) {
+			    getLog().info("SOURCE FOR COVER PAGE: "+sourceFilePath);
+			}
 			// transformer.setParameter("docbook.infile", sourceFilePath.toURI().toString());
 
-
-			getLog().info("SOURCE FOR COVER PAGE: " + new File(projectBuildDirectory, inputFilename).getAbsolutePath());
+			if (getLog().isDebugEnabled()) {
+			    getLog().debug("SOURCE FOR COVER PAGE: " + new File(projectBuildDirectory, inputFilename).getAbsolutePath());
+			}
 			transformer.setParameter("docbook.infile", new File(projectBuildDirectory, inputFilename).toURI().toString());
 
 			transformer.transform (new StreamSource(coverImageTemplate), new StreamResult(coverImage));
@@ -883,7 +886,9 @@ public class PDFBuilder {
 		URIResolver uriResolver;
 		try {			
 			URL url = getNonDefaultStylesheetURL() == null ? getDefaultStylesheetURL() : getNonDefaultStylesheetURL();
-			getLog().debug("Using stylesheet: " + url.toExternalForm());
+			if (getLog().isDebugEnabled()) {
+			    getLog().debug("Using stylesheet: " + url.toExternalForm());
+			}
 			uriResolver = new StylesheetResolver("urn:docbkx:stylesheet", new StreamSource(url.openStream(), url
 					.toExternalForm()), catalogResolver);
 		} catch (IOException ioe) {
@@ -963,7 +968,6 @@ public class PDFBuilder {
 				}
 
 				if (getCustomizationParameters() != null) {
-					getLog().info("Applying customization parameters");
 					final Iterator iterator = getCustomizationParameters().iterator();
 					while (iterator.hasNext()) {
 						Parameter param = (Parameter) iterator.next();

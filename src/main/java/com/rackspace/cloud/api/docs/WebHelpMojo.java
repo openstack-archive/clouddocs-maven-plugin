@@ -864,7 +864,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         //makePdf is a POM configuration for generate-webhelp goal to control the execution of
         //automatic building of pdf output
         if(this.makePdf) {
+	    if (getLog().isDebugEnabled()) {
         	getLog().info("\n************************************* START: Automatically generating PDF for WEBHELP *************************************");
+	    }
         	//Target directory for Webhelp points to ${basepath}/target/docbkx/webhelp. So get parent.
         	File baseDir = getTargetDirectory().getParentFile();
         	//The point FO/PDF file output to be generated at ${basepath}/target/docbkx/autopdf.
@@ -910,10 +912,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
         	File srcFilename = new File(this.projectBuildDirectory, "docbkx/"+sourceFile.getName());
 	    	if(srcFilename.exists()) {
+		    if (getLog().isDebugEnabled()) {
 	    		getLog().debug("***********************"+ srcFilename);
+		    }
 	    		pdfBuilder.setSourceFilePath(srcFilename);
 	    	} else {
+		    if (getLog().isDebugEnabled()) {
 	    		getLog().debug("***********************"+ getSourceDirectory()+File.separator+inputFilename);
+		    }
 	    		pdfBuilder.setSourceFilePath(new File(getSourceDirectory(), inputFilename));
 	    	}
         	
@@ -932,14 +938,16 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         			com.rackspace.cloud.api.docs.FileUtils.mkdir(targetDirForPdf);
         		}
         		boolean moved = pdfBuilder.movePdfToWebhelpDir(pdfFile, targetDirForPdf);
-        		if(moved) {
+        		if(moved && getLog().isDebugEnabled()) {
         			getLog().info("Successfully moved auto-generated PDF file to Webhelp target directory!");
-        		} else {
+        		} else if(getLog().isDebugEnabled()) {
         			getLog().error("Unable to move auto-generated PDF file to Webhelp target directory!");
         		}
         	}
         	autoPdfUrl = "../"+foFile.getName();
-        	getLog().info("************************************* END: Automatically generating PDF for WEBHELP *************************************\n");
+		if (getLog().isDebugEnabled()) {
+		    getLog().info("************************************* END: Automatically generating PDF for WEBHELP *************************************\n");
+		}
         }
 
         
