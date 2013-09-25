@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet exclude-result-prefixes="d g"
+<xsl:stylesheet exclude-result-prefixes="d g date"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:date="http://exslt.org/dates-and-times" 
                 xmlns:d="http://docbook.org/ns/docbook"
-		            xmlns="http://www.w3.org/1999/xhtml"
-								xmlns:g="http://www.google.com"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:g="http://www.google.com"         
                 version="1.1">
 
   <!-- <xsl:import href="urn:docbkx:stylesheet-orig/xsl/webhelp.xsl" /> -->
@@ -38,6 +39,8 @@
             <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
     </xsl:param>
+
+    <xsl:param name="repository.commit"/>
 
   <xsl:param name="use.extensions">1</xsl:param>
   <xsl:param name="callouts.extension">1</xsl:param>
@@ -224,6 +227,37 @@ set       toc,title
 	<xsl:include href="../inline.xsl"/>
 
     <xsl:template name="user.footer.content">
+      <xsl:param name="node" select="."/>
+      <xsl:variable name="builddate">
+	<xsl:call-template name="datetime.format">  
+          <xsl:with-param name="date" select="date:date-time()"/>  
+          <xsl:with-param name="format" select="'Y-m-d'"/>  
+          </xsl:call-template>T<xsl:call-template name="datetime.format">  
+          <xsl:with-param name="date" select="date:date-time()"/>  
+          <xsl:with-param name="format" select="'X'"/>  
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="bugtitle"><xsl:apply-templates select="$node" mode="object.title.markup.textonly"/> in <xsl:value-of select="/*/d:title|/*/d:info/d:title"/><xsl:apply-templates select="/*/d:info/d:releaseinfo[1]" mode="rackspace-title"/></xsl:variable>
+      <xsl:variable name="quote">"</xsl:variable>
+      <script type="text/javascript" src="{$webhelp.common.dir}main.js">
+        <xsl:comment></xsl:comment>
+      </script>
+      <div class="logabug" style="text-align: center">
+	<a id="logABugLink2" href="" target="_blank">Log a bug against this page</a>
+      </div>
+      <xsl:if test="$branding = 'openstack'">
+	<script language="JavaScript">
+	  var sourceFile = "source File: <xsl:value-of select="(ancestor-or-self::*/@xml:base)[position() = last()]"/>"
+	  var xmlId = "xml:id: <xsl:value-of select="@xml:id"/>"
+	  var lineFeed = "%0A";
+	  var docUrl = "URL: " + window.location;
+	  var bugTitle = "<xsl:value-of select="translate(normalize-space($bugtitle),$quote,'')"/>";
+	  var buildTime = "Built: <xsl:value-of select="$builddate"/>";
+	  var gitSha = "git SHA: <xsl:value-of select="$repository.commit"/>";
+	  var fieldComment = encodeURI(buildTime) +  lineFeed + encodeURI(gitSha) + lineFeed + encodeURI(docUrl) + lineFeed + encodeURI(sourceFile) + lineFeed + encodeURI(xmlId);
+	  logABug(bugTitle,fieldComment);
+	</script>
+      </xsl:if>
         <xsl:if test="$enable.disqus!='0' and (//d:section[not(@xml:id)] or //d:chapter[not(@xml:id)] or //d:part[not(@xml:id)] or //d:appendix[not(@xml:id)] or //d:preface[not(@xml:id)] or /*[not(@xml:id)])">
             <xsl:message terminate="yes"> 
                 <xsl:for-each select="//d:section[not(@xml:id)]|//d:chapter[not(@xml:id)]|//d:part[not(@xml:id)]|//d:appendix[not(@xml:id)]|//d:preface[not(@xml:id)]|/*[not(@xml:id)]">
@@ -231,15 +265,7 @@ set       toc,title
                 </xsl:for-each>
                      When Disqus comments are enabled, the root element and every part, chapter, appendix, preface, and section must have an xml:id attribute.
             </xsl:message>
-        </xsl:if>
-        
-	<!-- Alternate location for SyntaxHighlighter scripts -->
-
-
-        <script type="text/javascript" src="{$webhelp.common.dir}main.js">
-            <xsl:comment></xsl:comment>
-        </script>
-	
+        </xsl:if>        
 	<xsl:if test="$enable.disqus != '0'">
 	  <hr />
 	      <xsl:choose>
@@ -297,6 +323,11 @@ ERROR: Feedback email not set but internal comments are enabled.
     <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
       &#160;
       <a href="../atom.xml"><img alt="Atom feed of this document" src="{$webhelp.common.dir}images/feed-icon.png"/></a>
+    </xsl:if>
+    <xsl:if test="$branding = 'openstack' and $social.icons = '0'">
+      <div id="gplusone">
+	<a id="logABugLink1" href="" target="_blank" title="Log a bug against this page"><i class="icon-bug"><xsl:comment/></i></a>
+      </div>
     </xsl:if>
     <xsl:if test="$social.icons != '0' and $security = 'external' ">
 <!--social buttons-->

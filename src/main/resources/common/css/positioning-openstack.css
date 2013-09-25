@@ -473,7 +473,11 @@ body div#content div.navfooter table tbody td, body div#content div.navfooter ta
 
 .olinkdocname{ font-style: italic; }
 
-
+.icon-bug{
+    font-size: 1.75em; 
+    text-decoration: none; 
+    color: #cc0000;
+}
 @media print {
 
     body * {
@@ -493,3 +497,4 @@ body div#content div.navfooter table tbody td, body div#content div.navfooter ta
     }
 
 }
+

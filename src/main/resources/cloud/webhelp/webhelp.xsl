@@ -174,6 +174,9 @@ This avoids two problems in IE 8. We should someday figure out why this is happe
 These problems go away when you add this IE=7 mode meta tag.
  -->
 	<!-- <meta http-equiv="X-UA-Compatible" content="IE=7" /> -->
+	<xsl:if test="$branding = 'openstack'">
+	  <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
+	</xsl:if>
       	<xsl:if test=".//d:programlisting[@language] or .//d:screen[@language] or .//d:literallayout[@language]">
     <link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/> 
     <script type="text/javascript" src="scripts/shCore.js"><xsl:comment/></script>
