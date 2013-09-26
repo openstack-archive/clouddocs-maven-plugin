@@ -309,6 +309,7 @@
 			  </xsl:otherwise>
 			</xsl:choose>
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
+			<xsl:variable name="requestSection">
 			<section xml:id="{$sectionIdComputed}-Request">
 				<title>Request</title>
             <!-- About the request -->
@@ -356,6 +357,8 @@
                     <xsl:copy-of select="$wadl.norequest.msg"/>
                 </xsl:if>
 			</section>
+			</xsl:variable>
+			<xsl:variable name="responseSection">
 			<section xml:id="{$sectionIdComputed}-Response">
 				<title>Response</title>
             <!-- About the response -->
@@ -381,6 +384,13 @@
             	<xsl:copy-of select="$wadl.noresponse.msg"/>
              </xsl:if>
 			</section>
+			</xsl:variable>
+			<xsl:if test="$requestSection//d:section/*[not(self::d:title)]">
+				<xsl:copy-of select="$requestSection"/>
+			</xsl:if>
+			<xsl:if test="$responseSection//d:section/*[not(self::d:title)]">
+				<xsl:copy-of select="$responseSection"/>
+			</xsl:if>	
 		</section>
 	</xsl:template>
 	
