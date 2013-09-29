@@ -310,6 +310,8 @@ function showSelected(selectorId, optionId){
                       <thead>
                         <tr>
                           <th>Parameter</th>
+                          <th>Style</th>
+                          <th>Type</th>
                           <th>Description</th>
                         </tr>
                       </thead>
@@ -330,8 +332,8 @@ function showSelected(selectorId, optionId){
                       <thead>
                         <tr>
                           <th>Parameter</th>
-			  <th>Style</th>
-			  <th>Type</th>
+			                    <th>Style</th>
+			                    <th>Type</th>
                           <th>Description</th>
                         </tr>
                       </thead>
