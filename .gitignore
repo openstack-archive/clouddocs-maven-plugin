@@ -16,3 +16,7 @@ target
 .idea
 /.classpath
 /.project
+
+# NetBeans user-specific build actions
+nbactions.xml
+nbactions-*.xml
