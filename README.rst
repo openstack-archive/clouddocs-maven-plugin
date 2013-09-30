@@ -29,14 +29,17 @@ How Tos
 Release Notes
 =============
 
-clouddocs-maven-plugin 1.10.1-SNAPSHOT
+clouddocs-maven-plugin 1.11.0 (September 30, 2013)
 ============================================================
 -  Add "Log a bug" link to OpenStack output.
+-  Moving to Maven Central
 -  Bug fixes
+
    -  Empty Request or Response sections sometimes created if an incomplete wadl was processed.
    -  Reduce noise on stdout and improve ability to debug XProc pipelines (when run with --debug)
    -  Use Calabash 1.0.13-94 for XProc piplines.
    -  In api-ref page xslts, adjust xpath expressions to account for changes in wadl-tools.
+   -  Add missing <th>s to param tables in api reference output. 
 
 
 clouddocs-maven-plugin 1.10.0 (September 17, 2013)
