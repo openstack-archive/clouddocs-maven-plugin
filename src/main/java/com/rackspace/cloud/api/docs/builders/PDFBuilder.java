@@ -61,6 +61,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import com.agilejava.docbkx.maven.CachingTransformerBuilder;
+import com.agilejava.docbkx.maven.Entity;
 import com.agilejava.docbkx.maven.ExpressionHandler;
 import com.agilejava.docbkx.maven.InjectingEntityResolver;
 import com.agilejava.docbkx.maven.NullWriter;
@@ -134,8 +135,8 @@ public class PDFBuilder {
 	 * @parameter
 	 */
 	private String foCustomization;
-	private List customizationParameters = new ArrayList();
-	private List entities;
+	private List<Parameter> customizationParameters = new ArrayList<Parameter>();
+	private List<Entity> entities;
 
 
 	private Log log = null;
@@ -270,7 +271,7 @@ public class PDFBuilder {
 		File targetPdfFile = null;
 		try
 		{
-			String baseURL = sourceDirectory.toURL().toExternalForm();
+			String baseURL = sourceDirectory.toURI().toURL().toExternalForm();
 			baseURL = baseURL.replace("file:/", "file:///");
 
 			userAgent.setBaseURL(baseURL);
@@ -335,7 +336,7 @@ public class PDFBuilder {
 	public void adjustTransformer(Transformer transformer, String sourceFilename, File targetFile) {
 		String baseUrl;
 		try {
-			final String str = (new File(sourceFilename)).getParentFile().toURL().toExternalForm();
+			final String str = (new File(sourceFilename)).getParentFile().toURI().toURL().toExternalForm();
 			baseUrl = str.replace("file:/", "file:///");
 		} catch (MalformedURLException e) {
 			getLog().warn("Failed to get FO basedir", e);
@@ -776,10 +777,10 @@ public class PDFBuilder {
 	}
 
 
-	public List getEntities() {
+	public List<Entity> getEntities() {
 		return entities;
 	}
-	public void setEntities(List entities) {
+	public void setEntities(List<Entity> entities) {
 		this.entities = entities;
 	}
 
@@ -846,14 +847,14 @@ public class PDFBuilder {
 			final String catalog = catalogs[i];
 
 			try {
-				Enumeration enumeration = classLoader.getResources(catalog);
+				Enumeration<URL> enumeration = classLoader.getResources(catalog);
 				while (enumeration.hasMoreElements()) {
 					if (!first) {
 						builder.append(';');
 					} else {
 						first = false;
 					}
-					URL resource = (URL) enumeration.nextElement();
+					URL resource = enumeration.nextElement();
 					builder.append(resource.toExternalForm());
 				}
 			} catch (IOException ioe) {
@@ -968,9 +969,9 @@ public class PDFBuilder {
 				}
 
 				if (getCustomizationParameters() != null) {
-					final Iterator iterator = getCustomizationParameters().iterator();
+					final Iterator<Parameter> iterator = getCustomizationParameters().iterator();
 					while (iterator.hasNext()) {
-						Parameter param = (Parameter) iterator.next();
+						Parameter param = iterator.next();
 						if (param.getName() != null) // who knows
 						{
 							transformer.setParameter(param.getName(), param.getValue());
@@ -1000,7 +1001,7 @@ public class PDFBuilder {
 				if (getStylesheetLocation().startsWith("http://")) {
 					return new URL(getStylesheetLocation());
 				}
-				return new File(getStylesheetLocation()).toURL();
+				return new File(getStylesheetLocation()).toURI().toURL();
 			} catch (MalformedURLException mue) {
 				return null;
 			}
@@ -1024,7 +1025,7 @@ public class PDFBuilder {
 		return false;
 	}
 
-	public List getCustomizationParameters()
+	public List<Parameter> getCustomizationParameters()
 	{
 		return customizationParameters;
 	}

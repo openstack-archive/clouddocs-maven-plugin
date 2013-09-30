@@ -1,5 +1,7 @@
 package com.rackspace.cloud.api.docs;
 
+import com.agilejava.docbkx.maven.Entity;
+import com.agilejava.docbkx.maven.Parameter;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -14,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Target;
 import org.xml.sax.XMLReader;
@@ -55,7 +58,7 @@ public abstract class EpubMojo
      * @required
      * @readonly
      */
-    List artifacts;
+    List<Artifact> artifacts;
 
     /**
      * Ant tasks to be executed before the transformation. Comparable
@@ -88,7 +91,7 @@ public abstract class EpubMojo
      *
      * @parameter
      */
-    private List entities;
+    private List<Entity> entities;
 
     /**
      * A list of additional XSL parameters to give to the XSLT engine.
@@ -101,7 +104,7 @@ public abstract class EpubMojo
      *
      * @parameter
      */
-    private List customizationParameters;
+    private List<Parameter> customizationParameters;
 
     /**
      * List of additional System properties.
@@ -4289,11 +4292,11 @@ public abstract class EpubMojo
         return results;
     }
 
-    public List getEntities() {
+    public List<Entity> getEntities() {
         return entities;
     }
 
-    public List getCustomizationParameters()
+    public List<Parameter> getCustomizationParameters()
     {
     	return customizationParameters;
     }
@@ -4315,7 +4318,7 @@ public abstract class EpubMojo
         return project;
     }
 
-    public List getArtifacts() {
+    public List<Artifact> getArtifacts() {
         return artifacts;
     }
 
@@ -4508,7 +4511,7 @@ public abstract class EpubMojo
          //                    new Float(.8));
 
         // Create the transcoder input.
-        String svgURI = new File("/Users/nare4013/epub/rackspace-template/rackspace-template/target/docbkx/images/cloud/cover.svg").toURL().toString();
+        String svgURI = new File("/Users/nare4013/epub/rackspace-template/rackspace-template/target/docbkx/images/cloud/cover.svg").toURI().toURL().toString();
         TranscoderInput input = new TranscoderInput(svgURI);
 
         // Create the transcoder output.

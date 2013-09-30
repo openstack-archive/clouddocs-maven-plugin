@@ -48,7 +48,7 @@ public abstract class HTMLMojo extends AbstractHtmlMojo {
         String pathToPipelineFile = "classpath:///wadl2html.xpl"; //use "classpath:///path" for this to work
         Source source = super.createSource(inputFilename, sourceFile, filter);
 
-        Map map=new HashMap<String, String>();
+        Map<String, Object> map=new HashMap<String, Object>();
         
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);

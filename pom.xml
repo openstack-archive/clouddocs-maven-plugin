@@ -11,9 +11,37 @@
     <version>1.10.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
+    <url>https://github.com/rackerlabs/clouddocs-maven-plugin</url>
+    <licenses>
+      <license>
+        <name>Apache License, Version 2.0</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        <distribution>repo</distribution>
+      </license>
+    </licenses>
+    <developers>
+      <developer>
+        <name>David Cramer</name>
+        <email>david.cramer@rackspace.com</email>
+      </developer>
+      <developer>
+        <name>Sam Harwell</name>
+        <email>sam.harwell@rackspace.com</email>
+      </developer>
+    </developers>
+
+    <parent>
+      <groupId>org.sonatype.oss</groupId>
+      <artifactId>oss-parent</artifactId>
+      <version>7</version>
+    </parent>
+
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <wadl.tools.version>1.0.16</wadl.tools.version>
+      <java6.home>${env.JAVA6_HOME}</java6.home>
+      <bootclasspath.java6>${java6.home}/lib/rt.jar</bootclasspath.java6>
+      <bootclasspath.compile>${bootclasspath.java6}</bootclasspath.compile>
+      <bootclasspath.testCompile>${bootclasspath.java6}</bootclasspath.testCompile>
       <!-- Need to exclude this because the description includes Unicode characters,
            and docbkx-tools doesn't support specifying the encoding. -->
       <excluded.properties>annotation.graphic.close</excluded.properties>
@@ -22,32 +50,6 @@
     <description>
         Generates a XHTML and API documents.
     </description>
-
-    <repositories>
-        <repository>
-            <id>public.maven.research.rackspace.com</id>
-            <name>Rackspace Research</name>
-            <url>http://maven.research.rackspacecloud.com/content/groups/aggregate</url>
-        </repository>
-
-        <repository>
-            <id>releases.maven.research.rackspace.com</id>
-            <name>Rackspace Research Releases</name>
-            <url>http://maven.research.rackspacecloud.com/content/repositories/releases</url>
-        </repository>
-
-        <repository>
-            <id>trancecode.org</id>
-            <name>Trance Code Release Repo</name>
-            <url>http://maven.trancecode.org/releases/</url>
-        </repository>
-
-        <repository>
-            <id>snapshots.trancecode.org</id>
-            <name>Trance Code Snapshot Repo</name>
-            <url>http://maven.trancecode.org/snapshots/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
@@ -63,9 +65,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.rackspace.papi.components</groupId>
-            <artifactId>translation</artifactId>
-            <version>2.9.0</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>3.1.1.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -230,9 +232,9 @@
         <dependency>
             <groupId>com.rackspace.cloud.api</groupId>
             <artifactId>wadl-tools</artifactId>
-            <version>${wadl.tools.version}</version>
+            <version>1.0.17</version>
             <scope>provided</scope>
-        </dependency> 
+        </dependency>
 
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
@@ -241,29 +243,61 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-       
+
+    <issueManagement>
+      <system>GitHub Issues</system>
+      <url>https://github.com/rackerlabs/clouddocs-maven-plugin/issues</url>
+    </issueManagement>
 
     <scm>
-        <connection>scm:git:ssh://git@github.com/rackerlabs/clouddocs-maven-plugin.git</connection>
-
-
+      <url>https://github.com/rackerlabs/clouddocs-maven-plugin/tree/master</url>
+      <connection>scm:git:git://github.com/rackerlabs/clouddocs-maven-plugin.git</connection>
+      <developerConnection>scm:git:git@github.com:rackerlabs/clouddocs-maven-plugin.git</developerConnection>
     </scm>
 
-    <distributionManagement>
-        <repository>
-            <id>releases.maven.research.rackspacecloud.com</id>
-
-            <name>Rackspace Cloud Research Releases</name>
-            <url>http://maven.research.rackspacecloud.com/content/repositories/releases/</url>
-        </repository>
-
-        <snapshotRepository>
-            <id>snapshots.maven.research.rackspacecloud.com</id>
-
-            <name>Rackspace Cloud Research Snapshots</name>
-            <url>http://maven.research.rackspacecloud.com/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    <profiles>
+      <profile>
+        <id>sonatype-oss-release</id>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                <source>1.6</source>
+                <target>1.6</target>
+                <showWarnings>true</showWarnings>
+                <showDeprecation>true</showDeprecation>
+              </configuration>
+              <executions>
+                <execution>
+                  <id>default-compile</id>
+                  <configuration>
+                    <compilerArgs>
+                      <arg>-Xlint</arg>
+                      <arg>-Xlint:-serial</arg>
+                      <arg>-bootclasspath</arg>
+                      <arg>${bootclasspath.compile}</arg>
+                    </compilerArgs>
+                  </configuration>
+                </execution>
+                <execution>
+                  <id>default-testCompile</id>
+                  <configuration>
+                    <compilerArgs>
+                      <arg>-Xlint</arg>
+                      <arg>-Xlint:-serial</arg>
+                      <arg>-bootclasspath</arg>
+                      <arg>${bootclasspath.testCompile}</arg>
+                    </compilerArgs>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
+    </profiles>
 
     <build>
         <resources>
@@ -504,13 +538,74 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.1</version>
 
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                    <compilerArgs>
+                      <arg>-Xlint</arg>
+                      <arg>-Xlint:-serial</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>2.4</version>
+              <configuration>
+                <archive>
+                  <manifest>
+                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                  </manifest>
+                </archive>
+              </configuration>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-release-plugin</artifactId>
+              <!-- override the version inherited from the parent -->
+              <version>2.4.1</version>
+              <configuration>
+                <arguments>-Psonatype-oss-release ${release.arguments}</arguments>
+              </configuration>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <!-- override the version inherited from the parent -->
+              <version>2.16</version>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-source-plugin</artifactId>
+              <!-- override the version inherited from the parent -->
+              <version>2.2.1</version>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <!-- override the version inherited from the parent -->
+              <version>2.9.1</version>
+              <configuration>
+                <quiet>true</quiet>
+              </configuration>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <!-- override the version inherited from the parent -->
+              <version>1.4</version>
+            </plugin>
+
         </plugins>
     </build>
 </project>

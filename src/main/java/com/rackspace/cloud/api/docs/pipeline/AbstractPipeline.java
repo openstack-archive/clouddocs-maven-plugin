@@ -1,14 +1,15 @@
 package com.rackspace.cloud.api.docs.pipeline;
 
-import com.rackspace.papi.components.translation.resolvers.InputStreamUriParameterResolver;
-
+import com.rackspace.cloud.api.docs.pipeline.resolvers.InputStreamUriParameterResolver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class AbstractPipeline implements Pipeline {
-   private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(AbstractPipeline.class);
+   private static final Logger LOG = Logger.getLogger(AbstractPipeline.class.getName());
    private final InputStreamUriParameterResolver resolver;
    
    public AbstractPipeline(InputStreamUriParameterResolver resolver) {
@@ -21,12 +22,12 @@ public abstract class AbstractPipeline implements Pipeline {
    
    protected abstract <T>void addOption(PipelineInput<T> input);
    
-   protected void handleInputs(PipelineInput... inputs) {
+   protected void handleInputs(PipelineInput<?>... inputs) {
       handleInputs(Arrays.asList(inputs));
    }
    
-   protected void handleInputs(List<PipelineInput> inputs) {
-      for (PipelineInput input: inputs) {
+   protected void handleInputs(List<PipelineInput<?>> inputs) {
+      for (PipelineInput<?> input: inputs) {
          switch (input.getType()) {
             case PORT:
                addPort(input);
@@ -57,19 +58,19 @@ public abstract class AbstractPipeline implements Pipeline {
          try {
             ((InputStream)source).close();
          } catch (IOException ex) {
-            LOG.error("Unable to close input stream. Reason: " + ex.getMessage(), ex);
+            LOG.log(Level.SEVERE, "Unable to close input stream. Reason: " + ex.getMessage(), ex);
          }
          resolver.removeStream((InputStream)source);
       }
    }
    
-   protected void clearParameters(PipelineInput... inputs) {
+   protected void clearParameters(PipelineInput<?>... inputs) {
       clearParameters(Arrays.asList(inputs));
    }
    
-   protected void clearParameters(List<PipelineInput> inputs) {
+   protected void clearParameters(List<PipelineInput<?>> inputs) {
       
-      for (PipelineInput input: inputs) {
+      for (PipelineInput<?> input: inputs) {
          switch (input.getType()) {
             case PARAMETER:
                clearParameter(input);
@@ -81,7 +82,7 @@ public abstract class AbstractPipeline implements Pipeline {
    }
    
    @Override
-   public void run(PipelineInput... inputs) {
+   public void run(PipelineInput<?>... inputs) {
       run(Arrays.asList(inputs));
    }
    

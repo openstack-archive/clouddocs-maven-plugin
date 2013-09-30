@@ -7,9 +7,9 @@ public interface Pipeline {
 
    List<Source> getResultPort(String name);
 
-   void run(List<PipelineInput> inputs) throws PipelineException;
+   void run(List<PipelineInput<?>> inputs) throws PipelineException;
 
-   void run(PipelineInput... inputs);
+   void run(PipelineInput<?>... inputs);
 
    void reset();
 }

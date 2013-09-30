@@ -111,7 +111,7 @@ public class FileUtils {
         }
     }
 
-    public static void extractJaredDirectory (String directory, Class jarSrc,
+    public static void extractJaredDirectory (String directory, Class<?> jarSrc,
                                               File dest)
         throws MojoExecutionException {
         try {
