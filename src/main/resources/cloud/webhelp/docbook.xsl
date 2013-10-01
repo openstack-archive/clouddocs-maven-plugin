@@ -243,10 +243,10 @@ set       toc,title
       <script type="text/javascript" src="{$webhelp.common.dir}main.js">
         <xsl:comment></xsl:comment>
       </script>
-      <div class="logabug" style="text-align: center">
-	<a id="logABugLink2" href="" target="_blank">Log a bug against this page</a>
-      </div>
       <xsl:if test="$branding = 'openstack'">
+	<div class="logabug" style="text-align: center">
+	  <a id="logABugLink2" href="" target="_blank">Log a bug against this page</a>
+	</div>
 	<script language="JavaScript">
 	  var sourceFile = "source File: <xsl:value-of select="(ancestor-or-self::*/@xml:base)[position() = last()]"/>"
 	  var xmlId = "xml:id: <xsl:value-of select="@xml:id"/>"
