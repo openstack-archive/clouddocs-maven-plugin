@@ -29,6 +29,15 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.11.1
+============================================================
+-  Bug fixes
+
+   -  Hide "Log a Bug" link at bottom of page in Rackspace output.
+   -  Updated apipage-main.xsl to include metering API
+   -  Updated Rackspace logo 
+   -  Fix alignment of ordered lists in API reference pages.
+
 clouddocs-maven-plugin 1.11.0 (September 30, 2013)
 ============================================================
 -  Add "Log a bug" link to OpenStack output.
