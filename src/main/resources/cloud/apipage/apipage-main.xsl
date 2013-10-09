@@ -155,7 +155,9 @@ function showSelected(selectorId, optionId){
                         <a class="color" href="api-ref-compute.html">Compute API and Extensions</a>
                         <a class="color" href="api-ref-image.html">Image Service APIs</a>
                         <a class="color" href="api-ref-blockstorage.html">Block Storage
-                          Service API</a>
+                        Service API</a>
+                        <a class="color" href="api-ref-metering.html">Metering
+                          API</a>
                         <a class="color" href="api-ref-networking.html">Networking API</a>
                         <a class="color" href="api-ref-objectstorage.html">Object Storage
                           API</a>
