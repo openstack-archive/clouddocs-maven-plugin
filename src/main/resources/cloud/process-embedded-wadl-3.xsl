@@ -670,6 +670,7 @@
     	<xsl:param name="style"/>
     	<xsl:param name="styleCapitalized">
     		<xsl:choose>
+		        <xsl:when test="$style = 'template'">URI</xsl:when>
     			<xsl:when test="$style != 'plain'"><xsl:value-of select="concat(translate(substring($style,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($style,2))"/></xsl:when>
     			<xsl:otherwise>Body</xsl:otherwise>
     		</xsl:choose>
