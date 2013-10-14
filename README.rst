@@ -37,6 +37,7 @@ clouddocs-maven-plugin 1.11.1
    -  Updated apipage-main.xsl to include metering API
    -  Updated Rackspace logo 
    -  Fix alignment of ordered lists in API reference pages.
+   -  Rename "Template" parameters as "URI" parameters in output. 
 
 clouddocs-maven-plugin 1.11.0 (September 30, 2013)
 ============================================================
