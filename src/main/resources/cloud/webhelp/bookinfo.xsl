@@ -48,7 +48,7 @@
     <xsl:variable name="info" select="/*/db:info"/>
 
     <xsl:template match="/">      
-      <xsl:processing-instruction name="rax-warinfo"><xsl:value-of select="concat($warprefix,$input.filename,if ($security != 'external') then $warsuffix else '')"/></xsl:processing-instruction>
+      <xsl:processing-instruction name="rax-warinfo"><xsl:value-of select="if($webhelpDirname != '') then $webhelpDirname else concat($warprefix,$input.filename,if ($security != 'external') then $warsuffix else '')"/></xsl:processing-instruction>
       
         <xsl:apply-templates/>
 
