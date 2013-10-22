@@ -79,7 +79,7 @@ $(document).ready(function() {
     // hides the top 95px or so of the page.
     // This code deals with the problem when 
     // you click on a link from another page. 
-    var hash = window.location.hash;
+    var hash = window.location.hash.replace(/[\(\)\<\>\"\'\=]/g,'');
     if(hash){ 
 	var targetOffset = $(hash).offset().top - 140;
 	$('html,body').animate({scrollTop: targetOffset}, 200);
