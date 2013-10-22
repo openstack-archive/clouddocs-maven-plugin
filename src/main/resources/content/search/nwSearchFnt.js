@@ -23,7 +23,7 @@ function Verifie(ditaSearch_Form) {
     }
 
 
-    var expressionInput = document.ditaSearch_Form.textToSearch.value.replace(/["',;]/g,' ');
+    var expressionInput = document.ditaSearch_Form.textToSearch.value.replace(/\(\)\<\>["',;]/g,' ');
     //Set a cookie to store the searched keywords
     $.cookie('textToSearch', expressionInput);
 
