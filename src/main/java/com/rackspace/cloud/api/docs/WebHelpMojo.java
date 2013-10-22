@@ -615,12 +615,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	    System.out.println("Got an Exception: " + e.getMessage());          
 	}
 
-	String warSuffix = properties.getProperty("warsuffix","");
+	String warSuffix = webhelpDirname != null ? "" : properties.getProperty("warsuffix","");
+	String warPrefix = webhelpDirname != null ? "" : properties.getProperty("warprefix","");
 	String warSuffixForWar = warSuffix.equals("-external") ? "" : warSuffix;
 	if(null != webhelpWar && !"0".equals(webhelpWar)){
 	    //Zip up the war from here.
-	    File sourceDir = new File(result.getParentFile().getParentFile(), webhelpOutdir);
-	    File zipFile = new File(result.getParentFile().getParentFile(), properties.getProperty("warprefix","") + warBasename + warSuffixForWar + ".war");
+	    File sourceDir = new File(result.getParentFile().getParentFile(), warBasename);
+	    File zipFile = new File(result.getParentFile().getParentFile(), warPrefix + warBasename + warSuffixForWar + ".war");
 	    //result.deleteOnExit();
 
 	    try{
