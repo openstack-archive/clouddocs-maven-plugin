@@ -42,7 +42,7 @@
         add <type>s to the bookinfo for resources mentioned in lists in the doc -->
     <xsl:variable name="resource-lists" select="//db:itemizedlist[db:info/raxm:metadata]"/> 
 
-    <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product,'-',/*/db:info/raxm:metadata/raxm:product/@version,'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
+    <xsl:variable name="warprefix"><xsl:if test="/*/db:info/raxm:metadata/raxm:product and /*/db:info/raxm:metadata/raxm:product/@version"><xsl:value-of select="translate(translate(concat(/*/db:info/raxm:metadata/raxm:product[1],'-',/*/db:info/raxm:metadata/raxm:product/@version[1],'-'),' ','_'),' ','')"/></xsl:if></xsl:variable>
     <xsl:variable name="warsuffix"><xsl:if test="$webhelpDirname = ''">-<xsl:value-of select="normalize-space($security)"/></xsl:if></xsl:variable>
     <xsl:variable name="pdfsuffix"><xsl:if test="not($security = 'external') and not($security = '') and $pdfFilenameBase = ''">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/db:info/db:pubdate and $includeDateInPdfFilename = '1'">-<xsl:value-of select="translate(/*/db:info/db:pubdate,'-','')"/></xsl:if></xsl:variable>
     <xsl:variable name="info" select="/*/db:info"/>
@@ -93,7 +93,7 @@
                                         </xsl:choose>
 				    </xsl:variable>
                                     <displayname><xsl:value-of select="if (not(normalize-space($displayname) = '')) then normalize-space($displayname) else '????'"/></displayname>
-                                    <url><xsl:value-of select="concat($IndexWar,'/',/*/db:info/raxm:metadata/raxm:product,'/api/',/*/db:info/raxm:metadata/raxm:product/@version,'/',$input.filename,'/content/',$default.topic)"/></url>
+                                    <url><xsl:value-of select="concat($IndexWar,'/',/*/db:info/raxm:metadata/raxm:product[1],'/api/',/*/db:info/raxm:metadata/raxm:product/@version[1],'/',$input.filename,'/content/',$default.topic)"/></url>
                                     <sequence><xsl:value-of select="f:calculatepriority(/*/db:info//raxm:priority[1])"/></sequence> 
                                 </type>  
                                </xsl:if>
