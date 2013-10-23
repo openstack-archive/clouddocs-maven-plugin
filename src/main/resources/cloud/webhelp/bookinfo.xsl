@@ -67,7 +67,7 @@
                     <artifactid><xsl:value-of select="$artifactId"/></artifactid>
                     <version><xsl:value-of select="$docProjectVersion"/></version>
                     <pomname><xsl:choose>
-		      <xsl:when test="normalize-space($pomProjectName) != ''"><xsl:value-of select="$pomProjectName"/>, <xsl:value-of select="$docProjectVersion"/></xsl:when>
+		      <xsl:when test="normalize-space($pomProjectName) != ''"><xsl:value-of select="$pomProjectName"/></xsl:when>
 		      <xsl:otherwise><xsl:value-of select="$artifactId"/>, <xsl:value-of select="$docProjectVersion"/></xsl:otherwise>
 		    </xsl:choose></pomname>
                 </pominfo>
