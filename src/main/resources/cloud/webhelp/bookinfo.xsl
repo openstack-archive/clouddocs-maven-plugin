@@ -180,6 +180,12 @@ branding=<xsl:value-of select="$branding"/>
             <xsl:when test="$key= 'cdns'">Cloud DNS</xsl:when>
             <xsl:when test="$key= 'sites'">Cloud Sites</xsl:when>
             <xsl:when test="$key= 'sdks'">SDKs</xsl:when>
+            <xsl:when test="$key= 'cas'">Cloud Auto Scale</xsl:when>
+            <xsl:when test="$key= 'cbd'">Cloud Big Data</xsl:when>
+            <xsl:when test="$key= 'feeds'">Cloud Feeds</xsl:when>
+            <xsl:when test="$key= 'images'">Cloud Images</xsl:when>
+            <xsl:when test="$key= 'networks'">Cloud Networks</xsl:when>
+            <xsl:when test="$key= 'queues'">Cloud Queues</xsl:when>
             <xsl:otherwise><xsl:value-of select="$info/db:productname"/></xsl:otherwise>
         </xsl:choose>
     </xsl:function>
