@@ -93,7 +93,7 @@
                                         </xsl:choose>
 				    </xsl:variable>
                                     <displayname><xsl:value-of select="if (not(normalize-space($displayname) = '')) then normalize-space($displayname) else '????'"/></displayname>
-                                    <url><xsl:value-of select="concat($IndexWar, if(not(/*/db:info/raxm:metadata/raxm:product[1] = '')) then concat('/', /*/db:info/raxm:metadata/raxm:product[1], '/api/',/*/db:info/raxm:metadata/raxm:product[1]/@version) else '','/',if($webhelpDirname != '') then $webhelpDirname else $input.filename,'/content/',$default.topic)"/></url>
+                                    <url><xsl:choose><xsl:when test="/*/db:info/raxm:metadata/raxm:product[1]/@url"><xsl:value-of select="concat($IndexWar, if(not(/*/db:info/raxm:metadata/raxm:product[1]/@url = '')) then /*/db:info/raxm:metadata/raxm:product[1]/@url else concat('/', if($webhelpDirname != '') then $webhelpDirname else $input.filename),'/content/',$default.topic)"/></xsl:when><xsl:otherwise><xsl:value-of select="concat($IndexWar, if(not(/*/db:info/raxm:metadata/raxm:product[1] = '')) then concat('/', /*/db:info/raxm:metadata/raxm:product[1], '/api/',/*/db:info/raxm:metadata/raxm:product[1]/@version) else '','/',if($webhelpDirname != '') then $webhelpDirname else $input.filename,'/content/',$default.topic)"/></xsl:otherwise></xsl:choose></url>
                                     <sequence><xsl:value-of select="f:calculatepriority(/*/db:info//raxm:priority[1])"/></sequence> 
                                 </type>  
                                </xsl:if>
