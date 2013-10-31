@@ -44,7 +44,7 @@
 				<col width="50%"/>
 				<thead>
 					<tr>
-						<th align="center">Verb</th>
+						<th align="center">Method</th>
 						<th align="center">URI</th>
 						<th align="center">Description</th>
 					</tr>
@@ -170,7 +170,7 @@
 				<col width="50%"/>
 				<thead>
 					<tr>
-						<th align="center">Verb</th>
+						<th align="center">Method</th>
 						<th align="center">URI</th>
 						<th align="center">Description</th>
 					</tr>
@@ -271,7 +271,7 @@
 				<col width="50%"/>
 				<thead>
 					<tr>
-						<th align="center">Verb</th>
+						<th align="center">Method</th>
 						<th align="center">URI</th>
 						<th align="center">Description</th>
 					</tr>
