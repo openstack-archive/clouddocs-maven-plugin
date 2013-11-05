@@ -359,10 +359,8 @@ setting failOnValidationError to no in your pom.
                             </xsl:copy>
                         </xsl:template>
                         
-			<xsl:template match="*[(ancestor::db:programlisting and not(self::db:emphasis) and not(self::db:co)) and not(self::db:replaceable) or 
-					       (ancestor::db:screen         and not(self::db:emphasis) and not(self::db:co)) and not(self::db:replaceable) or 
-					       (ancestor::db:literallayout  and not(self::db:emphasis) and not(self::db:co)) and not(self::db:replaceable) ]"><xsl:apply-templates select="node() | @*"/></xsl:template>
-
+                        <xsl:template match="*[(ancestor::db:programlisting or ancestor::db:screen or ancestor::db:literallayout ) and 
+                                               (not(self::db:emphasis) and not(self::db:co) and not(self::db:replaceable) ) ]"><xsl:apply-templates select="node()"/></xsl:template>
                         <xsl:template match="db:programlisting">
                             <xsl:copy>
                                 <xsl:apply-templates select="@*"/>
