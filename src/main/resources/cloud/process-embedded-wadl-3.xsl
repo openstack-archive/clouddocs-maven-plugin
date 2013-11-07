@@ -551,11 +551,22 @@
 				<code role="hyphenate-true"><xsl:value-of select="concat(if (@style = 'template') then '{' else '', @name, if (@style = 'template') then '}' else '')"/></code>
 			</td>
 			<td align="left">
+			  <para>
 				<xsl:call-template name="hyphenate.camelcase">
 					<xsl:with-param name="content">
 						<xsl:value-of select="concat(translate(substring($type,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($type,2))"/>
 					</xsl:with-param>
 				</xsl:call-template>
+			  </para>
+				<!--
+				    Template parameters are always required, so
+				    there's no poin in processing @required.
+				-->
+                  		<xsl:choose>
+                        	  <xsl:when test="@style = 'template'"/>
+				  <xsl:when test="@required = 'true'"><para><emphasis>(Required)</emphasis></para></xsl:when>
+				  <xsl:otherwise><para><emphasis>(Optional)</emphasis></para></xsl:otherwise>
+				</xsl:choose>
 			</td>			
 			<td>
 				<xsl:choose>
@@ -573,16 +584,6 @@
 						</xsl:for-each> Default: <xsl:value-of select="@default"
 						/><xsl:text>. </xsl:text>
 					</xsl:if>
-                    <!--
-                        Template parameters are always required, so
-                        there's no poin in processing @required.
-                    -->
-                  	<xsl:choose>
-                        	<xsl:when test="@style = 'template'"/>
-                            <xsl:when test="@required = 'true'">The <code role="hyphenate-true"><xsl:value-of select="@name"/></code>
-                            <xsl:value-of select="$param"/> should always be supplied. </xsl:when>
-                            <xsl:otherwise>The <code role="hyphenate-true"><xsl:value-of select="@name"/></code> <xsl:value-of select="$param"/> is optional. </xsl:otherwise>
-                    </xsl:choose>
                 </para>
 				</xsl:if>
             </td>
