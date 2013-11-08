@@ -105,21 +105,9 @@
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="enable.coremetrics">
-    <xsl:choose>
-      <xsl:when test="$branding = 'rackspace'">1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:param>
   <xsl:param name="google.analytics.id">
     <xsl:choose>
       <xsl:when test="$branding = 'rackspace'">UA-23102455-4</xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-  </xsl:param>
-  <xsl:param name="coremetrics.id">
-    <xsl:choose>
-      <xsl:when test="$branding = 'rackspace'">90378909</xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:param>
