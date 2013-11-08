@@ -38,7 +38,7 @@
 			 Here we build a summary template for whole reference. 
   			 Combine the tables for a section into one big table
 			-->
-			<informaltable rules="all">
+			<informaltable rules="all" width="100%">			
 				<col width="10%"/>
 				<col width="40%"/>
 				<col width="50%"/>
@@ -164,7 +164,7 @@
         <xsl:variable name="skipSummary" select="boolean(number($skipSummaryN))"/>
 		<!-- Make a summary table then apply templates to wadl:resource/wadl:method (from wadl) -->
 		<xsl:if test="not($skipSummary)">
-			<informaltable rules="all">
+			<informaltable rules="all" width="100%">			
 				<col width="10%"/>
 				<col width="40%"/>
 				<col width="50%"/>
@@ -176,7 +176,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<xsl:apply-templates select="wadl:resource" mode="method-rows"/>
+					<xsl:apply-templates select="wadl:resource" mode="method-rows"/>				
 				</tbody>
 			</informaltable>
 		</xsl:if>
@@ -265,7 +265,18 @@
 			<xsl:if test="$security = 'writeronly'">
 				<para security="writeronly">Source wadl: <link xlink:href="{@rax:original-wadl}"><xsl:value-of select="@rax:original-wadl"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
 			</xsl:if>
-			<informaltable rules="all">
+			
+			<!-- Method Docs -->
+			<xsl:choose>
+				<xsl:when test="wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
+					<xsl:apply-templates select="wadl:doc/*[not(@role='shortdesc')]"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<!-- Suppress because everything will be in the table -->
+				</xsl:otherwise>
+			</xsl:choose>
+			
+			<informaltable rules="all" width="100%">		
 				<col width="10%"/>
 				<col width="40%"/>
 				<col width="50%"/>
@@ -277,37 +288,61 @@
 					</tr>
 				</thead>
 				<tbody>
-					<xsl:call-template name="method-row"/>
+					<xsl:call-template name="method-row"/>				
 				</tbody>
 			</informaltable>
 
-			<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
-                <simpara>
-                    Normal Response Code(s):
-					<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
-                </simpara>
-			</xsl:if>
-			<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
-                <simpara>
-                    Error Response Code(s):
-                    <!--
-                        Put those errors that don't have a set status
-                        up front.  These are typically general errors.
-                    -->
-					<xsl:apply-templates select="wadl:response[not(@status)]" mode="preprocess-faults"/>
-					<xsl:apply-templates select="wadl:response[@status]" mode="preprocess-faults"/>
-                </simpara>
-			</xsl:if>
-
-            <!-- Method Docs -->
 			<xsl:choose>
-			  <xsl:when test="wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
-			    <xsl:apply-templates select="wadl:doc/*[not(@role='shortdesc')]"/>
-			  </xsl:when>
-			  <xsl:otherwise>
-			    <!-- Suppress because everything will be in the table -->
-			  </xsl:otherwise>
+				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
+					<para>
+					The following table shows the possible
+					response codes for this operation
+						<table rules="all" pgwide="1" width="100%">	
+							<caption>Response Codes</caption>
+							<col width="10%" />
+							<col width="30%" />
+							<col width="60%" />
+							<thead>
+								<tr>
+									<th align="center">Response Code</th>
+									<th align="center">Name</th>
+									<th align="center">Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<xsl:apply-templates select="wadl:response[@status and (starts-with(@status,'2') or starts-with(@status,'3'))]" mode="responseTable">
+									<xsl:sort select="@status"/>
+								</xsl:apply-templates>
+								<xsl:apply-templates select="wadl:response[@status and not(starts-with(@status,'2') or starts-with(@status,'3'))]" mode="responseTable">
+									<xsl:sort select="@status"/>
+								</xsl:apply-templates>
+								<xsl:apply-templates select="wadl:response[not(@status)]" mode="responseTable"/>
+								
+							</tbody>
+						</table>
+					</para>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
+						<simpara>
+							<emphasis role="bold">Normal Response Code(s):</emphasis>
+							<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
+						</simpara>
+					</xsl:if>
+					<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
+						<simpara>
+							<emphasis role="bold">Error Response Code(s):</emphasis>
+							<!--
+								Put those errors that don't have a set status
+								up front.  These are typically general errors.
+							-->
+							<xsl:apply-templates select="wadl:response[not(@status)]" mode="preprocess-faults"/>
+							<xsl:apply-templates select="wadl:response[@status]" mode="preprocess-faults"/>
+						</simpara>
+					</xsl:if>
+				</xsl:otherwise>
 			</xsl:choose>
+			
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 			<xsl:variable name="requestSection">
 			<section xml:id="{$sectionIdComputed}-Request">
@@ -392,6 +427,14 @@
 				<xsl:copy-of select="$responseSection"/>
 			</xsl:if>	
 		</section>
+	</xsl:template>
+	
+	<xsl:template match="wadl:response" mode="responseTable">
+		<tr>
+			<td align="left"><xsl:value-of select="if(@status) then @status else '400 500 &#x2026;'"/></td>
+			<td align="left"><xsl:value-of select="wadl:doc/@title"></xsl:value-of></td>
+			<td><xsl:apply-templates select="wadl:doc/node()"/></td>
+		</tr>
 	</xsl:template>
 	
 	<xsl:template match="wadl:representation">
@@ -680,10 +723,11 @@
         <xsl:if test="$mode='Request' or $mode='Response'">
             <xsl:element name="{$tableType}">
             	<xsl:attribute name="rules">all</xsl:attribute>
+            	<xsl:attribute name="width">100%</xsl:attribute>	
                 <xsl:if test="$tableType = 'table'"><caption><xsl:value-of select="concat($method.title,' ',$mode, ' ', $styleCapitalized, ' Parameters')"/></caption></xsl:if>
                 <col width="30%"/>
                 <col width="10%"/>
-                <col width="40%"/>
+                <col width="60%"/>
                 <thead>
                     <tr>
                         <th align="center">Name</th>
