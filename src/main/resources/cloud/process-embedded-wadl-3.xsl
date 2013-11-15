@@ -296,9 +296,9 @@
 				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
 					<para>
 					The following table shows the possible
-					response codes for this operation
-						<table rules="all" pgwide="1" width="100%">	
-							<caption>Response Codes</caption>
+					response codes for this operation:
+						<informaltable rules="all" width="100%">	
+						<!--	<caption>Response Codes</caption>-->
 							<col width="10%" />
 							<col width="30%" />
 							<col width="60%" />
@@ -319,7 +319,7 @@
 								<xsl:apply-templates select="wadl:response[not(@status)]" mode="responseTable"/>
 								
 							</tbody>
-						</table>
+						</informaltable>
 					</para>
 				</xsl:when>
 				<xsl:otherwise>
@@ -440,13 +440,13 @@
 	<xsl:template match="wadl:representation">
 		<xsl:param name="method.title"/>
 		<xsl:variable name="plainParams">
-		<xsl:if test="wadl:param[@style = 'plain']">
-			<xsl:call-template name="paramTable">
-				<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
-				<xsl:with-param name="method.title" select="$method.title"/>
-				<xsl:with-param name="style" select="'plain'"/>
-			</xsl:call-template>
-		</xsl:if>
+			<xsl:if test="wadl:param[@style = 'plain']">
+				<xsl:call-template name="paramTable">
+					<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
+					<xsl:with-param name="method.title" select="$method.title"/>
+					<xsl:with-param name="style" select="'plain'"/>
+				</xsl:call-template>
+			</xsl:if>
 		</xsl:variable>
 		<xsl:apply-templates select="wadl:doc" mode="representation">
 			<xsl:with-param name="plainParams" select="$plainParams"/>
@@ -567,6 +567,7 @@
 	</xsl:template>
 	
 	<xsl:template match="xsdxt:code" mode="sample">
+		<!-- Remove this element. The code was already pulled in by the wadl normalizer -->
 		<xsl:apply-templates mode="sample"/>
 	</xsl:template>
 	
@@ -594,11 +595,14 @@
 		<tr>
 			<td align="left">
 				<xsl:choose>
-					<xsl:when test="$style = 'plain' and contains(parent::representation/@mediaType, 'json') and ends-with(@path,'[*]')">
-						<para><xsl:if test="$style = 'plain' and $jsonPathDepth &gt; 0"><xsl:for-each select="1 to $jsonPathDepth">&#160;&#8658;&#160;</xsl:for-each></xsl:if><emphasis><code role="hyphenate-true"><xsl:value-of select="@name"/></code></emphasis></para>										
+					<xsl:when test="$style = 'plain' and contains(parent::wadl:representation/@mediaType, 'json') and ends-with(@path,'[*]')">
+						<para><xsl:if test="$style = 'plain' and $jsonPathDepth &gt; 0"><xsl:for-each select="1 to $jsonPathDepth">&#160;&#187;&#160;</xsl:for-each></xsl:if><emphasis><code role="hyphenate-true"><xsl:value-of select="@name"/></code></emphasis></para>										
+					</xsl:when>
+					<xsl:when test="$style = 'plain' and contains(parent::wadl:representation/@mediaType, 'json')">
+						<para><xsl:if test="$style = 'plain' and $jsonPathDepth &gt; 0"><xsl:for-each select="1 to $jsonPathDepth">&#160;&#187;&#160;</xsl:for-each></xsl:if><code role="hyphenate-true"><xsl:value-of select="@name"/></code></para>										
 					</xsl:when>
 					<xsl:otherwise>
-						<para><xsl:if test="$style = 'plain' and contains(parent::representation/@mediaType, 'json') and $jsonPathDepth &gt; 0"><xsl:for-each select="1 to $jsonPathDepth">&#160;&#8658;&#160;</xsl:for-each></xsl:if><code role="hyphenate-true"><xsl:value-of select="concat(if (@style = 'template') then '{' else '', @name, if (@style = 'template') then '}' else '')"/></code></para>										
+						<para><code role="hyphenate-true"><xsl:value-of select="concat(if (@style = 'template') then '{' else '', @name, if (@style = 'template') then '}' else '')"/></code></para>										
 					</xsl:otherwise>
 				</xsl:choose>
 			</td>
@@ -638,7 +642,7 @@
 					</xsl:if>
                 </para>
 				</xsl:if>
-				<xsl:if test="@style = 'plain' and @path and contains(parent::representation/@mediaType, 'json')"><para>JSONPath: <code><xsl:value-of select="@path"/></code></para></xsl:if>
+				<xsl:if test="@style = 'plain' and @path and contains(parent::wadl:representation/@mediaType, 'json')"><para>JSONPath: <code><xsl:value-of select="@path"/></code></para></xsl:if>
             </td>
 		</tr>
 		
@@ -729,9 +733,11 @@
     			<xsl:otherwise>Body</xsl:otherwise>
     		</xsl:choose>
     	</xsl:param>
-    	<xsl:variable name="tableType" select="(: if($style = 'plain') then 'informaltable' else :)'table'"/>
+    	<xsl:variable name="tableType" select="(: if($style = 'plain') then 'informaltable' else :)'informaltable'"/>
         <xsl:if test="$mode='Request' or $mode='Response'">
-            <xsl:element name="{$tableType}">
+        	
+			<para>The following table shows the <xsl:value-of select="$styleCapitalized"/> parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+        	<xsl:element name="{$tableType}">
             	<xsl:attribute name="rules">all</xsl:attribute>
             	<xsl:attribute name="width">100%</xsl:attribute>	
                 <xsl:if test="$tableType = 'table'"><caption><xsl:value-of select="concat($method.title,' ',$mode, ' ', $styleCapitalized, ' Parameters')"/></caption></xsl:if>
