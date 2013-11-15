@@ -499,6 +499,7 @@
  			</xsl:choose>
  		</xsl:variable>
  		
+ 		<xsl:copy-of select="$plainParams"/>
  		<xsl:choose>
  			<xsl:when test=".//xsdxt:samples">
  				<xsl:apply-templates select=".//xsdxt:samples/xsdxt:sample" mode="sample"/>
@@ -516,7 +517,6 @@
  				<xsl:apply-templates mode="sample"/>
  			</xsl:otherwise>
  		</xsl:choose>
- 		<xsl:copy-of select="$plainParams"/>
  	</xsl:template>
 	
 	<xsl:template match="xsdxt:sample" mode="sample">
@@ -577,9 +577,10 @@
 	</xsl:template>
 	
 	<xsl:template match="wadl:param">
+		<xsl:param name="style"/>
 		<xsl:variable name="default.param.type" select="if (@style != 'plain') then 'String' else ''"/>
 	  <xsl:variable name="type">
-	  	<xsl:value-of select="if (@type and contains(@type, ':')) then substring-after(@type,':') else $default.param.type"/>
+	  	<xsl:value-of select="if (@type and contains(@type, ':')) then substring-after(@type,':') else if(@type) then @type else $default.param.type"/>
 	  </xsl:variable>
         <xsl:variable name="param">
             <xsl:choose>
@@ -589,9 +590,17 @@
         </xsl:variable>
 
 		<!-- TODO: Get more info from the xsd about these params-->
+		<xsl:variable name="jsonPathDepth" select="(string-length(@path) - string-length(translate(@path,'.',''))) - 1"/>
 		<tr>
 			<td align="left">
-				<code role="hyphenate-true"><xsl:value-of select="concat(if (@style = 'template') then '{' else '', @name, if (@style = 'template') then '}' else '')"/></code>
+				<xsl:choose>
+					<xsl:when test="$style = 'plain' and contains(parent::representation/@mediaType, 'json') and ends-with(@path,'[*]')">
+						<para><xsl:if test="$style = 'plain' and $jsonPathDepth &gt; 0"><xsl:for-each select="1 to $jsonPathDepth">&#160;&#8658;&#160;</xsl:for-each></xsl:if><emphasis><code role="hyphenate-true"><xsl:value-of select="@name"/></code></emphasis></para>										
+					</xsl:when>
+					<xsl:otherwise>
+						<para><xsl:if test="$style = 'plain' and contains(parent::representation/@mediaType, 'json') and $jsonPathDepth &gt; 0"><xsl:for-each select="1 to $jsonPathDepth">&#160;&#8658;&#160;</xsl:for-each></xsl:if><code role="hyphenate-true"><xsl:value-of select="concat(if (@style = 'template') then '{' else '', @name, if (@style = 'template') then '}' else '')"/></code></para>										
+					</xsl:otherwise>
+				</xsl:choose>
 			</td>
 			<td align="left">
 			  <para>
@@ -629,6 +638,7 @@
 					</xsl:if>
                 </para>
 				</xsl:if>
+				<xsl:if test="@style = 'plain' and @path and contains(parent::representation/@mediaType, 'json')"><para>JSONPath: <code><xsl:value-of select="@path"/></code></para></xsl:if>
             </td>
 		</tr>
 		
@@ -738,7 +748,9 @@
                 <tbody>
                     <xsl:choose>
                     	<xsl:when test="$style = 'plain'">
-                    		<xsl:apply-templates select="wadl:param[@style = 'plain']"/>
+                    		<xsl:apply-templates select="wadl:param[@style = 'plain']">
+                    			<xsl:with-param name="style">plain</xsl:with-param>
+                    		</xsl:apply-templates>
                     	</xsl:when>
                         <xsl:when test="$mode = 'Request'">
                             <xsl:apply-templates select="wadl:request//wadl:param[@style = $style]|parent::wadl:resource/wadl:param[@style = $style]"/>
