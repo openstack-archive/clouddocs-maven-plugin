@@ -440,13 +440,21 @@
 	<xsl:template match="wadl:representation">
 		<xsl:param name="method.title"/>
 		<xsl:variable name="plainParams">
-			<xsl:if test="wadl:param[@style = 'plain']">
-				<xsl:call-template name="paramTable">
-					<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
-					<xsl:with-param name="method.title" select="$method.title"/>
-					<xsl:with-param name="style" select="'plain'"/>
-				</xsl:call-template>
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="wadl:param[@style = 'plain'] and contains(@mediaType,'json')">
+					<xsl:call-template name="paramList">
+						<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
+						<xsl:with-param name="method.title" select="$method.title"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:when test="wadl:param[@style = 'plain']">
+					<xsl:call-template name="paramTable">
+						<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
+						<xsl:with-param name="method.title" select="$method.title"/>
+						<xsl:with-param name="style" select="'plain'"/>
+					</xsl:call-template>
+				</xsl:when>
+			</xsl:choose>
 		</xsl:variable>
 		<xsl:apply-templates select="wadl:doc" mode="representation">
 			<xsl:with-param name="plainParams" select="$plainParams"/>
@@ -775,7 +783,46 @@
             </xsl:element>
         </xsl:if>
     </xsl:template>
+
+	<!-- The following templates, paramList and group-params turn a set of 
+		 plain parameters into nested itemizedlists based on the JSONPath values
+		 in @path. -->
+    <xsl:template name="paramList">
+    	<xsl:param name="mode"/>
+    	<xsl:param name="method.title"/>
+    	<xsl:variable name="plainParams" select="wadl:param[@style = 'plain' and ./wadl:doc and @path]"/>
+        <para>The following list shows the Body parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+        	<itemizedlist role="paramList">
+	    		<xsl:call-template name="group-params">
+	    			<xsl:with-param name="plainParams" select="$plainParams"/>
+	    		</xsl:call-template>
+	    	</itemizedlist>    
+    </xsl:template>
 	
+	<xsl:template name="group-params">
+		<xsl:param name="plainParams"/>
+		<xsl:param name="token-number" select="1" as="xs:integer"/>
+		<xsl:for-each-group select="$plainParams" group-by="tokenize(substring-after(@path,'$.'),'\.')[$token-number]">
+			<xsl:variable name="path" select="concat('$.',replace(string-join(for $item in tokenize(substring-after(current-group()[1]/@path,'$.'),'\.')[position() &lt; ($token-number + 1)] return concat($item,'.'),''),'(.*)\.$','$1'))" />
+			<xsl:variable name="current-param" select="current-group()[@path = $path]"/>
+			<xsl:variable name="optionality"><xsl:value-of select="if ($current-param/@required = 'true') then '(Required). ' else if ($current-param/@required = 'false') then '(Optional). ' else ''"/></xsl:variable>
+			<listitem role="body-params">
+				<para role="paramList"><emphasis role="bold"><xsl:value-of select="current-grouping-key()"/></emphasis>: <xsl:value-of select="if($current-param/@type) then concat(upper-case(substring(@type,1,1)),substring(@type,2),'. ') else if(current-grouping-key() = '[*]') then 'Array. ' else ''"/> <xsl:if test="not($optionality = '')"><emphasis><xsl:value-of select="$optionality"/></emphasis></xsl:if> <xsl:apply-templates select="$current-param/wadl:doc/node()" mode="copy"/></para>
+				<xsl:variable name="children">
+					<xsl:call-template name="group-params">
+						<xsl:with-param name="token-number" select="$token-number + 1"/>
+						<xsl:with-param name="plainParams" select="current-group()"/>
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:if test="$children/*">
+					<itemizedlist>
+						<xsl:copy-of select="$children"/>
+					</itemizedlist>
+				</xsl:if>
+			</listitem>
+		</xsl:for-each-group>
+	</xsl:template>
+
     <xsl:template name="statusCodeList">
         <xsl:param name="codes" select="'400 500 &#x2026;'"/>
         <xsl:param name="separator" select="','"/>
