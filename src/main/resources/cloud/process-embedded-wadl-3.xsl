@@ -795,31 +795,58 @@
         	<itemizedlist role="paramList">
 	    		<xsl:call-template name="group-params">
 	    			<xsl:with-param name="plainParams" select="$plainParams"/>
+	    			<xsl:with-param name="top" select="true()"/>
 	    		</xsl:call-template>
 	    	</itemizedlist>    
     </xsl:template>
 	
 	<xsl:template name="group-params">
 		<xsl:param name="plainParams"/>
+		<xsl:param name="top" select="false()"/>
 		<xsl:param name="token-number" select="1" as="xs:integer"/>
 		<xsl:for-each-group select="$plainParams" group-by="tokenize(substring-after(@path,'$.'),'\.')[$token-number]">
 			<xsl:variable name="path" select="concat('$.',replace(string-join(for $item in tokenize(substring-after(current-group()[1]/@path,'$.'),'\.')[position() &lt; ($token-number + 1)] return concat($item,'.'),''),'(.*)\.$','$1'))" />
 			<xsl:variable name="current-param" select="current-group()[@path = $path]"/>
-			<xsl:variable name="optionality"><xsl:value-of select="if ($current-param/@required = 'true') then '(Required). ' else if ($current-param/@required = 'false') then '(Optional). ' else ''"/></xsl:variable>
-			<listitem role="body-params">
-				<para role="paramList"><emphasis role="bold"><xsl:value-of select="current-grouping-key()"/></emphasis>: <xsl:value-of select="if($current-param/@type) then concat(upper-case(substring(@type,1,1)),substring(@type,2),'. ') else if(current-grouping-key() = '[*]') then 'Array. ' else ''"/> <xsl:if test="not($optionality = '')"><emphasis><xsl:value-of select="$optionality"/></emphasis></xsl:if> <xsl:apply-templates select="$current-param/wadl:doc/node()" mode="copy"/></para>
-				<xsl:variable name="children">
-					<xsl:call-template name="group-params">
-						<xsl:with-param name="token-number" select="$token-number + 1"/>
-						<xsl:with-param name="plainParams" select="current-group()"/>
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:if test="$children/*">
-					<itemizedlist>
-						<xsl:copy-of select="$children"/>
-					</itemizedlist>
-				</xsl:if>
-			</listitem>
+			<xsl:variable name="optionality"><xsl:value-of select="if ($current-param/@required = 'true') then 'Required. ' else if ($current-param/@required = 'false') then 'Optional. ' else ''"/></xsl:variable>
+			<xsl:choose>
+				<xsl:when test="current-grouping-key() = '[*]' and not($top)">
+					<xsl:variable name="children">
+						<xsl:call-template name="group-params">
+							<xsl:with-param name="token-number" select="$token-number + 1"/>
+							<xsl:with-param name="plainParams" select="current-group()"/>
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:if test="$children/*">
+
+							<xsl:copy-of select="$children"/>
+						
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<listitem role="body-params">
+						<para role="paramList"><emphasis role="bold"><xsl:value-of select="current-grouping-key()"/></emphasis>: <xsl:value-of select="if($current-param/@type) then concat(upper-case(substring(@type,1,1)),substring(@type,2),'. ') else if(current-grouping-key() = '[*]') then 'Array. ' else ''"/> <xsl:if test="not($optionality = '')"><xsl:value-of select="$optionality"/></xsl:if> </para>
+						<xsl:choose>
+							<xsl:when test="$current-param/wadl:doc/d:para or $current-param/wadl:doc/d:itemizedlist or $current-param/wadl:doc/d:orderedlist or $current-param/wadl:doc/d:formalpara or $current-param/wadl:doc/d:simpara">
+								<xsl:apply-templates select="$current-param/wadl:doc/node()" mode="copy"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<para><xsl:apply-templates select="$current-param/wadl:doc/node()" mode="copy"/></para>
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:variable name="children">
+							<xsl:call-template name="group-params">
+								<xsl:with-param name="token-number" select="$token-number + 1"/>
+								<xsl:with-param name="plainParams" select="current-group()"/>
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:if test="$children/*">
+							<itemizedlist>
+								<xsl:copy-of select="$children"/>
+							</itemizedlist>
+						</xsl:if>
+					</listitem>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:for-each-group>
 	</xsl:template>
 
