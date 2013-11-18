@@ -433,7 +433,7 @@
  			as="xs:string"
  			select="if (.//xsdxt:code/@title) then .//xsdxt:code[1]/@title
  			else if (.//xsdxt:sample/@title) then .//xsdxt:sample[1]/@title
- 			else if (wadl:doc/@title) then wadl:doc/@title
+ 			else if (@title) then @title
  			else ''"/> <!-- a defualt title will be computed below in this case -->
  		<xsl:variable name="title-calculated">
  			<xsl:choose>
