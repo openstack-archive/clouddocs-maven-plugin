@@ -29,7 +29,32 @@ How Tos
 Release Notes
 =============
 
-clouddocs-maven-plugin 1.11.1
+clouddocs-maven-plugin 1.12.0 (November 19, 2013)
+============================================================
+-  Features and updates
+
+   -  Support @url attribute on raxm:product for publishing several version of the same document. 
+   -  Depend on version 1.0.19 of wadl-tools.
+   -  Remove Coremetrics Javascript from webhelp.
+   -  Format <parameter> element as monospace instead of italics.  
+   -  In reference content generated from wadl files:
+
+      -  Change "Verb" to "Method" in summary tables.
+      -  Modify the appearance of "Required" and "Optional" in parameter tables. 
+      -  Format response codes in a table if descriptions are available. 
+      -  Format plain parameters for JSON bodies as a tree with collapsible nodes. 
+      -  Fix regression where override of the titles for body examples were not respected.
+
+-  Bug fixes
+
+   -  Fix XSS vulnerabilities in Webhelp output. 
+   -  Fix bug where webhelpBasename wasn't respected for .war file names.
+   -  Eliminiate various xsl errors when multiple raxm:metadata/* elements appear in the document. 
+   -  Avoid xslt errors when inline markup stripped from code listings had attributes.
+
+
+
+clouddocs-maven-plugin 1.11.1 (October 14, 2013)
 ============================================================
 -  Bug fixes
 
