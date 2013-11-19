@@ -325,13 +325,13 @@
 				<xsl:otherwise>
 					<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
 						<simpara>
-							<emphasis role="bold">Normal Response Code(s):</emphasis>
+							<emphasis role="bold">Normal Response Code(s): </emphasis>
 							<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
 						</simpara>
 					</xsl:if>
 					<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
 						<simpara>
-							<emphasis role="bold">Error Response Code(s):</emphasis>
+							<emphasis role="bold">Error Response Code(s): </emphasis>
 							<!--
 								Put those errors that don't have a set status
 								up front.  These are typically general errors.
