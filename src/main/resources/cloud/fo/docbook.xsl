@@ -891,7 +891,7 @@
 	<fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" background-color="yellow"><xsl:apply-imports/></fo:inline>
   </xsl:template>
 
-    <xsl:template match="d:parameter[@role = 'template']">
+    <xsl:template match="d:parameter">
       <xsl:param name="content">
 	<xsl:call-template name="simple.xlink">
 	  <xsl:with-param name="content">
@@ -909,7 +909,12 @@
 	      <xsl:otherwise>rtl</xsl:otherwise>
 	    </xsl:choose>
 	  </xsl:attribute>
-	</xsl:if>{<xsl:copy-of select="$content"/>}</fo:inline>
+	</xsl:if>
+	<xsl:choose>
+	  <xsl:when test="@role = 'template'">{<xsl:copy-of select="$content"/>}</xsl:when>
+	  <xsl:otherwise><xsl:copy-of select="$content"/></xsl:otherwise>
+	</xsl:choose>
+      </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[@role = 'hyphenate-true']">
