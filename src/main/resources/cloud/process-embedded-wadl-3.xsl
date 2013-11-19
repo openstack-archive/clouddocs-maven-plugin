@@ -38,7 +38,7 @@
 			 Here we build a summary template for whole reference. 
   			 Combine the tables for a section into one big table
 			-->
-			<informaltable rules="all">
+			<informaltable rules="all" width="100%">			
 				<col width="10%"/>
 				<col width="40%"/>
 				<col width="50%"/>
@@ -164,7 +164,7 @@
         <xsl:variable name="skipSummary" select="boolean(number($skipSummaryN))"/>
 		<!-- Make a summary table then apply templates to wadl:resource/wadl:method (from wadl) -->
 		<xsl:if test="not($skipSummary)">
-			<informaltable rules="all">
+			<informaltable rules="all" width="100%">			
 				<col width="10%"/>
 				<col width="40%"/>
 				<col width="50%"/>
@@ -176,7 +176,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<xsl:apply-templates select="wadl:resource" mode="method-rows"/>
+					<xsl:apply-templates select="wadl:resource" mode="method-rows"/>				
 				</tbody>
 			</informaltable>
 		</xsl:if>
@@ -265,7 +265,18 @@
 			<xsl:if test="$security = 'writeronly'">
 				<para security="writeronly">Source wadl: <link xlink:href="{@rax:original-wadl}"><xsl:value-of select="@rax:original-wadl"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
 			</xsl:if>
-			<informaltable rules="all">
+			
+			<!-- Method Docs -->
+			<xsl:choose>
+				<xsl:when test="wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
+					<xsl:apply-templates select="wadl:doc/*[not(@role='shortdesc')]"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<!-- Suppress because everything will be in the table -->
+				</xsl:otherwise>
+			</xsl:choose>
+			
+			<informaltable rules="all" width="100%">		
 				<col width="10%"/>
 				<col width="40%"/>
 				<col width="50%"/>
@@ -277,37 +288,61 @@
 					</tr>
 				</thead>
 				<tbody>
-					<xsl:call-template name="method-row"/>
+					<xsl:call-template name="method-row"/>				
 				</tbody>
 			</informaltable>
 
-			<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
-                <simpara>
-                    Normal Response Code(s):
-					<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
-                </simpara>
-			</xsl:if>
-			<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
-                <simpara>
-                    Error Response Code(s):
-                    <!--
-                        Put those errors that don't have a set status
-                        up front.  These are typically general errors.
-                    -->
-					<xsl:apply-templates select="wadl:response[not(@status)]" mode="preprocess-faults"/>
-					<xsl:apply-templates select="wadl:response[@status]" mode="preprocess-faults"/>
-                </simpara>
-			</xsl:if>
-
-            <!-- Method Docs -->
 			<xsl:choose>
-			  <xsl:when test="wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
-			    <xsl:apply-templates select="wadl:doc/*[not(@role='shortdesc')]"/>
-			  </xsl:when>
-			  <xsl:otherwise>
-			    <!-- Suppress because everything will be in the table -->
-			  </xsl:otherwise>
+				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
+					<para>
+					The following table shows the possible
+					response codes for this operation:
+						<informaltable rules="all" width="100%">	
+						<!--	<caption>Response Codes</caption>-->
+							<col width="10%" />
+							<col width="30%" />
+							<col width="60%" />
+							<thead>
+								<tr>
+									<th align="center">Response Code</th>
+									<th align="center">Name</th>
+									<th align="center">Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<xsl:apply-templates select="wadl:response[@status and (starts-with(@status,'2') or starts-with(@status,'3'))]" mode="responseTable">
+									<xsl:sort select="@status"/>
+								</xsl:apply-templates>
+								<xsl:apply-templates select="wadl:response[@status and not(starts-with(@status,'2') or starts-with(@status,'3'))]" mode="responseTable">
+									<xsl:sort select="@status"/>
+								</xsl:apply-templates>
+								<xsl:apply-templates select="wadl:response[not(@status)]" mode="responseTable"/>
+								
+							</tbody>
+						</informaltable>
+					</para>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
+						<simpara>
+							<emphasis role="bold">Normal Response Code(s):</emphasis>
+							<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
+						</simpara>
+					</xsl:if>
+					<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
+						<simpara>
+							<emphasis role="bold">Error Response Code(s):</emphasis>
+							<!--
+								Put those errors that don't have a set status
+								up front.  These are typically general errors.
+							-->
+							<xsl:apply-templates select="wadl:response[not(@status)]" mode="preprocess-faults"/>
+							<xsl:apply-templates select="wadl:response[@status]" mode="preprocess-faults"/>
+						</simpara>
+					</xsl:if>
+				</xsl:otherwise>
 			</xsl:choose>
+			
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 			<xsl:variable name="requestSection">
 			<section xml:id="{$sectionIdComputed}-Request">
@@ -394,16 +429,32 @@
 		</section>
 	</xsl:template>
 	
+	<xsl:template match="wadl:response" mode="responseTable">
+		<tr>
+			<td align="left"><xsl:value-of select="if(@status) then @status else '400 500 &#x2026;'"/></td>
+			<td align="left"><xsl:value-of select="wadl:doc/@title"></xsl:value-of></td>
+			<td><xsl:apply-templates select="wadl:doc/node()"/></td>
+		</tr>
+	</xsl:template>
+	
 	<xsl:template match="wadl:representation">
 		<xsl:param name="method.title"/>
 		<xsl:variable name="plainParams">
-		<xsl:if test="wadl:param[@style = 'plain']">
-			<xsl:call-template name="paramTable">
-				<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
-				<xsl:with-param name="method.title" select="$method.title"/>
-				<xsl:with-param name="style" select="'plain'"/>
-			</xsl:call-template>
-		</xsl:if>
+			<xsl:choose>
+				<xsl:when test="wadl:param[@style = 'plain'] and contains(@mediaType,'json')">
+					<xsl:call-template name="paramList">
+						<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
+						<xsl:with-param name="method.title" select="$method.title"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:when test="wadl:param[@style = 'plain']">
+					<xsl:call-template name="paramTable">
+						<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
+						<xsl:with-param name="method.title" select="$method.title"/>
+						<xsl:with-param name="style" select="'plain'"/>
+					</xsl:call-template>
+				</xsl:when>
+			</xsl:choose>
 		</xsl:variable>
 		<xsl:apply-templates select="wadl:doc" mode="representation">
 			<xsl:with-param name="plainParams" select="$plainParams"/>
@@ -456,6 +507,7 @@
  			</xsl:choose>
  		</xsl:variable>
  		
+ 		<xsl:copy-of select="$plainParams"/>
  		<xsl:choose>
  			<xsl:when test=".//xsdxt:samples">
  				<xsl:apply-templates select=".//xsdxt:samples/xsdxt:sample" mode="sample"/>
@@ -473,7 +525,6 @@
  				<xsl:apply-templates mode="sample"/>
  			</xsl:otherwise>
  		</xsl:choose>
- 		<xsl:copy-of select="$plainParams"/>
  	</xsl:template>
 	
 	<xsl:template match="xsdxt:sample" mode="sample">
@@ -524,6 +575,7 @@
 	</xsl:template>
 	
 	<xsl:template match="xsdxt:code" mode="sample">
+		<!-- Remove this element. The code was already pulled in by the wadl normalizer -->
 		<xsl:apply-templates mode="sample"/>
 	</xsl:template>
 	
@@ -534,9 +586,10 @@
 	</xsl:template>
 	
 	<xsl:template match="wadl:param">
+		<xsl:param name="style"/>
 		<xsl:variable name="default.param.type" select="if (@style != 'plain') then 'String' else ''"/>
 	  <xsl:variable name="type">
-	  	<xsl:value-of select="if (@type and contains(@type, ':')) then substring-after(@type,':') else $default.param.type"/>
+	  	<xsl:value-of select="if (@type and contains(@type, ':')) then substring-after(@type,':') else if(@type) then @type else $default.param.type"/>
 	  </xsl:variable>
         <xsl:variable name="param">
             <xsl:choose>
@@ -546,9 +599,20 @@
         </xsl:variable>
 
 		<!-- TODO: Get more info from the xsd about these params-->
+		<xsl:variable name="jsonPathDepth" select="(string-length(@path) - string-length(translate(@path,'.',''))) - 1"/>
 		<tr>
 			<td align="left">
-				<code role="hyphenate-true"><xsl:value-of select="concat(if (@style = 'template') then '{' else '', @name, if (@style = 'template') then '}' else '')"/></code>
+				<xsl:choose>
+					<xsl:when test="$style = 'plain' and contains(parent::wadl:representation/@mediaType, 'json') and ends-with(@path,'[*]')">
+						<para><xsl:if test="$style = 'plain' and $jsonPathDepth &gt; 0"><xsl:for-each select="1 to $jsonPathDepth">&#160;&#187;&#160;</xsl:for-each></xsl:if><emphasis><code role="hyphenate-true"><xsl:value-of select="@name"/></code></emphasis></para>										
+					</xsl:when>
+					<xsl:when test="$style = 'plain' and contains(parent::wadl:representation/@mediaType, 'json')">
+						<para><xsl:if test="$style = 'plain' and $jsonPathDepth &gt; 0"><xsl:for-each select="1 to $jsonPathDepth">&#160;&#187;&#160;</xsl:for-each></xsl:if><code role="hyphenate-true"><xsl:value-of select="@name"/></code></para>										
+					</xsl:when>
+					<xsl:otherwise>
+						<para><code role="hyphenate-true"><xsl:value-of select="concat(if (@style = 'template') then '{' else '', @name, if (@style = 'template') then '}' else '')"/></code></para>										
+					</xsl:otherwise>
+				</xsl:choose>
 			</td>
 			<td align="left">
 			  <para>
@@ -586,6 +650,7 @@
 					</xsl:if>
                 </para>
 				</xsl:if>
+				<xsl:if test="@style = 'plain' and @path and contains(parent::wadl:representation/@mediaType, 'json')"><para>JSONPath: <code><xsl:value-of select="@path"/></code></para></xsl:if>
             </td>
 		</tr>
 		
@@ -676,14 +741,17 @@
     			<xsl:otherwise>Body</xsl:otherwise>
     		</xsl:choose>
     	</xsl:param>
-    	<xsl:variable name="tableType" select="(: if($style = 'plain') then 'informaltable' else :)'table'"/>
+    	<xsl:variable name="tableType" select="(: if($style = 'plain') then 'informaltable' else :)'informaltable'"/>
         <xsl:if test="$mode='Request' or $mode='Response'">
-            <xsl:element name="{$tableType}">
+        	
+			<para>The following table shows the <xsl:value-of select="$styleCapitalized"/> parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+        	<xsl:element name="{$tableType}">
             	<xsl:attribute name="rules">all</xsl:attribute>
+            	<xsl:attribute name="width">100%</xsl:attribute>	
                 <xsl:if test="$tableType = 'table'"><caption><xsl:value-of select="concat($method.title,' ',$mode, ' ', $styleCapitalized, ' Parameters')"/></caption></xsl:if>
                 <col width="30%"/>
                 <col width="10%"/>
-                <col width="40%"/>
+                <col width="60%"/>
                 <thead>
                     <tr>
                         <th align="center">Name</th>
@@ -694,7 +762,9 @@
                 <tbody>
                     <xsl:choose>
                     	<xsl:when test="$style = 'plain'">
-                    		<xsl:apply-templates select="wadl:param[@style = 'plain']"/>
+                    		<xsl:apply-templates select="wadl:param[@style = 'plain']">
+                    			<xsl:with-param name="style">plain</xsl:with-param>
+                    		</xsl:apply-templates>
                     	</xsl:when>
                         <xsl:when test="$mode = 'Request'">
                             <xsl:apply-templates select="wadl:request//wadl:param[@style = $style]|parent::wadl:resource/wadl:param[@style = $style]"/>
@@ -713,7 +783,73 @@
             </xsl:element>
         </xsl:if>
     </xsl:template>
+
+	<!-- The following templates, paramList and group-params turn a set of 
+		 plain parameters into nested itemizedlists based on the JSONPath values
+		 in @path. -->
+    <xsl:template name="paramList">
+    	<xsl:param name="mode"/>
+    	<xsl:param name="method.title"/>
+    	<xsl:variable name="plainParams" select="wadl:param[@style = 'plain' and ./wadl:doc and @path]"/>
+        <para>The following list shows the Body parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+        	<itemizedlist role="paramList">
+	    		<xsl:call-template name="group-params">
+	    			<xsl:with-param name="plainParams" select="$plainParams"/>
+	    			<xsl:with-param name="top" select="true()"/>
+	    		</xsl:call-template>
+	    	</itemizedlist>    
+    </xsl:template>
 	
+	<xsl:template name="group-params">
+		<xsl:param name="plainParams"/>
+		<xsl:param name="top" select="false()"/>
+		<xsl:param name="token-number" select="1" as="xs:integer"/>
+		<xsl:for-each-group select="$plainParams" group-by="tokenize(substring-after(@path,'$.'),'\.')[$token-number]">
+			<xsl:variable name="path" select="concat('$.',replace(string-join(for $item in tokenize(substring-after(current-group()[1]/@path,'$.'),'\.')[position() &lt; ($token-number + 1)] return concat($item,'.'),''),'(.*)\.$','$1'))" />
+			<xsl:variable name="current-param" select="current-group()[@path = $path]"/>
+			<xsl:variable name="optionality"><xsl:value-of select="if ($current-param/@required = 'true') then 'Required. ' else if ($current-param/@required = 'false') then 'Optional. ' else ''"/></xsl:variable>
+			<xsl:choose>
+				<xsl:when test="current-grouping-key() = '[*]' and not($top)">
+					<xsl:variable name="children">
+						<xsl:call-template name="group-params">
+							<xsl:with-param name="token-number" select="$token-number + 1"/>
+							<xsl:with-param name="plainParams" select="current-group()"/>
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:if test="$children/*">
+
+							<xsl:copy-of select="$children"/>
+						
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
+					<listitem role="body-params">
+						<para role="paramList"><emphasis role="bold"><xsl:value-of select="current-grouping-key()"/></emphasis>: <xsl:value-of select="if($current-param/@type) then concat(upper-case(substring(@type,1,1)),substring(@type,2),'. ') else if(current-grouping-key() = '[*]') then 'Array. ' else ''"/> <xsl:if test="not($optionality = '')"><xsl:value-of select="$optionality"/></xsl:if> </para>
+						<xsl:choose>
+							<xsl:when test="$current-param/wadl:doc/d:para or $current-param/wadl:doc/d:itemizedlist or $current-param/wadl:doc/d:orderedlist or $current-param/wadl:doc/d:formalpara or $current-param/wadl:doc/d:simpara">
+								<xsl:apply-templates select="$current-param/wadl:doc/node()" mode="copy"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<para><xsl:apply-templates select="$current-param/wadl:doc/node()" mode="copy"/></para>
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:variable name="children">
+							<xsl:call-template name="group-params">
+								<xsl:with-param name="token-number" select="$token-number + 1"/>
+								<xsl:with-param name="plainParams" select="current-group()"/>
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:if test="$children/*">
+							<itemizedlist>
+								<xsl:copy-of select="$children"/>
+							</itemizedlist>
+						</xsl:if>
+					</listitem>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:for-each-group>
+	</xsl:template>
+
     <xsl:template name="statusCodeList">
         <xsl:param name="codes" select="'400 500 &#x2026;'"/>
         <xsl:param name="separator" select="','"/>

@@ -815,5 +815,36 @@ ERROR: Feedback email not set but internal comments are enabled.
         <xsl:otherwise><xsl:value-of select="translate($filename,'*','.')"/></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
+    <xsl:template match="d:itemizedlist[@role = 'paramList']">
+        <script type="text/javascript">
+            $(function() {
+            $("&#35;<xsl:value-of select="generate-id(.)"/>").treeview({
+            collapsed: false,
+            animated: "medium",
+            control: "#treecontrol"
+            });
+            });
+        </script>
+        <div id="treecontrol">
+            <a title="Collapse the entire tree below" href="#"><img src="../common/jquery/treeview/images/minus.gif" />Collapse All</a><xsl:text> | </xsl:text>            
+            <a title="Expand the entire tree below" href="#"><img src="../common/jquery/treeview/images/plus.gif" />Expand All</a><xsl:text> | </xsl:text>
+            <a title="Toggle the tree below, opening closed branches, closing open branches" href="#">Toggle All</a>
+        </div>
+        <ul id="{generate-id(.)}" class="treeview-black">
+            <xsl:apply-templates/>
+        </ul>
+    </xsl:template>
+    
+    <xsl:template match="d:itemizedlist[ancestor::d:itemizedlist[@role = 'paramList']]">
+        <ul>
+            <xsl:apply-templates/>
+        </ul>
+    </xsl:template>
+    
+    <xsl:template match="d:para[@role = 'paramList']">
+        <span><xsl:apply-templates/></span>
+    </xsl:template>
+    
+ 
 </xsl:stylesheet>
