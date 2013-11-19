@@ -791,13 +791,15 @@
     	<xsl:param name="mode"/>
     	<xsl:param name="method.title"/>
     	<xsl:variable name="plainParams" select="wadl:param[@style = 'plain' and ./wadl:doc and @path]"/>
+    	<xsl:if test="$plainParams">
         <para>The following list shows the Body parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
         	<itemizedlist role="paramList">
 	    		<xsl:call-template name="group-params">
 	    			<xsl:with-param name="plainParams" select="$plainParams"/>
 	    			<xsl:with-param name="top" select="true()"/>
 	    		</xsl:call-template>
-	    	</itemizedlist>    
+	    	</itemizedlist> 
+    	</xsl:if>
     </xsl:template>
 	
 	<xsl:template name="group-params">
