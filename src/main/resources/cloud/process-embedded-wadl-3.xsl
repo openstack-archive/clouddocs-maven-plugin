@@ -829,7 +829,7 @@
 						<para role="paramList"><emphasis role="bold"><xsl:value-of select="current-grouping-key()"/></emphasis>: <xsl:value-of select="if($current-param/@type) then concat(upper-case(substring(@type,1,1)),substring(@type,2),'. ') else if(current-grouping-key() = '[*]') then 'Array. ' else ''"/> <xsl:if test="not($optionality = '')"><xsl:value-of select="$optionality"/></xsl:if> </para>
 						<xsl:choose>
 							<xsl:when test="$current-param/wadl:doc/d:para or $current-param/wadl:doc/d:itemizedlist or $current-param/wadl:doc/d:orderedlist or $current-param/wadl:doc/d:formalpara or $current-param/wadl:doc/d:simpara">
-								<xsl:apply-templates select="$current-param/wadl:doc/node()" mode="copy"/>
+								<xsl:apply-templates select="$current-param/wadl:doc/*" mode="copy"/>
 							</xsl:when>
 							<xsl:otherwise>
 								<para><xsl:apply-templates select="$current-param/wadl:doc/node()" mode="copy"/></para>
@@ -851,7 +851,15 @@
 			</xsl:choose>
 		</xsl:for-each-group>
 	</xsl:template>
-
+	
+	
+	<xsl:template match="node() | @*" mode="copy">
+		<xsl:copy>
+			<xsl:apply-templates select="node() | @*" mode="copy"/>
+		</xsl:copy>
+	</xsl:template>
+	
+	
     <xsl:template name="statusCodeList">
         <xsl:param name="codes" select="'400 500 &#x2026;'"/>
         <xsl:param name="separator" select="','"/>
