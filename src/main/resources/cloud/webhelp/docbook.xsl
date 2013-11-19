@@ -735,7 +735,7 @@ ERROR: Feedback email not set but internal comments are enabled.
     <xsl:template match="text()[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') and not(ancestor::d:programlisting) ] | xref[ contains(concat(';',ancestor::*/@security,';'),';reviewer;') and not(ancestor::d:programlisting)]"><span class="remark"><xsl:apply-imports/></span></xsl:template>
     <xsl:template match="text()[ ancestor::*/@role = 'highlight' and not(ancestor::d:programlisting) ] | xref[ ancestor::*/@role = 'highlight' and not(ancestor::d:programlisting)]" priority="10"><span class="remark"><xsl:apply-imports/></span></xsl:template>
 
-    <xsl:template match="d:parameter[@role = 'template']">
+    <xsl:template match="d:parameter">
       <xsl:param name="content">
 	<xsl:call-template name="anchor"/>
 	<xsl:call-template name="simple.xlink">
@@ -744,7 +744,12 @@ ERROR: Feedback email not set but internal comments are enabled.
 	  </xsl:with-param>
 	</xsl:call-template>
       </xsl:param>
-      <em><xsl:call-template name="common.html.attributes"/><code><xsl:call-template name="generate.html.title"/><xsl:call-template name="dir"/>{<xsl:copy-of select="$content"/>}<xsl:call-template name="apply-annotations"/></code></em>
+      <code><xsl:call-template name="common.html.attributes"/><xsl:call-template name="generate.html.title"/><xsl:call-template name="dir"/>
+      <xsl:choose>
+	<xsl:when test="@role = 'template'">{<xsl:copy-of select="$content"/>}</xsl:when>
+	<xsl:otherwise><xsl:copy-of select="$content"/></xsl:otherwise>
+      </xsl:choose>
+<xsl:call-template name="apply-annotations"/></code>
     </xsl:template>
 
 <!-- The following two templates are from the svn trunk (html.xsl) -->
