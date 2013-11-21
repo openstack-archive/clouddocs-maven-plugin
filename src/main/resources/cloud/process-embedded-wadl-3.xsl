@@ -85,10 +85,10 @@
 				</command>
 			</td>
 			<td>
-				<code>
-					<!-- 
+				<!-- 
 						TODO: Deal with non-flattened path in embedded wadl? 
-					-->
+			    -->
+				<xsl:variable name="path">
 					<xsl:choose>
 						<xsl:when test="xs:integer($trim.wadl.uri.count) &gt; 0">
 							<xsl:call-template name="trimUri">
@@ -100,11 +100,11 @@
 							<xsl:value-of select="parent::wadl:resource/@path"/>
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:for-each select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
-						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1">?</xsl:if><xsl:value-of select="@name"/>=<replaceable><xsl:value-of
-								select="if (@type and contains(@type, ':')) then substring-after(@type,':') else $default.param.type"/></replaceable><xsl:if
-									test="not(position() = last())">&amp;</xsl:if>
-					</xsl:for-each>
+				</xsl:variable>
+				<code>
+					<xsl:value-of select="replace($path,'/\{','{/')"/><xsl:for-each select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
+						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1">{?</xsl:if><xsl:value-of select="@name"/><xsl:choose><xsl:when
+									test="not(position() = last())">,</xsl:when><xsl:otherwise>}</xsl:otherwise></xsl:choose></xsl:for-each>
 				</code>
 			</td>
 			<td>
