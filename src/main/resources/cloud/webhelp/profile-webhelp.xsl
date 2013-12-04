@@ -323,7 +323,7 @@
   </xsl:param>
 
   <title><!-- DWC: Adding stuff to title for SEO -->
-    <xsl:copy-of select="$title"/>&#160;-&#160;<xsl:value-of select="//d:title[1]"/><xsl:apply-templates select="/*/d:info/d:releaseinfo[1]" mode="rackspace-title"/>
+    <xsl:if test="parent::*"><xsl:copy-of select="$title"/>&#160;-&#160;</xsl:if><xsl:value-of select="//d:title[1]"/><xsl:apply-templates select="/*/d:info/d:releaseinfo[1]" mode="rackspace-title"/>
   </title>
 
   <xsl:if test="$html.base != ''">
