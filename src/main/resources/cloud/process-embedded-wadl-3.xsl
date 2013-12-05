@@ -250,10 +250,12 @@
 				</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
-		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
-			
-		
-        <xsl:if test="$addMethodPageBreaks">
+		<!-- generate id from raxid -->
+		<xsl:variable name="app_raxid" select="generate-id($raxid)"/>
+		<xsl:variable name="sectionIdComputed"
+			select="concat(@name,'_',$app_raxid,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
+
+		<xsl:if test="$addMethodPageBreaks">
             <xsl:processing-instruction name="hard-pagebreak"/>
         </xsl:if>
 		<section xml:id="{$sectionIdComputed}">
@@ -294,32 +296,37 @@
 
 			<xsl:choose>
 				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
-					<para>
-					The following table shows the possible
-					response codes for this operation:
-						<informaltable rules="all" width="100%">	
+					<para>The following table shows the possible response codes
+						for this operation:
+					<informaltable rules="all" width="100%">
 						<!--	<caption>Response Codes</caption>-->
-							<col width="10%" />
-							<col width="30%" />
-							<col width="60%" />
-							<thead>
-								<tr>
-									<th align="center">Response Code</th>
-									<th align="center">Name</th>
-									<th align="center">Description</th>
-								</tr>
-							</thead>
-							<tbody>
-								<xsl:apply-templates select="wadl:response[@status and (starts-with(@status,'2') or starts-with(@status,'3'))]" mode="responseTable">
-									<xsl:sort select="@status"/>
-								</xsl:apply-templates>
-								<xsl:apply-templates select="wadl:response[@status and not(starts-with(@status,'2') or starts-with(@status,'3'))]" mode="responseTable">
-									<xsl:sort select="@status"/>
-								</xsl:apply-templates>
-								<xsl:apply-templates select="wadl:response[not(@status)]" mode="responseTable"/>
-								
-							</tbody>
-						</informaltable>
+						<col width="10%"/>
+						<col width="30%"/>
+						<col width="60%"/>
+						<thead>
+							<tr>
+								<th align="center">Response Code</th>
+								<th align="center">Name</th>
+								<th align="center">Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<xsl:apply-templates
+								select="wadl:response[@status and (starts-with(@status,'2') or starts-with(@status,'3'))]"
+								mode="responseTable">
+								<xsl:sort select="@status"/>
+							</xsl:apply-templates>
+							<xsl:apply-templates
+								select="wadl:response[@status and not(starts-with(@status,'2') or starts-with(@status,'3'))]"
+								mode="responseTable">
+								<xsl:sort select="@status"/>
+							</xsl:apply-templates>
+							<xsl:apply-templates
+								select="wadl:response[not(@status)]"
+								mode="responseTable"/>
+
+						</tbody>
+					</informaltable>
 					</para>
 				</xsl:when>
 				<xsl:otherwise>
