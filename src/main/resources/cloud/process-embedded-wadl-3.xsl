@@ -250,10 +250,13 @@
 				</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
-		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
-			
-		
-        <xsl:if test="$addMethodPageBreaks">
+		<!-- generate id from raxid -->
+		<xsl:variable name="app_raxid" select="generate-id($raxid)"/>
+		<xsl:variable name="sectionIdComputed"
+			select="concat(@name,'_',$app_raxid,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
+
+
+		<xsl:if test="$addMethodPageBreaks">
             <xsl:processing-instruction name="hard-pagebreak"/>
         </xsl:if>
 		<section xml:id="{$sectionIdComputed}">
@@ -297,8 +300,8 @@
 					<para>
 					The following table shows the possible
 					response codes for this operation:
-						<informaltable rules="all" width="100%">	
-						<!--	<caption>Response Codes</caption>-->
+					<informaltable rules="all" width="100%">
+					<!--	<caption>Response Codes</caption>-->
 							<col width="10%" />
 							<col width="30%" />
 							<col width="60%" />
