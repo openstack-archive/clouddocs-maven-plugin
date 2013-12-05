@@ -250,10 +250,13 @@
 				</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
-		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
-			
-		
-        <xsl:if test="$addMethodPageBreaks">
+		<!-- generate id from raxid -->
+		<xsl:variable name="app_raxid" select="if(ancestor::wadl:resources/@xml:id) then concat(ancestor::wadl:resources/@xml:id, '_') else ''"/>
+		<xsl:variable name="sectionIdComputed"
+			select="concat(@name,'_',$app_raxid,$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
+
+
+		<xsl:if test="$addMethodPageBreaks">
             <xsl:processing-instruction name="hard-pagebreak"/>
         </xsl:if>
 		<section xml:id="{$sectionIdComputed}">
@@ -485,7 +488,7 @@
  			select="if (.//xsdxt:code/@title) then .//xsdxt:code[1]/@title
  			else if (.//xsdxt:sample/@title) then .//xsdxt:sample[1]/@title
  			else if (@title) then @title
- 			else ''"/> <!-- a defualt title will be computed below in this case -->
+ 			else ''"/> <!-- a default title will be computed below in this case -->
  		<xsl:variable name="title-calculated">
  			<xsl:choose>
  				<xsl:when test="string-length($title) != 0"><xsl:value-of select="$title"/></xsl:when>
@@ -546,7 +549,7 @@
 			as="xs:string"
 			select="if (@title) then @title
 			else if (.//xsdxt:code/@title) then .//xsdxt:code[1]/@title
-			else ''"/> <!-- a defualt title will be computed below in this case -->
+			else ''"/> <!-- a default title will be computed below in this case -->
 		<xsl:variable name="title-calculated">
 			<xsl:choose>
 				<xsl:when test="string-length($title) != 0"><xsl:value-of select="$title"/></xsl:when>
