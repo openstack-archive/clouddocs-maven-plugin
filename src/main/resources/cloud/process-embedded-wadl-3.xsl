@@ -249,9 +249,13 @@
 					</xsl:otherwise>
 				</xsl:choose>
 		</xsl:variable>
-		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
+		<!--<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
 		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
-			
+		-->
+		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
+		<!-- generate id from raxid -->
+		<xsl:variable name="app_raxid" select="generate-id($raxid)"/>
+		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$app_raxid,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>			
 		
         <xsl:if test="$addMethodPageBreaks">
             <xsl:processing-instruction name="hard-pagebreak"/>
@@ -259,8 +263,8 @@
 		<section xml:id="{$sectionIdComputed}">
 			<xsl:processing-instruction name="dbhtml">stop-chunking</xsl:processing-instruction>
 			<title><xsl:value-of select="$method.title"/></title>
-			<xsl:if test="$sectionIdComputed != concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')">
-				<anchor xml:id="{concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')}" xreflabel="{$method.title}"/>
+			<xsl:if test="$sectionIdComputed != concat(@name,'_',$app_raxid,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')">
+				<anchor xml:id="{concat(@name,'_',$app_raxid,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')}" xreflabel="{$method.title}"/>
 			</xsl:if>
 			<xsl:if test="$security = 'writeronly'">
 				<para security="writeronly">Source wadl: <link xlink:href="{@rax:original-wadl}"><xsl:value-of select="@rax:original-wadl"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
@@ -485,7 +489,7 @@
  			select="if (.//xsdxt:code/@title) then .//xsdxt:code[1]/@title
  			else if (.//xsdxt:sample/@title) then .//xsdxt:sample[1]/@title
  			else if (@title) then @title
- 			else ''"/> <!-- a defualt title will be computed below in this case -->
+ 			else ''"/> <!-- a default title will be computed below in this case -->
  		<xsl:variable name="title-calculated">
  			<xsl:choose>
  				<xsl:when test="string-length($title) != 0"><xsl:value-of select="$title"/></xsl:when>
@@ -546,7 +550,7 @@
 			as="xs:string"
 			select="if (@title) then @title
 			else if (.//xsdxt:code/@title) then .//xsdxt:code[1]/@title
-			else ''"/> <!-- a defualt title will be computed below in this case -->
+			else ''"/> <!-- a default title will be computed below in this case -->
 		<xsl:variable name="title-calculated">
 			<xsl:choose>
 				<xsl:when test="string-length($title) != 0"><xsl:value-of select="$title"/></xsl:when>
