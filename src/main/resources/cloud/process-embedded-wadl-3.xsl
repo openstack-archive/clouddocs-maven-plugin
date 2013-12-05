@@ -250,8 +250,9 @@
 				</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
-		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
-			
+		<xsl:message>raxid = $raxid</xsl:message>
+		<xsl:variable name="app_raxid" select="if (/wadl:application/processing-instruction('raxid')) then /wadl:application/processing-instruction('raxid') else 'no_raxid'"/> 
+		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$app_raxid,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>			
 		
         <xsl:if test="$addMethodPageBreaks">
             <xsl:processing-instruction name="hard-pagebreak"/>
@@ -259,8 +260,8 @@
 		<section xml:id="{$sectionIdComputed}">
 			<xsl:processing-instruction name="dbhtml">stop-chunking</xsl:processing-instruction>
 			<title><xsl:value-of select="$method.title"/></title>
-			<xsl:if test="$sectionIdComputed != concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')">
-				<anchor xml:id="{concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')}" xreflabel="{$method.title}"/>
+			<xsl:if test="$sectionIdComputed != concat(@name,'_',$app_raxid,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')">
+				<anchor xml:id="{concat(@name,'_',$app_raxid,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')}" xreflabel="{$method.title}"/>
 			</xsl:if>
 			<xsl:if test="$security = 'writeronly'">
 				<para security="writeronly">Source wadl: <link xlink:href="{@rax:original-wadl}"><xsl:value-of select="@rax:original-wadl"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
@@ -295,8 +296,8 @@
 			<xsl:choose>
 				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
 					<para>
-					The following table shows the possible
-					response codes for this operation:
+					This table shows the possible
+					response codes for this operation:</para>
 						<informaltable rules="all" width="100%">	
 						<!--	<caption>Response Codes</caption>-->
 							<col width="10%" />
@@ -304,7 +305,7 @@
 							<col width="60%" />
 							<thead>
 								<tr>
-									<th align="center">Response Code</th>
+									<th align="center">Response code</th>
 									<th align="center">Name</th>
 									<th align="center">Description</th>
 								</tr>
@@ -320,7 +321,6 @@
 								
 							</tbody>
 						</informaltable>
-					</para>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
@@ -546,7 +546,7 @@
 			as="xs:string"
 			select="if (@title) then @title
 			else if (.//xsdxt:code/@title) then .//xsdxt:code[1]/@title
-			else ''"/> <!-- a defualt title will be computed below in this case -->
+			else ''"/> <!-- a default title will be computed below in this case -->
 		<xsl:variable name="title-calculated">
 			<xsl:choose>
 				<xsl:when test="string-length($title) != 0"><xsl:value-of select="$title"/></xsl:when>
@@ -624,7 +624,7 @@
 			  </para>
 				<!--
 				    Template parameters are always required, so
-				    there's no poin in processing @required.
+				    there's no point in processing @required.
 				-->
                   		<xsl:choose>
                         	  <xsl:when test="@style = 'template'"/>
@@ -744,7 +744,7 @@
     	<xsl:variable name="tableType" select="(: if($style = 'plain') then 'informaltable' else :)'informaltable'"/>
         <xsl:if test="$mode='Request' or $mode='Response'">
         	
-			<para>The following table shows the <xsl:value-of select="$styleCapitalized"/> parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+        	<para>This table shows the <xsl:value-of select="$styleCapitalized"/> parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
         	<xsl:element name="{$tableType}">
             	<xsl:attribute name="rules">all</xsl:attribute>
             	<xsl:attribute name="width">100%</xsl:attribute>	
@@ -792,7 +792,7 @@
     	<xsl:param name="method.title"/>
     	<xsl:variable name="plainParams" select="wadl:param[@style = 'plain' and ./wadl:doc and @path]"/>
     	<xsl:if test="$plainParams">
-        <para>The following list shows the Body parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+        <para>This list shows the body parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
         	<itemizedlist role="paramList">
 	    		<xsl:call-template name="group-params">
 	    			<xsl:with-param name="plainParams" select="$plainParams"/>
