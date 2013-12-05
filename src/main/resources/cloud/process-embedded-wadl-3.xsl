@@ -250,8 +250,7 @@
 				</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
-		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
-			
+		<xsl:variable name="sectionIdComputed" select="concat(@name,'_',$raxid,'_',translate(/wadl:application/processing-instruction('raxid'), $replacechars, '___'),'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>			
 		
         <xsl:if test="$addMethodPageBreaks">
             <xsl:processing-instruction name="hard-pagebreak"/>
@@ -259,8 +258,8 @@
 		<section xml:id="{$sectionIdComputed}">
 			<xsl:processing-instruction name="dbhtml">stop-chunking</xsl:processing-instruction>
 			<title><xsl:value-of select="$method.title"/></title>
-			<xsl:if test="$sectionIdComputed != concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')">
-				<anchor xml:id="{concat(@name,'_',$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')}" xreflabel="{$method.title}"/>
+			<xsl:if test="$sectionIdComputed != concat(@name,'_',$raxid,'_',translate(/wadl:application/processing-instruction('raxid'), $replacechars, '___'),'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')">
+				<anchor xml:id="{concat(@name,'_',$raxid,'_',translate(/wadl:application/processing-instruction('raxid'), $replacechars, '___'),'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_')}" xreflabel="{$method.title}"/>
 			</xsl:if>
 			<xsl:if test="$security = 'writeronly'">
 				<para security="writeronly">Source wadl: <link xlink:href="{@rax:original-wadl}"><xsl:value-of select="@rax:original-wadl"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
