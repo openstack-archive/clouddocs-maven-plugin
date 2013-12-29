@@ -431,8 +431,8 @@
           <xsl:template match="wadl:param" mode="param2tr">
             <tr>
               <td><xsl:value-of select="@name"/><xsl:if test="not(@required = 'true') and not(@style = 'template') and not(@style = 'matrix')"> (Optional)</xsl:if></td>
-	      <td><xsl:value-of select="if(@style = 'template') then 'URI' else @style"/></td>
-	      <td><xsl:value-of select="if(not(@type) or @type = '') then 'String' else @type"/></td>
+              <td><xsl:value-of select="if(@style = 'template') then 'URI' else @style"/></td>
+              <td><xsl:value-of select="if(not(@type) or @type = '') then 'String' else @type"/></td>
               <td><xsl:apply-templates select="./wadl:doc/*|./wadl:doc/text()"/></td>
             </tr>
           </xsl:template>
