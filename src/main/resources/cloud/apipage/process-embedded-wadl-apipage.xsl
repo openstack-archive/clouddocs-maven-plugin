@@ -6,13 +6,13 @@
     xmlns:rax="http://docs.rackspace.com/api"
     xmlns:d="http://docbook.org/ns/docbook"
     exclude-result-prefixes="xs d wadl rax" version="2.0">
-    
+
     <xsl:template match="node() | @*">
         <xsl:copy>
             <xsl:apply-templates select="node() | @*"/>
         </xsl:copy>
     </xsl:template>
-    
+
     <xsl:param name="compute.wadl.path.from.docbook.path">0</xsl:param>
 
     <xsl:param name="project.build.directory"/>
@@ -25,11 +25,11 @@
         </xsl:variable>
         <xsl:apply-templates select="document($wadl.path)//wadl:resource"/>
     </xsl:template>
-    
+
     <xsl:template match="wadl:resources">
         <xsl:apply-templates/>
     </xsl:template>
-    
+
     <xsl:template match="wadl:resource[@href]"> <!-- and not(./wadl:method) -->
         <xsl:variable name="wadl.path">
             <xsl:call-template name="wadlPath">
@@ -53,7 +53,7 @@
             </xsl:choose>
         </xsl:copy>
     </xsl:template>
-    
+
     <xsl:template match="wadl:method[@href]">
         <xsl:param name="wadl.path"/>
         <xsl:param name="resourceid" select="substring-after(parent::wadl:resource/@href,'#')"/>
@@ -62,8 +62,8 @@
             <xsl:with-param name="resourceLink" select="."/>
         </xsl:apply-templates>
     </xsl:template>
-    
-    
+
+
     <xsl:template name="wadlPath">
         <xsl:param name="path"/>
         <xsl:choose>
@@ -103,5 +103,5 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
+
 </xsl:stylesheet>
