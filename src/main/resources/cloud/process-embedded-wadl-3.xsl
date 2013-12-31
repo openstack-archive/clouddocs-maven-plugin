@@ -298,7 +298,7 @@
 				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
 					<para>
 					The following table shows the possible
-					response codes for this operation:
+					response codes for this operation:</para>
 						<informaltable rules="all" width="100%">	
 						<!--	<caption>Response Codes</caption>-->
 							<col width="10%" />
@@ -322,18 +322,17 @@
 								
 							</tbody>
 						</informaltable>
-					</para>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
 						<simpara>
-							<emphasis role="bold">Normal Response Code(s): </emphasis>
+							<emphasis role="bold">Normal response codes: </emphasis>
 							<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
 						</simpara>
 					</xsl:if>
 					<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
 						<simpara>
-							<emphasis role="bold">Error Response Code(s): </emphasis>
+							<emphasis role="bold">Error response codes: </emphasis>
 							<!--
 								Put those errors that don't have a set status
 								up front.  These are typically general errors.
@@ -743,10 +742,22 @@
     			<xsl:otherwise>Body</xsl:otherwise>
     		</xsl:choose>
     	</xsl:param>
+    	<xsl:param name="styleLowercase">
+    		<xsl:choose>
+    			<xsl:when test="$style = 'template'">URI</xsl:when>
+    			<xsl:when test="$style != 'plain'"><xsl:value-of select="concat(translate(substring($style,1,1),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),substring($style,2))"/></xsl:when>
+    			<xsl:otherwise>body</xsl:otherwise>
+    		</xsl:choose>
+    	</xsl:param>
+    	<xsl:param name="styleLowercaseMethod">
+    		<xsl:choose>
+    			<xsl:when test="$style != 'plain'"><xsl:value-of select="concat(translate(substring($method.title,1,1),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),substring($method.title,2))"/></xsl:when>
+    		</xsl:choose>
+    	</xsl:param>
     	<xsl:variable name="tableType" select="(: if($style = 'plain') then 'informaltable' else :)'informaltable'"/>
-        <xsl:if test="$mode='Request' or $mode='Response'">
+        <xsl:if test="$mode='request' or $mode='response'">
         	
-			<para>The following table shows the <xsl:value-of select="$styleCapitalized"/> parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+        	<para>The following table shows the <xsl:value-of select="$styleLowercase"/> parameters for the <xsl:value-of select="concat($styleLowercaseMethod, ' ', $mode)"/>:</para>
         	<xsl:element name="{$tableType}">
             	<xsl:attribute name="rules">all</xsl:attribute>
             	<xsl:attribute name="width">100%</xsl:attribute>	
