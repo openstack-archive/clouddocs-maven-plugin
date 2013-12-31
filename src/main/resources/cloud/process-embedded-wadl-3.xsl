@@ -297,7 +297,7 @@
 			<xsl:choose>
 				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
 					<para>
-					The following table shows the possible
+					This table shows the possible
 					response codes for this operation:
 						<informaltable rules="all" width="100%">	
 						<!--	<caption>Response Codes</caption>-->
@@ -327,13 +327,13 @@
 				<xsl:otherwise>
 					<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
 						<simpara>
-							<emphasis role="bold">Normal Response Code(s): </emphasis>
+							<emphasis role="bold">Normal response codes: </emphasis>
 							<xsl:apply-templates select="wadl:response" mode="preprocess-normal"/>
 						</simpara>
 					</xsl:if>
 					<xsl:if test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
 						<simpara>
-							<emphasis role="bold">Error Response Code(s): </emphasis>
+							<emphasis role="bold">Error response codes: </emphasis>
 							<!--
 								Put those errors that don't have a set status
 								up front.  These are typically general errors.
@@ -746,7 +746,7 @@
     	<xsl:variable name="tableType" select="(: if($style = 'plain') then 'informaltable' else :)'informaltable'"/>
         <xsl:if test="$mode='Request' or $mode='Response'">
         	
-			<para>The following table shows the <xsl:value-of select="$styleCapitalized"/> parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+			<para>This table shows the <xsl:value-of select="$styleCapitalized"/> parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
         	<xsl:element name="{$tableType}">
             	<xsl:attribute name="rules">all</xsl:attribute>
             	<xsl:attribute name="width">100%</xsl:attribute>	
@@ -961,7 +961,6 @@
 		</xsl:choose>
 	</xsl:template>
 	
-
 <xsl:template name="hyphenate.camelcase">
   <xsl:param name="content"/>
   <xsl:variable name="head" select="substring($content, 1, 1)"/>
