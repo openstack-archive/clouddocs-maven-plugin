@@ -47,19 +47,11 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="rax:resource">
-		<xsl:choose>
-			<xsl:when
-				test="parent::*[./processing-instruction('rax') = 'start-sections']">
-				<xsl:apply-templates mode="start-sections"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:apply-templates/>
-			</xsl:otherwise>
-		</xsl:choose>
+	<xsl:template match="rax:resource[not(parent::*[./processing-instruction('rax') = 'start-sections'])]">
+		<xsl:apply-templates/>
 	</xsl:template>
 
-	<xsl:template match="rax:resource" mode="start-sections">
+	<xsl:template match="rax:resource[parent::*[./processing-instruction('rax') = 'start-sections']]">
 		<xsl:variable name="rax-id" select="@rax:id"/>
 		<section
 			xml:id="{translate(//wadl:resource[@id = $rax-id]/@path,'/{}:','___')}">
