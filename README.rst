@@ -2,7 +2,7 @@ Introduction
 ============
 
 This project is the Rackspace/OpenStack customization of the Docbkx
-plugin for creating documentation artifacts for Rackspace, OpenStack,
+plug-in for creating documentation artifacts for Rackspace, OpenStack,
 and other OpenStack projects.
 
 Example output
@@ -21,6 +21,46 @@ OpenStack source files:
 - https://github.com/openstack/openstack-manuals/tree/master/doc/user-guide/src
 - https://github.com/openstack/api-site/tree/master/api-ref
 
+
+Test changes to clouddocs-maven-plugin
+======================================
+
+Note: When you commit, be sure you are on a branch,
+do a single commit, and do "git review" instead of pushing.
+
+To test changes to clouddocs-maven-plugin on your local machine:
+
+  1. Run this command to clone clouddocs-maven-plugin: 
+  
+        git clone git@github.com:stackforge/clouddocs-maven-plugin.git
+        
+  2. CD into the clouddocs-maven-plugin directory.
+  
+  3. Edit the pom.xml file and make sure that the version number on line #11 includes -SNAPSHOT. 
+     For example, 1.12.1-SNAPSHOT.
+  
+  4. Make changes to clouddocs-maven-plugin.
+  
+  5. Run this command to build clouddocs-maven-plugin locally:
+    
+        mvn clean install
+        
+  6. Run this command to clone the api-site:
+  
+        git clone git@github.com:openstack/api-site.git
+        
+  7. CD into the api-site directory.
+  
+  8. Edit the pom.xml file and make sure that the version number on line #42 
+     includes the same version number as in the clouddocs-maven-plugin pom.xml file. 
+     For example, 1.12.1-SNAPSHOT.
+  
+  9. Run the following command to build the api-site locally: 
+  
+        mvn clean generate-sources ÐU  
+        
+     The ÐU switch picks up the local build of clouddocs-maven-plugin.
+     
 How Tos
 =======
 - http://docs.rackspace.com/writers-guide
