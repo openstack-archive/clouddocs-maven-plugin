@@ -605,22 +605,10 @@ setting failOnValidationError to no in your pom.
                 <p:load name="wadl">
                     <p:with-option name="href" select="$href"/>
                 </p:load>
-                    <p:xslt name="normalize-wadl">  
-                        <p:input port="source">
-                            <p:pipe port="result" step="wadl"/>
-                        </p:input>
-                        <p:input port="stylesheet">
-                            <p:document href="classpath:///cloud/normalizeWadl/normalizeWadl.xsl"/>
-                        </p:input>
-                        <p:with-param name="checksum" select="$checksum"/>
-                        <p:input port="parameters">
-                            <p:pipe step="normalize-wadls-step" port="parameters"/>
-                        </p:input>
-                    </p:xslt>
-		    <p:xslt>
+		    <p:xslt name="filter-wadl">
 		      <!-- Filter normalized wadl based on security attr -->
                       <p:input port="source">
-                        <p:pipe port="result" step="normalize-wadl"/>
+                        <p:pipe port="result" step="wadl"/>
                       </p:input>
                         <p:input port="stylesheet">
 			  <p:inline>
@@ -642,6 +630,18 @@ setting failOnValidationError to no in your pom.
                             <p:pipe step="normalize-wadls-step" port="parameters"/>
                         </p:input>		      
 		    </p:xslt>
+                    <p:xslt name="normalize-wadl">  
+                        <p:input port="source">
+                            <p:pipe port="result" step="filter-wadl"/>
+                        </p:input>
+                        <p:input port="stylesheet">
+                            <p:document href="classpath:///cloud/normalizeWadl/normalizeWadl.xsl"/>
+                        </p:input>
+                        <p:with-param name="checksum" select="$checksum"/>
+                        <p:input port="parameters">
+                            <p:pipe step="normalize-wadls-step" port="parameters"/>
+                        </p:input>
+                    </p:xslt>
                   <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
                    <p:with-option name="href" select="$newhref"/>
                   </p:store>
