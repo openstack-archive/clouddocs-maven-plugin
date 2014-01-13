@@ -14,6 +14,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
@@ -115,7 +116,14 @@ public class FileUtils {
                                               File dest)
         throws MojoExecutionException {
         try {
-            File jar = new File (jarSrc.getProtectionDomain().getCodeSource().getLocation().getFile());
+            File jar;
+            try {
+                // see https://weblogs.java.net/blog/kohsuke/archive/2007/04/how_to_convert.html
+                jar = new File (jarSrc.getProtectionDomain().getCodeSource().getLocation().toURI());
+            }
+            catch (URISyntaxException e) {
+                jar = new File (jarSrc.getProtectionDomain().getCodeSource().getLocation().getFile());
+            }
 
             ZipFile zf = new ZipFile (jar);
             Enumeration<? extends ZipEntry> entries = zf.entries();
