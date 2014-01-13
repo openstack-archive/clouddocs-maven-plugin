@@ -143,7 +143,7 @@ public class FileUtils {
             zf.close();
         }catch (Exception e) {
             e.printStackTrace();
-            throw new MojoExecutionException("Error while extracting jar files: "+e);
+            throw new MojoExecutionException("Error while extracting jar files", e);
         }
     }
 }
