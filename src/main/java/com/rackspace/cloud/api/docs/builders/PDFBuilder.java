@@ -352,7 +352,10 @@ public class PDFBuilder {
 			transformer.setParameter("builtForOpenStack", "0");
 		}
 		transformer.setParameter("coverLogoPath", coverLogoPath);
-		transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
+
+		if(null != secondaryCoverLogoPath){
+		    transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
+		}
 		transformer.setParameter("coverLogoLeft", coverLogoLeft);
 		transformer.setParameter("coverLogoTop", coverLogoTop);
 		transformer.setParameter("coverUrl", coverUrl);

@@ -93,7 +93,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
     /**
      * Path to an alternative cover logo.
      *
-     * @parameter expression="${generate-pdf.secondaryCoverLogoPath}" default-value=""
+     * @parameter expression="${generate-pdf.secondaryCoverLogoPath}" 
      */
     private String secondaryCoverLogoPath;
 
@@ -399,7 +399,9 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	transformer.setParameter("branding", branding);
 	transformer.setParameter("builtForOpenStack", builtForOpenStack);
 	transformer.setParameter("coverLogoPath", coverLogoPath);
-	transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
+	if(null != secondaryCoverLogoPath){
+	    transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
+	}
 	transformer.setParameter("coverLogoLeft", coverLogoLeft);
 	transformer.setParameter("coverLogoTop", coverLogoTop);
 	transformer.setParameter("coverUrl", coverUrl);

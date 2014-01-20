@@ -45,7 +45,12 @@
   <xsl:include href="urn:docbkx:stylesheet-base/xhtml/profile-chunk-code.xsl" />
 
 
-  <xsl:param name="builtForOpenStack">0</xsl:param>
+  <xsl:param name="builtForOpenStack">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace-private-cloud'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
   <!-- ======================================== -->
 
   <xsl:variable name="preprocessed-nodes">

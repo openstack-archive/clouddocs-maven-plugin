@@ -77,12 +77,16 @@
   <xsl:param name="autoPdfUrl"></xsl:param>
   <xsl:param name="useLatestSuffixInPdfUrl">
     <xsl:choose>
-      <xsl:when test="$branding = 'rackspace'">1</xsl:when>
-      <xsl:when test="$branding = 'openstack'">0</xsl:when>
+      <xsl:when test="$webhelp.war != '0' and $webhelp.war != ''">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="section.autolabel" select="1"/>
+  <xsl:param name="section.autolabel">
+    <xsl:choose>
+      <xsl:when test="$branding = 'rackspace-private-cloud'">0</xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
   <xsl:param name="chapter.autolabel" select="1"/>
   <xsl:param name="appendix.autolabel" select="'A'"/>
   <xsl:param name="part.autolabel" select="'I'"/>
@@ -101,19 +105,20 @@
   <xsl:param name="suppress.footer.navigation">1</xsl:param>
   <xsl:param name="enable.google.analytics">
     <xsl:choose>
-      <xsl:when test="$branding = 'rackspace' and $security = 'external'">1</xsl:when>
+      <xsl:when test="($branding = 'rackspace' or $branding = 'rackspace-private-cloud') and $security = 'external'">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <xsl:param name="google.analytics.id">
     <xsl:choose>
-      <xsl:when test="$branding = 'rackspace'">UA-23102455-4</xsl:when>
+      <xsl:when test="$branding = 'rackspace' or $branding = 'rackspace-private-cloud'">UA-23102455-4</xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:param>
   <xsl:param name="google.analytics.domain">
     <xsl:choose>
       <xsl:when test="$branding = 'rackspace'">.rackspace.com</xsl:when>
+      <xsl:when test="$branding = 'rackspace-private-cloud'">.rackspace.com</xsl:when>
       <xsl:when test="$branding = 'openstack'">.openstack.org</xsl:when>
       <xsl:when test="$branding = 'repose'">.openrepose.org</xsl:when>
       <xsl:otherwise/>
@@ -169,10 +174,8 @@ set       toc,title
   <xsl:param name="disqus_identifier" select="/*/@xml:id"/>
   <xsl:param name="disqus.shortname">
     <xsl:choose>
-      <xsl:when test="$branding = 'test'">jonathan-test-dns</xsl:when>
       <xsl:when test="$branding = 'rackspace'">rc-api-docs</xsl:when>
       <xsl:when test="$branding = 'openstack'">openstackdocs</xsl:when>
-      <xsl:when test="$branding = 'openstackextension'">openstackdocs</xsl:when>
     </xsl:choose>
       
   </xsl:param>
@@ -181,7 +184,6 @@ set       toc,title
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">OpenStack</xsl:when>
       <xsl:when test="$branding = 'repose'">Repose</xsl:when>
-      <xsl:when test="$branding = 'openstackextension'">OpenStack Extension</xsl:when>
       <xsl:otherwise>Rackspace</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
@@ -189,7 +191,6 @@ set       toc,title
     <xsl:choose>
       <xsl:when test="$branding = 'openstack'">http://docs.openstack.org/</xsl:when>
       <xsl:when test="$branding = 'repose'">http://openrepose.org/documentation.html</xsl:when>
-      <xsl:when test="$branding = 'openstackextension'">http://docs-beta.rackspace.com/test/jonathan/OpenstackExtDocs/</xsl:when>
       <xsl:otherwise>
 	<xsl:choose>
 	  <xsl:when test="$webhelp.war != '' and $webhelp.war != '0'">/</xsl:when>
@@ -376,7 +377,6 @@ ERROR: Feedback email not set but internal comments are enabled.
 	    <xsl:choose>
 		<xsl:when test="$branding = 'openstack'">http://www.openstack.org</xsl:when>
 		<xsl:when test="$branding = 'repose'">http://www.openrepose.org</xsl:when>
-	    <xsl:when test="$branding = 'openstackextension'">http://docs-beta.rackspace.com/test/jonathan/OpenStackExtDocs/</xsl:when>
 		<xsl:otherwise>http://www.rackspace.com</xsl:otherwise>
 	      </xsl:choose>
 	    </xsl:attribute>
@@ -467,7 +467,6 @@ ERROR: Feedback email not set but internal comments are enabled.
             </div>            
         </div>
 
-	<!-- <xsl:if test="$branding = 'rackspace'"> -->
 	  <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 	    <div id="toolbar-left">
 	      <xsl:call-template name="breadcrumbs">
@@ -475,16 +474,6 @@ ERROR: Feedback email not set but internal comments are enabled.
 	      </xsl:call-template>
 	    </div>
 	  </div>
-	<!-- </xsl:if> -->
-	<!-- <xsl:if test="$branding = 'openstackextension'"> -->
-	<!--   <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"> -->
-	<!--     <div id="toolbar-left"> -->
-	<!--       <xsl:call-template name="breadcrumbs"> -->
-	<!-- 	<xsl:with-param name="home" select="$home"/> -->
-	<!--       </xsl:call-template> -->
-	<!--     </div> -->
-	<!--   </div> -->
-	<!-- </xsl:if> -->
     </xsl:template>
     
     <xsl:template name="webhelptoc">
