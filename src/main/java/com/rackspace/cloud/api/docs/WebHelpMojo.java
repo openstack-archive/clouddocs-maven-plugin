@@ -122,7 +122,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      /**
      * Display built for OpenStack logo?
      *
-     * @parameter expression="${generate-webhelp.builtForOpenStack}" default-value="0"
+     * @parameter expression="${generate-webhelp.builtForOpenStack}" 
      */
     private String builtForOpenStack;
 
@@ -137,7 +137,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
     /**
      * Path to an alternative cover logo.
      *
-     * @parameter expression="${generate-webhelp.secondaryCoverLogoPath}" default-value=""
+     * @parameter expression="${generate-webhelp.secondaryCoverLogoPath}" 
      */
     private String secondaryCoverLogoPath;
 
@@ -464,9 +464,14 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         //if the pdf is generated automatically with webhelp then this will be set.
         transformer.setParameter("autoPdfUrl", autoPdfUrl);
         
-        transformer.setParameter("builtForOpenStack", builtForOpenStack);
+	if (null != builtForOpenStack) {
+	    transformer.setParameter("builtForOpenStack", builtForOpenStack);
+	}
 	transformer.setParameter("coverLogoPath", coverLogoPath);
-	transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
+
+	if (null != secondaryCoverLogoPath) {
+	    transformer.setParameter("secondaryCoverLogoPath", secondaryCoverLogoPath);
+	}
 	transformer.setParameter("coverLogoLeft", coverLogoLeft);
 	transformer.setParameter("coverLogoTop", coverLogoTop);
 	transformer.setParameter("coverUrl", coverUrl);
