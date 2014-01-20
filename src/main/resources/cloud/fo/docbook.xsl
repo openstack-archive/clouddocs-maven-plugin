@@ -493,7 +493,7 @@
     <xsl:param name="default-pagemaster"/>
 
     <xsl:choose>
-      <xsl:when test="$default-pagemaster = 'titlepage'">
+      <xsl:when test="$element = 'book'">
         <xsl:value-of select="'cloud-titlepage'" />
       </xsl:when>
       <xsl:otherwise>
