@@ -58,6 +58,24 @@
   <xsl:param name="omitCover">0</xsl:param>
   <xsl:param name="draft.mode">no</xsl:param>
 
+<xsl:param name="generate.toc">
+/appendix toc,title
+article/appendix  nop
+/article  toc,title
+book      toc,title,figure,table,example,equation
+/chapter  toc,title
+part      noop
+/preface  toc,title
+reference toc,title
+/sect1    toc
+/sect2    toc
+/sect3    toc
+/sect4    toc
+/sect5    toc
+/section  toc
+set       toc,title
+</xsl:param>
+
   <xsl:param name="alignment">start</xsl:param>
   <xsl:param name="security">external</xsl:param>
   <xsl:param name="draft.status" select="''"/>
@@ -493,7 +511,8 @@
     <xsl:param name="default-pagemaster"/>
 
     <xsl:choose>
-      <xsl:when test="$default-pagemaster = 'titlepage'">
+      <xsl:when test="($element = 'book' or $element = 'set') and 
+		       $default-pagemaster = 'titlepage'">
         <xsl:value-of select="'cloud-titlepage'" />
       </xsl:when>
       <xsl:otherwise>
@@ -848,6 +867,152 @@
   </xsl:if>
 </xsl:template>
 
+<!-- DWC: From pagesetup.xsl; modified to remove headers from part titlepages -->
+<xsl:template name="header.table">
+  <xsl:param name="pageclass" select="''"/>
+  <xsl:param name="sequence" select="''"/>
+  <xsl:param name="gentext-key" select="''"/>
+
+  <!-- default is a single table style for all headers -->
+  <!-- Customize it for different page classes or sequence location -->
+
+  <xsl:choose>
+      <xsl:when test="$pageclass = 'index'">
+          <xsl:attribute name="margin-{$direction.align.start}">0pt</xsl:attribute>
+      </xsl:when>
+  </xsl:choose>
+
+  <xsl:variable name="column1">
+    <xsl:choose>
+      <xsl:when test="$double.sided = 0">1</xsl:when>
+      <xsl:when test="$sequence = 'first' or $sequence = 'odd'">1</xsl:when>
+      <xsl:otherwise>3</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="column3">
+    <xsl:choose>
+      <xsl:when test="$double.sided = 0">3</xsl:when>
+      <xsl:when test="$sequence = 'first' or $sequence = 'odd'">3</xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="candidate">
+    <fo:table xsl:use-attribute-sets="header.table.properties">
+      <xsl:call-template name="head.sep.rule">
+        <xsl:with-param name="pageclass" select="$pageclass"/>
+        <xsl:with-param name="sequence" select="$sequence"/>
+        <xsl:with-param name="gentext-key" select="$gentext-key"/>
+      </xsl:call-template>
+
+      <fo:table-column column-number="1">
+        <xsl:attribute name="column-width">
+          <xsl:text>proportional-column-width(</xsl:text>
+          <xsl:call-template name="header.footer.width">
+            <xsl:with-param name="location">header</xsl:with-param>
+            <xsl:with-param name="position" select="$column1"/>
+            <xsl:with-param name="pageclass" select="$pageclass"/>
+            <xsl:with-param name="sequence" select="$sequence"/>
+            <xsl:with-param name="gentext-key" select="$gentext-key"/>
+          </xsl:call-template>
+          <xsl:text>)</xsl:text>
+        </xsl:attribute>
+      </fo:table-column>
+      <fo:table-column column-number="2">
+        <xsl:attribute name="column-width">
+          <xsl:text>proportional-column-width(</xsl:text>
+          <xsl:call-template name="header.footer.width">
+            <xsl:with-param name="location">header</xsl:with-param>
+            <xsl:with-param name="position" select="2"/>
+            <xsl:with-param name="pageclass" select="$pageclass"/>
+            <xsl:with-param name="sequence" select="$sequence"/>
+            <xsl:with-param name="gentext-key" select="$gentext-key"/>
+          </xsl:call-template>
+          <xsl:text>)</xsl:text>
+        </xsl:attribute>
+      </fo:table-column>
+      <fo:table-column column-number="3">
+        <xsl:attribute name="column-width">
+          <xsl:text>proportional-column-width(</xsl:text>
+          <xsl:call-template name="header.footer.width">
+            <xsl:with-param name="location">header</xsl:with-param>
+            <xsl:with-param name="position" select="$column3"/>
+            <xsl:with-param name="pageclass" select="$pageclass"/>
+            <xsl:with-param name="sequence" select="$sequence"/>
+            <xsl:with-param name="gentext-key" select="$gentext-key"/>
+          </xsl:call-template>
+          <xsl:text>)</xsl:text>
+        </xsl:attribute>
+      </fo:table-column>
+
+      <fo:table-body>
+        <fo:table-row>
+          <xsl:attribute name="block-progression-dimension.minimum">
+            <xsl:value-of select="$header.table.height"/>
+          </xsl:attribute>
+          <fo:table-cell text-align="start"
+                         display-align="before">
+            <xsl:if test="$fop.extensions = 0">
+              <xsl:attribute name="relative-align">baseline</xsl:attribute>
+            </xsl:if>
+            <fo:block>
+              <xsl:call-template name="header.content">
+                <xsl:with-param name="pageclass" select="$pageclass"/>
+                <xsl:with-param name="sequence" select="$sequence"/>
+                <xsl:with-param name="position" select="$direction.align.start"/>
+                <xsl:with-param name="gentext-key" select="$gentext-key"/>
+              </xsl:call-template>
+            </fo:block>
+          </fo:table-cell>
+          <fo:table-cell text-align="center"
+                         display-align="before">
+            <xsl:if test="$fop.extensions = 0">
+              <xsl:attribute name="relative-align">baseline</xsl:attribute>
+            </xsl:if>
+            <fo:block>
+              <xsl:call-template name="header.content">
+                <xsl:with-param name="pageclass" select="$pageclass"/>
+                <xsl:with-param name="sequence" select="$sequence"/>
+                <xsl:with-param name="position" select="'center'"/>
+                <xsl:with-param name="gentext-key" select="$gentext-key"/>
+              </xsl:call-template>
+            </fo:block>
+          </fo:table-cell>
+          <fo:table-cell text-align="right"
+                         display-align="before">
+            <xsl:if test="$fop.extensions = 0">
+              <xsl:attribute name="relative-align">baseline</xsl:attribute>
+            </xsl:if>
+            <fo:block>
+              <xsl:call-template name="header.content">
+                <xsl:with-param name="pageclass" select="$pageclass"/>
+                <xsl:with-param name="sequence" select="$sequence"/>
+                <xsl:with-param name="position" select="$direction.align.end"/>
+                <xsl:with-param name="gentext-key" select="$gentext-key"/>
+              </xsl:call-template>
+            </fo:block>
+          </fo:table-cell>
+        </fo:table-row>
+      </fo:table-body>
+    </fo:table>
+  </xsl:variable>
+
+  <!-- Really output a header? -->
+  <xsl:choose>
+    <xsl:when test="$pageclass = 'titlepage' and ($gentext-key = 'book' or $gentext-key = 'part') and $sequence='first'">
+      <!-- no, book titlepages have no headers at all -->
+    </xsl:when>
+    <xsl:when test="$sequence = 'blank' and $headers.on.blank.pages = 0">
+      <!-- no output -->
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy-of select="$candidate"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
 <xsl:template match="processing-instruction('sbr')">
   <xsl:text>&#x200B;</xsl:text>
 </xsl:template>
@@ -1010,5 +1175,149 @@
   </xsl:choose>
 </xsl:template>
 
+
+<xsl:template name="footer.table">
+  <xsl:param name="pageclass" select="''"/>
+  <xsl:param name="sequence" select="''"/>
+  <xsl:param name="gentext-key" select="''"/>
+
+  <!-- default is a single table style for all footers -->
+  <!-- Customize it for different page classes or sequence location -->
+
+  <xsl:choose>
+      <xsl:when test="$pageclass = 'index'">
+          <xsl:attribute name="margin-{$direction.align.start}">0pt</xsl:attribute>
+      </xsl:when>
+  </xsl:choose>
+
+  <xsl:variable name="column1">
+    <xsl:choose>
+      <xsl:when test="$double.sided = 0">1</xsl:when>
+      <xsl:when test="$sequence = 'first' or $sequence = 'odd'">1</xsl:when>
+      <xsl:otherwise>3</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="column3">
+    <xsl:choose>
+      <xsl:when test="$double.sided = 0">3</xsl:when>
+      <xsl:when test="$sequence = 'first' or $sequence = 'odd'">3</xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="candidate">
+    <fo:table xsl:use-attribute-sets="footer.table.properties">
+      <xsl:call-template name="foot.sep.rule">
+        <xsl:with-param name="pageclass" select="$pageclass"/>
+        <xsl:with-param name="sequence" select="$sequence"/>
+        <xsl:with-param name="gentext-key" select="$gentext-key"/>
+      </xsl:call-template>
+      <fo:table-column column-number="1">
+        <xsl:attribute name="column-width">
+          <xsl:text>proportional-column-width(</xsl:text>
+          <xsl:call-template name="header.footer.width">
+            <xsl:with-param name="location">footer</xsl:with-param>
+            <xsl:with-param name="position" select="$column1"/>
+            <xsl:with-param name="pageclass" select="$pageclass"/>
+            <xsl:with-param name="sequence" select="$sequence"/>
+            <xsl:with-param name="gentext-key" select="$gentext-key"/>
+          </xsl:call-template>
+          <xsl:text>)</xsl:text>
+        </xsl:attribute>
+      </fo:table-column>
+      <fo:table-column column-number="2">
+        <xsl:attribute name="column-width">
+          <xsl:text>proportional-column-width(</xsl:text>
+          <xsl:call-template name="header.footer.width">
+            <xsl:with-param name="location">footer</xsl:with-param>
+            <xsl:with-param name="position" select="2"/>
+            <xsl:with-param name="pageclass" select="$pageclass"/>
+            <xsl:with-param name="sequence" select="$sequence"/>
+            <xsl:with-param name="gentext-key" select="$gentext-key"/>
+          </xsl:call-template>
+          <xsl:text>)</xsl:text>
+        </xsl:attribute>
+      </fo:table-column>
+      <fo:table-column column-number="3">
+        <xsl:attribute name="column-width">
+          <xsl:text>proportional-column-width(</xsl:text>
+          <xsl:call-template name="header.footer.width">
+            <xsl:with-param name="location">footer</xsl:with-param>
+            <xsl:with-param name="position" select="$column3"/>
+            <xsl:with-param name="pageclass" select="$pageclass"/>
+            <xsl:with-param name="sequence" select="$sequence"/>
+            <xsl:with-param name="gentext-key" select="$gentext-key"/>
+          </xsl:call-template>
+          <xsl:text>)</xsl:text>
+        </xsl:attribute>
+      </fo:table-column>
+
+      <fo:table-body>
+        <fo:table-row>
+          <xsl:attribute name="block-progression-dimension.minimum">
+            <xsl:value-of select="$footer.table.height"/>
+          </xsl:attribute>
+          <fo:table-cell text-align="start"
+                         display-align="after">
+            <xsl:if test="$fop.extensions = 0">
+              <xsl:attribute name="relative-align">baseline</xsl:attribute>
+            </xsl:if>
+            <fo:block>
+              <xsl:call-template name="footer.content">
+                <xsl:with-param name="pageclass" select="$pageclass"/>
+                <xsl:with-param name="sequence" select="$sequence"/>
+                <xsl:with-param name="position" select="$direction.align.start"/>
+                <xsl:with-param name="gentext-key" select="$gentext-key"/>
+              </xsl:call-template>
+            </fo:block>
+          </fo:table-cell>
+          <fo:table-cell text-align="center"
+                         display-align="after">
+            <xsl:if test="$fop.extensions = 0">
+              <xsl:attribute name="relative-align">baseline</xsl:attribute>
+            </xsl:if>
+            <fo:block>
+              <xsl:call-template name="footer.content">
+                <xsl:with-param name="pageclass" select="$pageclass"/>
+                <xsl:with-param name="sequence" select="$sequence"/>
+                <xsl:with-param name="position" select="'center'"/>
+                <xsl:with-param name="gentext-key" select="$gentext-key"/>
+              </xsl:call-template>
+            </fo:block>
+          </fo:table-cell>
+          <fo:table-cell text-align="end"
+                         display-align="after">
+            <xsl:if test="$fop.extensions = 0">
+              <xsl:attribute name="relative-align">baseline</xsl:attribute>
+            </xsl:if>
+            <fo:block>
+              <xsl:call-template name="footer.content">
+                <xsl:with-param name="pageclass" select="$pageclass"/>
+                <xsl:with-param name="sequence" select="$sequence"/>
+                <xsl:with-param name="position" select="$direction.align.end"/>
+                <xsl:with-param name="gentext-key" select="$gentext-key"/>
+              </xsl:call-template>
+            </fo:block>
+          </fo:table-cell>
+        </fo:table-row>
+      </fo:table-body>
+    </fo:table>
+  </xsl:variable>
+
+  <!-- Really output a footer? -->
+  <xsl:choose>
+    <xsl:when test="$pageclass='titlepage' and ($gentext-key = 'book' or $gentext-key = 'part') 
+                    and $sequence='first'">
+      <!-- no, book titlepages have no footers at all -->
+    </xsl:when>
+    <xsl:when test="$sequence = 'blank' and $footers.on.blank.pages = 0">
+      <!-- no output -->
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy-of select="$candidate"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 </xsl:stylesheet>
