@@ -384,6 +384,7 @@
 	<xsl:attribute name="style">
 	  <xsl:choose>
 	    <xsl:when test="$coverColor != ''">fill:#<xsl:value-of select="$coverColor"/>;fill-opacity:1</xsl:when>
+	    <xsl:when test="$branding = 'rackspace-private-cloud'">fill:#c42126;fill-opacity:1</xsl:when>
 	    <xsl:when test="$branding = 'openstack'">fill:#ce3327;fill-opacity:1</xsl:when>
 	    <xsl:when test="$branding = 'repose'">fill:#A1CAFF;fill-opacity:1</xsl:when>
 	    <xsl:otherwise>fill:#c42126;fill-opacity:1</xsl:otherwise>

@@ -1,6 +1,5 @@
 #gplusone{display:inline;position:absolute;right:330px;top:.5em}
 #rstwitter{vertical-align:text-top;display:inline;position:absolute;right:370px;top:.5em}
-tr th .added { color: #E6E6FA; } 
 tr th .changed {color: #99ff99; }
 div.added tr, div.added    { background-color: #E6E6FA; }
 div.deleted tr, div.deleted  { text-decoration: line-through;
@@ -16,35 +15,53 @@ span.off     {  }
 
 
 body { font: 12px Verdana, Geneva, sans-serif; }
-p, ul, ol, li { font: 10pt Verdana, Geneva, sans-serif; }
+p, ul, ol, li, td { font: 10pt Verdana, Geneva, sans-serif; }
 h1 { font: 15pt Arial, Helvetica, geneva;
-	color: #cf2f19;
+     color: black !important;
 }
 h2 { font: normal 12pt Arial, Helvetica, geneva;
-	color: black! important;
+	color: black !important;
 }
 
 #header {
     position: fixed;
     width: 100%;
-    height: 95px;
+    height: 97px;
     top: 0;
     right: 0;
     bottom: auto;
     left: 0;
     border-bottom: 1px solid #bbc4c5;
     z-index: 2000;
-	background: white url(../images/book_open.png) no-repeat 250px center;
+    background: #282828 url("../images/main_bg_fade.png") top left no-repeat;
+}
+
+#header h1 {
+    color: #fff;
+    margin-left: 310px;
 }
 
 #header h1, p.breadcrumbs {
-	margin-left: 300px;
+    margin-top: 30px;
+    margin-left: 310px;
 }
 
 #header img {
-	float: left;
-	margin-left: 20px;
-	margin-top: 20px;
+    float: left;
+    margin-left: 20px;
+    margin-top: 22px;
+}
+
+#header p.breadcrumbs a {
+    color: #bbb;
+}
+
+.ie #leftnavigation {
+    top: 96px;
+}
+
+.chrome #leftnavigation {
+    top: 92px;
 }
 
 #leftnavigation {
@@ -58,9 +75,32 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
     z-index: 1500;
     border-right:1px solid #bbc4c5;
     padding: 0px;
-	background-color: #f2f7f7!important;
+    background-color: #f0f0f0 !important;
 }
 
+#treeDiv {
+    overflow: auto;
+    position: fixed;
+    height: auto;
+    top: 130px;
+    bottom: 0;
+    left: 0;
+    width: 243px;
+    z-index: 1500;
+    border-right:2px solid #CCCCCC;
+}
+
+#searchDiv {
+    overflow: auto;
+    position: fixed;
+    height: auto;
+    top: 130px;
+    bottom: 0;
+    left: 0;
+    width: 243px;
+    z-index: 1500;
+    border-right:2px solid #CCCCCC;
+}
 #content {
     position: relative;
     top: 90px; /* left: 240px;*/
@@ -79,19 +119,22 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
 
 #navheader {
     position: fixed;
-    top: 65px;
-    right:4px;
+    background: #fff;
+    border-radius: 5px 0px 0px 5px;
+    padding-left: 10px;
+    right: 0px;
+    top: 37px;
 }
 
-#content h1, #content h2 { color: #cc0000; }
+#content h1, #content h2 { color: black; }
 .navfooter { bottom: 2%; }
 .highlight { background-color: #c5d3c3; }
 .highlightButton{ font-size: 0; }
 
-#content pre.literallayout, #content pre.programlisting 
+#content pre.literallayout, #content pre.programlisting, #content pre.screen
 {
     -x-system-font: none;
-    background-color: silver;
+    //background-color: silver;
     border-bottom-color: #DEDEDE !important;
     border-bottom-style: solid !important;
     border-bottom-width: 1px !important;
@@ -185,6 +228,7 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
 	}
 	
 p.breadcrumbs {
+        display: inline;
 	margin-bottom: 0px;
 	margin-top: 33px;
 }
@@ -196,7 +240,10 @@ p.breadcrumbs a {
 	color: #575757;
 	text-transform: uppercase;
 	font-size: 10px;
-	background: url(../images/breadcrumb-arrow.png) no-repeat right center;
+}
+
+p.breadcrumbs a:first-child {
+    background: url(../images/breadcrumb-arrow-white.png) no-repeat right center;
 }
 
 p.breadcrumbs a:hover {
@@ -234,6 +281,10 @@ a#showHideButton {
 }
 
 	
+.filetree li span a { color: #777; }
+
+#treediv { -webkit-box-shadow: #CCC 0px 1px 2px 0px inset; }
+
 .legal, .legal *{
  color: #555;
  text-align: center;
@@ -262,10 +313,9 @@ tr th, tr th .internal, tr th .added, tr th .changed
 	text-align: left;
 	}
 
-
 .statustext{
     position:fixed;
-    top:100px;
+    top:105px;
     width: 0%;
     height: 0%;
     opacity: .3;
@@ -273,26 +323,81 @@ tr th, tr th .internal, tr th .added, tr th .changed
     -moz-transform: rotate(90deg);
     -o-transform: rotate(90deg);
     white-space: nowrap;
-    color: red; 
-    font-weight: bold; 
+    color: red;
+    font-weight: bold;
     font-size: 2em;
+    margin-top: 30px;
     }
 
-
-div.note table, div.note table td, div.note table tr th, div.caution table, div.caution table td, div.caution table tr th, div.important table, div.important table td, div.important table tr th, div.tip table, div.tip table td, div.tip table tr th, div.warning table, div.warning table td, div.warning table tr th{
-    background: inherit;
-    color: inherit;
-    border: 0px  !important;
-    
+#toolbar {
+	width: 100%;
+	height: 33px;
+	position: fixed;
+	top: 93px;
+	z-index: 99;
+	left: 280px;
+	color: #333;
+	line-height: 28px;
+	padding-left: 10px;
 }
 
-/* #content table thead{ */
-/*     background: #f2f7f7; */
-/*     color: white; */
-/* } */
+#toolbar-left {
+	position: relative;
+	left: 0px;
+}
+ 
+body p.breadcrumbs {
+	margin: 0px;
+	padding: 0px;
+	line-height: 28px;
+}
 
-#content table caption, #content table thead td{
+body #content {
+	position: static;
+	margin-top: 126px;
+	top: 0px;
+}
+
+#header h1 {
+    position: fixed;
+    top: 35px;
+    left: -15px;
+    color: white !important;
+}
+
+body.sidebar #toolbar{
+   left: 0px;
+}
+
+body.sidebar #toolbar-left{
+   left: 0px;
+}
+
+div#toolbar-left img {
+    vertical-align: text-top;
+}
+
+
+div.note *, div.caution *, div.important *, div.tip *, div.warning *, div.calloutlist * {
+    background: inherit !important;
+    color: inherit !important;
+    border: inherit !important;    
+}
+
+div.note p:first-child, div.caution p:first-child, div.important p:first-child, div.tip p:first-child, div.warning p:first-child, div.calloutlist p:first-child {
+    margin-top: 0px;
+}
+
+#content table thead, #content table th{
+    background: gray;
+    color: white;
     font-weight: bold;
+}
+
+#content table caption{
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 0.25em;
 }
 
 #content table td, #content table {
@@ -305,7 +410,100 @@ div.note table, div.note table td, div.note table tr th, div.caution table, div.
 
 #content table {
 	margin-bottom: 20px;
-
+	border-collapse: collapse;
 }
 
+*[align = 'center']{
+    text-align: center;
+}
+
+/* tildehash stuff */
+
+form td, form table{
+    border: inherit !important;
+}
+
+#cmtfont {
+   font-size: 18px;
+   padding: 4px 0px 0px 3px;
+   display: inline-block;
+}
+
+#cmtdiv {
+   padding: 2px 4px 4px 4px;
+   margin: 2px 0px 0px 0px;
+   border: 2px solid #707070;
+   background-color: #F5F5F9;
+   -moz-border-radius: 8px 8px 8px 8px;
+   -webkit-border-radius: 8px 8px 8px 8px;
+   border-radius: 8px 8px 8px 8px;
+   text-align: left;
+}
+
+#cmtnumber {
+   font-size: 18px;
+   padding: 2px 0px 0px 4px;
+   font-family: helvetica;
+}
+
+#cmtdate {
+   float: right;
+   position: relative;
+   font-style: italic;
+   top: 6px;
+}
+
+#cmtopts {
+   padding: 3px;
+   background-color: #E4E4E4;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
+   border-radius: 4px;
+}
+
+span.italic, span.italics{
+    font-style: italic;
+}
+
+div.sidebar{
+    background-color: silver;
+    border: 1px solid black;
+    padding: 10px 10px 10px 10px;
+}
+
+.co img {
+vertical-align: middle;
+}
+
+body div#content div.navfooter table tbody td, body div#content div.navfooter table  {
+    border: 0px solid black; 
+}
+
+#content .variablelist table, #content .variablelist table td {
+    border-style: hidden;
+}
+
+
+.olinkdocname{ font-style: italic; }
+
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    #content, #content * {
+        visibility: visible;
+    }
+
+   #sidebar, .navfooter {
+       display: none;
+   }
+
+   #content {
+	margin: 0 0 0 0;
+    }
+
+}
 

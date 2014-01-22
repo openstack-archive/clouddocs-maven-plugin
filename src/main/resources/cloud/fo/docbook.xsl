@@ -54,7 +54,7 @@
   <xsl:param name="coverLogoLeft"/>
   <xsl:param name="coverLogoTop"/>
   <xsl:param name="coverUrl"/>
-  <xsl:param name="secondaryCoverLogoPath"/>
+  <xsl:param name="secondaryCoverLogoPath"><xsl:if test="$branding = 'rackspace-private-cloud'"><xsl:value-of select="concat($cloud.api.cc.image.dir,'/../powered-by-openstack.png')"/></xsl:if></xsl:param>
   <xsl:param name="omitCover">0</xsl:param>
   <xsl:param name="draft.mode">no</xsl:param>
 
@@ -925,13 +925,19 @@
         <fo:inline color="red">this?</fo:inline>
     </xsl:template>
 
-    <xsl:param name="builtForOpenStack">0</xsl:param>
+    <xsl:param name="builtForOpenStack">
+      <xsl:choose>
+	<xsl:when test="$branding = 'rackspace-private-cloud'">1</xsl:when>
+	<xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
 
     <xsl:template name="book.titlepage.recto">
       <xsl:variable name="url">
 	  <xsl:choose>
 	    <xsl:when test="$coverUrl != ''"><xsl:value-of select="$coverUrl"/></xsl:when>
 	    <xsl:when test="$branding = 'rackspace'">docs.rackspace.com/api</xsl:when>
+	    <xsl:when test="$branding = 'rackspace-private-cloud'">rackspace.com/cloud/private</xsl:when>
 	    <xsl:when test="$branding = 'openstack'">docs.openstack.org</xsl:when>
 	    <xsl:when test="$branding = 'repose'">www.openrepose.org</xsl:when>
 	  </xsl:choose>
@@ -960,6 +966,7 @@
 	  <xsl:choose>
 	    <xsl:when test="$coverLogoLeft != ''"><xsl:value-of select="$coverLogoLeft"/></xsl:when>
 	    <xsl:when test="$branding = 'rackspace'">5.6in</xsl:when>
+	    <xsl:when test="$branding = 'rackspace-private-cloud'">3in</xsl:when>
 	    <xsl:when test="$branding = 'openstack'">5.2in</xsl:when>
 	    <xsl:when test="$branding = 'repose'">3.9in</xsl:when>
 	    <xsl:otherwise>5.6in</xsl:otherwise>
@@ -969,6 +976,7 @@
 	  <xsl:choose>
 	    <xsl:when test="$coverLogoTop != ''"><xsl:value-of select="$coverLogoTop"/></xsl:when>
 	    <xsl:when test="$branding = 'rackspace'">9.28in</xsl:when>
+	    <xsl:when test="$branding = 'rackspace-private-cloud'">9.25in</xsl:when>
 	    <xsl:when test="$branding = 'openstack'">9.0in</xsl:when>
 	    <xsl:when test="$branding = 'repose'">4.9in</xsl:when>
 	    <xsl:otherwise>9.0in</xsl:otherwise>
@@ -978,7 +986,10 @@
 	  <fo:external-graphic>
 	    <xsl:attribute name="src">
 	      <xsl:choose>
-		<xsl:when test="$coverUrl != ''">url(<xsl:value-of select="$coverLogoPath"/>)</xsl:when>
+		<xsl:when test="$branding = 'rackspace-private-cloud'">
+		  <xsl:value-of select="concat('url(',$cloud.api.cc.image.dir,'/../rpc-coverlogo.png)')"/>
+		</xsl:when>
+		<xsl:when test="$coverLogoPath != ''">url(<xsl:value-of select="$coverLogoPath"/>)</xsl:when>
 		<xsl:otherwise>
 		  <xsl:value-of select="concat('url(',$cloud.api.cc.image.dir,'/../',$branding,'-logo.svg)')"/>
 		</xsl:otherwise>
