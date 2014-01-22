@@ -102,7 +102,7 @@
 					</xsl:choose>
 				</xsl:variable>
 				<code>
-					<xsl:value-of select="replace($path,'/\{','{/')"/><xsl:for-each select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
+					<xsl:value-of select="$path"/><xsl:for-each select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
 						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1">{?</xsl:if><xsl:value-of select="@name"/><xsl:if test="@repeating = 'true'">*</xsl:if><xsl:choose><xsl:when
 									test="not(position() = last())">,</xsl:when><xsl:otherwise>}</xsl:otherwise></xsl:choose></xsl:for-each>
 				</code>
