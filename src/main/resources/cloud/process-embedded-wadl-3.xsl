@@ -268,16 +268,6 @@
 				<para security="writeronly">Source wadl: <link xlink:href="{@rax:original-wadl}"><xsl:value-of select="@rax:original-wadl"/></link>  (method id: <xsl:value-of select="@rax:id"/>)</para>
 			</xsl:if>
 			
-			<!-- Method Docs -->
-			<xsl:choose>
-				<xsl:when test="wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
-					<xsl:apply-templates select="wadl:doc/*[not(@role='shortdesc')]"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<!-- Suppress because everything will be in the table -->
-				</xsl:otherwise>
-			</xsl:choose>
-			
 			<informaltable rules="all" width="100%">		
 				<col width="10%"/>
 				<col width="40%"/>
@@ -293,6 +283,16 @@
 					<xsl:call-template name="method-row"/>				
 				</tbody>
 			</informaltable>
+			
+			<!-- Method Docs -->
+			<xsl:choose>
+				<xsl:when test="wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
+					<xsl:apply-templates select="wadl:doc/*[not(@role='shortdesc')]"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<!-- Suppress because everything will be in the table -->
+				</xsl:otherwise>
+			</xsl:choose>
 
 			<xsl:choose>
 				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
