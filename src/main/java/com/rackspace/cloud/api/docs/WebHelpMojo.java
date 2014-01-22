@@ -915,6 +915,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 		pdfBuilder.setGenerateToc(getProperty("generateToc"));
 		pdfBuilder.setTocMaxDepth(getProperty("tocMaxDepth"));
 		pdfBuilder.setTocSectionDepth(getProperty("tocSectionDepth"));
+        	pdfBuilder.setGlossaryCollection(getProperty("glossaryCollection"));
 
         	File srcFilename = new File(this.projectBuildDirectory, "docbkx/"+sourceFile.getName());
 	    	if(srcFilename.exists()) {
