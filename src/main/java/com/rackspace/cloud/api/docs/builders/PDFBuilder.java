@@ -122,7 +122,8 @@ public class PDFBuilder {
         private String generateToc;
         private String tocMaxDepth;
         private String tocSectionDepth;
-     
+        private String glossaryCollection;
+
 	private String draftStatus;
 	private String statusBarText;
 	private String trimWadlUriCount;
@@ -374,7 +375,9 @@ public class PDFBuilder {
 		    transformer.setParameter("double.sided", doubleSided); 
 		}
 
-
+		if(null != glossaryCollection){
+		    transformer.setParameter("glossary.collection", glossaryCollection);
+		}
 		if(null != sectionAutolabel){
 		    transformer.setParameter("section.autolabel", sectionAutolabel);
 		}
@@ -695,6 +698,15 @@ public class PDFBuilder {
 	public void setSectionAutolabel(String sectionAutolabel) {
 		this.sectionAutolabel = sectionAutolabel;
 	}
+
+	public String getGlossaryCollection() {
+		return glossaryCollection;
+	}
+
+	public void setGlossaryCollection(String glossaryCollection) {
+		this.glossaryCollection = glossaryCollection;
+	}
+
 
 	public String getSectionLabelIncludesComponentLabel() {
 		return sectionLabelIncludesComponentLabel;
