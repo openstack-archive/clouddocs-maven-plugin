@@ -69,6 +69,28 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.13.0 (January 23, 2014)
+============================================================
+-  Features and updates
+
+   -  Move method signatures back to the top of methods in generated API reference for guides.
+   -  Add hyperlinks from summary tables to method reference pages in generated API reference for guides.
+   -  Add support for a Rackspace Private Cloud branding.
+
+-  Bug fixes
+
+   -  Improve handling of paths containing spaces.
+   -  Provide more information in certain error states.
+   -  Support <part>s in pdf and webhelp output.
+   -  Support the glossaryCollection parameter for pdfs automatically generated during webhelp build.
+   -  Improve formatting of paths in sections generated for API references in guides.
+
+clouddocs-maven-plugin 1.12.3 (January 8, 2014)
+============================================================
+-  Bug fixes
+
+   -  Minor update to OpenStack API Reference page.
+
 clouddocs-maven-plugin 1.12.1 (January 7, 2014)
 ============================================================
 -  Features and updates
