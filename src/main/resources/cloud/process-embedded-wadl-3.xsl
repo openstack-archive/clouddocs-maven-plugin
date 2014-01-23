@@ -77,6 +77,15 @@
 	</xsl:template>
 	
 	<xsl:template match="wadl:method" name="method-row" mode="method-rows">
+		<!-- calculate section id -->
+		<xsl:param name="mode">href</xsl:param>
+		<xsl:variable name="sectionId" select="ancestor::d:section[1]/@xml:id"/>
+		<xsl:variable name="replacechars">/{}:</xsl:variable>
+		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
+		<xsl:variable name="app_raxid" select="if(ancestor::wadl:resources/@xml:id) then concat(ancestor::wadl:resources/@xml:id, '_') else ''"/>
+		<xsl:variable name="sectionIdComputed"
+			select="concat(@name,'_',$app_raxid,$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
+		
 		<xsl:variable name="default.param.type">string</xsl:variable>
 		<tr>
 			<td>
@@ -102,6 +111,7 @@
 					</xsl:choose>
 				</xsl:variable>
 				<code>
+					<xsl:if test="$mode = 'href'"><xsl:attribute name="xlink:href" select="concat('#',$sectionIdComputed)"/></xsl:if>
 					<xsl:value-of select="$path"/><xsl:for-each select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
 						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1">{?</xsl:if><xsl:value-of select="@name"/><xsl:if test="@repeating = 'true'">*</xsl:if><xsl:choose><xsl:when
 									test="not(position() = last())">,</xsl:when><xsl:otherwise>}</xsl:otherwise></xsl:choose></xsl:for-each>
@@ -189,8 +199,13 @@
 	</xsl:template>
 	
 	<xsl:template match="wadl:method">
-		<xsl:param name="sectionId" select="ancestor::d:section[1]/@xml:id"/>
-	    <xsl:variable name="id" select="@rax:id"/>
+		<!-- calculate section id -->
+		<xsl:variable name="sectionId" select="ancestor::d:section[1]/@xml:id"/>
+		<xsl:variable name="replacechars">/{}:</xsl:variable>
+		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
+		<xsl:variable name="app_raxid" select="if(ancestor::wadl:resources/@xml:id) then concat(ancestor::wadl:resources/@xml:id, '_') else ''"/>
+		<xsl:variable name="sectionIdComputed"
+			select="concat(@name,'_',$app_raxid,$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
 		
         <!-- Handle skipText PIs -->
         <xsl:variable name="skipNoRequestTextN">
@@ -233,7 +248,6 @@
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="addMethodPageBreaks" select="boolean(number($addMethodPageBreaksN))"/>
-		<xsl:variable name="replacechars">/{}:</xsl:variable>
 		<xsl:variable name="method.title">
 				<xsl:choose>
 					<xsl:when test="wadl:doc/@title">
@@ -249,10 +263,6 @@
 					</xsl:otherwise>
 				</xsl:choose>
 		</xsl:variable>
-		<xsl:variable name="raxid" select="if (@rax:id) then @rax:id else @id"/>
-		<xsl:variable name="app_raxid" select="if(ancestor::wadl:resources/@xml:id) then concat(ancestor::wadl:resources/@xml:id, '_') else ''"/>
-		<xsl:variable name="sectionIdComputed"
-			select="concat(@name,'_',$app_raxid,$raxid,'_',translate(parent::wadl:resource/@path, $replacechars, '___'),'_',$sectionId)"/>
 
 
 		<xsl:if test="$addMethodPageBreaks">
@@ -290,7 +300,9 @@
 					</tr>
 				</thead>
 				<tbody>
-					<xsl:call-template name="method-row"/>				
+					<xsl:call-template name="method-row">
+						<xsl:with-param name="mode" select="'none'"/>
+					</xsl:call-template>				
 				</tbody>
 			</informaltable>
 
