@@ -85,7 +85,7 @@ clouddocs-maven-plugin 1.13.0 (January 23, 2014)
    -  Support the glossaryCollection parameter for pdfs automatically generated during webhelp build.
    -  Improve formatting of paths in sections generated for API references in guides.
 
-clouddocs-maven-plugin 1.12.3 (January 8, 2014)
+clouddocs-maven-plugin 1.12.2 (January 8, 2014)
 ============================================================
 -  Bug fixes
 
