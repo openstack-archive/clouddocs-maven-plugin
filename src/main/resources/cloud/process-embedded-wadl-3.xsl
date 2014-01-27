@@ -106,7 +106,7 @@
 							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="parent::wadl:resource/@path"/>
+							<xsl:value-of select="if(not(starts-with(parent::wadl:resource/@path,'/'))) then concat('/', parent::wadl:resource/@path) else parent::wadl:resource/@path"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
