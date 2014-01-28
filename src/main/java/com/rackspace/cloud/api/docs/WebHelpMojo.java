@@ -429,8 +429,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	    warBasename = webhelpDirname;
 	} else {
 	    warBasename = webhelpOutdir;
-	}	
-	targetFile = new File( getTargetDirectory() + "/" + warBasename + "/" + warBasename + ".xml" );
+	}
+	targetFile = new File( getTargetDirectory() + "/" + warBasename + "/" + sourceFilename );
 
         super.adjustTransformer(transformer, sourceFilename, targetFile);
                     
@@ -596,7 +596,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	} else {
 	    warBasename = webhelpOutdir;
 	}	
-	result = new File( getTargetDirectory() + "/" + warBasename + "/" + warBasename + ".xml" );
+	result = new File( getTargetDirectory() + "/" + warBasename + "/" + "dummy.xml" );
 
 	super.postProcessResult(result);
 	
@@ -659,7 +659,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     protected void copyTemplate(File result) throws MojoExecutionException {
 
-        final File targetDirectory = result.getParentFile();
+        final File targetDirectory = result.getParentFile(); 
 
         com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("content", WebHelpMojo.class, targetDirectory);
         com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("common", WebHelpMojo.class, targetDirectory);
