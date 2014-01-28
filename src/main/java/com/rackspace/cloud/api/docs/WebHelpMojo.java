@@ -429,8 +429,10 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	    warBasename = webhelpDirname;
 	} else {
 	    warBasename = webhelpOutdir;
-	}	
-	targetFile = new File( getTargetDirectory() + "/" + warBasename + "/" + warBasename + ".xml" );
+	}
+
+
+	targetFile = new File( getTargetDirectory() + "/" + warBasename + "/dummy.webhelp" );
 
         super.adjustTransformer(transformer, sourceFilename, targetFile);
                     
@@ -596,7 +598,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	} else {
 	    warBasename = webhelpOutdir;
 	}	
-	result = new File( getTargetDirectory() + "/" + warBasename + "/" + warBasename + ".xml" );
+	result = new File( getTargetDirectory() + "/" + warBasename + "/" + "dummy.xml" );
 
 	super.postProcessResult(result);
 	
@@ -620,6 +622,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	    System.out.println("Got an Exception: " + e.getMessage());          
 	}
 
+	warBasename = warBasename == null ? null : new File(warBasename).getName();
+
 	String warSuffix = webhelpDirname != null ? "" : properties.getProperty("warsuffix","");
 	String warPrefix = webhelpDirname != null ? "" : properties.getProperty("warprefix","");
 	String warSuffixForWar = warSuffix.equals("-external") ? "" : warSuffix;
@@ -640,9 +644,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
                                
 		//close the ZipOutputStream
 		zout.close();
-                               
-		System.out.println("Zip file has been created!");
-                               
+                                                              
 	    }catch(IOException ioe){
 		System.out.println("IOException :" + ioe);     
 	    }
@@ -659,7 +661,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 
     protected void copyTemplate(File result) throws MojoExecutionException {
 
-        final File targetDirectory = result.getParentFile();
+        final File targetDirectory = result.getParentFile(); 
 
         com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("content", WebHelpMojo.class, targetDirectory);
         com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("common", WebHelpMojo.class, targetDirectory);
