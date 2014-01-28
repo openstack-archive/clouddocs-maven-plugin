@@ -54,7 +54,10 @@
   <xsl:param name="coverLogoLeft"/>
   <xsl:param name="coverLogoTop"/>
   <xsl:param name="coverUrl"/>
-  <xsl:param name="secondaryCoverLogoPath"><xsl:if test="$branding = 'rackspace-private-cloud'"><xsl:value-of select="concat($cloud.api.cc.image.dir,'/../powered-by-openstack.png')"/></xsl:if></xsl:param>
+  <xsl:param name="secondaryCoverLogoPath"><xsl:choose>
+      <xsl:when test="$branding = 'rackspace-private-cloud'"><xsl:value-of select="concat($cloud.api.cc.image.dir,'/../powered-by-openstack.png')"/></xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose></xsl:param>
   <xsl:param name="omitCover">0</xsl:param>
   <xsl:param name="draft.mode">no</xsl:param>
 
@@ -1108,7 +1111,7 @@ set       toc,title
 	  </xsl:choose>
       </xsl:variable>
 
-      <xsl:if test="$builtForOpenStack != 0 or $secondaryCoverLogoPath != ''">
+      <xsl:if test="$builtForOpenStack != 0 or $secondaryCoverLogoPath != 0">
 	<fo:block-container absolute-position="fixed" left="1in" top="8in">
 	  <fo:block>
 	    <fo:external-graphic>
