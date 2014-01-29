@@ -36,7 +36,28 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
      *     default-value="0"
      */
     private String failOnValidationError;
-    
+
+    /**
+     * Specifies the Goggle Analytics Id to use on the page
+     * 
+     * @parameter expression="${generate-html.enableGoogleAnalytics}" default-value="1"
+     */
+    private String enableGoogleAnalytics;
+
+    /**
+     * Specifies the Goggle Analytics Id to use on the page
+     * 
+     * @parameter expression="${generate-html.googleAnalyticsId}" default-value="UA-17511903-1"
+     */
+    private String googleAnalyticsId;
+
+    /**
+     * Specifies the Goggle Analytics domain to use on the page
+     * 
+     * @parameter expression="${generate-html.googleAnalyticsDomain}" default-value=".openstack.org"
+     */
+    private String googleAnalyticsDomain;   
+
     /**
      * A parameter used to specify the security level (external, internal, reviewer, writeronly) of the document.
      *
@@ -85,7 +106,10 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("failOnValidationError", failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
-        
+	map.put("enableGoogleAnalytics", enableGoogleAnalytics);
+        map.put("googleAnalyticsId", googleAnalyticsId);
+	map.put("googleAnalyticsDomain", googleAnalyticsDomain);
+
         return CalabashHelper.createSource(getLog(), source, pathToPipelineFile, map);
     }
 }
