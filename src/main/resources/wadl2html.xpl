@@ -46,7 +46,9 @@
     <p:input port="stylesheet">
       <p:document href="classpath:///cloud/apipage/process-embedded-wadl-apipage.xsl"/>
     </p:input>
-    <p:with-param name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value"/>
+    <p:input port="parameters" >
+      <p:pipe step="main" port="parameters"/>
+    </p:input>
   </p:xslt>
   
 <!--  <l:xhtml2docbook name="xhtml2docbook"/>   -->
@@ -63,7 +65,7 @@
       <p:document href="classpath:///cloud/apipage/apipage-main.xsl"/>
     </p:input>
     <p:input port="parameters" >
-      <p:empty/>
+      <p:pipe step="main" port="parameters"/>
     </p:input>
   </p:xslt>
   

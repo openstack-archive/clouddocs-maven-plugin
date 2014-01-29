@@ -25,6 +25,9 @@
           <xsl:param name="wadl.norequest.msg"><p class="nobody">This operation does not require a request body.</p></xsl:param>
           <xsl:param name="wadl.noresponse.msg"><p class="nobody">This operation does not return a response body.</p></xsl:param>
           <xsl:param name="wadl.noreqresp.msg"><p class="nobody">This operation does not require a request body and does not return a response body.</p></xsl:param>
+	  <xsl:param name="googleAnalyticsId"/>
+	  <xsl:param name="googleAnalyticsDomain"/>
+	  <xsl:param name="enableGoogleAnalytics">0</xsl:param>
 
           <xsl:template match="node() | @*">
             <xsl:copy>
@@ -118,9 +121,11 @@
                 <script type="text/javascript" src="apiref/js/jquery-1.10.2.min.js"></script>
                 <script type="text/javascript" src="apiref/js/bootstrap.min.js"></script>
                 <script type="text/javascript" src="apiref/js/api-site.js"></script>
+		<xsl:if test="$enableGoogleAnalytics != '0'">
                 <script type="text/javascript">
                   var _gaq = _gaq || [];
-                  _gaq.push(['_setAccount', 'UA-17511903-8']);
+                  _gaq.push(['_setAccount', '<xsl:value-of select="$googleAnalyticsId"/>']);
+		  _gaq.push(['_setDomainName', '<xsl:value-of select="$googleAnalyticsDomain"/>']);
                   _gaq.push(['_trackPageview']);
                   (function () {
                     var ga = document.createElement('script');
@@ -128,9 +133,10 @@
                     ga.async = true;
                     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
                     var s = document.getElementsByTagName('script')[0];
-                    s.parentNode.insertBefore(ga, s);
+                    s.parentNode.insertBefore(ga, s);\
                   })();
                 </script>
+		</xsl:if>
               </body>
             </html>
           </xsl:template>
