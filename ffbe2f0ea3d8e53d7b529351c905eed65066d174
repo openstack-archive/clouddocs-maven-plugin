@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Approved+1: David Cramer <david.cramer@rackspace.com>
+Code-Review+2: David Cramer <david.cramer@rackspace.com>
+Code-Review+1: Andreas Jaeger <jaegerandi@gmail.com>
+Submitted-by: Jenkins
+Submitted-at: Thu, 30 Jan 2014 18:27:53 +0000
+Reviewed-on: https://review.openstack.org/69740
+Project: stackforge/clouddocs-maven-plugin
+Branch: refs/heads/master
