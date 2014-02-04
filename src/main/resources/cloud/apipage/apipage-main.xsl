@@ -85,8 +85,9 @@
                             <a href="api-ref.html">Openstack API Docs</a>
                             <ul class="nav active">
                               <li><a href="api-ref-blockstorage.html">Block Storage Service</a></li> 
-                              <li><a href="api-ref-compute.html">Compute</a></li>
-                              <li><a href="api-ref-compute-ext.html">Compute extensions</a></li>
+                              <li><a href="api-ref-compute.html">Compute v2</a></li>
+                              <li><a href="api-ref-compute-ext.html">Compute v2 extensions</a></li>
+                              <li><a href="api-ref-compute-v3ext.html">Compute v3 extensions</a></li>
                               <li><a href="api-ref-identity.html">Identity Service</a></li>
                               <li><a href="api-ref-image.html">Image Service</a></li>  
                               <li><a href="api-ref-networking.html">Networking</a></li>
