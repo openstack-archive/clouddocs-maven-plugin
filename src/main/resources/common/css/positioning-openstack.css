@@ -478,6 +478,11 @@ body div#content div.navfooter table tbody td, body div#content div.navfooter ta
     text-decoration: none; 
     color: #cc0000;
 }
+.icon-question{
+    font-size: 1.75em; 
+    text-decoration: none; 
+    color: #cc0000;
+}
 @media print {
 
     body * {
