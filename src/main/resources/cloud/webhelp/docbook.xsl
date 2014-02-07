@@ -235,7 +235,9 @@ set       toc,title
       </script>
       <xsl:if test="$branding = 'openstack'">
 	<div class="logabug" style="text-align: center">
-	  <a id="logABugLink2" href="" target="_blank">Log a bug against this page</a>
+	  <a id="AskOOLink2" href="http://ask.openstack.org" target="_blank"><i class="icon-question"><xsl:comment/></i>Questions? Discuss on ask.openstack.org<i class="icon-question"><xsl:comment/></i></a>
+          <br/>
+	  <a id="logABugLink2" href="" target="_blank"><i class="icon-bug"><xsl:comment/></i>Found an error? Report a bug against this page<i class="icon-bug"><xsl:comment/></i></a>
 	</div>
 	<script language="JavaScript">
 	  var sourceFile = "source File: <xsl:value-of select="(ancestor-or-self::*/@xml:base)[position() = last()]"/>"
@@ -317,7 +319,8 @@ ERROR: Feedback email not set but internal comments are enabled.
     </xsl:if>
     <xsl:if test="$branding = 'openstack' and $social.icons = '0'">
       <div id="gplusone">
-	<a id="logABugLink1" href="" target="_blank" title="Log a bug against this page"><i class="icon-bug"><xsl:comment/></i></a>
+	<a id="AskOOLink1" href="http://ask.openstack.org" target="_blank" title="Questions? Discuss on ask.openstack.org"><i class="icon-question"><xsl:comment/></i></a>
+	<a id="logABugLink1" href="" target="_blank" title="Found an error? Report a bug against this page"><i class="icon-bug"><xsl:comment/></i></a>
       </div>
     </xsl:if>
     <xsl:if test="$social.icons != '0' and $security = 'external' ">
