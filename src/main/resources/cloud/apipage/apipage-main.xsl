@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
         <xsl:stylesheet
           xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:xhtml="http://www.w3.org/1999/xhtml"
           xmlns:wadl="http://wadl.dev.java.net/2009/02"
           xmlns:rax="http://docs.rackspace.com/api"
@@ -84,16 +85,9 @@
                           <li>
                             <a href="api-ref.html">Openstack API Docs</a>
                             <ul class="nav active">
-                              <li><a href="api-ref-blockstorage.html">Block Storage Service</a></li> 
-                              <li><a href="api-ref-compute.html">Compute v2</a></li>
-                              <li><a href="api-ref-compute-ext.html">Compute v2 extensions</a></li>
-                              <li><a href="api-ref-compute-v3ext.html">Compute v3 extensions</a></li>
-                              <li><a href="api-ref-identity.html">Identity Service</a></li>
-                              <li><a href="api-ref-image.html">Image Service</a></li>  
-                              <li><a href="api-ref-networking.html">Networking</a></li>
-                              <li><a href="api-ref-objectstorage.html">Object Storage</a></li>
-                              <li><a href="api-ref-orchestration.html">Orchestration</a></li>
-                              <li><a href="api-ref-telemetry.html">Telemetry</a></li>
+                              <xsl:apply-templates
+                                select="//d:preface//d:itemizedlist[@xml:id='service-list']/d:listitem/d:para/d:link"
+                                mode="menu-toc"/>
                             </ul>
                           </li>
                         </ul>
@@ -159,6 +153,15 @@
             <li><a href="#{@xml:id}"><xsl:value-of select="d:title"/></a></li>
           </xsl:template>
 
+          <xsl:template match="d:link" mode="menu-toc">
+            <li>
+              <a href="{@xlink:href}">
+                <xsl:value-of select="."/>
+              </a>
+            </li>
+          </xsl:template>
+          <!-- Do nothing when you see this list - just used to seed the menu -->
+          <xsl:template match="d:itemizedlist[@xml:id='service-list']"/>
           <xsl:template match="d:section">
             <div id="{@xml:id}">
               <div class="subhead">
