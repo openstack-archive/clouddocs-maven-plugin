@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
         <xsl:stylesheet
           xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:xhtml="http://www.w3.org/1999/xhtml"
           xmlns:wadl="http://wadl.dev.java.net/2009/02"
           xmlns:rax="http://docs.rackspace.com/api"
@@ -80,6 +81,16 @@
                           <xsl:apply-templates select="d:chapter" mode="toc"/>
                           <li>
                             <a href="api-ref.html">Openstack API Docs</a>
+                           
+                          <!--<xsl:apply-templates select="d:chapter" mode="toc"/> -->
+                            
+                              <ul class="nav active">
+                                <xsl:apply-templates select="d:preface//itemizedlist[@xml:id='service-list']/listitem/para/link" mode="toc"/>
+                              </ul>
+                              
+                         <!-- <xsl:apply-templates select="/itemizedlist/listitem/link[text()]" mode="toc"/>
+                          <li>
+                            <a href="api-ref.html">Openstack API Docs</a>
                             <ul class="nav active">
                               <li><a href="api-ref-blockstorage.html">Block Storage Service</a></li> 
                               <li><a href="api-ref-compute.html">Compute</a></li>
@@ -91,8 +102,8 @@
                               <li><a href="api-ref-orchestration.html">Orchestration</a></li>
                               <li><a href="api-ref-telemetry.html">Telemetry</a></li>
                             </ul>
-                          </li>
-                        </ul>
+                          </li>-->
+</li></ul>
                         <div class="row">
                           <div class="col-md-7">
                             <label class="sr-only" for="search-box">Search on this page</label>
@@ -151,7 +162,7 @@
           <xsl:template match="d:section" mode="toc">
             <li><a href="#{@xml:id}"><xsl:value-of select="d:title"/></a></li>
           </xsl:template>
-
+          
           <xsl:template match="d:section">
             <div id="{@xml:id}">
               <div class="subhead">
@@ -171,6 +182,14 @@
     <li><a href="#{@xml:id}"><xsl:value-of select="translate(d:title,' ','&#160;')"/></a></li>
     <li class="divider"></li>
   </xsl:template>
+
+<xsl:template match="d:preface//itemizedlist[@xml:id='service-list']/listitem/para/link" mode="toc">          
+  <li><a href="#{@xlink:href}">Test</a></li>
+  <xsl:message terminate="no">
+    HERE: in preface itemizedlist!
+  </xsl:message>
+</xsl:template>
+          
 
   <xsl:template match="@*|node()" mode="toc">
     <xsl:apply-templates mode="toc"/>
@@ -517,7 +536,6 @@
               </xsl:choose>
             </xsl:if>
           </xsl:template>
-
 
           <xsl:template name="statusCodeList">
             <xsl:param name="codes" select="'400 500 &#x2026;'"/>
