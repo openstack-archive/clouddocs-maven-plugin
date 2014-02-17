@@ -26,9 +26,9 @@
           <xsl:param name="wadl.norequest.msg"><p class="nobody">This operation does not require a request body.</p></xsl:param>
           <xsl:param name="wadl.noresponse.msg"><p class="nobody">This operation does not return a response body.</p></xsl:param>
           <xsl:param name="wadl.noreqresp.msg"><p class="nobody">This operation does not require a request body and does not return a response body.</p></xsl:param>
-	  <xsl:param name="googleAnalyticsId"/>
-	  <xsl:param name="googleAnalyticsDomain"/>
-	  <xsl:param name="enableGoogleAnalytics">0</xsl:param>
+	        <xsl:param name="googleAnalyticsId"/>
+	        <xsl:param name="googleAnalyticsDomain"/>
+	        <xsl:param name="enableGoogleAnalytics">0</xsl:param>
 
           <xsl:template match="node() | @*">
             <xsl:copy>
@@ -83,12 +83,12 @@
                         <ul class="nav api-sidenav">
                           <xsl:apply-templates select="d:chapter" mode="toc"/>
                           <li>
-                            <xsl:apply-templates
-                              select="//d:preface//d:title"
-                              mode="menu-toc"/>
+                            <!-- API ref page TOC -->
+                            <xsl:apply-templates select="//d:preface//d:title" mode="menu-toc"/>
                             <ul class="nav active">
+                              <!-- add list of all services to the sidebar menu -->
                               <xsl:apply-templates
-                                select="//d:preface//d:itemizedlist[@xml:id='service-list']/d:listitem/d:para/d:link"
+                                select="//d:book//d:itemizedlist[@xml:id='service-list']/d:listitem/d:para/d:link"
                                 mode="menu-toc"/>
                             </ul>
                           </li>
