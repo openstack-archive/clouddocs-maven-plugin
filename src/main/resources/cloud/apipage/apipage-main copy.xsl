@@ -82,16 +82,19 @@
                       <div class="api-sidebar" data-spy="affix" data-offset-top="80" data-offset-bottom="0">
                         <ul class="nav api-sidenav">
                           <xsl:apply-templates select="d:chapter" mode="toc"/>
-                          <li>
+                       <li>
                             <xsl:apply-templates
                               select="//d:preface//d:title"
                               mode="menu-toc"/>
-                            <ul class="nav active">
-                              <xsl:apply-templates
-                                select="//d:book//d:itemizedlist[@xml:id='service-list']/d:listitem/d:para/d:link"
+                            <ul class="nav active"> 
+                         <xsl:apply-templates
+                                select="//d:preface//d:itemizedlist[@xml:id='service-list']/d:listitem/d:para/d:link"
                                 mode="menu-toc"/>
+                          <xsl:apply-templates
+                            select="//d:chapter//d:info[@xreflabel]|//d:preface//d:info[@xreflabel]"
+                            mode="menu-toc"/>
                             </ul>
-                          </li>
+                     </li>
                         </ul>
                         <div class="row">
                           <div class="col-md-7">
@@ -155,16 +158,16 @@
             <li><a href="#{@xml:id}"><xsl:value-of select="d:title"/></a></li>
           </xsl:template>
 
-          <xsl:template match="//d:preface//d:title" mode="menu-toc">
+          <xsl:template match="//d:preface//d:info[@xreflabel]" mode="menu-toc">
             <li>
-              <a href="api-ref.html"><xsl:value-of select="."/></a>
+              <a href="#{@xml:id}"><xsl:value-of select="d:title"/></a>
             </li>
           </xsl:template>
 
-          <xsl:template match="d:link" mode="menu-toc">
+          <xsl:template match="d:info[@xreflabel]" mode="menu-toc">
             <li>
-              <a href="{@xlink:href}">
-                <xsl:value-of select="."/>
+              <a href="{@xreflabel}">
+                <xsl:value-of select="d:title"/>
               </a>
             </li>
           </xsl:template>
