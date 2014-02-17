@@ -83,12 +83,10 @@
                         <ul class="nav api-sidenav">
                           <xsl:apply-templates select="d:chapter" mode="toc"/>
                           <li>
-                            <xsl:apply-templates
-                              select="//d:preface//d:title"
-                              mode="menu-toc"/>
+                            <xsl:apply-templates select="//d:preface//d:title" mode="menu-toc"/>
                             <ul class="nav active">
                               <xsl:apply-templates
-                                select="//d:preface//d:itemizedlist[@xml:id='service-list']/d:listitem/d:para/d:link"
+                                select="//d:book//d:itemizedlist[@xml:id='service-list']/d:listitem/d:para/d:link"
                                 mode="menu-toc"/>
                             </ul>
                           </li>
