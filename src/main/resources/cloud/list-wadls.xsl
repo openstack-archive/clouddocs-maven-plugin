@@ -16,6 +16,7 @@
     -->
 
     <xsl:param name="project.build.directory"/>
+    <xsl:param name="targetHtmlContentDir"/>
 
     <xsl:variable name="wadls">
         <xsl:for-each select="//wadl:resource[@href]|//wadl:resources[@href]">
@@ -41,16 +42,18 @@
             <xsl:for-each
                 select="distinct-values($wadls/wadl/@href)">
                 <xsl:variable name="checksum" select="rax:checksum(.)"/>
-                <xsl:variable name="newhref" select="concat($project.build.directory,'/generated-resources/xml/xslt/',$checksum,'-',replace(., '^(.*/)?([^/]+)$', '$2'))"/>
+                <xsl:variable name="wadl-filename" select="replace(., '^(.*/)?([^/]+)$', '$2')"/>
+                <xsl:variable name="wadl-filename-base" select="if(contains($wadl-filename,'.')) then (string-join(tokenize($wadl-filename, '\.')[not(position() = last())],'.')) else $wadl-filename"/>
+                <xsl:variable name="newhref" select="concat($project.build.directory,'/generated-resources/xml/xslt/',$checksum,'-',$wadl-filename)"/>
                 <!-- Only add this wadl to the list if the new wadl does not already exist -->
                 <xsl:choose>
                     <xsl:when test="unparsed-text-available(.)">
                         <xsl:choose>
                             <xsl:when test="not(unparsed-text-available($newhref))">
-                                <wadl href="{.}" newhref="{$newhref}" checksum="{$checksum}"/>
+                                <wadl href="{.}" newhref="{$newhref}" checksum="{$checksum}" targetHtmlContentDir="{$targetHtmlContentDir}" basefilename="{$wadl-filename-base}"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <wadl-already-normalized href="{.}" newhref="{$newhref}" checksum="{$checksum}"/>
+                                <wadl-already-normalized href="{.}" newhref="{$newhref}" checksum="{$checksum}" targetHtmlContentDir="{$targetHtmlContentDir}" basefilename="{$wadl-filename-base}"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
@@ -63,6 +66,11 @@
     </xsl:variable>
 
     <xsl:template match="/">
+        <xsl:if test="count($wadllist//@basefilename) != count(distinct-values($wadllist//@basefilename))">
+            <xsl:message>
+                WARNING: This document contains more than one wadl with the same base file name.
+            </xsl:message>
+        </xsl:if>
         <xsl:result-document href="/tmp/wadllist.xml">
                 <xsl:copy-of select="$wadllist/*"/>
         </xsl:result-document>
