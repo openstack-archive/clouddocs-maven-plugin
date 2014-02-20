@@ -398,11 +398,13 @@
 			<xsl:apply-templates select=".//wadl:representation[parent::wadl:request]">
 				<xsl:with-param name="method.title" select="$method.title"/>
 			</xsl:apply-templates>
-			
-            <!-- We allow no request text and there is no request... -->
-	   		<!-- Note that wadl:request[@mediaType = 'application/xml' and not(@element)] is there to catch the situation where -->
-	    	<!-- a request exists only to insert a header sample with no body -->
-            <xsl:if test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]])">
+
+				<!-- Here we try to figure out is we should add a "No request body required" message -->
+				<!-- 1. We rule out that there's a PI telling us to skip the message. -->
+				<!-- 2. If we find a request with a media type of application/xml that doesn't have an element attr or -->
+				<!-- 3. If we find a request with a media type of application/json that doesn't contains a { -->
+				<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
+				<xsl:if test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:request[wadl:representation[@mediaType = 'application/json' and not(contains(.//xsdxt:code,'{')) and not(contains(.//xsdxt:code,'['))]])">
                     <xsl:copy-of select="$wadl.norequest.msg"/>
                 </xsl:if>
 			</section>
@@ -419,19 +421,20 @@
                 	<xsl:with-param name="style" select="'header'"/>
                 </xsl:call-template>
             </xsl:if>
-			
+
 			<!-- TODO: Refactor to generate one example for each representation.-->
 				<xsl:apply-templates select=".//wadl:representation[parent::wadl:response[starts-with(normalize-space(@status),'2')]]">
 				<xsl:with-param name="method.title" select="$method.title"/>
-			</xsl:apply-templates>
-			
-            <!-- we allow no response text and we dont have a 200 level response with a representation -->
-            <xsl:if test="not($skipNoResponseText) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
-                <!-- If we are also missing request text and it's not
-                     supressed then output the noreqresp message,
-                     otherwise output the noresponse message -->
-            	<xsl:copy-of select="$wadl.noresponse.msg"/>
-             </xsl:if>
+			</xsl:apply-templates> 
+
+				<!-- Here we try to figure out is we should add a "No response body required" message -->
+				<!-- 1. We rule out that there's a PI telling us to skip the message. -->
+				<!-- 2. If we find a 2xx response with a media type of application/xml that doesn't have an element attr or -->
+				<!-- 3. If we find a 2xx response with a media type of application/json that doesn't contains a { -->
+				<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
+				<xsl:if test="not($skipNoResponseText) and (wadl:response[starts-with(normalize-space(@status),'2') and ./wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:response[starts-with(normalize-space(@status),'2') and wadl:representation[@mediaType = 'application/json' and not(contains(.//xsdxt:code,'{')) and not(contains(.//xsdxt:code,'['))]])">
+					<xsl:copy-of select="$wadl.noresponse.msg"/>
+				</xsl:if>
 			</section>
 			</xsl:variable>
 			<xsl:if test="$requestSection//d:section/*[not(self::d:title)]">
@@ -450,7 +453,7 @@
 			<td><xsl:apply-templates select="wadl:doc/node()"/></td>
 		</tr>
 	</xsl:template>
-	
+
 	<xsl:template match="wadl:representation">
 		<xsl:param name="method.title"/>
 		<xsl:variable name="plainParams">
