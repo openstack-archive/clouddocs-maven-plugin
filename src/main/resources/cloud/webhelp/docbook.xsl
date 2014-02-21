@@ -839,5 +839,47 @@ ERROR: Feedback email not set but internal comments are enabled.
         <span><xsl:apply-templates/></span>
     </xsl:template>
     
+
+<xsl:template match="d:copyright" mode="book.titlepage.recto.mode">
+
+  <xsl:variable name="buildyear">
+    <xsl:call-template name="datetime.format">
+      <xsl:with-param name="date" select="date:date-time()"/>
+      <xsl:with-param name="format" select="'Y'"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="$branding = 'rackspace'"><p><xsl:call-template name="dingbat">
+      <xsl:with-param name="dingbat">copyright</xsl:with-param>
+    </xsl:call-template><script type="text/javascript">document.write(new Date().getFullYear())</script><noscript><xsl:value-of select="$buildyear"/></noscript> Rackspace, US Inc.</p></xsl:when>
+    <xsl:otherwise>
+  <xsl:if test="generate-id() = generate-id(//d:refentryinfo/d:copyright[1])
+      and ($stylesheet.result.type = 'html' or $stylesheet.result.type = 'xhtml')">
+    <h2>Copyright</h2>
+  </xsl:if>
+
+  <p>
+    <xsl:apply-templates select="." mode="common.html.attributes"/>
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key" select="'Copyright'"/>
+    </xsl:call-template>
+    <xsl:call-template name="gentext.space"/>
+    <xsl:call-template name="dingbat">
+      <xsl:with-param name="dingbat">copyright</xsl:with-param>
+    </xsl:call-template>
+    <xsl:call-template name="gentext.space"/>
+    <xsl:call-template name="copyright.years">
+      <xsl:with-param name="years" select="d:year"/>
+      <xsl:with-param name="print.ranges" select="$make.year.ranges"/>
+      <xsl:with-param name="single.year.ranges"
+                      select="$make.single.year.ranges"/>
+    </xsl:call-template>
+    <xsl:call-template name="gentext.space"/>
+    <xsl:apply-templates select="d:holder" mode="titlepage.mode"/>
+  </p>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
  
 </xsl:stylesheet>
