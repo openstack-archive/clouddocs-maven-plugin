@@ -6,7 +6,8 @@
 <xsl:stylesheet exclude-result-prefixes="d"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://docbook.org/ns/docbook"
-		xmlns:exslt="http://exslt.org/common" 
+                xmlns:date="http://exslt.org/dates-and-times"
+		xmlns:exslt="http://exslt.org/common"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.1">
 
@@ -1333,5 +1334,35 @@ set       toc,title
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+<xsl:template match="d:copyright" mode="book.titlepage.verso.auto.mode">
+  <xsl:choose>
+    <xsl:when test="$branding = 'rackspace'"><xsl:call-template name="dingbat">
+      <xsl:with-param name="dingbat">copyright</xsl:with-param>
+      </xsl:call-template><xsl:call-template name="datetime.format">
+      <xsl:with-param name="date" select="date:date-time()"/>
+      <xsl:with-param name="format" select="'Y'"/>
+      </xsl:call-template> Rackspace, US Inc.</xsl:when>
+    <xsl:otherwise>
+  <xsl:call-template name="gentext">
+    <xsl:with-param name="key" select="'Copyright'"/>
+  </xsl:call-template>
+  <xsl:call-template name="gentext.space"/>
+  <xsl:call-template name="dingbat">
+    <xsl:with-param name="dingbat">copyright</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="gentext.space"/>
+  <xsl:call-template name="copyright.years">
+    <xsl:with-param name="years" select="d:year"/>
+    <xsl:with-param name="print.ranges" select="$make.year.ranges"/>
+    <xsl:with-param name="single.year.ranges"
+                    select="$make.single.year.ranges"/>
+  </xsl:call-template>
+  <xsl:call-template name="gentext.space"/>
+  <xsl:apply-templates select="d:holder" mode="titlepage.mode"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 </xsl:stylesheet>
