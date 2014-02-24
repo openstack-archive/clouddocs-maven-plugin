@@ -175,6 +175,9 @@
       </attribute>
   </optional>
   <optional>
+    <attribute name="xml:id"/>
+  </optional>
+  <optional>
       <attribute name="href">
         <data type="anyURI"/>
       </attribute>

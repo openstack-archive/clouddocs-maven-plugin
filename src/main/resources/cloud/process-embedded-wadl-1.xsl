@@ -6,7 +6,8 @@
 	xmlns="http://docbook.org/ns/docbook" 
 	exclude-result-prefixes="wadl rax d" version="2.0">
 
-	<xsl:import href="classpath:///cloud/date.xsl"/>
+	 <xsl:import href="classpath:///cloud/date.xsl"/> 
+	<!--<xsl:import href="date.xsl"/>-->
 
 	<doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
 		<desc> 
@@ -24,34 +25,48 @@
 	</doc>
 
 	<xsl:template match="@*|node()">
+		<xsl:param name="xmlid"/>
 		<xsl:copy>
 			<xsl:if test="self::wadl:method[ancestor::wadl:application]">
 				<xsl:attribute name="rax:original-wadl" select="ancestor::wadl:application/@rax:original-wadl"/>
 			</xsl:if>
-			<xsl:apply-templates select="@*|node()"/>
+			<xsl:apply-templates select="@*|node()">
+				<xsl:with-param name="xmlid" select="$xmlid"/>
+			</xsl:apply-templates>
 		</xsl:copy>
 	</xsl:template>
 
 	<xsl:template match="wadl:resources[@href]">
-		<xsl:apply-templates select="document(@href)//rax:resources"/>
+		<xsl:apply-templates select="document(@href)//rax:resources">
+			<xsl:with-param name="xmlid" select="@xml:id"/>
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="rax:resources">
+		<xsl:param name="xmlid"/>
 		<xsl:choose>
 			<xsl:when test=".//processing-instruction('rax') = 'start-sections'">
-				<xsl:apply-templates select="rax:resource"/>
+				<xsl:apply-templates select="rax:resource">
+					<xsl:with-param name="xmlid" select="$xmlid"/>
+				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:apply-templates select="//wadl:resources"/>
+				<xsl:apply-templates select="//wadl:resources">
+					<xsl:with-param name="xmlid" select="$xmlid"/>
+				</xsl:apply-templates>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="rax:resource[not(parent::*[./processing-instruction('rax') = 'start-sections'])]">
-		<xsl:apply-templates/>
+		<xsl:param name="xmlid"/>
+		<xsl:apply-templates>
+			<xsl:with-param name="xmlid" select="$xmlid"/>
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="rax:resource[parent::*[./processing-instruction('rax') = 'start-sections']]">
+		<xsl:param name="xmlid"/>
 		<xsl:variable name="rax-id" select="@rax:id"/>
 		<section
 			xml:id="{translate(//wadl:resource[@id = $rax-id]/@path,'/{}:','___')}">
@@ -71,8 +86,13 @@
 				</xsl:choose>
 			</title>
 			<xsl:apply-templates
-				select="//wadl:resource[@id = current()/@rax:id]/wadl:doc/*"/>
+				select="//wadl:resource[@id = current()/@rax:id]/wadl:doc/*">
+				<xsl:with-param name="xmlid" select="@xmlid"/>
+			</xsl:apply-templates>
 			<wadl:resources>
+				<xsl:if test="normalize-space($xmlid) != ''">
+					<xsl:attribute name="xml:id" select="$xmlid"/>
+				</xsl:if>
 				<xsl:apply-templates select="//wadl:resource[@id = current()/@rax:id]"/>
 				<xsl:apply-templates select="rax:resource" mode="continue-section"/>
 			</wadl:resources>
