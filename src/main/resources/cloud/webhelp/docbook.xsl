@@ -771,10 +771,6 @@ ERROR: Feedback email not set but internal comments are enabled.
   </xsl:template>
 
 
-<xsl:template match="d:sidebar/d:title">
-  <b><xsl:apply-templates/></b>
-</xsl:template>
-
 <xsl:template name="anchor">
   <xsl:param name="node" select="."/>
   <xsl:param name="conditional" select="1"/>

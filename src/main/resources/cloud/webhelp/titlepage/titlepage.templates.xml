@@ -684,12 +684,6 @@
 
 <!-- ==================================================================== -->
 <t:titlepage t:element="sidebar" t:wrapper="div" class="titlepage">
-  <t:titlepage-content t:side="recto">
-    <title
-           t:named-template="formal.object.heading"
-           param:object="ancestor-or-self::sidebar[1]"/>
-    <subtitle/>
-  </t:titlepage-content>
 
   <t:titlepage-content t:side="verso">
   </t:titlepage-content>
