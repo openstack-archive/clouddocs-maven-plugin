@@ -323,7 +323,7 @@ ERROR: Feedback email not set but internal comments are enabled.
         <a id="logABugLink1" href="" target="_blank" title="Found an error? Report a bug against this page"><i class="icon-bug"><xsl:comment/></i></a>
       </div>
     </xsl:if>
-    <xsl:if test="$social.icons != '0' and $security = 'external' ">
+    <xsl:if test="$social.icons != '0' and $security = 'external' and $branding != 'rackspace'">
 <!--social buttons-->
 <div id="fb-root">&#160;</div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"><xsl:comment> </xsl:comment></script>
 <script>(function(d, s, id) {
