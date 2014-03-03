@@ -3,11 +3,12 @@
 <!ENTITY lowercase "'abcdefghijklmnopqrstuvwxyz'">
 <!ENTITY uppercase "'ABCDEFGHIJKLMNOPQRSTUVWXYZ'">
  ]>
-<xsl:stylesheet exclude-result-prefixes="d"
+<xsl:stylesheet exclude-result-prefixes="d date ng exsl"
                 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
         xmlns:d="http://docbook.org/ns/docbook"
-xmlns:exsl="http://exslt.org/common"
+        xmlns:exsl="http://exslt.org/common"
+        xmlns:date="http://exslt.org/dates-and-times"
         xmlns:ng="http://docbook.org/docbook-ng" 
         xmlns:db="http://docbook.org/ns/docbook"
         version="1.0" xmlns="http://www.w3.org/1999/xhtml">
@@ -27,6 +28,7 @@ xmlns:exsl="http://exslt.org/common"
             cdata-section-elements=""/>
 
     <xsl:param name="meta.robots"/>
+    <xsl:param name="repository.commit"/>
     <xsl:param name="meta.robots.calculated">
       <xsl:choose>
 	<xsl:when test="$meta.robots = '1'">NOINDEX, NOFOLLOW</xsl:when>
@@ -198,15 +200,25 @@ These problems go away when you add this IE=7 mode meta tag.
 
 
     <xsl:template name="user.head.content">
+      <xsl:variable name="builddate">
+	<xsl:call-template name="datetime.format">
+          <xsl:with-param name="date" select="date:date-time()"/>
+          <xsl:with-param name="format" select="'Y-m-d'"/>
+          </xsl:call-template>T<xsl:call-template name="datetime.format">
+          <xsl:with-param name="date" select="date:date-time()"/>
+          <xsl:with-param name="format" select="'X'"/>
+        </xsl:call-template>
+      </xsl:variable>
   	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <!--  <xsl:message>
             webhelp.tree.cookie.id = <xsl:value-of select="$webhelp.tree.cookie.id"/> +++ <xsl:value-of select="count(//node())"/>
             $webhelp.indexer.language = <xsl:value-of select="$webhelp.indexer.language"/> +++ <xsl:value-of select="count(//node())"/>
         </xsl:message>-->
-	
 	<xsl:if test="$meta.robots.calculated != ''">
 	  <meta name="robots" content="{$meta.robots.calculated}"/>
 	</xsl:if>
+	<meta name="git-sha" content="{$repository.commit}"/>
+	<meta name="buildTime" content="{$builddate}"/>
         <script type="text/javascript">
             //The id for tree cookie
             var treeCookieId = "<xsl:value-of select="$webhelp.tree.cookie.id"/>";
