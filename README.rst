@@ -69,6 +69,28 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.14.0 (March 3, 2014)
+============================================================
+-  Features and updates
+
+   -  Generate wadl and json representations of the API in the content directory. Using new wadl-tools version.
+   -  Support adding an xml:id attribute to the wadl:resources element in the DocBook content that will make the resulting section URIs unique.
+   -  For Rackspace branding, use new copyright format.
+   -  Remove legacy anchor in DocBook generated from wadl that could result in duplicate ids in some situations.
+   -  In content generated from wadl, no longer suppress content marked role="shortdesc" from the method docs.
+   -  Apiref output: Automatically generate the toc content.
+   -  Apiref output: Support Google Analytics parameters.
+   -  Webhelp output: Support using path delimiters in webhelpDirname parameter.
+   -  Webhelp output: Turn off social icons when branding is set to rackspace.
+
+-  Bug fixes
+
+   -  Support automatically adding "No request body required" and "No response body required" text for JSON bodies.
+   -  Fix bug resulting in spurious "SEVERE: Image not available." messages on stdout.
+   -  In the generated wadl reference, add a leading / to the URI if necessary.
+   -  Fix bug where search highlighting interfered with syntax highlighting.
+   -  Fix bug resulting in empty <b/> elements before sidebar/title elements.
+
 clouddocs-maven-plugin 1.13.0 (January 23, 2014)
 ============================================================
 -  Features and updates
