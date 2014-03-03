@@ -531,12 +531,10 @@ setting failOnValidationError to no in your pom.
         xmlns:l="http://xproc.org/library" type="l:normalize-wadls"
         xmlns:c="http://www.w3.org/ns/xproc-step" version="1.0"
         name="normalize-wadls-step">
-
-        <!-- 
-            TODO: 
-            * Test to make sure this works when wadls, xsds, are fetched over http, https 
-            * Test with api.openstack.org xpl
-        -->
+        
+        <p:documentation>
+            This step takes any wadls mentioned in the source document and normalizes them. 
+        </p:documentation>
 
         <p:input port="source" primary="true"/>
 
@@ -602,6 +600,8 @@ setting failOnValidationError to no in your pom.
                 <p:variable name="href" select="/*/@href"/>
                 <p:variable name="newhref" select="/*/@newhref"/>
                 <p:variable name="checksum" select="/*/@checksum"/>
+                <p:variable name="targetHtmlContentDir" select="/*/@targetHtmlContentDir"/>
+                <p:variable name="basefilename" select="/*/@basefilename"/>
                 <p:load name="wadl">
                     <p:with-option name="href" select="$href"/>
                 </p:load>
@@ -645,16 +645,65 @@ setting failOnValidationError to no in your pom.
                   <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
                    <p:with-option name="href" select="$newhref"/>
                   </p:store>
-              <p:for-each>
-              <p:iteration-source>
-               <p:pipe step="normalize-wadl" port="secondary"/>
-              </p:iteration-source>
-              <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
-               <p:with-option name="href"
-                select="concat($project.build.directory,'/generated-resources/xml/xslt/',$checksum,'-',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))"
-                />
-              </p:store>
-            </p:for-each>
+                <p:xslt name="clean-wadl">
+                    <p:input port="source">
+                        <p:pipe port="result" step="normalize-wadl"/>
+                    </p:input>
+                    <p:input port="stylesheet">
+                        <p:document href="classpath:///cloud/webhelp/clean-wadl.xsl"/>
+                    </p:input>
+                    <p:input port="parameters">
+                        <p:pipe step="normalize-wadls-step" port="parameters"/>
+                    </p:input>
+                </p:xslt>
+                <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
+                    <p:with-option name="href" select="concat($targetHtmlContentDir,'/', $basefilename, '.wadl')"/>
+                </p:store>
+                  <p:xslt name="wadl2jsonx">
+                      <p:input port="source">
+                          <p:pipe port="result" step="normalize-wadl"/>
+                      </p:input>
+                      <p:input port="stylesheet">
+                          <p:document href="classpath:///cloud/normalizeWadl/wadl2apiary-jsonx.xsl"/>
+                      </p:input>
+                      <p:input port="parameters">
+                          <p:pipe step="normalize-wadls-step" port="parameters"/>
+                      </p:input>
+                  </p:xslt>
+                  <p:xslt name="jsonx2json">
+                    <p:input port="source">
+                        <p:pipe port="result" step="wadl2jsonx"/>
+                    </p:input>
+                    <p:input port="stylesheet">
+                        <p:document href="classpath:///cloud/normalizeWadl/jsonx2json.xsl"/>
+                    </p:input>
+                    <p:input port="parameters">
+                        <p:pipe step="normalize-wadls-step" port="parameters"/>
+                    </p:input>
+                   </p:xslt>
+                  <p:store encoding="utf-8" indent="true" method="text">
+                      <p:with-option name="href" select="concat($targetHtmlContentDir,'/', $basefilename, '.json')"/>
+                   </p:store>
+                <p:for-each>
+                    <p:iteration-source>
+                        <p:pipe step="normalize-wadl" port="secondary"/>
+                    </p:iteration-source>
+                    <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
+                        <p:with-option name="href"
+                            select="concat($project.build.directory,'/generated-resources/xml/xslt/',$checksum,'-',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))"
+                        />
+                    </p:store>
+                </p:for-each>
+                <p:for-each>
+                    <p:iteration-source>
+                        <p:pipe step="normalize-wadl" port="secondary"/>
+                    </p:iteration-source>
+                    <p:store encoding="utf-8" indent="true" omit-xml-declaration="false">
+                        <p:with-option name="href"
+                            select="concat($targetHtmlContentDir,'/', $checksum,'-',replace(base-uri(/*), '^(.*/)?([^/]+)$', '$2'))"
+                        />
+                    </p:store>
+                </p:for-each>
            </p:for-each>
         </p:group>
         
