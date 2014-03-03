@@ -76,7 +76,6 @@ clouddocs-maven-plugin 1.14.0 (March 3, 2014)
    -  Generate wadl and json representations of the API in the content directory. Using new wadl-tools version.
    -  Support adding an xml:id attribute to the wadl:resources element in the DocBook content that will make the resulting section URIs unique.
    -  For Rackspace branding, use new copyright format.
-   -  Remove legacy anchor in DocBook generated from wadl that could result in duplicate ids in some situations.
    -  In content generated from wadl, no longer suppress content marked role="shortdesc" from the method docs.
    -  Apiref output: Automatically generate the toc content.
    -  Apiref output: Support Google Analytics parameters.
