@@ -69,6 +69,13 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.14.0 (March 5, 2014)
+============================================================
+-  Bug fixes
+
+   -  Address https://bugs.launchpad.net/openstack-manuals/+bug/1288395
+
+
 clouddocs-maven-plugin 1.14.0 (March 3, 2014)
 ============================================================
 -  Features and updates
