@@ -296,7 +296,7 @@
 			<!-- Method Docs -->
 			<xsl:choose>
 				<xsl:when test="wadl:doc//db:*[@role = 'shortdesc']" xmlns:db="http://docbook.org/ns/docbook">
-					<xsl:apply-templates select="wadl:doc/*"/>
+					<xsl:apply-templates select="wadl:doc/*[not(@role='shortdesc')]"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<!-- Suppress because everything will be in the table -->
