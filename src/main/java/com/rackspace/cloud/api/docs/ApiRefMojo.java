@@ -109,7 +109,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
         map.put("enableGoogleAnalytics", enableGoogleAnalytics);
         map.put("googleAnalyticsId", googleAnalyticsId);
         map.put("googleAnalyticsDomain", googleAnalyticsDomain);
-
+	map.put("targetHtmlContentDir", new File(getTargetDirectory(),  "/wadls/"));
         return CalabashHelper.createSource(getLog(), source, pathToPipelineFile, map);
     }
 }

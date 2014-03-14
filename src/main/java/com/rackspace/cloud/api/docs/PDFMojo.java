@@ -551,6 +551,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	    }
 
 	map.put("targetDirectory", getTargetDirectory().getParentFile());
+	map.put("targetHtmlContentDir", new File(getTargetDirectory(),  "/wadls/"));
         map.put("security", security);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("replacementsFile", replacementsFile);
