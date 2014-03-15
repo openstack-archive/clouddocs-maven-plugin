@@ -404,7 +404,7 @@
 				<!-- 2. If we find a request with a media type of application/xml that doesn't have an element attr or -->
 				<!-- 3. If we find a request with a media type of application/json that doesn't contains a { -->
 				<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
-				<xsl:if test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:request[wadl:representation[@mediaType = 'application/json' and not(contains(.//xsdxt:code,'{')) and not(contains(.//xsdxt:code,'['))]])">
+				<xsl:if test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:request[wadl:representation[@mediaType = 'application/json' and not((for $code in .//xsdxt:code return if(contains($code,'{') or contains($code,'[')) then 1 else 0) = 1)]])">
                     <xsl:copy-of select="$wadl.norequest.msg"/>
                 </xsl:if>
 			</section>
@@ -432,7 +432,7 @@
 				<!-- 2. If we find a 2xx response with a media type of application/xml that doesn't have an element attr or -->
 				<!-- 3. If we find a 2xx response with a media type of application/json that doesn't contains a { -->
 				<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
-				<xsl:if test="not($skipNoResponseText) and (wadl:response[starts-with(normalize-space(@status),'2') and ./wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:response[starts-with(normalize-space(@status),'2') and wadl:representation[@mediaType = 'application/json' and not(contains(.//xsdxt:code,'{')) and not(contains(.//xsdxt:code,'['))]])">
+				<xsl:if test="not($skipNoResponseText) and (wadl:response[starts-with(normalize-space(@status),'2') and ./wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:response[starts-with(normalize-space(@status),'2') and wadl:representation[@mediaType = 'application/json' and not((for $code in .//xsdxt:code return if(contains($code,'{') or contains($code,'[')) then 1 else 0) = 1)]])">
 					<xsl:copy-of select="$wadl.noresponse.msg"/>
 				</xsl:if>
 			</section>
