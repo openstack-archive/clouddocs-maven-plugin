@@ -28,7 +28,9 @@
 
   <xsl:variable name="profiled-nodes" select="exslt:node-set($profiled-content)"/>
 
-  <xsl:param name="rackspace.font">
+  <xsl:param name="monospaceFont"/>
+
+  <xsl:param name="bodyFont">
     <xsl:choose>
       <xsl:when test="starts-with(/*/@xml:lang, 'zh')">AR-PL-New-Sung</xsl:when>
       <xsl:when test="starts-with(/*/@xml:lang, 'ja')">TakaoGothic</xsl:when>
@@ -38,6 +40,7 @@
 
   <xsl:param name="monospace.font.family">
     <xsl:choose>
+      <xsl:when test="$monospaceFont != ''"><xsl:value-of select="$monospaceFont"/></xsl:when>
       <xsl:when test="starts-with(/*/@xml:lang, 'zh')">AR-PL-New-Sung</xsl:when>
       <xsl:when test="starts-with(/*/@xml:lang, 'ja')">TakaoGothic</xsl:when>
       <xsl:otherwise>monospace</xsl:otherwise>
@@ -183,7 +186,7 @@ set       toc,title
   <xsl:param name="use.extensions" select="1"/>
   <xsl:param name="callouts.extension" select="1"/>
   <xsl:param name="textinsert.extension" select="1"/>
-  <xsl:param name="title.fontset" select="$rackspace.font"/>
+  <xsl:param name="title.fontset" select="$bodyFont"/>
   <!--
       Don't use dingbats for things like the copyright symbol.  Assume
       our font already has it.
@@ -210,37 +213,37 @@ set       toc,title
 
   <!-- Root Text Properties  -->
   <xsl:attribute-set name="root.properties">
-    <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
+    <xsl:attribute name="font-family"><xsl:value-of select="$bodyFont"/></xsl:attribute>
     <xsl:attribute name="font-size">10.5pt</xsl:attribute>
   </xsl:attribute-set>
 
   <!-- Title Properties (Sections/Components) -->
   <xsl:attribute-set name="component.title.properties">
-    <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
+    <xsl:attribute name="font-family"><xsl:value-of select="$bodyFont"/></xsl:attribute>
     <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.title.properties">
     <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
-    <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
+    <xsl:attribute name="font-family"><xsl:value-of select="$bodyFont"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="header.content.properties">
-      <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
+      <xsl:attribute name="font-family"><xsl:value-of select="$bodyFont"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="footer.content.properties">
-      <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
+      <xsl:attribute name="font-family"><xsl:value-of select="$bodyFont"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="formal.title.properties">
       <xsl:attribute name="color">rgb(176,0,14)</xsl:attribute>
-      <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
+      <xsl:attribute name="font-family"><xsl:value-of select="$bodyFont"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="admonition.title.properties">
       <xsl:attribute name="color">rgb(196,0,34)</xsl:attribute>
-      <xsl:attribute name="font-family"><xsl:value-of select="$rackspace.font"/></xsl:attribute>
+      <xsl:attribute name="font-family"><xsl:value-of select="$bodyFont"/></xsl:attribute>
   </xsl:attribute-set>
 
 
