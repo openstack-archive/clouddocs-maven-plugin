@@ -55,8 +55,17 @@
                 <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery.qtip-1.0.0-rc3/jquery.qtip-1.0.0-rc3.min.js">
                    <xsl:comment>jQuery plugin for glossary popups. </xsl:comment>
                    $('a[title]').qtip({ style: { name: 'cream', tip: true } })
-                </script>
 
+                   <xsl:if test="$branding = 'rackspace'">
+                     var s = document.createElement( 'script' );
+                     if ( location.hostname == "docs.rackspace.com") {
+                       s.setAttribute('src', "https://tags.tiqcdn.com/utag/rackspace/docs/prod/utag.js");
+                       document.body.appendChild( s ); }
+                     else if ( location.hostname == "docs-staging.rackspace.com") {
+                       s.setAttribute('src', "https://tags.tiqcdn.com/utag/rackspace/docs/qa/utag.js");
+                       document.body.appendChild( s ); }
+                   </xsl:if>
+		</script>
             </body>
         </html>
         <xsl:value-of select="$chunk.append"/>
