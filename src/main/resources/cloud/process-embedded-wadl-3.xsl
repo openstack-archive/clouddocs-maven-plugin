@@ -22,6 +22,8 @@
 	
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
 
+	<xsl:param name="request-mode">request</xsl:param>
+	<xsl:param name="response-mode">response</xsl:param>
 	<xsl:template match="@*|node()">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|node()"/>
@@ -310,8 +312,8 @@
 				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
 					<para>
 					This table shows the possible
-					response codes for this operation:
-						<informaltable rules="all" width="100%">	
+					response codes for this operation:</para>
+					<informaltable rules="all" width="100%">
 						<!--	<caption>Response Codes</caption>-->
 							<col width="10%" />
 							<col width="30%" />
@@ -364,7 +366,7 @@
             <!-- About the request -->
 			<xsl:if test="wadl:request//wadl:param[@style = 'header'] or parent::wadl:resource/wadl:param[@style = 'header']">
 				<xsl:call-template name="paramTable">
-					<xsl:with-param name="mode" select="'Request'"/>
+					<xsl:with-param name="mode" select="'request'"/>
 					<xsl:with-param name="method.title" select="$method.title"/>
 					<xsl:with-param name="style" select="'header'"/>
 				</xsl:call-template>
@@ -372,7 +374,7 @@
 			
 			<xsl:if test="ancestor::wadl:resource/wadl:param[@style = 'template']">
 				<xsl:call-template name="paramTable">
-					<xsl:with-param name="mode" select="'Request'"/>
+					<xsl:with-param name="mode" select="'request'"/>
 					<xsl:with-param name="method.title" select="$method.title"/>
 					<xsl:with-param name="style" select="'template'"/>
 				</xsl:call-template>
@@ -380,19 +382,11 @@
 			
 	        <xsl:if test="wadl:request//wadl:param[@style = 'query']">
                 <xsl:call-template name="paramTable">
-                    <xsl:with-param name="mode" select="'Request'"/>
+                    <xsl:with-param name="mode" select="'request'"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
                 	<xsl:with-param name="style" select="'query'"/>
                 </xsl:call-template>
             </xsl:if>
-			
-<!--			<xsl:if test="wadl:request//wadl:param[@style = 'plain']">
-				<xsl:call-template name="paramTable">
-					<xsl:with-param name="mode" select="'Request'"/>
-					<xsl:with-param name="method.title" select="$method.title"/>
-					<xsl:with-param name="style" select="'plain'"/>
-				</xsl:call-template>
-			</xsl:if>-->
 
 			<!-- TODO: Refactor to generate one example for each representation.-->
 			<xsl:apply-templates select=".//wadl:representation[parent::wadl:request]">
@@ -416,7 +410,8 @@
 
 			<xsl:if test="wadl:response/wadl:param[@style = 'header']">
                 <xsl:call-template name="paramTable">
-                    <xsl:with-param name="mode" select="'Response'"/>
+             <!--       <xsl:with-param name="mode" select="'response'"/>-->
+                	<xsl:with-param name="mode" select="$response-mode"/>
                     <xsl:with-param name="method.title" select="$method.title"/>
                 	<xsl:with-param name="style" select="'header'"/>
                 </xsl:call-template>
@@ -460,13 +455,13 @@
 			<xsl:choose>
 				<xsl:when test="wadl:param[@style = 'plain'] and contains(@mediaType,'json')">
 					<xsl:call-template name="paramList">
-						<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
+						<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'response' else 'request'"/>
 						<xsl:with-param name="method.title" select="$method.title"/>
 					</xsl:call-template>
 				</xsl:when>
 				<xsl:when test="wadl:param[@style = 'plain']">
 					<xsl:call-template name="paramTable">
-						<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'Response' else 'Request'"/>
+						<xsl:with-param name="mode" select="if(ancestor::wadl:response) then 'response' else 'request'"/>
 						<xsl:with-param name="method.title" select="$method.title"/>
 						<xsl:with-param name="style" select="'plain'"/>
 					</xsl:call-template>
@@ -511,14 +506,18 @@
  						<xsl:value-of select="ancestor::wadl:method/wadl:doc/@title"/>
  					</xsl:if>
  					<xsl:choose>
- 						<xsl:when test="ancestor::wadl:response"> Response</xsl:when>
- 						<xsl:when test="ancestor::wadl:request"> Request</xsl:when>
+ 						<xsl:when test="$type = 'application/xml'">: XML </xsl:when>
+ 						<xsl:when test="$type = 'application/json'">: JSON </xsl:when>
+ 						<xsl:when test="$type = 'application/atom+xml'">: ATOM </xsl:when>
+ 						<xsl:otherwise>: <xsl:value-of select="$type"/></xsl:otherwise>
  					</xsl:choose>
  					<xsl:choose>
- 						<xsl:when test="$type = 'application/xml'">: XML</xsl:when>
- 						<xsl:when test="$type = 'application/json'">: JSON</xsl:when>
- 						<xsl:when test="$type = 'application/atom+xml'">: ATOM</xsl:when>
- 						<xsl:otherwise>: <xsl:value-of select="$type"/></xsl:otherwise>
+ 						<xsl:when test="ancestor::wadl:response">
+ 							<xsl:value-of select="$response-mode"/>
+ 						</xsl:when>
+ 						<xsl:when test="ancestor::wadl:request">
+ 							<xsl:value-of select="$request-mode"/>
+ 						</xsl:when>
  					</xsl:choose>
  				</xsl:otherwise>
  			</xsl:choose>
@@ -572,14 +571,18 @@
 						<xsl:value-of select="ancestor::wadl:method/wadl:doc/@title"/>
 					</xsl:if>
 					<xsl:choose>
-						<xsl:when test="ancestor::wadl:response"> Response</xsl:when>
-						<xsl:when test="ancestor::wadl:request"> Request</xsl:when>
+						<xsl:when test="$type = 'application/xml'">: XML </xsl:when>
+						<xsl:when test="$type = 'application/json'">: JSON </xsl:when>
+						<xsl:when test="$type = 'application/atom+xml'">: ATOM </xsl:when>
+						<xsl:otherwise>: <xsl:value-of select="$type"/></xsl:otherwise>
 					</xsl:choose>
 					<xsl:choose>
-						<xsl:when test="$type = 'application/xml'">: XML</xsl:when>
-						<xsl:when test="$type = 'application/json'">: JSON</xsl:when>
-						<xsl:when test="$type = 'application/atom+xml'">: ATOM</xsl:when>
-						<xsl:otherwise>: <xsl:value-of select="$type"/></xsl:otherwise>
+						<xsl:when test="ancestor::wadl:response">
+							<xsl:value-of select="$response-mode"/>
+						</xsl:when>
+						<xsl:when test="ancestor::wadl:request">
+							<xsl:value-of select="$request-mode"/>
+						</xsl:when>
 					</xsl:choose>
 				</xsl:otherwise>
 			</xsl:choose>
@@ -641,7 +644,7 @@
 			  </para>
 				<!--
 				    Template parameters are always required, so
-				    there's no poin in processing @required.
+				    there's no point in processing @required.
 				-->
                   		<xsl:choose>
                         	  <xsl:when test="@style = 'template'"/>
@@ -748,24 +751,25 @@
 		</xsl:choose>
 	</xsl:template>
     <xsl:template name="paramTable">
-        <xsl:param name="mode"/>
+    	<xsl:param name="mode"/>
     	<xsl:param name="method.title"/>
     	<xsl:param name="style"/>
-    	<xsl:param name="styleCapitalized">
+    	<xsl:param name="styleLowercase">
     		<xsl:choose>
-		        <xsl:when test="$style = 'template'">URI</xsl:when>
-    			<xsl:when test="$style != 'plain'"><xsl:value-of select="concat(translate(substring($style,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($style,2))"/></xsl:when>
-    			<xsl:otherwise>Body</xsl:otherwise>
+    			<xsl:when test="$style = 'template'">URI</xsl:when>
+    			<xsl:when test="$style != 'plain'">
+    				<xsl:value-of select="lower-case($style)"/>
+    			</xsl:when>
+    			<xsl:otherwise>body</xsl:otherwise>
     		</xsl:choose>
     	</xsl:param>
     	<xsl:variable name="tableType" select="(: if($style = 'plain') then 'informaltable' else :)'informaltable'"/>
-        <xsl:if test="$mode='Request' or $mode='Response'">
-        	
-			<para>This table shows the <xsl:value-of select="$styleCapitalized"/> parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+        <xsl:if test="$mode='request' or $mode='response'">
+        	<para>This table shows the <xsl:value-of select="$styleLowercase"/> parameters for the <xsl:value-of select="lower-case($method.title)"/> <xsl:value-of select="concat(' ', $mode)"/>:</para>
         	<xsl:element name="{$tableType}">
             	<xsl:attribute name="rules">all</xsl:attribute>
             	<xsl:attribute name="width">100%</xsl:attribute>	
-                <xsl:if test="$tableType = 'table'"><caption><xsl:value-of select="concat($method.title,' ',$mode, ' ', $styleCapitalized, ' Parameters')"/></caption></xsl:if>
+                <xsl:if test="$tableType = 'table'"><caption><xsl:value-of select="concat($method.title,' ',$mode, ' ', $styleLowercase, ' parameters')"/></caption></xsl:if>
                 <col width="30%"/>
                 <col width="10%"/>
                 <col width="60%"/>
@@ -783,10 +787,10 @@
                     			<xsl:with-param name="style">plain</xsl:with-param>
                     		</xsl:apply-templates>
                     	</xsl:when>
-                        <xsl:when test="$mode = 'Request'">
+                        <xsl:when test="$mode = 'request'">
                             <xsl:apply-templates select="wadl:request//wadl:param[@style = $style]|parent::wadl:resource/wadl:param[@style = $style]"/>
                         </xsl:when>
-                        <xsl:when test="$mode = 'Response'">
+                        <xsl:when test="$mode = 'response'">
                             <xsl:apply-templates select="wadl:response//wadl:param[@style = $style]"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -807,9 +811,10 @@
     <xsl:template name="paramList">
     	<xsl:param name="mode"/>
     	<xsl:param name="method.title"/>
+<xsl:param name="method.tableintro"/>
     	<xsl:variable name="plainParams" select="wadl:param[@style = 'plain' and ./wadl:doc and @path]"/>
     	<xsl:if test="$plainParams">
-        <para>The following list shows the Body parameters for the <xsl:value-of select="concat($method.title, ' ', $mode)"/>:</para>
+        <para>This list shows the body parameters for the <xsl:value-of select="concat($method.tableintro, ' ', $mode)"/>:</para>
         	<itemizedlist role="paramList">
 	    		<xsl:call-template name="group-params">
 	    			<xsl:with-param name="plainParams" select="$plainParams"/>
