@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:choose>
+    <xsl:when test="$branding = 'rackspace'">
+        <li>
+            <a class="smallcapped" href="#{@xml:id}">
+                <xsl:value-of select="translate(d:title,' ','&#160;')"
+                />
+            </a>
+        </li>
+    </xsl:when>
+    <xsl:otherwise>
+        <li>
+            <a href="#{@xml:id}">
+                <xsl:value-of select="translate(d:title,' ','&#160;')"
+                />
+            </a>
+        </li>
+    </xsl:otherwise>
+</xsl:choose>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:choose>
+    <xsl:when test="$branding = 'rackspace'">
+        <head>
+            <meta http-equiv="content-type"
+                content="text/html; charset=UTF-8"/>
+            <meta http-equiv="X-UA-Compatible"
+                content="IE=edge,chrome=1"/>
+            <title>Rackspace API Documentation</title>
+            <link href="apiref/css/css.css" rel="stylesheet"
+                type="text/css"/>
+            <!-- compiled from the less files -->
+            <link rel="stylesheet" href="apiref/css/reset.css"/>
+            <link rel="stylesheet" href="apiref/css/style.css"/>
+            <!-- syntax highlighting CSS -->
+            <link rel="stylesheet" href="apiref/css/syntax.css"/>
+            <link href="apiref/css/main-rackspace.css"
+                rel="stylesheet" type="text/css"/>
+            <link href="apiref/css/bootstrap.min.css" rel="stylesheet"
+            />
+        </head>
+    </xsl:when>
+    <xsl:otherwise>
+        <head>
+            <meta http-equiv="content-type"
+                content="text/html; charset=UTF-8"/>
+            <meta name="viewport"
+                content="width=device-width, initial-scale=1.0"/>
+            <title>OpenStack API Documentation</title>
+            <link rel="stylesheet" href="apiref/css/bootstrap.min.css"/>
+            <!-- OpenStack Specific CSS -->
+            <link rel="stylesheet" href="apiref/css/main.css"
+                type="text/css"/>
+            <link href="apiref/css/main.css" rel="stylesheet"
+                type="text/css"/>
+            <link href="apiref/css/bootstrap.min.css" rel="stylesheet"
+            />
+        </head>
+    </xsl:otherwise>
+</xsl:choose>

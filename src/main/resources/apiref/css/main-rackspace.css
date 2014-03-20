@@ -1,0 +1,275 @@
+/* @override 
+	http://openstack.dev/themes/openstack/css/main.css
+	http://localhost:8888/themes/openstack/css/main.css
+	http://staging.openstack.org/themes/openstack/css/main.css
+*/
+
+
+#rightColumn {
+    float:left;
+    position: relative;
+    width: 1em;
+}
+
+.highlight {
+    background-color: #FFAA66;
+}
+
+body {
+	background: no-repeat scroll 0px 0px;
+	color: #535353;
+	font-family: "Source Sans Pro";
+    font-weight: 400;
+    font-size: 150%;
+}
+
+.navbar-brand {
+	display: block;
+	margin-top: 8px;
+	text-indent: -1000em;
+	background: url(../images/rackspace-logo.png) no-repeat left center;
+	height: 54px;
+	width: 177px;
+	color: black;
+}
+
+.container {
+	width: 1210px;
+	margin-right: auto;
+	margin-left: auto;
+	  
+}
+
+.navbar-default {
+    background-color: black;
+    border: none;
+}
+
+
+.subhead {
+	border-bottom: 1px dotted;
+	padding-bottom: 5px;
+	border-color: #c5e2ea;
+	margin-bottom: 20px;
+}
+
+.subhead h1 {
+    font-size: 24px;
+    font-weight: normal;
+}
+
+.subhead h2 {
+    color: #0eafcd;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.subhead h3 {
+    font-size: 18px;
+    color: black;
+    font-weight: normal;
+}
+
+a.headerlink {
+    color: #999;
+    position: absolute;
+    visibility: hidden;
+    top: 0;
+    left: 0;
+}
+
+.subhead h2,
+.subhead h3
+{
+    position: relative;
+    margin-left: -20px;
+    padding-left: 20px;
+}
+
+h1:hover > a.headerlink,
+h2:hover > a.headerlink,
+h3:hover > a.headerlink,
+h4:hover > a.headerlink,
+h5:hover > a.headerlink,
+h6:hover > a.headerlink,
+dt:hover > a.headerlink {
+  visibility: visible;
+}
+
+.nobody {
+    margin-top: 20px;
+}
+
+/*
+ * Side navigation
+ *
+ * Scrollspy and affixed enhanced navigation to highlight sections and secondary
+ * sections of docs content.
+ *
+ * Informed by bootstrap 3.0 site
+ */
+
+/* By default it's not affixed in mobile views, so undo that */
+.api-sidebar.affix {
+    position: static;
+}
+
+/* First level of nav */
+.api-sidenav {
+    margin-top: 20px;
+    margin-left: -10px;
+    margin-bottom: 30px;
+    width: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-shadow: 0 1px 0 #fff;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+/* All levels of nav */
+.api-sidebar .nav > li > a {
+    display: block;
+    width: auto;
+    color: #716b7a;
+    padding: 5px 20px;
+    font-size: 14px;
+}
+
+
+.api-sidebar .nav > li > a:hover,
+.api-sidebar .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #E0E4E6;
+}
+
+.api-sidebar .nav > .active > a,
+.api-sidebar .nav > .active:hover > a,
+.api-sidebar .nav > .active:focus > a {
+    font-weight: bold;
+    color: #C50022;
+    background-color: transparent;
+    border-right: 2px solid #C50022;
+}
+
+/* Nav: second level (shown on .active) */
+.api-sidebar .nav .nav {
+    margin-bottom: 8px;
+}
+
+.api-sidebar .nav .nav > li > a {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 30px;
+    font-size: 90%;
+}
+
+/* Show and affix the side nav when space allows it */
+@media (min-width: 992px) {
+    .api-sidebar .nav > .active > ul {
+        display: block;
+    }
+
+    /* Widen the fixed sidebar */
+    .api-sidebar.affix,
+    .api-sidebar.affix-bottom {
+        width: 213px;
+    }
+
+    .api-sidebar.affix {
+        position: fixed; /* Undo the static from mobile first approach */
+        top: 20px;
+    }
+
+    .api-sidebar.affix-bottom {
+        position: absolute; /* Undo the static from mobile first approach */
+    }
+
+    .api-sidebar.affix-bottom .api-sidenav,
+    .api-sidebar.affix .api-sidenav {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+}
+
+.nav > li.divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #0EAFCD;
+}
+
+@media (min-width: 1200px) {
+    /* Widen the fixed sidebar again */
+    .api-sidebar.affix-bottom,
+    .api-sidebar.affix {
+        width: 263px;
+    }
+}
+
+/* @end */
+
+/* handle making the rows visible in mobile */
+
+.doc-entry > .row {
+    background-color: #eee;
+    margin-bottom: 10px;
+    padding: 10px 0;
+}
+
+@media (min-width: 992px) {
+    .doc-entry > .row {
+        background-color: transparent;
+        margin-bottom: inherit;
+        padding: inherit;
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-default {
+        margin-top: 25px;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar-default .navbar-nav {
+        margin-top: 15px;
+    }
+    .navbar-default .navbar-nav > .active > a,
+    .navbar-default .navbar-nav > .active > a:hover,
+    .navbar-default .navbar-nav > .active > a:focus {
+        color: red;
+        border-bottom: 2px solid #C50022;
+        padding-right: 0;
+        background-color: transparent;
+    }
+    .navbar-nav > li > a {
+        padding: 5px 20px 5px 0;
+        color: #5BC0DE;
+    }
+}
+
+#footer {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #5BC0DE;
+}
+
+.label-success {
+    background-color: white;
+    border-color: white;
+    color: #0EAFCD;
+    font-size: 100%;
+}
+
+.btn-info {
+    background-color: #0EAFCD;
+    border-color: #0EAFCD;
+}
+
+.rowtop {
+    margin-top: 75px;
+}

@@ -66,6 +66,12 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
      *     default-value=""
      */
     private String security;
+    /**
+     * Specifies the branding to use on the page
+     *
+     * @parameter expression="${generate-html.branding}" default-value="openstack"
+     */
+    private String branding;
 	
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
         return super.createTransformerBuilder (new DocBookResolver (resolver, getType()));
@@ -103,6 +109,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
         Map<String, Object> map = new HashMap<String, Object>();
         
         map.put("security", security);
+        map.put("branding", branding);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("failOnValidationError", failOnValidationError);
         map.put("project.build.directory", this.projectBuildDirectory);
