@@ -13,6 +13,8 @@
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match="d:dummy"/>
+
     <xsl:param name="compute.wadl.path.from.docbook.path">0</xsl:param>
 
     <xsl:param name="project.build.directory"/>
