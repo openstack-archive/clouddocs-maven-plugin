@@ -4,6 +4,7 @@
 	http://staging.openstack.org/themes/openstack/css/main.css
 */
 
+
 #rightColumn {
     float:left;
     position: relative;
@@ -15,24 +16,34 @@
 }
 
 body {
-	background: white url(../images/openstack-page-bkg.jpg) no-repeat scroll 0px 0px;
-	border-top: 3px solid #255e6e;
+	background: no-repeat scroll 0px 0px;
 	color: #535353;
+	font-family: "Source Sans Pro";
+    font-weight: 400;
+    font-size: 150%;
 }
 
 .navbar-brand {
 	display: block;
 	margin-top: 8px;
 	text-indent: -1000em;
-	background: url(../images/open-stack-cloud-computing-logo-2.png) no-repeat left center;
+	background: url(../images/rackspace-logo.png) no-repeat left center;
 	height: 54px;
 	width: 177px;
+	color: black;
+}
+
+.container {
+	width: 1210px;
+	margin-right: auto;
+	margin-left: auto;
 }
 
 .navbar-default {
-    background-color: transparent;
+    background-color: black;
     border: none;
 }
+
 
 .subhead {
 	border-bottom: 1px dotted;
@@ -47,13 +58,15 @@ body {
 }
 
 .subhead h2 {
-    color: #cf2f19;
-    font-size: 20px;
+    color: #0eafcd;
+    font-size: 22px;
+    font-weight: bold;
 }
 
 .subhead h3 {
     font-size: 18px;
     color: black;
+    font-weight: normal;
 }
 
 a.headerlink {
@@ -67,7 +80,6 @@ a.headerlink {
 .subhead h2,
 .subhead h3
 {
-    font-weight: normal;
     position: relative;
     margin-left: -20px;
     padding-left: 20px;
@@ -103,8 +115,10 @@ dt:hover > a.headerlink {
 
 /* First level of nav */
 .api-sidenav {
-    margin-top: 30px;
+    margin-top: 20px;
+    margin-left: -10px;
     margin-bottom: 30px;
+    width: auto;
     padding-top: 10px;
     padding-bottom: 10px;
     text-shadow: 0 1px 0 #fff;
@@ -115,10 +129,12 @@ dt:hover > a.headerlink {
 /* All levels of nav */
 .api-sidebar .nav > li > a {
     display: block;
+    width: auto;
     color: #716b7a;
     padding: 5px 20px;
-    font-size: 12px;
+    font-size: 14px;
 }
+
 
 .api-sidebar .nav > li > a:hover,
 .api-sidebar .nav > li > a:focus {
@@ -130,9 +146,9 @@ dt:hover > a.headerlink {
 .api-sidebar .nav > .active:hover > a,
 .api-sidebar .nav > .active:focus > a {
     font-weight: bold;
-    color: #cf2f19;
+    color: #C50022;
     background-color: transparent;
-    border-right: 2px solid #cf2f19;
+    border-right: 2px solid #C50022;
 }
 
 /* Nav: second level (shown on .active) */
@@ -179,7 +195,7 @@ dt:hover > a.headerlink {
     height: 1px;
     margin: 9px 0;
     overflow: hidden;
-    background-color: #e5e5e5;
+    background-color: #0EAFCD;
 }
 
 @media (min-width: 1200px) {
@@ -216,23 +232,43 @@ dt:hover > a.headerlink {
 
 @media (min-width: 768px) {
     .navbar-default .navbar-nav {
-        border-bottom: 1px solid #c5e2ea;
         margin-top: 15px;
     }
     .navbar-default .navbar-nav > .active > a,
     .navbar-default .navbar-nav > .active > a:hover,
     .navbar-default .navbar-nav > .active > a:focus {
-        color: #cf2f19;
-        border-bottom: 2px solid #cf2f19;
+        color: red;
+        border-bottom: 2px solid #C50022;
         padding-right: 0;
         background-color: transparent;
     }
     .navbar-nav > li > a {
         padding: 5px 20px 5px 0;
+        color: #5BC0DE;
     }
 }
 
 #footer {
     border-top: 1px solid #eee;
     padding-top: 20px;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #5BC0DE;
+}
+
+.label-success {
+    background-color: white;
+    border-color: white;
+    color: #0EAFCD;
+    font-size: 100%;
+}
+
+.btn-info {
+    background-color: #0EAFCD;
+    border-color: #0EAFCD;
+}
+
+.rowtop {
+    margin-top: 75px;
 }
