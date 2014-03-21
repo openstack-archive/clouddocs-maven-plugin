@@ -228,11 +228,24 @@ public abstract class PDFMojo extends AbstractFoMojo {
     private String draftStatus;
 
     /**
-     * 
-     *
-     * @parameter expression="${generate-webhelp.draft.status}" default-value=""
+     * @parameter expression="${generate-pdf.statusBarText}"
      */
     private String statusBarText;
+    
+    /**
+     * @parameter expression="${generate-pdf.bodyFont}"
+     */
+    private String bodyFont;
+
+    /**
+     * @parameter expression="${generate-pdf.monospaceFont}"
+     */
+    private String monospaceFont;
+    
+    /**
+     * @parameter expression="${generate-pdf.localFontPath}"
+     */
+    private String localFontPath;
 
     protected void setImageDirectory (File imageDirectory) {
         this.imageDirectory = imageDirectory;
@@ -365,7 +378,7 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
     protected Configuration loadFOPConfig() throws MojoExecutionException {
         System.out.println ("At load config");
-        File fontPath = new File(getTargetDirectory().getParentFile(), "fonts");
+        File fontPath = (null != localFontPath && localFontPath != "")?new File(localFontPath):new File(getTargetDirectory().getParentFile(), "fonts");
         StringTemplateGroup templateGroup = new StringTemplateGroup("fonts", fontPath.getAbsolutePath());
         StringTemplate template = templateGroup.getInstanceOf("fontconfig");
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
@@ -435,8 +448,16 @@ public abstract class PDFMojo extends AbstractFoMojo {
 	if(null!=sysStatusBarText && !sysStatusBarText.isEmpty()){
 	    statusBarText=sysStatusBarText;
 	}
-	transformer.setParameter("statusBarText", statusBarText);
-
+    if(statusBarText != null){
+    	transformer.setParameter("statusBarText", statusBarText);
+    }
+    if(bodyFont != null){
+    	transformer.setParameter("bodyFont", bodyFont);
+    }
+    if(monospaceFont != null){
+    	transformer.setParameter("monospaceFont", monospaceFont);
+    }
+    
 	transformer.setParameter("project.build.directory", projectBuildDirectory.toURI().toString());
     
 	String sysSecurity=System.getProperty("security");
@@ -561,6 +582,8 @@ public abstract class PDFMojo extends AbstractFoMojo {
         map.put("outputType", "pdf");
         map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
         map.put("status.bar.text", getProperty("statusBarText"));
+        map.put("bodyFont", getProperty("bodyFont"));
+        map.put("monospaceFont", getProperty("monospaceFont"));
         map.put("draft.status", getProperty("draftStatus"));
         
         // Profiling attrs:        

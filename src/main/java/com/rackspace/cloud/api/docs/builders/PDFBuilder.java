@@ -126,6 +126,9 @@ public class PDFBuilder {
 
 	private String draftStatus;
 	private String statusBarText;
+	private String bodyFont;
+	private String monospaceFont;
+	private String localFontPath;
 	private String trimWadlUriCount;
 	private String computeWadlPathFromDocbookPath;
         private String pdfFilenameBase;
@@ -427,6 +430,13 @@ public class PDFBuilder {
 		if(null != statusBarText){
 		    transformer.setParameter("status.bar.text", statusBarText);
 		}
+		if(null != bodyFont){
+		    transformer.setParameter("bodyFont", bodyFont);
+		}
+		if(null != monospaceFont){
+		    transformer.setParameter("monospaceFont", monospaceFont);
+		}
+
 		if(trimWadlUriCount != null){
 			transformer.setParameter("trim.wadl.uri.count",trimWadlUriCount);
 		}
@@ -506,7 +516,7 @@ public class PDFBuilder {
 	}
 
 	protected Configuration loadFOPConfig() throws MojoExecutionException {
-		String fontPath  = (new File(getAutopdfTargetDirectory().getParentFile(), "fonts")).getAbsolutePath();
+	        String fontPath  = (null != localFontPath && localFontPath != "") ? localFontPath : (new File(getAutopdfTargetDirectory().getParentFile(), "fonts")).getAbsolutePath();
 		StringTemplateGroup templateGroup = new StringTemplateGroup("fonts", fontPath);
 		StringTemplate template = templateGroup.getInstanceOf("fontconfig");
 		DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
@@ -764,6 +774,29 @@ public class PDFBuilder {
 		this.statusBarText = statusBarText;
 	}
 
+	public void setBodyFont(String bodyFont) {
+		this.bodyFont = bodyFont;
+	}
+
+	public String getBodyFont() {
+		return bodyFont;
+	}
+
+	public void setMonospaceFont(String monospaceFont) {
+		this.monospaceFont = monospaceFont;
+	}
+
+	public String getMonospaceFont() {
+		return monospaceFont;
+	}
+
+	public void setLocalFontPath(String localFontPath) {
+		this.localFontPath = localFontPath;
+	}
+
+	public String getLocalFontPath() {
+		return localFontPath;
+	}
 
 	public String getTrimWadlUriCount() {
 		return trimWadlUriCount;

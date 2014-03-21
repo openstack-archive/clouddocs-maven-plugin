@@ -411,7 +411,24 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
      * @parameter expression="${generate-webhelp.draft.status}" default-value=""
      */
     private String statusBarText;
+    
+    /**
+     *
+     * @parameter expression="${generate-webhelp.bodyFont}"
+     */
+    private String bodyFont;
 
+    /**
+     *
+     * @parameter expression="${generate-webhelp.monospaceFont}"
+     */
+    private String monospaceFont;
+
+    /**
+     *
+     * @parameter expression="${generate-webhelp.localFontPath}"
+     */
+    private String localFontPath;
 
     /**
      * DOCUMENT ME!
@@ -520,7 +537,6 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
             transformer.setParameter("legal.notice.url", legalNoticeUrl);
         }
         
-        
     String sysWebhelpWar=System.getProperty("webhelp.war");
 	if(null!=sysWebhelpWar && !sysWebhelpWar.isEmpty()){
 	    webhelpWar=sysWebhelpWar;
@@ -548,6 +564,13 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 	if(null != statusBarText){
 	    transformer.setParameter("status.bar.text", statusBarText);
 	}
+	if(null != bodyFont){
+	    transformer.setParameter("bodyFont", bodyFont);
+	}
+	if(null != monospaceFont){
+	    transformer.setParameter("monospaceFont", monospaceFont);
+	}
+
 
     if(canonicalUrlBase != null){
 	transformer.setParameter("canonical.url.base",canonicalUrlBase);
@@ -795,6 +818,8 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         map.put("strictImageValidation", String.valueOf(this.strictImageValidation));
         map.put("trim.wadl.uri.count", this.trimWadlUriCount);
         map.put("status.bar.text", getProperty("statusBarText"));
+        map.put("bodyFont", getProperty("bodyFont"));
+        map.put("monospaceFont", getProperty("monospaceFont"));
         map.put("draft.status", getProperty("draftStatus"));
         
         // Profiling attrs:        
@@ -903,6 +928,9 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
         	pdfBuilder.setSecurity(security);
         	pdfBuilder.setDraftStatus(draftStatus);
         	pdfBuilder.setStatusBarText(statusBarText);
+        	pdfBuilder.setBodyFont(bodyFont);
+        	pdfBuilder.setMonospaceFont(monospaceFont);
+        	pdfBuilder.setLocalFontPath(localFontPath);
         	pdfBuilder.setTrimWadlUriCount(trimWadlUriCount);
         	pdfBuilder.setComputeWadlPathFromDocbookPath(computeWadlPathFromDocbookPath);
         	
