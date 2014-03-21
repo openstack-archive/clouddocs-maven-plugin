@@ -69,12 +69,25 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 1.15.0 (March 21, 2014)
+============================================================
+-  Features and updates
+
+   -  Support <branding> parameter for api-ref pages (openstack and rackspace supported)
+   -  Support bodyFont, monospaceFont, and localFontPath parameters to provide alternate fonts used when generating pdfs.
+   -  Add Tealium utag.js to html output when branding = rackspace.
+
+-  Bug fixes
+
+   -  Address Launchpad #1289568 which caused processing to fail on certain wadls.
+   -  Revert change which made the shortdesc line appear as the first line in the body of the api reference sections.
+   -  Fix NPE when using generate-pdf and generate-html goals.
+
 clouddocs-maven-plugin 1.14.1 (March 5, 2014)
 ============================================================
 -  Bug fixes
 
    -  Address https://bugs.launchpad.net/openstack-manuals/+bug/1288395
-
 
 clouddocs-maven-plugin 1.14.0 (March 3, 2014)
 ============================================================
