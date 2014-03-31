@@ -33,6 +33,8 @@
   <xsl:param name="googleAnalyticsDomain"/>
   <xsl:param name="enableGoogleAnalytics">0</xsl:param>
   <xsl:param name="branding">openstack</xsl:param>
+  <xsl:param name="autoPdfUrl">http://api.openstack.org/api-ref-guides/bk-</xsl:param>
+  <xsl:param name="pdfFilename"/>
           <xsl:template match="node() | @*">
             <xsl:copy>
               <xsl:apply-templates select="node() | @*"/>
@@ -64,10 +66,10 @@
                 </xsl:when>
                 <xsl:otherwise>
                   <head>
-                    <meta http-equiv="content-type"
-                      content="text/html; charset=UTF-8"/>
-                    <meta name="viewport"
-                      content="width=device-width, initial-scale=1.0"/>
+                    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+                    <meta charset="UTF-8"/>
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                     <title>OpenStack API Documentation</title>
                     <link rel="stylesheet" href="apiref/css/bootstrap.min.css"/>
                     <!-- OpenStack Specific CSS -->
@@ -166,6 +168,10 @@
                                 title="Go to OpenStack Documentation"
                                 >Documentation</a>
                             </li>
+                            <li><a title="Open the PDF for this page" onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{concat(normalize-space(substring($autoPdfUrl,1,string-length($autoPdfUrl) - 3)), $pdfFilename,'.pdf')}">
+                              <xsl:value-of select="translate(d:title,' ','&#160;')"
+                              />&#160;&#160;&#160;<img src="apiref/images/pdf.png"/>
+                            </a></li>
                           </ul>
                         </div>
                       </div>
@@ -335,17 +341,18 @@
             </li>
           </xsl:template>
           <xsl:template match="d:link" mode="menu-toc">
+            <!-- show sub-menu items in side nav bar -->
             <li>
               <a href="{@xlink:href}">
                 <xsl:value-of select="."/>
-              </a>
-            </li>
+              </a></li>
           </xsl:template>
           <!-- Do nothing when you see this list - just used to seed the menu -->
           <xsl:template match="d:itemizedlist[@xml:id='service-list']"/>
           <xsl:template match="d:section">
             <div id="{@xml:id}">
               <div class="subhead">
+                <!-- headings for API sections -->
                 <h3><xsl:value-of select="d:title"/>
                   <a class="headerlink" title="Permalink to this headline" href="#{@xml:id}">
                     <span class="glyphicon glyphicon-link"></span>
@@ -368,6 +375,7 @@
                 </li>
               </xsl:when>
               <xsl:otherwise>
+                <!-- show top menu item in side nav bar -->
                 <li>
                   <a href="#{@xml:id}">
                     <xsl:value-of select="translate(d:title,' ','&#160;')"
@@ -440,7 +448,6 @@
                 <!-- process response codes -->
                 <xsl:if
                     test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
-
                   <!-- Don't output if there are no status codes -->
                   <div class="row">
                     <div class="col-md-3">
@@ -454,7 +461,6 @@
                 </xsl:if>
                 <xsl:if
                     test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
-
                   <div class="row">
                     <div class="col-md-3">
                       <b>Error Response Codes</b>
@@ -491,7 +497,6 @@
                         </tbody>
                       </table>
                     </xsl:if>
-
                     <!-- Don't output if there are no params -->
                     <xsl:if test="./wadl:response//wadl:param">
                       <b>Response parameters</b>
@@ -564,14 +569,11 @@
                             select="wadl:response/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc//xsdxt:code"/>
                       </div>
                     </div>
-
-
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc//xsdxt:code"/>
                   </xsl:otherwise>
                 </xsl:choose>
-
                 <!-- we allow no response text and we dont have a 200 level response with a representation -->
                 <xsl:choose>
                   <xsl:when
@@ -585,60 +587,48 @@
                     <xsl:copy-of select="$wadl.noresponse.msg"/>
                   </xsl:when>
                 </xsl:choose>
-
               </div>
             </div>
           </div>
           <xsl:text></xsl:text>
         </xsl:template>
-
           <xsl:template match="wadl:doc|wadl:resource|wadl:link">
             <xsl:apply-templates/>
           </xsl:template>
-
           <xsl:template match="wadl:doc[parent::wadl:resource]"/>
-
           <xsl:template match="d:para">
             <p><xsl:apply-templates/></p>
           </xsl:template>
-
           <xsl:template match="d:link" xmlns:xlink="http://www.w3.org/1999/xlink">
             <a href="{@xlink:href}"><xsl:apply-templates/></a>
           </xsl:template>
           <xsl:template match="d:programlisting">
             <pre><xsl:apply-templates/></pre>
           </xsl:template>
-
           <xsl:template match="d:title[parent::d:chapter or parent::d:section or parent::d:book]|d:info|wadl:param"/>
-
           <xsl:template match="d:example/d:title">
             <b><xsl:apply-templates/></b>
           </xsl:template>
-
           <xsl:template match="d:example|xsdxt:code">
             <div class="example">
               <xsl:apply-templates/>
             </div>
           </xsl:template>
-
           <xsl:template match="d:itemizedlist">
             <ul>
               <xsl:apply-templates/>
             </ul>
           </xsl:template>
-
           <xsl:template match="d:orderedlist">
             <ol>
               <xsl:apply-templates/>
             </ol>
           </xsl:template>
-
           <xsl:template match="d:listitem">
             <li>
               <xsl:apply-templates/>
             </li>
           </xsl:template>
-
           <xsl:template match="wadl:param" mode="param2tr">
             <tr>
               <td><xsl:value-of select="@name"/><xsl:if test="not(@required = 'true') and not(@style = 'template') and not(@style = 'matrix')"> (Optional)</xsl:if></td>
@@ -647,14 +637,12 @@
               <td><xsl:apply-templates select="./wadl:doc/*|./wadl:doc/text()"/></td>
             </tr>
           </xsl:template>
-
           <xsl:template match="d:code"><code><xsl:apply-templates/></code></xsl:template>
           <xsl:template match="d:*">
             <xsl:copy>
               <xsl:apply-templates select="@*|node()"/>
             </xsl:copy>
           </xsl:template>
-
   <xsl:template name="trimUri">
     <!-- Trims elements -->
     <xsl:param name="trimCount"/>
@@ -686,7 +674,6 @@
               </xsl:call-template>
             </xsl:if>
           </xsl:template>
-
           <xsl:template match="wadl:response" mode="preprocess-faults">
             <xsl:if
               test="(not(@status) or not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')))">
@@ -728,7 +715,6 @@
               </xsl:choose>
             </xsl:if>
           </xsl:template>
-
           <xsl:template name="statusCodeList">
             <xsl:param name="codes" select="'400 500 &#x2026;'"/>
             <xsl:param name="separator" select="','"/>

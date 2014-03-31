@@ -66,13 +66,20 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
      *     default-value=""
      */
     private String security;
+     /**
+     * Base for the html dir name. By default this is the
+     * base of the input xml file.
+     *
+     * @parameter expression="${generate-webhelp.webhelpDirname}"
+     */
+    private String pdfFilename;
     /**
      * Specifies the branding to use on the page
      *
      * @parameter expression="${generate-html.branding}" default-value="openstack"
      */
     private String branding;
-	
+
     protected TransformerBuilder createTransformerBuilder(URIResolver resolver) {
         return super.createTransformerBuilder (new DocBookResolver (resolver, getType()));
     }
@@ -109,6 +116,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
         Map<String, Object> map = new HashMap<String, Object>();
         
         map.put("security", security);
+        map.put("pdfFilename", pdfFilename);
         map.put("branding", branding);
         map.put("canonicalUrlBase", canonicalUrlBase);
         map.put("failOnValidationError", failOnValidationError);
@@ -116,7 +124,7 @@ public abstract class ApiRefMojo extends AbstractHtmlMojo {
         map.put("enableGoogleAnalytics", enableGoogleAnalytics);
         map.put("googleAnalyticsId", googleAnalyticsId);
         map.put("googleAnalyticsDomain", googleAnalyticsDomain);
-	map.put("targetHtmlContentDir", new File(getTargetDirectory(),  "/wadls/"));
+        map.put("targetHtmlContentDir", new File(getTargetDirectory(),  "/wadls/"));
         return CalabashHelper.createSource(getLog(), source, pathToPipelineFile, map);
     }
 }
