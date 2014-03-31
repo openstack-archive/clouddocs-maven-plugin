@@ -184,6 +184,10 @@
                                 title="Go to OpenStack Documentation"
                                 >Documentation</a>
                             </li>
+                            <li><a title="Open the PDF" onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{concat(normalize-space(substring($autoPdfUrl,1,string-length($autoPdfUrl) - 3)), $pdfFilename,'.pdf')}">
+                              <xsl:value-of select="translate(d:title,' ','&#160;')"
+                              />&#160;&#160;&#160;<img src="apiref/images/pdf.png"/>
+                            </a></li>
                           </ul>
                         </div>
                       </div>
@@ -389,13 +393,17 @@
               <xsl:otherwise>
                 <!-- show top menu item in side nav bar -->
                 <li>
-                  <!--href="#{@xml:id}"--> 
-                  <a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{concat(normalize-space(substring($autoPdfUrl,1,string-length($autoPdfUrl) - 3)), $pdfFilename,'.pdf')}">
+                  <a href="#{@xml:id}">
                     <xsl:value-of select="translate(d:title,' ','&#160;')"
-                    /><img src="apiref/images/open-stack-logo.png"/>
+                    />
                   </a>
                 </li>
-               <!-- <li><a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{concat(normalize-space(substring($autoPdfUrl,1,string-length($autoPdfUrl) - 3)), $pdfFilename,'.pdf')}">PDF <img src="apiref/images/open-stack-logo.png"/></a>
+               <!-- <li>
+                  
+                  <a onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{concat(normalize-space(substring($autoPdfUrl,1,string-length($autoPdfUrl) - 3)), $pdfFilename,'.pdf')}">
+                    <xsl:value-of select="translate(d:title,' ','&#160;')"
+                    />&#160;&#160;<img src="apiref/images/pdf.png"/>
+                  </a>
                 </li>-->
               </xsl:otherwise>
             </xsl:choose>
