@@ -33,6 +33,24 @@
   <xsl:param name="googleAnalyticsDomain"/>
   <xsl:param name="enableGoogleAnalytics">0</xsl:param>
   <xsl:param name="branding">openstack</xsl:param>
+  <xsl:param name="security">external</xsl:param>
+  <xsl:param name="autoPdfUrl">http://api.openstack.org/api-ref-guides/bk-</xsl:param>
+  <xsl:param name="pdfFilename"/>
+  <xsl:param name="includeDateInPdfFilename">
+    <xsl:choose>
+      <xsl:when test="$branding = 'openstack'">0</xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:variable name="pubdate"><xsl:if test="not($security = 'external') and not($security = '') and $pdfFilename = ''">-<xsl:value-of select="$security"/></xsl:if><xsl:if test="/*/d:info/d:pubdate and $includeDateInPdfFilename = '1'"><xsl:value-of select="concat('-',translate(/*/d:info/d:pubdate,'-',''))"/></xsl:if></xsl:variable>
+  <xsl:param name="war.dirname"><xsl:value-of select="normalize-space(/processing-instruction('rax-warinfo'))"/></xsl:param>
+  <xsl:param name="webhelp.war">0</xsl:param>
+  <xsl:param name="webhelp.common.dir">
+    <xsl:choose>
+      <xsl:when test="$webhelp.war != '0' and $webhelp.war != ''">/<xsl:value-of select="$war.dirname"/>/common/</xsl:when>
+      <xsl:otherwise>../common/</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
           <xsl:template match="node() | @*">
             <xsl:copy>
               <xsl:apply-templates select="node() | @*"/>
@@ -166,6 +184,10 @@
                                 title="Go to OpenStack Documentation"
                                 >Documentation</a>
                             </li>
+                            <li><a title="Open the PDF" onclick="_gaq.push(['_trackEvent', 'Header', 'pdfDownload', 'click', 1]);" alt="Download a pdf of this document" class="pdficon" href="{concat(normalize-space(substring($autoPdfUrl,1,string-length($autoPdfUrl) - 3)), $pdfFilename,'.pdf')}">
+                              <xsl:value-of select="translate(d:title,' ','&#160;')"
+                              />&#160;&#160;&#160;<img src="apiref/images/pdf.png"/>
+                            </a></li>
                           </ul>
                         </div>
                       </div>
@@ -331,21 +353,22 @@
           </xsl:template>
           <xsl:template match="//d:preface//d:title" mode="menu-toc">
             <li>
-              <a href="api-ref.html"><xsl:value-of select="."/></a>
+              <a href="api-ref.html"><xsl:value-of select="."/></a>  
             </li>
           </xsl:template>
           <xsl:template match="d:link" mode="menu-toc">
+            <!-- show sub-menu items in side nav bar -->
             <li>
               <a href="{@xlink:href}">
                 <xsl:value-of select="."/>
-              </a>
-            </li>
+              </a></li>
           </xsl:template>
           <!-- Do nothing when you see this list - just used to seed the menu -->
           <xsl:template match="d:itemizedlist[@xml:id='service-list']"/>
           <xsl:template match="d:section">
             <div id="{@xml:id}">
               <div class="subhead">
+                <!-- headings for API sections -->
                 <h3><xsl:value-of select="d:title"/>
                   <a class="headerlink" title="Permalink to this headline" href="#{@xml:id}">
                     <span class="glyphicon glyphicon-link"></span>
@@ -368,6 +391,7 @@
                 </li>
               </xsl:when>
               <xsl:otherwise>
+                <!-- show top menu item in side nav bar -->
                 <li>
                   <a href="#{@xml:id}">
                     <xsl:value-of select="translate(d:title,' ','&#160;')"
