@@ -71,7 +71,12 @@
     <xsl:param name="webhelp.include.search.tab">true</xsl:param>
     <xsl:param name="webhelp.start.filename">index.html</xsl:param>
     <xsl:param name="webhelp.base.dir">docs</xsl:param>
-    <xsl:param name="webhelp.tree.cookie.id" select="concat( 'treeview-', count(//node()) )"/>
+    <xsl:param name="webhelp.tree.cookie.id">
+        <xsl:choose>
+            <xsl:when test="/*/@xml:id"><xsl:value-of select="concat('treeview-',/*/@xml:id)"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="concat( 'treeview-', count(//node()) )"/></xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
     <xsl:param name="webhelp.indexer.language">en</xsl:param>
     <xsl:param name="webhelp.default.topic"/>
     <xsl:param name="webhelp.autolabel">0</xsl:param>
@@ -219,6 +224,78 @@ These problems go away when you add this IE=7 mode meta tag.
 	</xsl:if>
 	<meta name="git-sha" content="{$repository.commit}"/>
 	<meta name="buildTime" content="{$builddate}"/>
+        
+      <xsl:choose>
+          <xsl:when test="$branding = 'rackspace' or $branding = 'rackspace-private-cloud'">
+              <script type="text/javascript">
+                  //The id for tree cookie
+                  var treeCookieId = "<xsl:value-of select="normalize-space($webhelp.tree.cookie.id)"/>";
+                  txt_browser_not_supported = "<xsl:call-template name="gentext">
+                      <xsl:with-param name="key" select="'txt_browser_not_supported'"/>
+                  </xsl:call-template>";
+                  txt_please_wait = "<xsl:call-template name="gentext">
+                      <xsl:with-param name="key" select="'txt_please_wait'"/>
+                  </xsl:call-template>";
+              </script>
+              <style type="text/css">
+                  .folder {
+                  display: block;
+                  height: 22px;
+                  padding-left: 20px;
+                  background: transparent url(<xsl:value-of select="$webhelp.common.dir"/>jquery/treeview/images/folder.gif) 0 0px no-repeat;
+                  }
+              </style>
+              <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
+              <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/positioning.css"/>
+              <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/custom.css"/>
+              <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
+                  <link href="../atom.xml" type="application/atom+xml" rel="alternate" title="Document ATOM Feed" />
+              </xsl:if>
+              <xsl:if test="$canonical.url.base != ''">
+                  <link rel="canonical" >
+                      <xsl:attribute name="href"><xsl:value-of select="$canonical.url.base"/>/<xsl:apply-templates select="." mode="chunk-filename"/></xsl:attribute>
+                  </link>
+              </xsl:if>
+              <xsl:comment><xsl:text>[if IE]>
+	&lt;link rel="stylesheet" type="text/css" href="</xsl:text><xsl:value-of select="$webhelp.common.dir"/>css/ie.css"/><xsl:text>
+	&lt;![endif]</xsl:text></xsl:comment>
+              <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
+              <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/treeview/jquery.treeview.css"/>
+              <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"><xsl:comment/></script>
+              <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"><xsl:comment/></script>
+              <script type="text/javascript" 
+                  src="http://content-services.rackspace.com/rax-headerservice/rest/service/raxheaderservice.js?headerdivid=raxheaderfooterservice-headercontent&amp;footerdivid=raxheaderfooterservice-footercontent&amp;contentdivid=content-wrapper&amp;filter=api_docs&amp;team=api">
+                  <xsl:comment/> 
+              </script>
+              <script type="text/javascript" src="http://content-services.rackspace.com/rax-feedback-services/rest/service/raxfeedbackservice.js?feedbackdivid=feedbackid&amp;servername=content-services.rackspace.com&amp;debug=true"><xsl:comment/></script>
+              <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery.cookie.js">
+                  <xsl:comment> </xsl:comment>
+              </script>
+              <script type="text/javascript" src="{$webhelp.common.dir}jquery/treeview/jquery.treeview.min.js">
+                  <xsl:comment> </xsl:comment>
+              </script>
+              <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.css"/>
+              <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.min.js">
+                  <xsl:comment>jQuery plugin for glossary popups. </xsl:comment>
+              </script>
+              
+              <xsl:if test="$enable.google.analytics = '1' and $security = 'external' and not($google.analytics.id = '')">
+                  <script type="text/javascript">
+                      var _gaq = _gaq || [];
+                      _gaq.push(['_setAccount', '<xsl:value-of select="$google.analytics.id"/>']);
+                      <xsl:choose>
+                          <xsl:when test="$google.analytics.domain = ''"><!-- Do nothing --></xsl:when>
+                          <xsl:otherwise>
+                              _gaq.push(['_setDomainName', '<xsl:value-of select="$google.analytics.domain"/>']);	        
+                          </xsl:otherwise>	
+                      </xsl:choose>  
+                  </script>
+                  <script type="text/javascript" src="{$webhelp.common.dir}ga.js">
+                      <xsl:comment></xsl:comment>
+                  </script>
+              </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
         <script type="text/javascript">
             //The id for tree cookie
             var treeCookieId = "<xsl:value-of select="$webhelp.tree.cookie.id"/>";
@@ -277,9 +354,9 @@ These problems go away when you add this IE=7 mode meta tag.
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/treeview/jquery.treeview.css"/>
 
-        <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery-1.4.3.min.js">
-            <xsl:comment> </xsl:comment>
-        </script>
+              <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js">
+                  <xsl:comment/>
+              </script>
         <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery-ui-1.8.2.custom.min.js">
             <xsl:comment> </xsl:comment>
         </script>
@@ -289,9 +366,10 @@ These problems go away when you add this IE=7 mode meta tag.
         <script type="text/javascript" src="{$webhelp.common.dir}jquery/treeview/jquery.treeview.min.js">
             <xsl:comment> </xsl:comment>
         </script>
-        <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery.qtip-1.0.0-rc3/jquery.qtip-1.0.0-rc3.min.js">
-            <xsl:comment>jQuery plugin for glossary popups. </xsl:comment>
-        </script>
+              <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.css"/>
+              <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.min.js">
+                  <xsl:comment>jQuery plugin for glossary popups. </xsl:comment>
+              </script>
             <!--Scripts/css stylesheets for Search-->
         <script type="text/javascript" src="search/htmlFileList.js">
             <xsl:comment> </xsl:comment>
@@ -367,7 +445,8 @@ These problems go away when you add this IE=7 mode meta tag.
 	  </script>
 	    </xsl:if>
 	</xsl:if>
-		
+          </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
     <xsl:template name="user.header.navigation">
@@ -403,16 +482,15 @@ These problems go away when you add this IE=7 mode meta tag.
     <xsl:when test="$security = 'external'"/>
     </xsl:choose><xsl:if test="not(normalize-space($status.bar.text) = '')"><xsl:value-of select="normalize-space($status.bar.text)"/> -&#160;</xsl:if> 
   </xsl:param>
-
+    
     <xsl:template name="user.header.content">
-      <div class="statustext">
-	<xsl:choose>
-	  <xsl:when test="not($rackspace.status.text = '')">   <!--TODO: Someday repeat this using javascript -->
-	    <xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>
-	  </xsl:when>
-	  <xsl:otherwise>&#160;</xsl:otherwise>
-	</xsl:choose>
-      </div>
+        <xsl:choose>
+            <xsl:when test="not($rackspace.status.text = '')">   <!--TODO: Someday repeat this using javascript -->
+                <div class="statustext">
+                    <xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>&#160;<xsl:value-of select="$rackspace.status.text"/>
+                </div>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="user.footer.navigation">
@@ -536,137 +614,6 @@ These problems go away when you add this IE=7 mode meta tag.
             </div>
 
         </div>
-    </xsl:template>
-
-    <xsl:template name="webhelptoc">
-        <xsl:param name="currentid"/>
-        <xsl:choose>
-            <xsl:when test="$rootid != ''">
-                <xsl:variable name="title">
-                    <xsl:if test="$webhelp.autolabel=1">
-                        <xsl:variable name="label.markup">
-                            <xsl:apply-templates select="key('id',$rootid)" mode="label.markup"/>
-                        </xsl:variable>
-                        <xsl:if test="normalize-space($label.markup)">
-                            <xsl:value-of select="concat($label.markup,$autotoc.label.separator)"/>
-                        </xsl:if>
-                    </xsl:if>
-                    <xsl:apply-templates select="key('id',$rootid)" mode="title.markup"/>
-                </xsl:variable>
-                <xsl:variable name="href">
-                    <xsl:choose>
-                        <xsl:when test="$manifest.in.base.dir != 0">
-                            <xsl:call-template name="href.target">
-                                <xsl:with-param name="object" select="key('id',$rootid)"/>
-                            </xsl:call-template>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:call-template name="href.target.with.base.dir">
-                                <xsl:with-param name="object" select="key('id',$rootid)"/>
-                            </xsl:call-template>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-            </xsl:when>
-
-            <xsl:otherwise>
-                <xsl:variable name="title">
-                    <xsl:if test="$webhelp.autolabel=1">
-                        <xsl:variable name="label.markup">
-                            <xsl:apply-templates select="/*" mode="label.markup"/>
-                        </xsl:variable>
-                        <xsl:if test="normalize-space($label.markup)">
-                            <xsl:value-of select="concat($label.markup,$autotoc.label.separator)"/>
-                        </xsl:if>
-                    </xsl:if>
-                    <xsl:apply-templates select="/*" mode="title.markup"/>
-                </xsl:variable>
-                <xsl:variable name="href">
-                    <xsl:choose>
-                        <xsl:when test="$manifest.in.base.dir != 0">
-                            <xsl:call-template name="href.target">
-                                <xsl:with-param name="object" select="/"/>
-                            </xsl:call-template>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:call-template name="href.target.with.base.dir">
-                                <xsl:with-param name="object" select="/"/>
-                            </xsl:call-template>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-
-                <div>
-                    <div id="leftnavigation" style="padding-top:3px; background-color:white;">
-                        <div id="tabs">
-                            <ul>
-                                <li>
-                                    <a href="#treeDiv" tabindex="1">
-                                        <em>
-                                            <xsl:call-template name="gentext">
-                                                <xsl:with-param name="key" select="'TableofContents'"/>
-                                            </xsl:call-template>
-                                        </em>
-                                    </a>
-                                </li>
-                                <xsl:if test="$webhelp.include.search.tab != 'false'">
-                                    <li>
-                                        <a href="#searchDiv" tabindex="1">
-                                            <em>
-                                                <xsl:call-template name="gentext">
-                                                    <xsl:with-param name="key" select="'Search'"/>
-                                                </xsl:call-template>
-                                            </em>
-                                        </a>
-                                    </li>
-                                </xsl:if>
-                            </ul>
-                            <div id="treeDiv">
-                                <img src="{$webhelp.common.dir}images/loading.gif" alt="loading table of contents..."
-                                     id="tocLoading" style="display:block;"/>
-                                <div id="ulTreeDiv" style="display:none">
-                                    <ul id="tree" class="filetree">
-                                        <xsl:apply-templates select="/*/*" mode="webhelptoc">
-                                            <xsl:with-param name="currentid" select="$currentid"/>
-                                        </xsl:apply-templates>
-                                    </ul>
-                                </div>
-
-                            </div>
-                            <xsl:if test="$webhelp.include.search.tab != 'false'">
-                                <div id="searchDiv">
-                                    <div id="search">
-                                        <form onsubmit="Verifie(ditaSearch_Form);return false"
-                                              name="ditaSearch_Form"
-                                              class="searchForm">
-                                            <fieldset class="searchFieldSet">
-                                                <legend>
-                                                    <xsl:call-template name="gentext">
-                                                        <xsl:with-param name="key" select="'Search'"/>
-                                                    </xsl:call-template>
-                                                </legend>
-                                                <center>
-                                                    <input id="textToSearch" name="textToSearch" type="text"
-                                                           class="searchText"/>
-                                                    <xsl:text disable-output-escaping="yes"> <![CDATA[&nbsp;]]> </xsl:text>
-                                                    <input onclick="Verifie(ditaSearch_Form)" type="button"
-                                                           class="searchButton"
-                                                           value="Go" id="doSearch"/>
-                                                </center>
-                                            </fieldset>
-                                        </form>
-                                    </div>
-                                    <div id="searchResults">
-                                           <center> </center>
-                                    </div>
-                                </div>
-                            </xsl:if>
-
-                        </div>
-                    </div>
-                </div>
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:template>
 
     <xsl:template

@@ -8,7 +8,12 @@
         xmlns:fb="http://ogp.me/ns/fb#"
         version="1.0" xmlns="http://www.w3.org/1999/xhtml">
   
+  
+    <!--<xsl:import href="/home/dcramer/.m2/repository/net/sf/docbook/docbook-xsl/1.76.1/unzipped/docbook/xhtml/chunk-common.xsl" />-->
+    
   <xsl:import href="urn:docbkx:stylesheet-base/xhtml/chunk-common.xsl" />
+
+    <xsl:param name="branding"/>
 
     <xsl:template name="chunk-element-content">
         <xsl:param name="prev"/>
@@ -34,39 +39,57 @@
                     <xsl:with-param name="next" select="$next"/>
                     <xsl:with-param name="nav.context" select="$nav.context"/>
                 </xsl:call-template>
-
-
-                <div id="content">
-
-                    <xsl:call-template name="user.header.content"/>
-
-                    <xsl:copy-of select="$content"/>
-
-                    <xsl:call-template name="user.footer.content"/>
-
-                    <xsl:call-template name="footer.navigation">
-                        <xsl:with-param name="prev" select="$prev"/>
-                        <xsl:with-param name="next" select="$next"/>
-                        <xsl:with-param name="nav.context" select="$nav.context"/>
-                    </xsl:call-template>
-                </div>
-
-                <xsl:call-template name="user.footer.navigation"/>
-                <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery.qtip-1.0.0-rc3/jquery.qtip-1.0.0-rc3.min.js">
-                   <xsl:comment>jQuery plugin for glossary popups. </xsl:comment>
-                   $('a[title]').qtip({ style: { name: 'cream', tip: true } })
-		</script>
-                <xsl:if test="$webhelp.war != '0' and $webhelp.war != '' and ($branding = 'rackspace' or $branding = 'rackspace-private-cloud')">
-                  <script type="text/javascript">
-                     var s = document.createElement( 'script' );
-                     if ( location.hostname == "docs.rackspace.com") {
-                       s.setAttribute('src', "https://tags.tiqcdn.com/utag/rackspace/docs/prod/utag.js");
-                       document.body.appendChild( s ); }
-                     else if ( location.hostname == "docs-staging.rackspace.com") {
-                       s.setAttribute('src', "https://tags.tiqcdn.com/utag/rackspace/docs/qa/utag.js");
-                       document.body.appendChild( s ); }
-                  </script>
-                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$branding = 'rackspace' or $branding = 'rackspace-private-cloud'">
+                        <div id="content-wrapper">
+                            <div id="content">
+                                <xsl:call-template name="user.header.content"/>
+                                
+                                <xsl:copy-of select="$content"/>
+                                
+                                <div id="feedbackid"><xsl:comment/></div>
+                                
+                                <xsl:call-template name="user.footer.content"/>
+                                
+                                <xsl:call-template name="footer.navigation">
+                                    <xsl:with-param name="prev" select="$prev"/>
+                                    <xsl:with-param name="next" select="$next"/>
+                                    <xsl:with-param name="nav.context" select="$nav.context"/>
+                                </xsl:call-template>
+                            </div>
+                            <xsl:call-template name="user.footer.navigation"/>
+                        </div>
+                        <div id="raxheaderfooterservice-footercontent"><xsl:comment/></div>
+                        <xsl:if test="$webhelp.war != '0' and $webhelp.war != ''">
+                            <script type="text/javascript">
+                                var s = document.createElement( 'script' );
+                                if ( location.hostname == "docs.rackspace.com") {
+                                s.setAttribute('src', "https://tags.tiqcdn.com/utag/rackspace/docs/prod/utag.js");
+                                document.body.appendChild( s ); }
+                                else if ( location.hostname == "docs-staging.rackspace.com") {
+                                s.setAttribute('src', "https://tags.tiqcdn.com/utag/rackspace/docs/qa/utag.js");
+                                document.body.appendChild( s ); }
+                            </script>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+                            <div id="content">
+                                
+                                <xsl:call-template name="user.header.content"/>
+                                
+                                <xsl:copy-of select="$content"/>
+                                
+                                <xsl:call-template name="user.footer.content"/>
+                                
+                                <xsl:call-template name="footer.navigation">
+                                    <xsl:with-param name="prev" select="$prev"/>
+                                    <xsl:with-param name="next" select="$next"/>
+                                    <xsl:with-param name="nav.context" select="$nav.context"/>
+                                </xsl:call-template>
+                            </div>
+                            <xsl:call-template name="user.footer.navigation"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </body>
         </html>
         <xsl:value-of select="$chunk.append"/>

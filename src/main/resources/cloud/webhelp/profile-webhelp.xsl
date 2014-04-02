@@ -43,7 +43,9 @@
        apply the chunking version instead of the original
        non-chunking version to format an element.  -->
   <xsl:include href="urn:docbkx:stylesheet-base/xhtml/profile-chunk-code.xsl" />
+  <!--<xsl:include href="/home/dcramer/.m2/repository/net/sf/docbook/docbook-xsl/1.76.1/unzipped/docbook/xhtml/profile-chunk-code.xsl" />-->
 
+  <xsl:param name="branding">not set</xsl:param>
 
   <xsl:param name="builtForOpenStack">
     <xsl:choose>

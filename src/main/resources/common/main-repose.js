@@ -85,6 +85,18 @@ $(document).ready(function() {
 	$('html,body').animate({scrollTop: targetOffset}, 200);
 	return false;
     }
+    
+        $('.gloss').each(function() { 
+        $(this).qtip({
+            content: {
+		attr: 'def'
+            },
+            position: {
+                target: 'mouse', 
+                adjust: { x: 5, y: 5 } 
+            }
+        });
+    });
 
 });
 

@@ -86,6 +86,18 @@ $(document).ready(function() {
 	return false;
     }
 
+    $('.gloss').each(function() { 
+        $(this).qtip({
+            content: {
+		attr: 'def'
+            },
+            position: {
+                target: 'mouse', 
+                adjust: { x: 5, y: 5 } 
+            }
+        });
+    });
+
 });
 
 /**
