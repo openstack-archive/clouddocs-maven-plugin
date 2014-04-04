@@ -253,18 +253,12 @@
                             <ul class="nav api-sidenav">
                               <xsl:apply-templates select="d:chapter"
                                 mode="toc"/>
-                              <li>
-                                <!-- API ref page TOC -->
-                                <xsl:apply-templates
-                                  select="//d:preface//d:title"
-                                  mode="menu-toc"/>
                                 <ul class="nav active">
                                   <!-- add list of all services to the sidebar menu -->
                                   <xsl:apply-templates
                                     select="//d:book//d:itemizedlist[@xml:id='service-list']/d:listitem/d:para/d:link"
                                     mode="menu-toc"/>
                                 </ul>
-                              </li>
                             </ul>
                             <div class="row">
                               <div class="col-md-7">
