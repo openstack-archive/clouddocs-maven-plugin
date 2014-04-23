@@ -49,7 +49,7 @@
 
   <xsl:param name="builtForOpenStack">
     <xsl:choose>
-      <xsl:when test="$branding = 'rackspace-private-cloud'">1</xsl:when>
+      <xsl:when test="$branding = 'rackspace-private-cloud'">0</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
@@ -80,17 +80,30 @@
 	</xsl:when>
       </xsl:choose>
       
-      <xsl:if test="$builtForOpenStack != 0 and not(preceding-sibling::d:legalnotice)">
-        <d:link xlink:href="http://www.openstack.org">
-          <d:informalfigure>
-            <d:mediaobject>
-              <d:imageobject>
-                <d:imagedata fileref="{$webhelp.common.dir}images/built-for-openstack.png"/>
-              </d:imageobject>
-            </d:mediaobject>
-          </d:informalfigure>
-        </d:link>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$builtForOpenStack != 0 and not(preceding-sibling::d:legalnotice)">
+          <d:link xlink:href="http://www.openstack.org">
+            <d:informalfigure>
+              <d:mediaobject>
+                <d:imageobject>
+                  <d:imagedata fileref="{$webhelp.common.dir}images/built-for-openstack.png"/>
+                </d:imageobject>
+              </d:mediaobject>
+            </d:informalfigure>
+          </d:link>
+        </xsl:when>
+        <xsl:when test="$branding = 'rackspace-private-cloud' and not(preceding-sibling::d:legalnotice)">
+          <d:link xlink:href="http://www.openstack.org">
+            <d:informalfigure>
+              <d:mediaobject>
+                <d:imageobject>
+                  <d:imagedata fileref="{$webhelp.common.dir}images/powered-by-openstack.png"/>
+                </d:imageobject>
+              </d:mediaobject>
+            </d:informalfigure>
+          </d:link>
+        </xsl:when>
+      </xsl:choose>
       
     </d:legalnotice>	  
 
