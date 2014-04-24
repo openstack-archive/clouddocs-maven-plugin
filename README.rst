@@ -69,6 +69,19 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.0.0 (April 23, 2014)
+============================================================
+-  Features and updates
+
+   -  Backwards incompatible change for Rackspace branding only: Update Rackspace webhelp format to use header-as-a-service and feedback-as-a-service. OpenStack branding unchanged.
+   -  Add PDF link on API site pages.
+
+-  Bug fixes
+
+   -  Use "Powered by OpenStack" logo in webhelp for Rackspace Private Cloud branding.
+   -  Remove spurious backslash from Google Analytics js.
+   -  Cosmetic improvements to overview pages for OpenStack api-site.
+
 clouddocs-maven-plugin 1.15.0 (March 21, 2014)
 ============================================================
 -  Features and updates
