@@ -70,7 +70,7 @@ moves all <tag>title</tag>, <tag>subtitle</tag>, and
 <tag>titleabbrev</tag> elements inside <tag>info</tag> wrappers,
 creating the wrapper if necessary.</para>
 <para>If the element being normalized has a default title (e.g.,
-<tag>bibligraphy</tag> and <tag>glossary</tag>), the title is made
+<tag>bibliography</tag> and <tag>glossary</tag>), the title is made
 explicit during normalization.</para>
 <para>External glossaries and bibliographies (not yet!) are also
 copied by normalization.</para>

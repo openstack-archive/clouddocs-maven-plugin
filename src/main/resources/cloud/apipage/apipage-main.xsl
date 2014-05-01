@@ -569,7 +569,7 @@
                     <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc//xsdxt:code"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                <!-- we allow no response text and we dont have a 200 level response with a representation -->
+                <!-- we allow no response text and we don't have a 200 level response with a representation -->
                 <xsl:choose>
                   <xsl:when
                       test="not(wadl:request) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">

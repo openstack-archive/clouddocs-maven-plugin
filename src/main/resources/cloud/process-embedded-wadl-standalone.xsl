@@ -537,10 +537,10 @@
             <xsl:if test="wadl:response/wadl:representation/wadl:doc/xhtml:*">
                 <xsl:apply-templates select="wadl:response/wadl:representation/wadl:doc/xhtml:*" mode="process-xhtml"/>
             </xsl:if>
-            <!-- we allow no response text and we dont have a 200 level response with a representation -->
+            <!-- we allow no response text and we don't have a 200 level response with a representation -->
             <xsl:if test="not($skipNoResponseText) and not(wadl:response[starts-with(normalize-space(@status),'2')]/wadl:representation)">
                 <!-- if we are also missing request text and it's not
-                     supressed then output the noreqresp message,
+                     suppressed then output the noreqresp message,
                      otherwise output the noresponse message -->
                 <xsl:choose>
                     <xsl:when test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]])">

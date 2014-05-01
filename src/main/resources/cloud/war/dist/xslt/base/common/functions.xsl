@@ -665,7 +665,7 @@ of the context node are in scope, as are processing instructions that appear
 
 <refdescription>
 <para>This function searches a list of processing instructions for the
-first psuedo-attribute matching the specified name and returns its value.
+first pseudo-attribute matching the specified name and returns its value.
 </para>
 </refdescription>
 
@@ -718,7 +718,7 @@ such attribute can be found.</para>
 <refpurpose>Returns a pseudo-XPath expression locating the specified node</refpurpose>
 
 <refdescription>
-<para>This function returns a psuedo-XPath expression that navigates from
+<para>This function returns a pseudo-XPath expression that navigates from
 the root of the document to the specified node.</para>
 
 <warning>
