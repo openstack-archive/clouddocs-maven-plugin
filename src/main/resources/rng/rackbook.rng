@@ -3,6 +3,7 @@
 
   <include href="classpath:///rng/docbookxi.rng"/> 
   <include href="classpath:///rng/extensions.rng"/>
+  <include href="classpath:///rng/its.rng"/>
 
   <define name="db.para.blocks" combine="choice">
     <choice>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    xmlns:its="http://www.w3.org/2005/11/its"
+    ns="http://docs.openstack.org/common/api/v1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+<!--
+This schema doesn't provide the full ITS vocabulary. If that's needed, we should
+just switch to using dbits.rng instead of docbookxi.rng. It just provides a few
+local attributes we use.
+-->
+
+    <define name="db.common.attributes" combine="interleave">
+      <interleave>
+        <optional>
+          <attribute name="its:translate">
+            <a:documentation>Specifies whether an element should be translated</a:documentation>
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="its:withinText">
+            <a:documentation>Specifies whether an element is treated as inline for translation</a:documentation>
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+              <value>nested</value>
+            </choice>
+          </attribute>
+        </optional>
+      </interleave>
+    </define>
+
+</grammar>
