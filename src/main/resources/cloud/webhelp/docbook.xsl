@@ -760,8 +760,7 @@ ERROR: Feedback email not set but internal comments are enabled.
         <a class="gloss" href="#">
             <xsl:attribute name="def">
                 <xsl:apply-templates select="$displayDefinition" mode="escapeXMLMarkup"/>
-            </xsl:attribute>
-            <xsl:attribute name="id"><xsl:value-of select="translate($term,' ','_')"></xsl:value-of></xsl:attribute> <xsl:value-of select="."/></a>
+            </xsl:attribute><xsl:value-of select="."/></a>
     </xsl:template>
     
     <xsl:template match="*" mode="escapeXMLMarkup">&lt;<xsl:value-of select="name(.)"/><xsl:apply-templates select="@*" mode="escapeXMLMarkup"/>&gt;<xsl:apply-templates mode="escapeXMLMarkup"/>&lt;/<xsl:value-of select="name(.)"/>&gt;</xsl:template>
