@@ -1,8 +1,8 @@
 a.gloss, a.gloss:hover, a.gloss:link, a.gloss:visited{
-    border: thin dotted green;
+    border: thin dotted green !important;
     text-decoration:none;
     color:black;
-    background-color:#FFFFEE;
+    background-color:#FFFFEE !important;
     padding-left:2px;
     padding-right:2px;
 }
