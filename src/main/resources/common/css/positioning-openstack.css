@@ -269,6 +269,11 @@ a.navLinkNext {
 	background: url(../images/next-arrow.png) no-repeat right center;
 }
 
+a.gloss, a.gloss:hover, a.gloss:link, a.gloss:visited{
+    border: thin dotted green !important;
+    background-color: #FFFFEE !important;
+}
+
 a#showHideButton {
 	padding-left: 20px;
 	background: url(../images/sidebar.png) no-repeat left center;
