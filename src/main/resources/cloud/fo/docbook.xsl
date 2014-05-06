@@ -1367,5 +1367,30 @@ set       toc,title
   </xsl:choose>
 </xsl:template>
 
+<!-- from fo/lists.xsl: Modified to make terms bold for openstack -->
+<xsl:template match="d:varlistentry/d:term">
+  <fo:inline>
+    <xsl:if test="$branding = 'openstack'">
+      <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:if>
+    <xsl:call-template name="simple.xlink">
+      <xsl:with-param name="content">
+        <xsl:apply-templates/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </fo:inline>
+  <xsl:choose>
+    <xsl:when test="not(following-sibling::d:term)"/> <!-- do nothing -->
+    <xsl:otherwise>
+      <!-- * if we have multiple terms in the same varlistentry, generate -->
+      <!-- * a separator (", " by default) and/or an additional line -->
+      <!-- * break after each one except the last -->
+      <fo:inline><xsl:value-of select="$variablelist.term.separator"/></fo:inline>
+      <xsl:if test="not($variablelist.term.break.after = '0')">
+        <fo:block/>
+      </xsl:if>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 </xsl:stylesheet>

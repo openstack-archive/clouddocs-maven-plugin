@@ -217,7 +217,7 @@ h2 { font: normal 12pt Arial, Helvetica, geneva;
     font-size: 10pt
 }
 
-.title, div.toc>p{
+.term, .title, div.toc>p{
 	font-weight: bold;
 	}
 	
