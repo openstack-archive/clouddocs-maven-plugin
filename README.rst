@@ -69,6 +69,15 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.0.1 (May 07, 2014)
+============================================================
+-  Bug fixes
+
+   -  For Rackspace branding, use the favicon.ico from a CDN.
+   -  For Rackspace branding, align search results to the left.
+   -  For OpenStack branding, make varlistentry/terms bold.
+   -  Avoid invalid ids <a> tags created from glossterms.
+
 clouddocs-maven-plugin 2.0.0 (April 23, 2014)
 ============================================================
 -  Features and updates
