@@ -245,7 +245,14 @@ These problems go away when you add this IE=7 mode meta tag.
                   background: transparent url(<xsl:value-of select="$webhelp.common.dir"/>jquery/treeview/images/folder.gif) 0 0px no-repeat;
                   }
               </style>
-              <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
+	      <xsl:choose>
+		<xsl:when test="contains($branding,'rackspace')">
+		  <link rel="shortcut icon" href="http://images.cdn.rackspace.com/icons/favicon.ico" type="image/x-icon"/>
+		</xsl:when>
+		<xsl:otherwise>
+		  <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
+		</xsl:otherwise>
+	      </xsl:choose>
               <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/positioning.css"/>
               <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/custom.css"/>
               <xsl:if test="//d:revhistory/d:revision and $canonical.url.base != ''">
