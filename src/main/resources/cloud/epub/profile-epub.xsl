@@ -75,7 +75,7 @@ Processing legalnotice: <xsl:value-of select="@role"/>
   </xsl:template>
 
   <!--
-      The abstract is supressed if the rs-api legal notice is used, as
+      The abstract is suppressed if the rs-api legal notice is used, as
       it's incorporated into the document in this case.
   -->
   <xsl:template match="d:abstract" mode="preprocess">

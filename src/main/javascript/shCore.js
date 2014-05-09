@@ -24,7 +24,7 @@ var sh = {
 		 * Pads line numbers. Possible values are:
 		 *
 		 *   false - don't pad line numbers.
-		 *   true  - automaticaly pad numbers with minimum required number of leading zeroes.
+		 *   true  - automatically pad numbers with minimum required number of leading zeroes.
 		 *   [int] - length up to which pad line numbers.
 		 */
 		'pad-line-numbers' : false,
@@ -829,7 +829,7 @@ function fixInputString(str)
 };
 
 /**
- * Removes all white space at the begining and end of a string.
+ * Removes all white space at the beginning and end of a string.
  * 
  * @param {String} str   String to trim.
  * @return {String}      Returns string without leading and following white space characters.
@@ -870,7 +870,7 @@ function unindent(str)
 		min = Math.min(matches[0].length, min);
 	}
 	
-	// trim minimum common number of white space from the begining of every line
+	// trim minimum common number of white space from the beginning of every line
 	if (min > 0) 
 		for (var i = 0; i < lines.length; i++) 
 			lines[i] = lines[i].substr(min);
@@ -1639,7 +1639,7 @@ sh.Highlighter.prototype = {
 	 * Initializes the highlighter/brush.
 	 *
 	 * Constructor isn't used for initialization so that nothing executes during necessary
-	 * `new SyntaxHighlighter.Highlighter()` call when setting up brush inheritence.
+	 * `new SyntaxHighlighter.Highlighter()` call when setting up brush inheritance.
 	 *
 	 * @param {Hash} params Highlighter parameters.
 	 */
