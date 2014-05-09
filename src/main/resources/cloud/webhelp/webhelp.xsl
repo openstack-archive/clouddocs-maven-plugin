@@ -274,7 +274,7 @@ These problems go away when you add this IE=7 mode meta tag.
                   src="http://content-services.rackspace.com/rax-headerservice/rest/service/raxheaderservice.js?headerdivid=raxheaderfooterservice-headercontent&amp;footerdivid=raxheaderfooterservice-footercontent&amp;contentdivid=content-wrapper&amp;filter=api_docs&amp;team=api">
                   <xsl:comment/> 
               </script>
-              <script type="text/javascript" src="http://content-services.rackspace.com/rax-feedback-services/rest/service/raxfeedbackservice.js?feedbackdivid=feedbackid&amp;servername=content-services.rackspace.com&amp;debug=true"><xsl:comment/></script>
+              <script type="text/javascript" src="http://content-services.rackspace.com/rax-feedback-services/rest/service/raxfeedbackservice.js?feedbackdivid=feedbackid&amp;servername=content-services.rackspace.com"><xsl:comment/></script>
               <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery.cookie.js">
                   <xsl:comment> </xsl:comment>
               </script>
