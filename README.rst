@@ -69,6 +69,15 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.0.2 (May 09, 2014)
+============================================================
+-  Bug fixes
+
+   -  OpenStack branding: Do not default builtForOpenStack to 1 when branding = openstack. These are independent parameters.
+   -  OpenStack branding: Apply css to glossterms even in admonitions.
+   -  Rackspace branding: set debug=false in Header-as-a-Service call.
+   -  Rackspace branding: Fix bug where toc overlapped the content pane if the cookie had not been set yet.
+
 clouddocs-maven-plugin 2.0.1 (May 07, 2014)
 ============================================================
 -  Bug fixes
