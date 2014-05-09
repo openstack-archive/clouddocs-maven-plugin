@@ -112,6 +112,7 @@ public class PDFBuilder {
 	private String coverLogoTop;
 	private String coverUrl;
 	private String branding;
+	private String builtForOpenStack;
 	private String security;
 
         private String chapterAutolabel;
@@ -350,10 +351,9 @@ public class PDFBuilder {
 		transformer.setParameter("autoPdfGlossaryInfix","/..");
 
 		transformer.setParameter("branding", branding);
-		if("openstack".equals(branding)) {
-			transformer.setParameter("builtForOpenStack", "1");
-		} else {
-			transformer.setParameter("builtForOpenStack", "0");
+
+		if(null != builtForOpenStack){
+		    transformer.setParameter("builtForOpenStack", builtForOpenStack);
 		}
 		transformer.setParameter("coverLogoPath", coverLogoPath);
 
@@ -645,6 +645,13 @@ public class PDFBuilder {
 	}
 	public void setBranding(String branding) {
 		this.branding = branding;
+	}
+
+	public String getBuiltForOpenStack() {
+		return builtForOpenStack;
+	}
+	public void setBuiltForOpenStack(String builtForOpenStack) {
+		this.builtForOpenStack = builtForOpenStack;
 	}
 
 	public String getPageWidth() {

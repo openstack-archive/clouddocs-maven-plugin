@@ -925,6 +925,7 @@ public abstract class WebHelpMojo extends AbstractWebhelpMojo {
 		pdfBuilder.setPdfFilenameBase(pdfFilenameBase);
         	        	
         	pdfBuilder.setBranding(branding);
+        	pdfBuilder.setBuiltForOpenStack(builtForOpenStack);
         	pdfBuilder.setSecurity(security);
         	pdfBuilder.setDraftStatus(draftStatus);
         	pdfBuilder.setStatusBarText(statusBarText);
