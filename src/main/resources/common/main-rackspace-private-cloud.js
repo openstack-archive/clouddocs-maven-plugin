@@ -19,6 +19,8 @@ $(document).ready(function() {
     var sidebarState = readCookie("webhelp-sidebar");
     if(sidebarState == "showing" || sidebarState == "hidden") {
 	showHideToc(sidebarState);
+    }else{
+	showHideToc("showing");
     }
 
     syncToc(); //Synchronize the toc tree with the content pane, when loading the page.   
