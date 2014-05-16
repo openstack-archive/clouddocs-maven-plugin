@@ -50,7 +50,7 @@
                       content="text/html; charset=UTF-8"/>
                     <meta http-equiv="X-UA-Compatible"
                       content="IE=edge,chrome=1"/>
-                      <title>Rackspace API Documentation</title>
+                    <title>Rackspace API Documentation</title>
                     <link href="apiref/css/css.css" rel="stylesheet"
                       type="text/css"/>
                     <!-- compiled from the less files -->
@@ -62,15 +62,55 @@
                       rel="stylesheet" type="text/css"/>
                     <link href="apiref/css/bootstrap.min.css" rel="stylesheet"
                     />
-                        <!-- fonts: -->
-                        <!-- This will need to be cleaned up before prod. I'm just including every style right now; once the styles are locked down it should be pared down to what's necessary. -->
-                        <link
-                          href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic'
-                          rel='stylesheet' type='text/css'/>
-                          
-                          <!-- our styles: -->
-                    <link rel="stylesheet" href="apiref/css/main-3569f93f8adb6558ac39cab2466620a8.css"/>   
                   </head>
+                  <!--<head>
+                    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+                      <meta charset="UTF-8"/>
+                    <meta http-equiv="X-UA-Compatible"
+                      content="IE=edge,chrome=1"/>
+                    <title>Rackspace API Documentation</title>
+                    <link href="apiref/css/css.css" rel="stylesheet"
+                      type="text/css"/>
+                    <!-\- compiled from the less files -\->
+                    <link rel="stylesheet" href="apiref/css/reset.css"/>
+                    <link rel="stylesheet" href="apiref/css/style.css"/>
+                    <!-\- syntax highlighting CSS -\->
+                    <link rel="stylesheet" href="apiref/css/syntax.css"/>
+                    <link href="apiref/css/main-rackspace.css"
+                      rel="stylesheet" type="text/css"/>
+                    <link href="apiref/css/bootstrap.min.css" rel="stylesheet"
+                    />
+                        <!-\- fonts: -\->
+                        <!-\- This will need to be cleaned up before prod. I'm just including every style right now; once the styles are locked down it should be pared down to what's necessary. -\->
+                        <link href="apiref/css/css.css" rel="stylesheet"
+                          type="text/css"/>
+                        <!-\- our styles: -\->
+                        <link rel="stylesheet" href="apiref/css/main-3569f93f8adb6558ac39cab2466620a8.css"/>
+                            
+                  </head> -->
+                  <!--<head>
+                    <meta charset="UTF-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                    <!-\-<meta http-equiv="content-type"
+                      content="text/html; charset=UTF-8"/>
+                    <meta http-equiv="X-UA-Compatible"
+                      content="IE=edge,chrome=1"/>-\->
+                    <title>Rackspace API Documentation</title>
+                    <link
+                      href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic'
+                      rel='stylesheet' type='text/css'/>
+                    <link href="apiref/css/css.css" rel="stylesheet"
+                      type="text/css"/>
+                    <!-\- compiled from the less files -\->
+                    <link rel="stylesheet" href="apiref/css/reset.css"/>
+                    <link rel="stylesheet" href="apiref/css/style.css"/>
+                    <!-\- syntax highlighting CSS -\->
+                    <link rel="stylesheet" href="apiref/css/syntax.css"/>
+                    <link href="apiref/css/main-rackspace.css"
+                      rel="stylesheet" type="text/css"/>
+                    <link href="apiref/css/bootstrap.min.css" rel="stylesheet"
+                    />
+                  </head>-->
                 </xsl:when>
                 <xsl:otherwise>
                   <head>
@@ -95,7 +135,7 @@
               <body> 
                 <xsl:choose>
                   <xsl:when test="$branding = 'rackspace'">
-                    <div class="navbar navbar-static-top navbar-inverse navbar-default">
+                    <div class="navbar navbar-fixed-top navbar-inverse navbar-default">
                       <div class="container">
                         <div class="navbar-header">
                           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-btn">
@@ -236,106 +276,23 @@
                           <xsl:apply-templates/>
                         </div>
                       </div>
-                    </div>
                       <div class="row">
-                        <!--<div class="col-md-3"/>-->
-                      <div id="footer" class="clearfix">   
-                        <div id="fatfooter-wrap" class="container clearfix">
-                          <div class="row">  
-                            <div class="col-md-2">
-                              <div class="footer-item-header">Products</div>
-                              <ul>
-                                <li><a href="http://www.rackspace.com/cloud/">Public Cloud</a></li>
-                                <li><a href="http://www.rackspace.com/cloud/private/">Private Cloud</a></li>
-                                <li><a href="http://www.rackspace.com/cloud/hybrid/">Hybrid Cloud</a></li>
-                                <li><a href="http://www.rackspace.com/managed-hosting/">Managed Hosting</a></li>
-                                <li><a href="http://www.rackspace.com/email-hosting/">Email Hosting</a></li>
-                              </ul>
-                            </div>
-                            <div class="col-md-2">
-                              <div class="footer-item-header">Support</div>
-                              <ul>
-                                <li><a href="http://support.rackspace.com/" target="_blank">Support Home</a></li>
-                                <li><a href="http://www.rackspace.com/knowledge_center/">Knowledge Center</a></li>
-                                <li><a href="https://community.rackspace.com" target="_blank">Rackspace Community</a></li>
-                                <li><a href="http://docs.rackspace.com/" target="_blank">API Documentation</a></li>
-                                <li><a href="http://developer.rackspace.com" target="_blank">Developer Center</a></li>
-                              </ul>
-                            </div>
-                            <div class="col-md-2">
-                              <div class="footer-item-header">Control Panels</div>
-                              <ul>
-                                <li><a href="https://my.rackspace.com/portal/auth/login" target="_blank">MyRackspace Portal</a></li>
-                                <li><a href="https://mycloud.rackspace.com" target="_blank">Cloud Control Panel</a></li>
-                                <li><a href="https://manage.rackspacecloud.com/pages/Login.jsp" target="_blank">Cloud Sites Control Panel</a>
-                                </li>
-                                <li><a href="https://apps.rackspace.com" target="_blank">Rackspace Webmail Login</a></li>
-                                <li><a href="https://cp.rackspace.com" target="_blank">Email Admin Login</a></li>
-                              </ul>
-                            </div>
-                            <div class="col-md-4 col-md-offset-1">
-                              <div class="footer-item-header">About Rackspace</div>
-                              <div class="row">
-                                <div class="col-md-6">
-                                  <ul>
-                                    <li><a href="http://www.rackspace.com/about/">Our Story</a></li>
-                                    <li><a href="http://stories.rackspace.com" target="_blank">Case Studies</a></li>
-                                    <li><a href="http://www.rackspace.com/events/">Events</a></li>
-                                    <li><a href="http://www.rackspace.com/programs/">Programs</a></li>
-                                    <li><a href="http://www.rackspace.com/blog/newsroom/">Newsroom</a></li>
-                                  </ul>
-                                </div>
-                                <div class="col-md-6">
-                                  <ul>
-                                    <li><a href="http://www.rackspace.com/blog/">The Rackspace Blog</a></li>
-                                    <li><a href="http://developer.rackspace.com/blog/" target="_blank">DevOps Blog</a></li>
-                                    <li><a href="http://www.rackspace.com/information/contactus/">Contact Information</a></li>
-                                    <li><a href="http://www.rackspace.com/information/legal/">Legal</a></li>
-                                    <li><a href="http://talent.rackspace.com/" target="_blank">Careers</a></li>
-                                  </ul>
-                                </div>
+                        <div class="col-md-3"/>
+                        <div class="col-md-9" id="footer">
+                          <!--<xsl:choose>
+                            <xsl:when test="$branding = 'rackspace'">-->
+                              <div class="legal">
+                                <a href="index.html"> Legal notices </a>
                               </div>
-                            </div>
-                          </div>
+                            <!--</xsl:when>
+                            <xsl:otherwise>
+                              <p>The OpenStack project is provided under the Apache 2.0
+                                license.</p>
+                            </xsl:otherwise>
+                          </xsl:choose>-->
                         </div>
-                        <div id="basement-wrap">
-                          <div class="container">
-                            <div class="row">
-                              <div class="col-md-1">
-                                <img src="http://images.cdn.rackspace.com/footer/basement/rackerpowered-logo.png" alt="Racker Powered"/>
-                              </div>
-                              <div class="col-md-2 col-md-offset-1">©2014 Rackspace, US Inc.</div>
-                              <div class="col-md-8"><span class="footerlink">
-                                <a href="/about/" class="basement">About Rackspace</a>
-                              </span> |
-                                <span class="footerlink">
-                                  <a href="http://ir.rackspace.com" class="basement">Investors</a>
-                                </span> |
-                                <span class="footerlink">
-                                  <a href="http://www.rackertalent.com" class="basement">Careers</a>
-                                </span> |
-                                <span class="footerlink">
-                                  <a href="/information/legal/privacystatement" class="basement">Privacy Statement</a>
-                                </span> |
-                                <span class="footerlink">
-                                  <a href="/information/legal/websiteterms" class="basement">Website Terms</a>
-                                </span> |
-                                <span class="footerlink">
-                                  <a href="/information/legal/copyrights_trademarks" class="basement">Trademarks</a>
-                                </span> |
-                                <span class="footerlink">
-                                  <a href="/sitemap/" class="basement">Sitemap</a>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>  
                       </div>
-                      </div>
-                      <script src="/assets/app-86aefccf54597dda65ee681f8853c86a.js"></script>
-                      <!-- syntax highlighter: -->
-                      <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
-                      <script>hljs.initHighlightingOnLoad();</script>
+                    </div>
                   </xsl:when>
                   <xsl:otherwise>
                     <div class="container">
