@@ -46,11 +46,16 @@
               <xsl:choose>
                 <xsl:when test="$branding = 'rackspace'">
                   <head>
-                    <meta http-equiv="content-type"
+                    <meta charset="UTF-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                    <!--<meta http-equiv="content-type"
                       content="text/html; charset=UTF-8"/>
                     <meta http-equiv="X-UA-Compatible"
-                      content="IE=edge,chrome=1"/>
+                      content="IE=edge,chrome=1"/>-->
                     <title>Rackspace API Documentation</title>
+                    <link
+                      href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic'
+                      rel='stylesheet' type='text/css'/>
                     <link href="apiref/css/css.css" rel="stylesheet"
                       type="text/css"/>
                     <!-- compiled from the less files -->
@@ -87,35 +92,36 @@
               <body> 
                 <xsl:choose>
                   <xsl:when test="$branding = 'rackspace'">
-                    <div class="header">
-                      <div class="inner clearfix">
-                        <a class="title" href="http://162.242.151.184/index.html">Rackspace Developer Portal</a>
-                        <ul>
-                          <li>
-                            <a href="http://162.242.151.184/main-sdks.html">SDKs</a>
-                          </li>
-                          <li>
-                            <a href="http://162.242.151.184/main-services.html"
-                              >Services</a>
-                          </li>
-                          <li>
-                            <a href="http://162.242.151.184/docs">Docs</a>
-                          </li>
-                          <li>
-                            <a href="http://162.242.151.184/blog-list.html">Developer
-                              Blog</a>
-                          </li>
-                          <li>
-                            <a href="#">Sign Up</a>
-                          </li>
-                          <li>
-                            <form>
-                              <input name="" id="" placeholder="Search our docs"
-                                type="search"/>
-                              <input name="" value="Search" type="submit"/>
-                            </form>
-                          </li>
-                        </ul>
+                    <div class="navbar navbar-fixed-top navbar-inverse navbar-default">
+                      <div class="container">
+                        <div class="navbar-header">
+                          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-btn">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                          </button>
+                          <a class="navbar-brand" href="/">Rackspace :: Develop</a>
+                        </div>
+                        <div class="collapse navbar-collapse" id="navbar-collapse-btn">
+                          <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/sdks/">SDKs &amp; Tools</a></li>
+                            <li><a href="/docs/">Docs</a></li>
+                            <li><a href="/blog/">Blog</a></li>
+                            <li><a href="/community/">Community</a></li>
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
+                              <ul class="dropdown-menu">
+                                <li><a href="https://mycloud.rackspace.com" target="_blank">Control Panel</a></li>
+                                <li><a href="http://status.rackspace.com" target="_blank">Service Status</a></li>
+                                <li class="divider"></li>
+                                <li><a href="http://www.rackspace.com/knowledge_center/" target="_blank">Knowledge Base</a></li>
+                                <li><a href="https://community.rackspace.com/developers/default" target="_blank">Developer Forums</a></li>
+                                <li><a href="http://www.rackspace.com/support/" target="_blank">Talk with Support</a></li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </xsl:when>
