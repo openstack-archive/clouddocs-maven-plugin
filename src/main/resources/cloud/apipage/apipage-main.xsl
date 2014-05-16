@@ -87,7 +87,7 @@
               <body> 
                 <xsl:choose>
                   <xsl:when test="$branding = 'rackspace'">
-                    <div class="header">
+                   <!-- <div class="header">
                       <div class="inner clearfix">
                         <a class="title" href="http://162.242.151.184/index.html">Rackspace Developer Portal</a>
                         <ul>
@@ -116,6 +116,39 @@
                             </form>
                           </li>
                         </ul>
+                      </div>
+                    </div>-->
+                    <div class="navbar navbar-static-top navbar-inverse navbar-default">
+                      <div class="container">
+                        <div class="navbar-header">
+                          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-btn">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                          </button>
+                          <a class="navbar-brand" href="/">Rackspace :: Develop</a>
+                        </div>
+                        <div class="collapse navbar-collapse" id="navbar-collapse-btn">
+                          <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/sdks/">SDKs &amp; Tools</a></li>
+                            <li><a href="/docs/">Docs</a></li>
+                            <li><a href="/blog/">Blog</a></li>
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
+                              <ul class="dropdown-menu">
+                                <li><a href="/community/">Community</a></li>
+                                <li class="divider"></li>
+                                <li><a href="https://mycloud.rackspace.com" target="_blank">Control Panel</a></li>
+                                <li><a href="http://status.rackspace.com" target="_blank">Service Status</a></li>
+                                <li class="divider"></li>
+                                <li><a href="http://www.rackspace.com/knowledge_center/" target="_blank">Knowledge Base</a></li>
+                                <li><a href="https://community.rackspace.com/developers/default" target="_blank">Developer Forums</a></li>
+                                <li><a href="http://www.rackspace.com/support/" target="_blank">Talk with Support</a></li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </xsl:when>
