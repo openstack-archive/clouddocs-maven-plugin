@@ -62,7 +62,17 @@
                       rel="stylesheet" type="text/css"/>
                     <link href="apiref/css/bootstrap.min.css" rel="stylesheet"
                     />
-                  </head>
+            <!-- fonts: -->
+            <!-- This will need to be cleaned up before prod. I'm just including every style right now; once the styles are locked down it should be pared down to what's necessary. -->
+            <link
+              href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic"
+              rel="stylesheet" type="text/css"/>
+
+            <!-- our styles: -->
+            <link rel="stylesheet"
+              href="apiref/css/main-3569f93f8adb6558ac39cab2466620a8.css"
+            />
+          </head>
                 </xsl:when>
                 <xsl:otherwise>
                   <head>
@@ -86,40 +96,41 @@
               <!-- body -->
               <body> 
                 <xsl:choose>
-                  <xsl:when test="$branding = 'rackspace'">
-                    <div class="header">
-                      <div class="inner clearfix">
-                        <a class="title" href="http://162.242.151.184/index.html">Rackspace Developer Portal</a>
-                        <ul>
-                          <li>
-                            <a href="http://162.242.151.184/main-sdks.html">SDKs</a>
-                          </li>
-                          <li>
-                            <a href="http://162.242.151.184/main-services.html"
-                              >Services</a>
-                          </li>
-                          <li>
-                            <a href="http://162.242.151.184/docs">Docs</a>
-                          </li>
-                          <li>
-                            <a href="http://162.242.151.184/blog-list.html">Developer
-                              Blog</a>
-                          </li>
-                          <li>
-                            <a href="#">Sign Up</a>
-                          </li>
-                          <li>
-                            <form>
-                              <input name="" id="" placeholder="Search our docs"
-                                type="search"/>
-                              <input name="" value="Search" type="submit"/>
-                            </form>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </xsl:when>
-                  <xsl:otherwise>
+          <xsl:when test="$branding = 'rackspace'">
+            <div class="navbar navbar-static-top navbar-inverse navbar-default">
+              <div class="container">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-btn">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="http://localhost:8000/">Rackspace :: Develop</a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse-btn">
+                  <ul class="nav navbar-nav navbar-right">
+                    <li><a href="http://localhost:8000/sdks/">SDKs &amp; Tools</a></li>
+                    <li><a href="http://localhost:8000/docs/">Docs</a></li>
+                    <li><a href="http://localhost:8000/blog/">Blog</a></li>
+                    <li><a href="http://localhost:8000/community/">Community</a></li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="https://mycloud.rackspace.com/" target="_blank">Control Panel</a></li>
+                        <li><a href="http://status.rackspace.com/" target="_blank">Service Status</a></li>
+                        <li class="divider"></li>
+                        <li><a href="http://www.rackspace.com/knowledge_center/" target="_blank">Knowledge Base</a></li>
+                        <li><a href="https://community.rackspace.com/developers/default" target="_blank">Developer Forums</a></li>
+                        <li><a href="http://www.rackspace.com/support/" target="_blank">Talk with Support</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </xsl:when>
+          <xsl:otherwise>
                     <div class="navbar navbar-default" role="navigation">
                       <!-- Brand and toggle get grouped for better mobile display -->
                       <div class="container">
@@ -229,22 +240,105 @@
                       </div>
                       <div class="row">
                         <div class="col-md-3"/>
-                        <div class="col-md-9" id="footer">
-                          <xsl:choose>
-                            <xsl:when test="$branding = 'rackspace'">
-                              <div class="legal">
-                                <a href="index.html"> Legal notices </a>
+                        <div id="footer" class="clearfix">
+                          <div id="fatfooter-wrap" class="container clearfix">
+                            <div class="row">
+                              <div class="col-md-2">
+                                <div class="footer-item-header">Products</div>
+                                <ul>
+                                  <li><a href="http://www.rackspace.com/cloud/">Public Cloud</a></li>
+                                  <li><a href="http://www.rackspace.com/cloud/private/">Private Cloud</a></li>
+                                  <li><a href="http://www.rackspace.com/cloud/hybrid/">Hybrid Cloud</a></li>
+                                  <li><a href="http://www.rackspace.com/managed-hosting/">Managed Hosting</a></li>
+                                  <li><a href="http://www.rackspace.com/email-hosting/">Email Hosting</a></li>
+                                </ul>
                               </div>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <p>The OpenStack project is provided under the Apache 2.0
-                                license.</p>
-                            </xsl:otherwise>
-                          </xsl:choose>
+                              <div class="col-md-2">
+                                <div class="footer-item-header">Support</div>
+                                <ul>
+                                  <li><a href="http://support.rackspace.com/" target="_blank">Support Home</a></li>
+                                  <li><a href="http://www.rackspace.com/knowledge_center/">Knowledge Center</a></li>
+                                  <li><a href="https://community.rackspace.com/" target="_blank">Rackspace Community</a></li>
+                                  <li><a href="http://docs.rackspace.com/" target="_blank">API Documentation</a></li>
+                                  <li><a href="http://developer.rackspace.com/" target="_blank">Developer Center</a></li>
+                                </ul>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="footer-item-header">Control Panels</div>
+                                <ul>
+                                  <li><a href="https://my.rackspace.com/portal/auth/login" target="_blank">MyRackspace Portal</a></li>
+                                  <li><a href="https://mycloud.rackspace.com/" target="_blank">Cloud Control Panel</a></li>
+                                  <li><a href="https://manage.rackspacecloud.com/pages/Login.jsp" target="_blank">Cloud Sites Control Panel</a>
+                                  </li>
+                                  <li><a href="https://apps.rackspace.com/" target="_blank">Rackspace Webmail Login</a></li>
+                                  <li><a href="https://cp.rackspace.com/" target="_blank">Email Admin Login</a></li>
+                                </ul>
+                              </div>
+                              <div class="col-md-4 col-md-offset-1">
+                                <div class="footer-item-header">About Rackspace</div>
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <ul>
+                                      <li><a href="http://www.rackspace.com/about/">Our Story</a></li>
+                                      <li><a href="http://stories.rackspace.com/" target="_blank">Case Studies</a></li>
+                                      <li><a href="http://www.rackspace.com/events/">Events</a></li>
+                                      <li><a href="http://www.rackspace.com/programs/">Programs</a></li>
+                                      <li><a href="http://www.rackspace.com/blog/newsroom/">Newsroom</a></li>
+                                    </ul>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <ul>
+                                      <li><a href="http://www.rackspace.com/blog/">The Rackspace Blog</a></li>
+                                      <li><a href="http://developer.rackspace.com/blog/" target="_blank">DevOps Blog</a></li>
+                                      <li><a href="http://www.rackspace.com/information/contactus/">Contact Information</a></li>
+                                      <li><a href="http://www.rackspace.com/information/legal/">Legal</a></li>
+                                      <li><a href="http://talent.rackspace.com/" target="_blank">Careers</a></li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="basement-wrap">
+                            <div class="container">
+                              <div class="row">
+                                <div class="col-md-1">
+                                  <img src="Rackspace%20Developer%20Center_files/rackerpowered-logo.png" alt="Racker Powered"/>
+                                </div>
+                                <div class="col-md-2 col-md-offset-1">©2014 Rackspace, US Inc.</div>
+                                <div class="col-md-8"><span class="footerlink">
+                                  <a href="http://localhost:8000/about/" class="basement">About Rackspace</a>
+                                </span> |
+                                  <span class="footerlink">
+                                    <a href="http://ir.rackspace.com/" class="basement">Investors</a>
+                                  </span> |
+                                  <span class="footerlink">
+                                    <a href="http://www.rackertalent.com/" class="basement">Careers</a>
+                                  </span> |
+                                  <span class="footerlink">
+                                    <a href="http://localhost:8000/information/legal/privacystatement" class="basement">Privacy Statement</a>
+                                  </span> |
+                                  <span class="footerlink">
+                                    <a href="http://localhost:8000/information/legal/websiteterms" class="basement">Website Terms</a>
+                                  </span> |
+                                  <span class="footerlink">
+                                    <a href="http://localhost:8000/information/legal/copyrights_trademarks" class="basement">Trademarks</a>
+                                  </span> |
+                                  <span class="footerlink">
+                                    <a href="http://localhost:8000/sitemap/" class="basement">Sitemap</a>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div> 
                         </div>
                       </div>
                     </div>
-                  </xsl:when>
+            <script src="/assets/app-86aefccf54597dda65ee681f8853c86a.js"/>
+            <!-- syntax highlighter: -->
+            <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"/>
+            <script>hljs.initHighlightingOnLoad();</script>
+          </xsl:when>
                   <xsl:otherwise>
                     <div class="container">
                       <div class="row">
