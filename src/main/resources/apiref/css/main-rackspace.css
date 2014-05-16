@@ -4,7 +4,6 @@
 	http://staging.openstack.org/themes/openstack/css/main.css
 */
 
-
 #rightColumn {
     float:left;
     position: relative;
@@ -24,13 +23,14 @@ body {
 }
 
 .navbar-brand {
-	display: block;
-	margin-top: 8px;
-	text-indent: -1000em;
-	background: url(../images/rackspace-logo.png) no-repeat left center;
-	height: 54px;
-	width: 177px;
-	color: black;
+	text-transform: uppercase;
+    color: #FFF;
+    line-height: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    background: url('apiref/images/rs-logo.svg') no-repeat scroll left center / 20px auto transparent;
+    padding: 12px 12px 12px 23px;
+    height: 42px;
 }
 
 .container {
@@ -42,8 +42,8 @@ body {
 .navbar-default {
     background-color: black;
     border: none;
+    margin-top: 0px;
 }
-
 
 .subhead {
 	border-bottom: 1px dotted;
@@ -226,7 +226,7 @@ dt:hover > a.headerlink {
 
 @media (min-width: 992px) {
     .navbar-default {
-        margin-top: 25px;
+        margin-top: 0px;
     }
 }
 
