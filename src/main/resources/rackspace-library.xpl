@@ -1007,6 +1007,77 @@ setting failOnValidationError to no in your pom.
 	    </p:xslt>                
 	</p:group>
     </p:declare-step>
+    
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:docbook-xslt2-monolithic-html"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="docbook-xslt2-monolithic-html-step">
+
+        <p:input port="source" primary="true"/>
+
+        <p:output port="result" primary="true">
+            <p:pipe step="group" port="result"/>
+        </p:output>
+
+        <p:input port="parameters" kind="parameter"/>
+        <ut:parameters name="params"/>
+        <p:sink/>
+
+        <p:group name="group">
+            <p:output port="result" primary="true">
+                <p:pipe step="identity" port="result"/>
+            </p:output>
+            <p:output port="secondary" primary="false" sequence="true"/>
+
+            <p:variable name="project.build.directory" select="//c:param[@name = 'project.build.directory']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+
+            <p:variable name="targetDirectory" select="//c:param[@name = 'targetDirectory']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+            
+            <p:variable name="base.dir" select="//c:param[@name = 'base.dir']/@value">
+                <p:pipe step="params" port="parameters"/>
+            </p:variable>
+
+            <p:load name="docbook.xsl">
+                <p:with-option name="href"
+                    select="concat(
+                    (if ($targetDirectory != '') then $targetDirectory else $project.build.directory),
+                    (if ($targetDirectory  = '') then '/docbkx' else ''),
+                    'cloud/war/dist/xslt/base/html/docbook.xsl')" >
+                    <p:empty/>
+                </p:with-option>
+            </p:load>
+            
+            <p:xslt name="docbook-xslt2-monolithic-html-xslt">
+                <p:input port="source"> 
+                    <p:pipe step="docbook-xslt2-monolithic-html-step" port="source"/> 
+                </p:input> 
+                <p:input port="stylesheet">
+                    <p:pipe step="docbook.xsl" port="result"/>
+                </p:input>
+                <p:input port="parameters" >
+                    <p:pipe step="docbook-xslt2-monolithic-html-step" port="parameters"/>
+                </p:input>
+            </p:xslt>
+            
+            <p:store>
+                <p:with-option name="href" select="concat($base.dir, '/content/index-monolithic.html')"/>
+            </p:store>
+
+            <p:identity name="identity">
+                <p:input port="source"> 
+                    <p:pipe step="docbook-xslt2-monolithic-html-step" port="source"/> 
+                </p:input> 
+            </p:identity>
+
+        </p:group>
+    </p:declare-step>
 
     <p:declare-step 
         xmlns:p="http://www.w3.org/ns/xproc"

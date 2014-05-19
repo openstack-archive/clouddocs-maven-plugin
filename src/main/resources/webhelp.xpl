@@ -67,4 +67,6 @@
     </p:input>
   </l:validate-transform-idrefs>
   
+  <l:docbook-xslt2-monolithic-html/>
+  
 </p:declare-step>
