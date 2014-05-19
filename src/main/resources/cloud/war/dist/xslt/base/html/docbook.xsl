@@ -24,7 +24,7 @@
   <xsl:include href="../common/title-content.xsl"/>
   <xsl:include href="../common/inlines.xsl"/>
   <xsl:include href="../common/olink.xsl"/>
-  <xsl:include href="../common/preprocess.xsl"/>
+<!--  <xsl:include href="../common/preprocess.xsl"/>-->
   <xsl:include href="../common/titlepages.xsl"/>
   <xsl:include href="titlepage-templates.xsl"/>
   <xsl:include href="titlepage-mode.xsl"/>
@@ -69,8 +69,10 @@
 <xsl:param name="stylesheet.result.type" select="'xhtml'"/>
 
 <xsl:template match="/">
+<!--  <xsl:variable name="root" as="element()"
+		select="f:docbook-root-element(f:preprocess(/),$rootid)"/>-->
   <xsl:variable name="root" as="element()"
-		select="f:docbook-root-element(f:preprocess(/),$rootid)"/>
+    select="f:docbook-root-element(/,$rootid)"/>
 
   <xsl:if test="$verbosity &gt; 3">
     <xsl:message>Styling...</xsl:message>

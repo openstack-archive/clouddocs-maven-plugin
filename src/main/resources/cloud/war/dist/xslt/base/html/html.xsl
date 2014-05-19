@@ -183,19 +183,19 @@ and a CSS style is specified.</para>
   <xsl:param name="node" select="."/>
 
   <xsl:if test="//db:annotation">
-    <script type="text/javascript" src="{concat($resource.root, 'js/AnchorPosition.js')}"/>
-    <script type="text/javascript" src="{concat($resource.root, 'js/PopupWindow.js')}"/>
-    <script type="text/javascript" src="{concat($resource.root, 'js/annotation.js')}"/>
+    <script type="text/javascript" src="{concat($resource.root, 'js/AnchorPosition.js')}"><xsl:comment/></script>
+    <script type="text/javascript" src="{concat($resource.root, 'js/PopupWindow.js')}"><xsl:comment/></script>
+    <script type="text/javascript" src="{concat($resource.root, 'js/annotation.js')}"><xsl:comment/></script>
   </xsl:if>
 
-  <script type="text/javascript" src="{concat($resource.root, 'js/dbmodnizr.js')}"/>
+  <script type="text/javascript" src="{concat($resource.root, 'js/dbmodnizr.js')}"><xsl:comment/></script>
 
   <xsl:if test="//*[@xlink:type='extended']">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"/>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"/>
     <link type="text/css" rel="stylesheet"
           href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css"/>
-    <script type="text/javascript" src="{concat($resource.root, 'js/nhrefs.js')}"/>
+    <script type="text/javascript" src="{concat($resource.root, 'js/nhrefs.js')}"><xsl:comment/></script>
   </xsl:if>
 </xsl:template>
 
