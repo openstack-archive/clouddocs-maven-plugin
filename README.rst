@@ -69,6 +69,13 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.0.3 (May 22, 2014)
+============================================================
+-  Bug fixes
+
+   -  Support nested bold and italic text in code listings with syntax highlighting.
+   -  Support arbitrary legalnotice text and inject appropriate text when role="rpc".
+
 clouddocs-maven-plugin 2.0.2 (May 09, 2014)
 ============================================================
 -  Bug fixes
