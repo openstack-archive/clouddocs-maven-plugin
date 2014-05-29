@@ -33,7 +33,7 @@
   <xsl:param name="googleAnalyticsDomain"/>
   <xsl:param name="enableGoogleAnalytics">0</xsl:param>
   <xsl:param name="branding">openstack</xsl:param>
-  <xsl:param name="autoPdfUrl">http://api.openstack.org/api-ref-guides/bk-</xsl:param>
+  <xsl:param name="autoPdfUrl">http://developer.openstack.org/api-ref-guides/bk-</xsl:param>
   <xsl:param name="pdfFilename"/>
           <xsl:template match="node() | @*">
             <xsl:copy>
