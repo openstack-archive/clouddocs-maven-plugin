@@ -938,7 +938,7 @@ ERROR: Feedback email not set but internal comments are enabled.
   <xsl:choose>
     <xsl:when test="$branding = 'rackspace'"><p><xsl:call-template name="dingbat">
       <xsl:with-param name="dingbat">copyright</xsl:with-param>
-    </xsl:call-template><script type="text/javascript">document.write(new Date().getFullYear())</script><noscript><xsl:value-of select="$buildyear"/></noscript> Rackspace, US Inc.</p></xsl:when>
+    </xsl:call-template><script type="text/javascript">document.write(new Date().getFullYear())</script><noscript><xsl:value-of select="$buildyear"/></noscript> Rackspace US, Inc.</p></xsl:when>
     <xsl:otherwise>
   <xsl:if test="generate-id() = generate-id(//d:refentryinfo/d:copyright[1])
       and ($stylesheet.result.type = 'html' or $stylesheet.result.type = 'xhtml')">
