@@ -1345,7 +1345,7 @@ set       toc,title
       </xsl:call-template><xsl:call-template name="datetime.format">
       <xsl:with-param name="date" select="date:date-time()"/>
       <xsl:with-param name="format" select="'Y'"/>
-      </xsl:call-template> Rackspace, US Inc.</xsl:when>
+      </xsl:call-template> Rackspace US, Inc.</xsl:when>
     <xsl:otherwise>
   <xsl:call-template name="gentext">
     <xsl:with-param name="key" select="'Copyright'"/>
