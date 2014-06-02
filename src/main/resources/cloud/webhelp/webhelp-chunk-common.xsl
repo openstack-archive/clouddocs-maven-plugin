@@ -60,17 +60,6 @@
                             <xsl:call-template name="user.footer.navigation"/>
                         </div>
                         <div id="raxheaderfooterservice-footercontent"><xsl:comment/></div>
-                        <xsl:if test="$webhelp.war != '0' and $webhelp.war != ''">
-                            <script type="text/javascript">
-                                var s = document.createElement( 'script' );
-                                if ( location.hostname == "docs.rackspace.com") {
-                                s.setAttribute('src', "https://tags.tiqcdn.com/utag/rackspace/docs/prod/utag.js");
-                                document.body.appendChild( s ); }
-                                else if ( location.hostname == "docs-staging.rackspace.com") {
-                                s.setAttribute('src', "https://tags.tiqcdn.com/utag/rackspace/docs/qa/utag.js");
-                                document.body.appendChild( s ); }
-                            </script>
-                        </xsl:if>
                     </xsl:when>
                     <xsl:otherwise>
                             <div id="content">
