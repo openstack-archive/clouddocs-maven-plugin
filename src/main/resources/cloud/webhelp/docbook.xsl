@@ -444,6 +444,20 @@ ERROR: Feedback email not set but internal comments are enabled.
           <xsl:choose>
               <xsl:when test="$branding = 'rackspace' or $branding = 'rackspace-private-cloud'">
                   <div id="raxheaderfooterservice-headercontent"><xsl:comment/></div>
+                  <noscript>
+                      <div class="noscript-message-wrapper">
+                          <div class="noscript-message-container">
+                              <p>The Rackspace Support Network works best with JavaScript enabled. Please <a href="http://enable-javascript.com" target="_blank">enable JavaScript</a> to enhance your experience.</p>
+                          </div>
+                      </div>
+                      <div class="noscript-header-wrapper">
+                          <div class="noscript-message-container">
+                              <p>
+                                  <a href="http://www.rackspace.com/support/">Support Hub</a> | <a href="http://www.rackspace.com/knowledge_center/">Knowlege Center</a> | <a href="http://docs.rackspace.com/">API Documentation</a> | <a href="https://community.rackspace.com">Rackspace Community</a>
+                              </p>
+                          </div>
+                      </div>
+                  </noscript>
                   <div id="toolbar" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                       <div id="toolbar-inner">
                           <xsl:call-template name="breadcrumbs">

@@ -108,7 +108,7 @@
             <l:gentext key="txt_filesfound" text="Results"/>
             <l:gentext key="txt_enter_at_least_1_char" text="You must enter at least one character."/>
             <l:gentext key="txt_browser_not_supported"
-                       text="Your browser is not supported. Use of Mozilla Firefox is recommended."/>
+                       text="Please enable JavaScript."/>
             <l:gentext key="txt_please_wait" text="Please wait. Search in progress..."/>
             <l:gentext key="txt_results_for" text="Results for: "/>
             <l:gentext key="TableofContents" text="Contents"/>
@@ -174,13 +174,6 @@
   <xsl:param name="node" select="."/>
 <xsl:text>
 </xsl:text>
-<!-- 
-This avoids two problems in IE 8. We should someday figure out why this is happening and tweak the JavaScript so this <meta/> tag is not necessary:
-1. When you perform a search and click the Toggle Highlight button, IE 8 adds a line break before the highlighted word.
-2. If you click the show/hide toc button, the tab crashes.
-These problems go away when you add this IE=7 mode meta tag.
- -->
-	<!-- <meta http-equiv="X-UA-Compatible" content="IE=7" /> -->
 	<xsl:if test="$branding = 'openstack'">
 	  <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
 	</xsl:if>
