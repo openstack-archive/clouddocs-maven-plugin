@@ -69,6 +69,14 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.0.4 (June 05, 2014)
+============================================================
+-  Bug fixes
+
+   -  Rackspace branding, Webhelp: Add <noscript> bar encouraging users to enable JavaScript. 
+   -  Rackspace branding: Minor change to copyright statement. 
+   -  Rackspace branding, Webhelp: Remove tealium js because this is now pulled in via HaaS.
+
 clouddocs-maven-plugin 2.0.3 (May 22, 2014)
 ============================================================
 -  Bug fixes
