@@ -453,7 +453,7 @@ ERROR: Feedback email not set but internal comments are enabled.
                       <div class="noscript-header-wrapper">
                           <div class="noscript-message-container">
                               <p>
-                                  <a href="http://www.rackspace.com/support/">Support Hub</a> | <a href="http://www.rackspace.com/knowledge_center/">Knowlege Center</a> | <a href="http://docs.rackspace.com/">API Documentation</a> | <a href="https://community.rackspace.com">Rackspace Community</a>
+                                  <a href="http://www.rackspace.com/support/">Support Hub</a> | <a href="http://www.rackspace.com/knowledge_center/">Knowledge Center</a> | <a href="http://docs.rackspace.com/">API Documentation</a> | <a href="https://community.rackspace.com">Rackspace Community</a>
                               </p>
                           </div>
                       </div>
