@@ -443,46 +443,55 @@
                       </div>
                     </div>
                   </div>
-                  <div id="basement-wrap">
+                  <!--<div id="basement-wrap">
                     <div class="container">
                       <div class="row">
                         <div class="col-md-1">
                           <img
                             src="apiref/images/rackerpowered-logo.png"
                             alt="Racker Powered"/>
-                        </div>
-                        <div class="col-md-2 col-md-offset-1">©2014
-                          Rackspace, US Inc.</div>
-                        <div class="col-md-8"><span class="footerlink">
-                            <a href="http://localhost:8000/about/"
-                              class="basement">About Rackspace</a>
-                          </span> | <span class="footerlink">
-                            <a href="http://ir.rackspace.com/"
-                              class="basement">Investors</a>
-                          </span> | <span class="footerlink">
-                            <a href="http://www.rackertalent.com/"
-                              class="basement">Careers</a>
-                          </span> | <span class="footerlink">
-                            <a
-                              href="http://localhost:8000/information/legal/privacystatement"
-                              class="basement">Privacy Statement</a>
-                          </span> | <span class="footerlink">
-                            <a
-                              href="http://localhost:8000/information/legal/websiteterms"
-                              class="basement">Website Terms</a>
-                          </span> | <span class="footerlink">
-                            <a
-                              href="http://localhost:8000/information/legal/copyrights_trademarks"
-                              class="basement">Trademarks</a>
-                          </span> | <span class="footerlink">
-                            <a href="http://localhost:8000/sitemap/"
-                              class="basement">Sitemap</a>
-                          </span>
-                        </div>
+                        </div>-->
+                </div>
+                <div id="basement-wrap">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-md-1">
+                        <img
+                          src="http://images.cdn.rackspace.com/footer/basement/rackerpowered-logo.png"
+                          alt="Racker Powered"/>
+                      </div>
+                      <div class="col-md-2 col-md-offset-1">©2014
+                        Rackspace, US Inc.</div>
+                      <div class="col-md-8"><span class="footerlink">
+                          <a href="http://localhost:8000/about/"
+                            class="basement">About Rackspace</a>
+                        </span> | <span class="footerlink">
+                          <a href="http://ir.rackspace.com/"
+                            class="basement">Investors</a>
+                        </span> | <span class="footerlink">
+                          <a href="http://www.rackertalent.com/"
+                            class="basement">Careers</a>
+                        </span> | <span class="footerlink">
+                          <a
+                            href="http://localhost:8000/information/legal/privacystatement"
+                            class="basement">Privacy Statement</a>
+                        </span> | <span class="footerlink">
+                          <a
+                            href="http://localhost:8000/information/legal/websiteterms"
+                            class="basement">Website Terms</a>
+                        </span> | <span class="footerlink">
+                          <a
+                            href="http://localhost:8000/information/legal/copyrights_trademarks"
+                            class="basement">Trademarks</a>
+                        </span> | <span class="footerlink">
+                          <a href="http://localhost:8000/sitemap/"
+                            class="basement">Sitemap</a>
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
             <script src="/assets/app-86aefccf54597dda65ee681f8853c86a.js"/>
