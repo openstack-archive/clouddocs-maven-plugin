@@ -18,7 +18,7 @@
     doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
     use-character-maps="comment" indent="no"/>
   <xsl:param name="wadl.norequest.msg">
-    <p class="nobody">This operation does not require a request
+    <p class="nobody">This operation does not accept a request
       body.</p>
   </xsl:param>
   <xsl:param name="wadl.noresponse.msg">
@@ -26,7 +26,7 @@
       body.</p>
   </xsl:param>
   <xsl:param name="wadl.noreqresp.msg">
-    <p class="nobody">This operation does not require a request
+    <p class="nobody">This operation does not accept a request
       body and does not return a response body.</p>
   </xsl:param>
   <xsl:param name="googleAnalyticsId"/>
@@ -407,6 +407,18 @@
                 </div></xsl:otherwise></xsl:choose>
                 <div class="col-md-5">
                   <xsl:value-of select="replace(replace(ancestor::wadl:resource/@path, '\}','}&#8203;'), '\{','&#8203;{')"/>
+                  <xsl:for-each
+                    select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
+                    <xsl:text>&#x200b;</xsl:text>
+                    <xsl:if test="position() = 1">{?</xsl:if>
+                    <xsl:value-of select="@name"/>
+                    <xsl:if test="@repeating = 'true'">*</xsl:if>
+                    <xsl:choose>
+                      <xsl:when test="not(position() = last())"
+                        >,</xsl:when>
+                      <xsl:otherwise>}</xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
               </div>
               <div class="col-md-5">
                 <xsl:choose>
@@ -638,6 +650,28 @@
               <xsl:apply-templates select="@*|node()"/>
             </xsl:copy>
           </xsl:template>
+  <!--<xsl:template name="trimUri">
+    <!-\- Trims elements -\->
+    <xsl:param name="trimCount"/>
+    <xsl:param name="uri"/>
+    <xsl:param name="i">0</xsl:param>
+    <xsl:choose>
+      <xsl:when test="$i &lt; $trimCount and contains($uri,'/')">
+        <xsl:call-template name="trimUri">
+          <xsl:with-param name="i" select="$i + 1"/>
+          <xsl:with-param name="trimCount">
+            <xsl:value-of select="$trimCount"/>
+          </xsl:with-param>
+          <xsl:with-param name="uri">
+            <xsl:value-of select="substring-after($uri,'/')"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('/',$uri)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>-->
   <xsl:template name="trimUri">
     <!-- Trims elements -->
     <xsl:param name="trimCount"/>
@@ -649,7 +683,7 @@
           <xsl:with-param name="i" select="$i + 1"/>
           <xsl:with-param name="trimCount">
             <xsl:value-of select="$trimCount"/>
-          </xsl:with-param>
+          </xsl:with-param> 
           <xsl:with-param name="uri">
             <xsl:value-of select="substring-after($uri,'/')"/>
           </xsl:with-param>

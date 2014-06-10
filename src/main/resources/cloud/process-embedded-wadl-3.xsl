@@ -14,9 +14,9 @@
 	
 	<!--<xsl:output indent="yes"/>-->
 	
-	<xsl:param name="wadl.norequest.msg"><para>This operation does not require a request body.</para></xsl:param>
+	<xsl:param name="wadl.norequest.msg"><para>This operation does not accept a request body.</para></xsl:param>
 	<xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
-	<xsl:param name="wadl.noreqresp.msg"><para>This operation does not require a request body and does not return a response body.</para></xsl:param>
+	<xsl:param name="wadl.noreqresp.msg"><para>This operation does not accept a request body and does not return a response body.</para></xsl:param>
 	<xsl:param name="security">external</xsl:param>
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
 	<xsl:template match="@*|node()">
@@ -108,10 +108,23 @@
 					</xsl:choose>
 				</xsl:variable>
 				<code>
-					<xsl:if test="$mode = 'href'"><xsl:attribute name="xlink:href" select="concat('#',$sectionIdComputed)"/></xsl:if>
-					<xsl:value-of select="$path"/><xsl:for-each select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
-						<xsl:text>&#x200b;</xsl:text><xsl:if test="position() = 1">{?</xsl:if><xsl:value-of select="@name"/><xsl:if test="@repeating = 'true'">*</xsl:if><xsl:choose><xsl:when
-									test="not(position() = last())">,</xsl:when><xsl:otherwise>}</xsl:otherwise></xsl:choose></xsl:for-each>
+					<xsl:if test="$mode = 'href'">
+						<xsl:attribute name="xlink:href"
+							select="concat('#',$sectionIdComputed)"/>
+					</xsl:if>
+					<xsl:value-of select="$path"/>
+					<xsl:for-each
+						select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
+						<xsl:text>&#x200b;</xsl:text>
+						<xsl:if test="position() = 1">{?</xsl:if>
+						<xsl:value-of select="@name"/>
+						<xsl:if test="@repeating = 'true'">*</xsl:if>
+						<xsl:choose>
+							<xsl:when test="not(position() = last())"
+								>,</xsl:when>
+							<xsl:otherwise>}</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>
 				</code>
 			</td>
 			<td>
