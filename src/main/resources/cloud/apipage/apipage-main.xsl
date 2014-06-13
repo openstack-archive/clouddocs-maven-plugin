@@ -458,7 +458,7 @@
                   <!-- Don't output if there are no status codes -->
                   <div class="row">
                     <div class="col-md-3">
-                      <b>Normal Response Codes</b>
+                      <b>Normal response codes</b>
                     </div>
                     <div class="col-md-9">
                       <xsl:apply-templates
@@ -470,7 +470,7 @@
                     test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
                   <div class="row">
                     <div class="col-md-3">
-                      <b>Error Response Codes</b>
+                      <b>Error response codes</b>
                     </div>
                     <div class="col-md-9">
                       <xsl:apply-templates
@@ -534,8 +534,8 @@
                     <div class="row">
                       <div class="col-md-3">
                         <select class="example-select form-control">
-                          <option data-target="#req-json-{$id}" value="json" selected="selected">JSON Request</option>
-                          <option data-target="#req-xml-{$id}" value="xml">XML Request</option>
+                          <option data-target="#req-json-{$id}" value="json" selected="selected">JSON request</option>
+                          <option data-target="#req-xml-{$id}" value="xml">XML request</option>
                         </select>
                       </div>
                     </div>
@@ -561,8 +561,8 @@
                     <div class="row">
                       <div class="col-md-3">
                         <select class="example-select form-control">
-                          <option data-target="#resp-json-{$id}" value="json" selected="selected">JSON Response</option>
-                          <option data-target="#resp-xml-{$id}" value="xml">XML Response</option>
+                          <option data-target="#resp-json-{$id}" value="json" selected="selected">JSON response</option>
+                          <option data-target="#resp-xml-{$id}" value="xml">XML response</option>
                         </select>
                       </div>
                     </div>

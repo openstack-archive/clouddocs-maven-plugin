@@ -369,75 +369,97 @@
 			
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 			<xsl:variable name="requestSection">
-			<section xml:id="{$sectionIdComputed}-Request">
-				<title>Request</title>
-            <!-- About the request -->
-			<xsl:if test="wadl:request//wadl:param[@style = 'header'] or parent::wadl:resource/wadl:param[@style = 'header']">
-				<xsl:call-template name="paramTable">
-					<xsl:with-param name="mode" select="'request'"/>
-					<xsl:with-param name="method.title" select="$method.title"/>
-					<xsl:with-param name="style" select="'header'"/>
-				</xsl:call-template>
-			</xsl:if>
-			
-			<xsl:if test="ancestor::wadl:resource/wadl:param[@style = 'template']">
-				<xsl:call-template name="paramTable">
-					<xsl:with-param name="mode" select="'request'"/>
-					<xsl:with-param name="method.title" select="$method.title"/>
-					<xsl:with-param name="style" select="'template'"/>
-				</xsl:call-template>
-			</xsl:if>
-			
-	        <xsl:if test="wadl:request//wadl:param[@style = 'query']">
-                <xsl:call-template name="paramTable">
-                    <xsl:with-param name="mode" select="'request'"/>
-                    <xsl:with-param name="method.title" select="$method.title"/>
-                	<xsl:with-param name="style" select="'query'"/>
-                </xsl:call-template>
-            </xsl:if>
+				<section xml:id="{$sectionIdComputed}-Request">
+					<title>Request</title>
+					<!-- About the request -->
+					<xsl:if
+						test="./wadl:request//wadl:param or parent::wadl:resource/wadl:param">
+						<!--<b>Request parameters</b>-->
+						<table
+							class="table table-bordered table-striped">
+							<caption>Request parameters</caption>
+							<thead>
+								<tr>
+									<th>Parameter</th>
+									<th>Style</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<xsl:apply-templates
+									select="./wadl:request//wadl:param|parent::wadl:resource/wadl:param"
+									mode="param2tr">
+									<!-- Add templates to handle wadl:params -->
+									<xsl:with-param name="id"
+										select="@id"/>
+								</xsl:apply-templates>
+							</tbody>
+						</table>
+					</xsl:if>
 
-			<!-- TODO: Refactor to generate one example for each representation.-->
-			<xsl:apply-templates select=".//wadl:representation[parent::wadl:request]">
-				<xsl:with-param name="method.title" select="$method.title"/>
-			</xsl:apply-templates>
-
-				<!-- Here we try to figure out is we should add a "No request body required" message -->
-				<!-- 1. We rule out that there's a PI telling us to skip the message. -->
-				<!-- 2. If we find a request with a media type of application/xml that doesn't have an element attr or -->
-				<!-- 3. If we find a request with a media type of application/json that doesn't contains a { -->
-				<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
-				<xsl:if test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:request[wadl:representation[@mediaType = 'application/json' and not((for $code in .//xsdxt:code return if(contains($code,'{') or contains($code,'[')) then 1 else 0) = 1)]])">
-                    <xsl:copy-of select="$wadl.norequest.msg"/>
-                </xsl:if>
-			</section>
+					<!-- TODO: Refactor to generate one example for each representation.-->
+					<xsl:apply-templates
+						select=".//wadl:representation[parent::wadl:request]">
+						<xsl:with-param name="method.title"
+							select="$method.title"/>
+					</xsl:apply-templates>
+					<!-- Here we try to figure out is we should add a "No request body required" message -->
+					<!-- 1. We rule out that there's a PI telling us to skip the message. -->
+					<!-- 2. If we find a request with a media type of application/xml that doesn't have an element attr or -->
+					<!-- 3. If we find a request with a media type of application/json that doesn't contains a { -->
+					<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
+					<xsl:if
+						test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:request[wadl:representation[@mediaType = 'application/json' and not((for $code in .//xsdxt:code return if(contains($code,'{') or contains($code,'[')) then 1 else 0) = 1)]])">
+						<xsl:copy-of select="$wadl.norequest.msg"/>
+					</xsl:if>
+				</section>
 			</xsl:variable>
 			<xsl:variable name="responseSection">
-			<section xml:id="{$sectionIdComputed}-Response">
-				<title>Response</title>
-            <!-- About the response -->
+				<section xml:id="{$sectionIdComputed}-Response">
+					<title>Response</title>
+					<xsl:if test="./wadl:response//wadl:param">
+						<!--<b>Response parameters</b>-->
+						<table
+							class="table table-bordered table-striped">
+							<caption>Response parameters</caption>
+							<thead>
+								<tr>
+									<th>Parameter</th>
+									<th>Style</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<xsl:apply-templates
+									select="./wadl:response//wadl:param|parent::wadl:resource/wadl:param"
+									mode="param2tr">
+									<!-- Add templates to handle wadl:params -->
+									<xsl:with-param name="id"
+										select="@id"/>
+								</xsl:apply-templates>
+							</tbody>
+						</table>
+					</xsl:if>
 
-			<xsl:if test="wadl:response/wadl:param[@style = 'header']">
-                <xsl:call-template name="paramTable">
-                	<xsl:with-param name="mode" select="'response'"/>
-                    <xsl:with-param name="method.title" select="$method.title"/>
-                	<xsl:with-param name="style" select="'header'"/>
-                </xsl:call-template>
-            </xsl:if>
+					<!-- TODO: Refactor to generate one example for each representation.-->
+					<xsl:apply-templates
+						select=".//wadl:representation[parent::wadl:response[starts-with(normalize-space(@status),'2')]]">
+						<xsl:with-param name="method.title"
+							select="$method.title"/>
+					</xsl:apply-templates>
 
-			<!-- TODO: Refactor to generate one example for each representation.-->
-				<xsl:apply-templates select=".//wadl:representation[parent::wadl:response[starts-with(normalize-space(@status),'2')]]">
-				<xsl:with-param name="method.title" select="$method.title"/>
-			</xsl:apply-templates> 
-
-				<!-- Here we try to figure out is we should add a "No response body required" message -->
-				<!-- 1. We rule out that there's a PI telling us to skip the message. -->
-				<!-- 2. If we find a 2xx response with a media type of application/xml that doesn't have an element attr or -->
-				<!-- 3. If we find a 2xx response with a media type of application/json that doesn't contains a { -->
-				<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
-				<xsl:if test="not($skipNoResponseText) and (wadl:response[starts-with(normalize-space(@status),'2') and ./wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:response[starts-with(normalize-space(@status),'2') and wadl:representation[@mediaType = 'application/json' and not((for $code in .//xsdxt:code return if(contains($code,'{') or contains($code,'[')) then 1 else 0) = 1)]])">
-					<xsl:copy-of select="$wadl.noresponse.msg"/>
-				</xsl:if>
-			</section>
+					<!-- Here we try to figure out is we should add a "No response body required" message -->
+					<!-- 1. We rule out that there's a PI telling us to skip the message. -->
+					<!-- 2. If we find a 2xx response with a media type of application/xml that doesn't have an element attr or -->
+					<!-- 3. If we find a 2xx response with a media type of application/json that doesn't contains a { -->
+					<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
+					<xsl:if
+						test="not($skipNoResponseText) and (wadl:response[starts-with(normalize-space(@status),'2') and ./wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:response[starts-with(normalize-space(@status),'2') and wadl:representation[@mediaType = 'application/json' and not((for $code in .//xsdxt:code return if(contains($code,'{') or contains($code,'[')) then 1 else 0) = 1)]])">
+						<xsl:copy-of select="$wadl.noresponse.msg"/>
+					</xsl:if>
+				</section>
 			</xsl:variable>
 			<xsl:if test="$requestSection//d:section/*[not(self::d:title)]">
 				<xsl:copy-of select="$requestSection"/>
@@ -764,6 +786,7 @@
     	<xsl:param name="styleLowercase">
     		<xsl:choose>
     			<xsl:when test="$style = 'template'">URI</xsl:when>
+                <xsl:when test="$style = 'query'">query</xsl:when>
     			<xsl:when test="$style != 'plain'">
     				<xsl:value-of select="lower-case($style)"/>
     			</xsl:when>
@@ -789,11 +812,11 @@
                 </thead>
                 <tbody>
                     <xsl:choose>
-                    	<xsl:when test="$style = 'plain'">
+                    	<!--<xsl:when test="$style = 'plain'">
                     		<xsl:apply-templates select="wadl:param[@style = 'plain']">
                     			<xsl:with-param name="style">plain</xsl:with-param>
                     		</xsl:apply-templates>
-                    	</xsl:when>
+                    	</xsl:when>-->
                         <xsl:when test="$mode = 'request'">
                             <xsl:apply-templates select="wadl:request//wadl:param[@style = $style]|parent::wadl:resource/wadl:param[@style = $style]"/>
                         </xsl:when>
@@ -1006,6 +1029,30 @@
     </xsl:call-template>
   </xsl:if>
 </xsl:template>
+	<xsl:template match="wadl:param" mode="param2tr">
+		<tr>
+			<td>
+				<xsl:value-of select="@name"/>
+				<xsl:if
+					test="not(@required = 'true') and not(@style = 'template') and not(@style = 'matrix')"
+					> (Optional)</xsl:if>
+			</td>
+			<td>
+				<xsl:value-of
+					select="if(@style = 'template') then 'URI' else @style"
+				/>
+			</td>
+			<td>
+				<xsl:value-of
+					select="if(not(@type) or @type = '') then 'String' else @type"
+				/>
+			</td>
+			<td>
+				<xsl:apply-templates
+					select="./wadl:doc/*|./wadl:doc/text()"/>
+			</td>
+		</tr>
+	</xsl:template>
 
 	<xsl:template match="d:SXXP0005">
 	  <!-- This stupid template is here to avoid SXXP0005 errors from Saxon -->
