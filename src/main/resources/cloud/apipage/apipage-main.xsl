@@ -27,7 +27,7 @@
   </xsl:param>
   <xsl:param name="wadl.noreqresp.msg">
     <p class="nobody">This operation does not accept a request
-      body and does not return a response body.</p>
+      body or return a response body.</p>
   </xsl:param>
   <xsl:param name="googleAnalyticsId"/>
   <xsl:param name="googleAnalyticsDomain"/>

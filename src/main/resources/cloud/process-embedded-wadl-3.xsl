@@ -16,7 +16,7 @@
 	
 	<xsl:param name="wadl.norequest.msg"><para>This operation does not accept a request body.</para></xsl:param>
 	<xsl:param name="wadl.noresponse.msg"><para>This operation does not return a response body.</para></xsl:param>
-	<xsl:param name="wadl.noreqresp.msg"><para>This operation does not accept a request body and does not return a response body.</para></xsl:param>
+	<xsl:param name="wadl.noreqresp.msg"><para>This operation does not accept a request body or return a response body.</para></xsl:param>
 	<xsl:param name="security">external</xsl:param>
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
 	<xsl:template match="@*|node()">
@@ -318,17 +318,15 @@
 
 			<xsl:choose>
 				<xsl:when test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]/wadl:doc">
-					<para>
-					This table shows the possible
+					<para>This table shows the possible
 					response codes for this operation:</para>
 					<informaltable rules="all" width="100%">
-						<!--	<caption>Response Codes</caption>-->
 							<col width="10%" />
 							<col width="30%" />
 							<col width="60%" />
 							<thead>
 								<tr>
-									<th align="center">Response Code</th>
+									<th align="center">Response code</th>
 									<th align="center">Name</th>
 									<th align="center">Description</th>
 								</tr>
@@ -340,11 +338,9 @@
 								<xsl:apply-templates select="wadl:response[@status and not(starts-with(@status,'2') or starts-with(@status,'3'))]" mode="responseTable">
 									<xsl:sort select="@status"/>
 								</xsl:apply-templates>
-								<xsl:apply-templates select="wadl:response[not(@status)]" mode="responseTable"/>
-								
+								<xsl:apply-templates select="wadl:response[not(@status)]" mode="responseTable"/>	
 							</tbody>
 						</informaltable>
-
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:if test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
@@ -369,53 +365,79 @@
 			
         <!--    <xsl:copy-of select="wadl:doc/db:*[not(@role='shortdesc')] | wadl:doc/processing-instruction()"   xmlns:db="http://docbook.org/ns/docbook" />-->
 			<xsl:variable name="requestSection">
-			<section xml:id="{$sectionIdComputed}-Request">
-				<title>Request</title>
-            <!-- About the request -->
-			<xsl:if test="wadl:request//wadl:param[@style = 'header'] or parent::wadl:resource/wadl:param[@style = 'header']">
-				<xsl:call-template name="paramTable">
-					<xsl:with-param name="mode" select="'request'"/>
-					<xsl:with-param name="method.title" select="$method.title"/>
-					<xsl:with-param name="style" select="'header'"/>
-				</xsl:call-template>
-			</xsl:if>
-			
-			<xsl:if test="ancestor::wadl:resource/wadl:param[@style = 'template']">
-				<xsl:call-template name="paramTable">
-					<xsl:with-param name="mode" select="'request'"/>
-					<xsl:with-param name="method.title" select="$method.title"/>
-					<xsl:with-param name="style" select="'template'"/>
-				</xsl:call-template>
-			</xsl:if>
-			
-	        <xsl:if test="wadl:request//wadl:param[@style = 'query']">
-                <xsl:call-template name="paramTable">
-                    <xsl:with-param name="mode" select="'request'"/>
-                    <xsl:with-param name="method.title" select="$method.title"/>
-                	<xsl:with-param name="style" select="'query'"/>
-                </xsl:call-template>
-            </xsl:if>
+				<section xml:id="{$sectionIdComputed}-Request">
+					<title>Request</title>
+					<!-- About the request -->
+					<xsl:if
+						test="wadl:request//wadl:param[@style = 'header'] or parent::wadl:resource/wadl:param[@style = 'header']">
+						<xsl:call-template name="paramTable">
+							<xsl:with-param name="mode"
+								select="'request'"/>
+							<xsl:with-param name="method.title"
+								select="$method.title"/>
+							<xsl:with-param name="style"
+								select="'header'"/>
+						</xsl:call-template>
+					</xsl:if>
 
-			<!-- TODO: Refactor to generate one example for each representation.-->
-			<xsl:apply-templates select=".//wadl:representation[parent::wadl:request]">
-				<xsl:with-param name="method.title" select="$method.title"/>
-			</xsl:apply-templates>
+					<xsl:if
+						test="ancestor::wadl:resource/wadl:param[@style = 'template']">
+						<xsl:call-template name="paramTable">
+							<xsl:with-param name="mode"
+								select="'request'"/>
+							<xsl:with-param name="method.title"
+								select="$method.title"/>
+							<xsl:with-param name="style"
+								select="'template'"/>
+						</xsl:call-template>
+					</xsl:if>
 
-				<!-- Here we try to figure out is we should add a "No request body required" message -->
-				<!-- 1. We rule out that there's a PI telling us to skip the message. -->
-				<!-- 2. If we find a request with a media type of application/xml that doesn't have an element attr or -->
-				<!-- 3. If we find a request with a media type of application/json that doesn't contains a { -->
-				<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
-				<xsl:if test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:request[wadl:representation[@mediaType = 'application/json' and not((for $code in .//xsdxt:code return if(contains($code,'{') or contains($code,'[')) then 1 else 0) = 1)]])">
-                    <xsl:copy-of select="$wadl.norequest.msg"/>
-                </xsl:if>
-			</section>
+					<xsl:if
+						test="wadl:request//wadl:param[@style = 'query']">
+						<xsl:call-template name="paramTable">
+							<xsl:with-param name="mode"
+								select="'request'"/>
+							<xsl:with-param name="method.title"
+								select="$method.title"/>
+							<xsl:with-param name="style"
+								select="'query'"/>
+						</xsl:call-template>
+					</xsl:if>
+
+					<xsl:if
+						test="wadl:request//wadl:param[@style = 'plain']">
+						<xsl:message>Found plain param.</xsl:message>
+						<xsl:call-template name="paramTable">
+							<xsl:with-param name="mode"
+								select="'request'"/>
+							<xsl:with-param name="method.title"
+								select="$method.title"/>
+							<xsl:with-param name="style"
+								select="'plain'"/>
+						</xsl:call-template>
+					</xsl:if>
+
+					<!-- TODO: Refactor to generate one example for each representation.-->
+					<xsl:apply-templates
+						select=".//wadl:representation[parent::wadl:request]">
+						<xsl:with-param name="method.title"
+							select="$method.title"/>
+					</xsl:apply-templates>
+
+					<!-- Here we try to figure out is we should add a "No request body required" message -->
+					<!-- 1. We rule out that there's a PI telling us to skip the message. -->
+					<!-- 2. If we find a request with a media type of application/xml that doesn't have an element attr or -->
+					<!-- 3. If we find a request with a media type of application/json that doesn't contains a { -->
+					<!-- The contortions are needed because the writers sometimes put in code samples with just headers. -->
+					<xsl:if
+						test="not($skipNoRequestText) and (not(wadl:request) or wadl:request[wadl:representation[@mediaType = 'application/xml' and not(@element)]] or wadl:request[wadl:representation[@mediaType = 'application/json' and not((for $code in .//xsdxt:code return if(contains($code,'{') or contains($code,'[')) then 1 else 0) = 1)]])">
+						<xsl:copy-of select="$wadl.norequest.msg"/>
+					</xsl:if>
+				</section>
 			</xsl:variable>
 			<xsl:variable name="responseSection">
 			<section xml:id="{$sectionIdComputed}-Response">
 				<title>Response</title>
-            <!-- About the response -->
-
 			<xsl:if test="wadl:response/wadl:param[@style = 'header']">
                 <xsl:call-template name="paramTable">
                 	<xsl:with-param name="mode" select="'response'"/>
@@ -764,6 +786,7 @@
     	<xsl:param name="styleLowercase">
     		<xsl:choose>
     			<xsl:when test="$style = 'template'">URI</xsl:when>
+    			<xsl:when test="$style = 'query'">query</xsl:when>
     			<xsl:when test="$style != 'plain'">
     				<xsl:value-of select="lower-case($style)"/>
     			</xsl:when>
@@ -789,11 +812,12 @@
                 </thead>
                 <tbody>
                     <xsl:choose>
-                    	<xsl:when test="$style = 'plain'">
+                    	<!-- add back -->
+                    	<!--<xsl:when test="$style = 'plain'">
                     		<xsl:apply-templates select="wadl:param[@style = 'plain']">
                     			<xsl:with-param name="style">plain</xsl:with-param>
                     		</xsl:apply-templates>
-                    	</xsl:when>
+                    	</xsl:when>-->
                         <xsl:when test="$mode = 'request'">
                             <xsl:apply-templates select="wadl:request//wadl:param[@style = $style]|parent::wadl:resource/wadl:param[@style = $style]"/>
                         </xsl:when>
@@ -839,6 +863,9 @@
 			<xsl:variable name="path" select="concat('$.',replace(string-join(for $item in tokenize(substring-after(current-group()[1]/@path,'$.'),'\.')[position() &lt; ($token-number + 1)] return concat($item,'.'),''),'(.*)\.$','$1'))" />
 			<xsl:variable name="current-param" select="current-group()[@path = $path]"/>
 			<xsl:variable name="optionality"><xsl:value-of select="if ($current-param/@required = 'true') then 'Required. ' else if ($current-param/@required = 'false') then 'Optional. ' else ''"/></xsl:variable>
+			<xsl:variable name="param-name"><xsl:value-of select="($current-param/@name)"/></xsl:variable>
+			<xsl:message>Parameter name is <xsl:value-of select="$param-name"/></xsl:message>
+
 			<xsl:choose>
 				<xsl:when test="current-grouping-key() = '[*]' and not($top)">
 					<xsl:variable name="children">
