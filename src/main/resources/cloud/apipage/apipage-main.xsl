@@ -26,8 +26,8 @@
       body.</p>
   </xsl:param>
   <xsl:param name="wadl.noreqresp.msg">
-    <p class="nobody">This operation does not accept a request
-      body and does not return a response body.</p>
+    <p class="nobody">This operation does not accept a request body or
+      return a response body.</p>
   </xsl:param>
   <xsl:param name="googleAnalyticsId"/>
   <xsl:param name="googleAnalyticsDomain"/>
@@ -405,7 +405,8 @@
                      rel="stylesheet" type="text/css"/><div class="col-md-1">
                   <span class="label label-success"><xsl:value-of select="@name"/></span>
                 </div></xsl:otherwise></xsl:choose>
-                <div class="col-md-5">
+        <!-- add query parameters to the URI string -->
+        <div class="col-md-5">
                   <xsl:value-of select="replace(replace(ancestor::wadl:resource/@path, '\}','}&#8203;'), '\{','&#8203;{')"/>
                   <xsl:for-each
                     select="wadl:request//wadl:param[@style = 'query']|parent::wadl:resource/wadl:param[@style = 'query']">
@@ -450,98 +451,105 @@
                   <xsl:if test="wadl:doc//d:*[@role = 'shortdesc'] or wadl:doc//xhtml:*[@class='shortdesc']">
                     <xsl:apply-templates
                         select="wadl:doc/d:*[not(@role = 'shortdesc')]|wadl:doc/xhtml:*[not(@role = 'shortdesc')]"/>
-                  </xsl:if>
-                </div>
-                <!-- process response codes -->
-                <xsl:if
+            </xsl:if>
+          </div>
+          <!-- process response codes -->
+          <xsl:if
                     test="wadl:response[starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')]">
-                  <!-- Don't output if there are no status codes -->
-                  <div class="row">
-                    <div class="col-md-3">
-                      <b>Normal Response Codes</b>
-                    </div>
-                    <div class="col-md-9">
-                      <xsl:apply-templates
+            <!-- Don't output if there are no status codes -->
+            <!-- normal response codes -->
+            <div class="row">
+              <div class="col-md-3">
+                <b>Normal response codes</b>
+              </div>
+              <div class="col-md-9">
+                <xsl:apply-templates
                           select="wadl:response" mode="preprocess-normal"/>
-                    </div>
-                  </div>
-                </xsl:if>
-                <xsl:if
+              </div>
+            </div>
+          </xsl:if>
+          <!-- error response codes -->
+          <xsl:if
                     test="wadl:response[not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3'))]">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <b>Error Response Codes</b>
-                    </div>
-                    <div class="col-md-9">
-                      <xsl:apply-templates
+            <div class="row">
+              <div class="col-md-3">
+                <b>Error response codes</b>
+              </div>
+              <div class="col-md-9">
+                <xsl:apply-templates
                           select="wadl:response[not(@status)]"
                           mode="preprocess-faults"/>
-                      <xsl:apply-templates select="wadl:response[(@status)]"
+                <xsl:apply-templates select="wadl:response[(@status)]"
                                            mode="preprocess-faults"/>
-                    </div>
-                  </div>
-                </xsl:if>
-                <div class="row">
-                  <div class="col-md-12">
-                    <!-- Don't output if there are no params -->
-                    <xsl:if test="./wadl:request//wadl:param or parent::wadl:resource/wadl:param">
-                      <b>Request parameters</b>
-                      <table class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>Parameter</th>
-                            <th>Style</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <xsl:apply-templates select="./wadl:request//wadl:param|parent::wadl:resource/wadl:param"
+              </div>
+            </div>
+          </xsl:if>
+          <!-- request parameters in a table -->
+          <div class="row">
+            <div class="col-md-12">
+              <!-- Don't output if there are no params -->
+              <!-- request parameters -->
+              <xsl:if test="./wadl:request//wadl:param or parent::wadl:resource/wadl:param">
+                <b>Request parameters</b>
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Style</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <xsl:apply-templates select="./wadl:request//wadl:param|parent::wadl:resource/wadl:param"
                                                mode="param2tr">
-                            <!-- Add templates to handle wadl:params -->
-                            <xsl:with-param name="id" select="$id"/>
-                          </xsl:apply-templates>
-                        </tbody>
-                      </table>
-                    </xsl:if>
-                    <!-- Don't output if there are no params -->
-                    <xsl:if test="./wadl:response//wadl:param">
-                      <b>Response parameters</b>
-                      <table class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>Parameter</th>
-                            <th>Style</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <xsl:apply-templates select="./wadl:response//wadl:param" mode="param2tr">
-                            <!-- Add templates to handle wadl:params -->
-                            <xsl:with-param name="id" select="$id"/>
-                          </xsl:apply-templates>
-                        </tbody>
-                      </table>
-                    </xsl:if>
-                  </div>
-                </div>
-                <!-- Examples -->
-                <xsl:choose>
-                  <xsl:when
+                      <!-- Add templates to handle wadl:params -->
+                      <xsl:with-param name="id" select="$id"/>
+                    </xsl:apply-templates>
+                  </tbody>
+                </table>
+              </xsl:if>
+              <!-- Don't output if there are no response params -->
+              <!-- response parameters -->
+              <xsl:if test="./wadl:response//wadl:param">
+                <b>Response parameters</b>
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Style</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <xsl:apply-templates
+                      select="./wadl:response//wadl:param|parent::wadl:resource/wadl:param"
+                      mode="param2tr">
+                      <!-- Add templates to handle wadl:params -->
+                      <xsl:with-param name="id" select="$id"/>
+                    </xsl:apply-templates>
+                  </tbody>
+                </table>
+              </xsl:if>
+            </div>
+          </div>
+          <!-- Examples -->
+          <xsl:choose>
+            <xsl:when
                       test="wadl:request/wadl:representation[ends-with(@mediaType,'/xml') ]/wadl:doc//xsdxt:code
                               and wadl:request/wadl:representation[ends-with(@mediaType,'/json')]/wadl:doc//xsdxt:code">
-                    <div class="row">
-                      <div class="col-md-3">
-                        <select class="example-select form-control">
-                          <option data-target="#req-json-{$id}" value="json" selected="selected">JSON Request</option>
-                          <option data-target="#req-xml-{$id}" value="xml">XML Request</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="tab-content">
-                      <div class="tab-pane example active" id="req-json-{$id}">
-                        <xsl:apply-templates
+              <div class="row">
+                <div class="col-md-3">
+                  <select class="example-select form-control">
+                    <option data-target="#req-json-{$id}" value="json" selected="selected">JSON request</option>
+                    <option data-target="#req-xml-{$id}" value="xml">XML request</option>
+                  </select>
+                </div>
+              </div>
+              <div class="tab-content">
+                <div class="tab-pane example active" id="req-json-{$id}">
+                  <xsl:apply-templates
                             select="wadl:request/wadl:representation[ends-with(@mediaType,'/json') ]/wadl:doc//xsdxt:code"/>
                       </div>
                       <div class="tab-pane example" id="req-xml-{$id}">
@@ -638,9 +646,13 @@
           </xsl:template>
           <xsl:template match="wadl:param" mode="param2tr">
             <tr>
-              <td><xsl:value-of select="@name"/><xsl:if test="not(@required = 'true') and not(@style = 'template') and not(@style = 'matrix')"> (Optional)</xsl:if></td>
-              <td><xsl:value-of select="if(@style = 'template') then 'URI' else @style"/></td>
-              <td><xsl:value-of select="if(not(@type) or @type = '') then 'String' else @type"/></td>
+              <td><xsl:value-of select="@name"/><xsl:if test="not(@required = 'true') and not(@style = 'template') and not(@style = 'matrix')"> (Optional)</xsl:if>
+      </td>
+      <td>
+        <xsl:value-of select="if(@style = 'template') then 'URI' else @style"/>
+      </td>
+      <td>
+        <xsl:value-of select="if(not(@type) or @type = '') then 'String' else @type"/></td>
               <td><xsl:apply-templates select="./wadl:doc/*|./wadl:doc/text()"/></td>
             </tr>
           </xsl:template>
@@ -650,28 +662,6 @@
               <xsl:apply-templates select="@*|node()"/>
             </xsl:copy>
           </xsl:template>
-  <!--<xsl:template name="trimUri">
-    <!-\- Trims elements -\->
-    <xsl:param name="trimCount"/>
-    <xsl:param name="uri"/>
-    <xsl:param name="i">0</xsl:param>
-    <xsl:choose>
-      <xsl:when test="$i &lt; $trimCount and contains($uri,'/')">
-        <xsl:call-template name="trimUri">
-          <xsl:with-param name="i" select="$i + 1"/>
-          <xsl:with-param name="trimCount">
-            <xsl:value-of select="$trimCount"/>
-          </xsl:with-param>
-          <xsl:with-param name="uri">
-            <xsl:value-of select="substring-after($uri,'/')"/>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('/',$uri)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>-->
   <xsl:template name="trimUri">
     <!-- Trims elements -->
     <xsl:param name="trimCount"/>
@@ -683,7 +673,7 @@
           <xsl:with-param name="i" select="$i + 1"/>
           <xsl:with-param name="trimCount">
             <xsl:value-of select="$trimCount"/>
-          </xsl:with-param> 
+          </xsl:with-param>
           <xsl:with-param name="uri">
             <xsl:value-of select="substring-after($uri,'/')"/>
           </xsl:with-param>
@@ -694,37 +684,37 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-          <xsl:template match="wadl:response" mode="preprocess-normal">
-            <xsl:variable name="normStatus" select="normalize-space(@status)"/>
-            <xsl:if
+  <xsl:template match="wadl:response" mode="preprocess-normal">
+    <xsl:variable name="normStatus" select="normalize-space(@status)"/>
+    <xsl:if
               test="starts-with($normStatus,'2') or starts-with($normStatus,'3')">
-              <xsl:call-template name="statusCodeList">
-                <xsl:with-param name="codes" select="$normStatus"/>
-              </xsl:call-template>
-            </xsl:if>
-          </xsl:template>
-          <xsl:template match="wadl:response" mode="preprocess-faults">
-            <xsl:if
+      <xsl:call-template name="statusCodeList">
+        <xsl:with-param name="codes" select="$normStatus"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="wadl:response" mode="preprocess-faults">
+    <xsl:if
               test="(not(@status) or not(starts-with(normalize-space(@status),'2') or starts-with(normalize-space(@status),'3')))">
-              <xsl:variable name="codes">
-                <xsl:choose>
-                  <xsl:when test="@status">
-                    <xsl:value-of select="normalize-space(@status)"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="'400 500 &#x2026;'"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <xsl:choose>
-                <xsl:when test="wadl:representation/@element">
-                  <xsl:variable name="statusCodes">
-                    <xsl:call-template name="statusCodeList">
-                      <xsl:with-param name="codes" select="$codes"/>
-                      <xsl:with-param name="inError" select="true()"/>
-                    </xsl:call-template>
-                  </xsl:variable>
-                  <xsl:value-of
+      <xsl:variable name="codes">
+        <xsl:choose>
+          <xsl:when test="@status">
+            <xsl:value-of select="normalize-space(@status)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'400 500 &#x2026;'"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="wadl:representation/@element">
+          <xsl:variable name="statusCodes">
+            <xsl:call-template name="statusCodeList">
+              <xsl:with-param name="codes" select="$codes"/>
+              <xsl:with-param name="inError" select="true()"/>
+            </xsl:call-template>
+          </xsl:variable>
+          <xsl:value-of
                     select="substring-after((wadl:representation/@element)[1],':')"
                   /> (<xsl:value-of select="normalize-space($statusCodes)"/>)</xsl:when>
                 <xsl:otherwise>
