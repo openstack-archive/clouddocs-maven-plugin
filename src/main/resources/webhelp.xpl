@@ -17,7 +17,9 @@
 
   <p:add-xml-base name="adding-xml-base-webhelp"/>
   
-  <p:xinclude fixup-xml-base="true" name="xincluding"/>
+  <p:xinclude cx:mark-roots="true" cx:copy-attributes="true" fixup-xml-base="true" name="xincluding"/>
+  
+  <l:transclusion-fixup/>
 
   <l:normalize-olinks name="normalize-olinks"/>
 

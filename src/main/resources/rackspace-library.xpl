@@ -1547,6 +1547,36 @@ setting failOnValidationError to no in your pom.
         </p:xslt>
 
     </p:declare-step>
+    
+    <p:declare-step 
+        xmlns:p="http://www.w3.org/ns/xproc"
+        xmlns:l="http://xproc.org/library"
+        type="l:transclusion-fixup"
+        xmlns:c="http://www.w3.org/ns/xproc-step"
+        version="1.0"
+        name="transclusion-fixup">
+        
+        <p:input port="source" primary="true"/>
+        
+        <p:output port="result" primary="true">
+            <p:pipe step="transclusion-fixup-xslt" port="result"/>
+        </p:output>
+        
+        <p:input port="parameters" kind="parameter"/>
+        
+        <p:xslt name="transclusion-fixup-xslt">
+            <p:input port="source"> 
+                <p:pipe step="transclusion-fixup" port="source"/> 
+            </p:input> 
+            <p:input port="stylesheet">
+                <p:document href="classpath:///cloud/transclusion-fixup.xsl"/>
+            </p:input>
+            <p:input port="parameters" >
+                <p:pipe step="transclusion-fixup" port="parameters"/>
+            </p:input>
+        </p:xslt>
+        
+    </p:declare-step>
 
 
 </p:library>

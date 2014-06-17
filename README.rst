@@ -69,6 +69,12 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.1.0 (June 16, 2014)
+============================================================
+-  Features and updates
+
+   -  Support fixing xml:id, linkend, and xlink:href attributes when xincluding content more than once. For more information, see https://github.com/docbook/transclusion-fixup and http://docbook.org/docs/transclusion/2010-12-09/transclusion.html#d6e179
+
 clouddocs-maven-plugin 2.0.4 (June 05, 2014)
 ============================================================
 -  Bug fixes
