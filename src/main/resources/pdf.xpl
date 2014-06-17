@@ -28,7 +28,7 @@
     <p:variable name="targetDirectory" select="//c:param[@name = 'targetDirectory']/@value">
       <p:pipe step="params" port="parameters"/>
     </p:variable>
-    
+
     <l:validate-docbook-format name="validate-docbook-format">
       <p:input port="source">
 	<p:pipe step="main" port="source"/>
@@ -96,7 +96,9 @@ pdfsuffix=<xsl:if test="not($security = 'external') and not($security = '') and 
       </p:input>
     </p:add-xml-base>
     
-    <p:xinclude fixup-xml-base="true" name="xincluding-pdf"/>
+    <p:xinclude cx:mark-roots="true" cx:copy-attributes="true" fixup-xml-base="true" name="xincluding-pdf"/>
+    
+    <l:transclusion-fixup/>
 
     <l:normalize-olinks name="normalize-olinks-pdf"/>
 

@@ -19,6 +19,32 @@
     </optional>
   </define>
 
+  <define name="db.xi.include.attlist" combine="choice">
+    <optional>
+      <attribute name="db:prefix"/>
+    </optional>
+    <optional>
+      <attribute name="db:idfixup">
+        <choice>
+          <value>none</value>
+          <value>strip</value>
+          <value>prefix</value>
+          <value>auto</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="db:linkscope">
+        <choice>
+          <value>user</value>
+          <value>local</value>
+          <value>near</value>
+          <value>global</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+
   <s:pattern name="xml:id required on book, part, section, chapter, appendix, and preface">
     <s:rule context="//db:book|//db:part|//db:section|//db:chapter|//db:appendix|//db:preface">
       <s:assert test="@xml:id">xml:id required on book, part, section, chapter, appendix, and preface.</s:assert>
