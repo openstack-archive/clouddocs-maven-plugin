@@ -8,7 +8,7 @@
 
     <name>Cloud API Docs Plugin</name>
 
-    <version>2.0.5-SNAPSHOT</version>
+    <version>2.1.0</version>
     <packaging>maven-plugin</packaging>
 
     <url>https://github.com/rackerlabs/clouddocs-maven-plugin</url>
@@ -252,7 +252,7 @@
       <url>https://github.com/rackerlabs/clouddocs-maven-plugin/tree/master</url>
       <connection>scm:git:git://github.com/rackerlabs/clouddocs-maven-plugin.git</connection>
       <developerConnection>scm:git:git@github.com:rackerlabs/clouddocs-maven-plugin.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>clouddocs-maven-plugin-2.1.0</tag>
   </scm>
 
     <profiles>
