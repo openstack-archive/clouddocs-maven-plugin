@@ -69,7 +69,7 @@ How Tos
 Release Notes
 =============
 
-clouddocs-maven-plugin 2.1.0 (June 16, 2014)
+clouddocs-maven-plugin 2.1.0 (June 23, 2014)
 ============================================================
 -  Features and updates
 
