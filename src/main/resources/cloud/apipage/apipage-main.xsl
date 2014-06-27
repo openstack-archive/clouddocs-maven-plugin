@@ -120,17 +120,17 @@
                   id="navbar-collapse-btn">
                   <ul class="nav navbar-nav navbar-right">
                     <li>
-                      <a href="/sdks/">SDKs &amp;
+                      <a href="http://developer.rackspace.comsdks/">SDKs &amp;
                         Tools</a>
                     </li>
                     <li>
-                      <a href="/docs/">Docs</a>
+                      <a href="http://developer.rackspace.com/docs/">Docs</a>
                     </li>
                     <li>
-                      <a href="/blog/">Blog</a>
+                      <a href="http://developer.rackspace.com/blog/">Blog</a>
                     </li>
                     <li>
-                      <a href="/community/"
+                      <a href="http://developer.rackspace.com/community/"
                         >Community</a>
                     </li>
                     <li class="dropdown">
