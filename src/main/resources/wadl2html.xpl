@@ -30,22 +30,35 @@
   </l:validate-transform>
   
   <l:normalize-wadls name="normalize"/>
-      
-  <p:xslt name="process-embedded-wadl">
-    <p:input port="source"> 
-      <p:pipe step="normalize" port="result"/> 
-    </p:input> 
-    <p:input port="stylesheet">
-      <p:document href="classpath:///cloud/apipage/process-embedded-wadl-apipage.xsl"/>
-    </p:input>
-    <p:input port="parameters" >
-      <p:pipe step="main" port="parameters"/>
-    </p:input>
-  </p:xslt>
+    
+    <p:xslt name="process-embedded-wadl-xslt-1">
+      <p:input port="source"> 
+        <p:pipe step="normalize" port="result"/> 
+      </p:input> 
+      <p:input port="stylesheet">
+        <p:document href="classpath:///cloud/process-embedded-wadl-1.xsl"/>
+      </p:input>
+      <p:input port="parameters" >
+        <p:pipe step="main" port="parameters"/>
+      </p:input>
+    </p:xslt>          
+    
+    <p:xslt name="process-embedded-wadl-xslt-2">
+      <p:input port="source"> 
+        <p:pipe step="process-embedded-wadl-xslt-1" port="result"/> 
+      </p:input> 
+      <p:input port="stylesheet">
+        <p:document href="classpath:///cloud/process-embedded-wadl-2.xsl"/>
+      </p:input>
+      <p:input port="parameters" >
+        <p:pipe step="main" port="parameters"/>
+      </p:input>
+    </p:xslt>
+    
   
   <p:xslt name="docbook2apipage">
     <p:input port="source"> 
-      <p:pipe step="process-embedded-wadl" port="result"/> 
+      <p:pipe step="process-embedded-wadl-xslt-2" port="result"/> 
     </p:input> 
     <p:input port="stylesheet">
       <p:document href="classpath:///cloud/apipage/apipage-main.xsl"/>
