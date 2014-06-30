@@ -19,6 +19,10 @@
 	<xsl:param name="wadl.noreqresp.msg"><para>This operation does not accept a request body and does not return a response body.</para></xsl:param>
 	<xsl:param name="security">external</xsl:param>
 	<xsl:param name="trim.wadl.uri.count">0</xsl:param>
+	
+	
+
+	
 	<xsl:template match="@*|node()">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|node()"/>
@@ -261,7 +265,7 @@
 		<xsl:variable name="method.title">
 				<xsl:choose>
 					<xsl:when test="wadl:doc/@title">
-						<xsl:value-of select="wadl:doc/@title"/>
+						<xsl:value-of select="(wadl:doc/@title)[1]"/>
 					</xsl:when>
 					<xsl:when test="@id or @rax:id">
 						<xsl:message>Warning: No title found for wadl:method</xsl:message>
