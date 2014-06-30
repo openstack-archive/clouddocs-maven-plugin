@@ -261,7 +261,7 @@
 		<xsl:variable name="method.title">
 				<xsl:choose>
 					<xsl:when test="wadl:doc/@title">
-						<xsl:value-of select="wadl:doc/@title"/>
+						<xsl:value-of select="(wadl:doc/@title)[1]"/>
 					</xsl:when>
 					<xsl:when test="@id or @rax:id">
 						<xsl:message>Warning: No title found for wadl:method</xsl:message>

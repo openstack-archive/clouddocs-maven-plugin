@@ -73,8 +73,8 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:copy>
-			<xsl:apply-templates select="$wadl-content//wadl:method[@rax:id = $thisMethodId]/@*"/>
-			<xsl:apply-templates select="$wadl-content//wadl:method[@rax:id = $thisMethodId]/node()">
+			<xsl:apply-templates select="$wadl-content/wadl:application/wadl:resources/wadl:resource[@id = $parent-id]/wadl:method[@rax:id = $thisMethodId]/@*"/>
+			<xsl:apply-templates select="$wadl-content/wadl:application/wadl:resources/wadl:resource[@id = $parent-id]/wadl:method[@rax:id = $thisMethodId]/node()">
 				<xsl:with-param name="doc" select="$doc"/>
 			</xsl:apply-templates>
 		</xsl:copy>
@@ -83,7 +83,7 @@
 	<xsl:template match="wadl:resource[@href and not(./wadl:method)]">
 		<xsl:variable name="doc" select="wadl:doc/*"/>
 		<xsl:variable name="wadl-content" select="document(substring-before(@href, '#'))"/>
-		<xsl:apply-templates select="$wadl-content//wadl:resource[@id = substring-after(current()/@href,'#')]">
+		<xsl:apply-templates select="$wadl-content/wadl:application/wadl:resources/wadl:resource[@id = substring-after(current()/@href,'#')]">
 			<xsl:with-param name="doc" select="$doc"/>			
 		</xsl:apply-templates>	
 		<xsl:apply-templates select="wadl:resource"/>
@@ -95,8 +95,8 @@
 		<xsl:variable name="wadl-content" select="document(substring-before(@href, '#'))"/>		
 		
 		<xsl:copy>
-        	<xsl:apply-templates select="$wadl-content//wadl:resource[@id = $resourceId]/@*"/>			
-			<xsl:apply-templates select="$wadl-content//wadl:resource[@id = $resourceId]/node()[not(self::wadl:method)]">
+			<xsl:apply-templates select="$wadl-content/wadl:application/wadl:resources/wadl:resource[@id = $resourceId]/@*"/>
+			<xsl:apply-templates select="$wadl-content/wadl:application/wadl:resources/wadl:resource[@id = $resourceId]/node()[not(self::wadl:method)]">
 				<xsl:with-param name="doc" select="$doc"/>
 			</xsl:apply-templates>
 			
