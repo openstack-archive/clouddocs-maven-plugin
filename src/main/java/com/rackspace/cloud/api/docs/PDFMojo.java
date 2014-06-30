@@ -378,11 +378,11 @@ public abstract class PDFMojo extends AbstractFoMojo {
 
     protected Configuration loadFOPConfig() throws MojoExecutionException {
         System.out.println ("At load config");
-        File fontPath = (null != localFontPath && localFontPath != "")?new File(localFontPath):new File(getTargetDirectory().getParentFile(), "fonts");
-        StringTemplateGroup templateGroup = new StringTemplateGroup("fonts", fontPath.getAbsolutePath());
+        String fontPath = (null != localFontPath && localFontPath != "")? localFontPath: (new File(getTargetDirectory().getParentFile(), "fonts")).getAbsolutePath();
+        StringTemplateGroup templateGroup = new StringTemplateGroup("fonts", fontPath);
         StringTemplate template = templateGroup.getInstanceOf("fontconfig");
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-        template.setAttribute ("fontPath",fontPath.toURI().toString());
+        template.setAttribute ("fontPath",fontPath);
         final String config = template.toString();
         if (getLog().isDebugEnabled()) {
             getLog().debug(config);
