@@ -120,17 +120,17 @@
                   id="navbar-collapse-btn">
                   <ul class="nav navbar-nav navbar-right">
                     <li>
-                      <a href="/sdks/">SDKs &amp;
+                      <a href="http://developer.rackspace.comsdks/">SDKs &amp;
                         Tools</a>
                     </li>
                     <li>
-                      <a href="/docs/">Docs</a>
+                      <a href="http://developer.rackspace.com/docs/">Docs</a>
                     </li>
                     <li>
-                      <a href="/blog/">Blog</a>
+                      <a href="http://developer.rackspace.com/blog/">Blog</a>
                     </li>
                     <li>
-                      <a href="/community/"
+                      <a href="http://developer.rackspace.com/community/"
                         >Community</a>
                     </li>
                     <li class="dropdown">
@@ -246,12 +246,14 @@
                     data-offset-top="1000" data-offset-bottom="0">
                     <ul class="nav api-sidenav">
                       <li>
-                        <a class="smallcapped" href="index.html"
-                          >Technical documentation</a>
+<!--                        <a class="smallcapped" href="index.html"
+                          >Technical documentation</a>-->
+                        <xsl:apply-templates select="d:chapter"
+                          mode="toc"/>
                       </li>
-                      <li class="divider"/>
-                      <xsl:apply-templates select="d:chapter"
-                        mode="toc"/>
+                     <!-- <li class="divider"/>-->
+                    <!--  <xsl:apply-templates select="d:chapter"
+                        mode="toc"/>-->
                       <li>
                         <!-- API ref page TOC -->
                         <xsl:apply-templates
