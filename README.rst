@@ -69,6 +69,20 @@ How Tos
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.1.1 (June 30, 2014)
+============================================================
+-  Features and updates
+
+   -  Depend on latest version of wadl-tools (1.0.27).
+
+-  Bug fixes
+
+   -  Avoid duplicating method content from included wadl when the included method appears more than once. 
+   -  New header etc in Rackspace branded api reference page. 
+   -  Avoid spurious "No body required" text in guides generated from wadl. 
+   -  Fix font bug in generate-pdf goal.
+   -  Use refactored wadl-processing code for api-reference page to cause all parameters to appear. 
+
 clouddocs-maven-plugin 2.1.0 (June 23, 2014)
 ============================================================
 -  Features and updates
