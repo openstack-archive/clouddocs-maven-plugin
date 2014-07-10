@@ -706,6 +706,15 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:choose>
+                <xsl:when test="@rax:phrase">
+                    <xsl:value-of select="@rax:phrase"/>
+                    <xsl:text> (</xsl:text>
+                    <xsl:call-template name="statusCodeList">
+                        <xsl:with-param name="codes" select="$codes"/>
+                        <xsl:with-param name="inError" select="true()"/>
+                    </xsl:call-template>
+                    <xsl:text>)</xsl:text>
+                </xsl:when>
                 <xsl:when test="wadl:representation/@element">
                     <xsl:value-of select="substring-after((wadl:representation/@element)[1],':')"/>
                     <xsl:text> (</xsl:text>
