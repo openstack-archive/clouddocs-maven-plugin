@@ -120,7 +120,7 @@
                   id="navbar-collapse-btn">
                   <ul class="nav navbar-nav navbar-right">
                     <li>
-                      <a href="http://developer.rackspace.comsdks/">SDKs &amp;
+                      <a href="http://developer.rackspace.com/sdks/">SDKs &amp;
                         Tools</a>
                     </li>
                     <li>
