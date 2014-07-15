@@ -1,6 +1,17 @@
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.1.2 (July 15, 2014)
+============================================================
+-  Features and updates
+
+   -  Add hyphenation support for FOP
+   -  Use new logo in Rackspace output
+
+-  Bug fixes
+
+   -  Fix incorrect link in Rackspace API reference
+
 clouddocs-maven-plugin 2.1.1 (June 30, 2014)
 ============================================================
 -  Features and updates
