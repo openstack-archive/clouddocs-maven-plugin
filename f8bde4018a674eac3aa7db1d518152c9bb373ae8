@@ -1,0 +1,10 @@
+Verified+2: Jenkins
+Code-Review+1: Anne Gentle <anne@openstack.org>
+Code-Review+1: Diane Fleming <dfleming@austin.rr.com>
+Code-Review+2: Sam Harwell <sam@tunnelvisionlabs.com>
+Workflow+1: Sam Harwell <sam@tunnelvisionlabs.com>
+Submitted-by: Jenkins
+Submitted-at: Tue, 15 Jul 2014 13:46:40 +0000
+Reviewed-on: https://review.openstack.org/106245
+Project: stackforge/clouddocs-maven-plugin
+Branch: refs/heads/master
