@@ -42,9 +42,6 @@
       <bootclasspath.java6>${java6.home}/lib/rt.jar</bootclasspath.java6>
       <bootclasspath.compile>${bootclasspath.java6}</bootclasspath.compile>
       <bootclasspath.testCompile>${bootclasspath.java6}</bootclasspath.testCompile>
-      <!-- Need to exclude this because the description includes Unicode characters,
-           and docbkx-tools doesn't support specifying the encoding. -->
-      <excluded.properties>annotation.graphic.close</excluded.properties>
     </properties>
 
     <description>
@@ -55,7 +52,7 @@
         <dependency>
             <groupId>com.agilejava.docbkx</groupId>
             <artifactId>docbkx-maven-plugin</artifactId>
-            <version>2.0.14</version>
+            <version>2.0.15</version>
         </dependency>
 
         <dependency>
@@ -174,7 +171,7 @@
         <dependency>
             <groupId>com.agilejava.docbkx</groupId>
             <artifactId>docbkx-maven-base</artifactId>
-            <version>2.0.14</version>
+            <version>2.0.15</version>
         </dependency>
 
         <dependency>
@@ -441,7 +438,7 @@
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-builder-maven-plugin</artifactId>
-                <version>2.0.14</version>
+                <version>2.0.15</version>
 
                 <executions>
 
