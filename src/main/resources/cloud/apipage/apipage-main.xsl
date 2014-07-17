@@ -676,6 +676,7 @@
           />
         </div>
         <div class="col-md-5">
+          <strong><xsl:value-of select="wadl:doc/@title"/></strong>
           <xsl:choose>
             <xsl:when
               test="wadl:doc//d:*[@role = 'shortdesc'] or wadl:doc//xhtml:*[@class = 'shortdesc']">
