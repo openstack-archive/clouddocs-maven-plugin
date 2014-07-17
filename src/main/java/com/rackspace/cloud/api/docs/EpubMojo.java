@@ -28,6 +28,7 @@ import org.codehaus.plexus.archiver.zip.ZipArchiver;
 import org.codehaus.plexus.util.FileUtils;
 
 import java.io.IOException;
+import java.io.FilenameFilter;
 import java.net.URL;
 
 
@@ -4344,7 +4345,6 @@ public abstract class EpubMojo
  
     // First transform the cover page
         transformCover();
-        //rasterize();
 
     final File targetDirectory = result.getParentFile();
     try {
@@ -4354,6 +4354,23 @@ public abstract class EpubMojo
       throw new MojoExecutionException("Unable to copy hardcoded container.xml file", e);
     }
 
+    // copy the images directory so it gets zipped
+    try {
+      FileUtils.mkdir(targetDirectory.toString() + "/images");
+      FileUtils.copyDirectory(getImageDirectory(), new File(targetDirectory.toString() + "/images"));
+    } catch (IOException e) {
+      throw new MojoExecutionException("Unable to copy images directory", e);
+    }
+    // copy the figures directory so it gets zipped
+    try {
+      FileUtils.mkdir(targetDirectory.toString() + "/figures");
+      FileUtils.copyDirectory(new File(sourceDirectory.toString() + "/figures"), new File(targetDirectory.toString() + "/figures"));
+    } catch (IOException e) {
+      throw new MojoExecutionException("Unable to copy figures directory", e);
+    }
+
+    //make PNGs from SVG images
+    rasterize(new File(targetDirectory.toString() + "/images"));
     // copy mimetype file
     try {
       final URL mimetypeURL = getClass().getResource("/epub/mimetype");
@@ -4361,6 +4378,9 @@ public abstract class EpubMojo
     } catch (IOException e) {
       throw new MojoExecutionException("Unable to copy hardcoded mimetype file", e);
     }
+
+    //do the CSS things
+    copyTemplate(targetDirectory);
 
     try {
       ZipArchiver zipArchiver = new ZipArchiver();
@@ -4419,7 +4439,9 @@ public abstract class EpubMojo
         super.adjustTransformer(transformer, sourceFilename, targetFile);
 
 	transformer.setParameter("branding", branding);
+	transformer.setParameter("html.stylesheet", "common/css/positioning.css");
 	transformer.setParameter("project.build.directory", projectBuildDirectory.toURI().toString());
+	transformer.setParameter("imgSrcPath", ".");
 
 	if(security != null){
 	    transformer.setParameter("security",security);
@@ -4441,7 +4463,8 @@ public abstract class EpubMojo
 	transformer.setParameter("source.directory",sourceDirectory.toURI().toString());
 	transformer.setParameter("compute.wadl.path.from.docbook.path",computeWadlPathFromDocbookPath);
 
-        transformer.setParameter ("admon.graphics.path", imageDirectory.toURI().toString());
+        //transformer.setParameter ("admon.graphics.path", imageDirectory.toURI().toString());
+        transformer.setParameter ("admon.graphics.path", "images/");
         transformer.setParameter ("callout.graphics.path", calloutDirectory.toURI().toString());
 
         //
@@ -4478,6 +4501,15 @@ public abstract class EpubMojo
             }
     }
 
+   protected void copyTemplate(File targetDirectory) throws MojoExecutionException {
+
+
+        com.rackspace.cloud.api.docs.FileUtils.extractJaredDirectory("common", EpubMojo.class, targetDirectory);
+        com.agilejava.docbkx.maven.FileUtils.copyFile(new File(targetDirectory, "common/images/favicon-" + branding + ".ico"), new File(targetDirectory, "favicon.ico"));
+        com.agilejava.docbkx.maven.FileUtils.copyFile(new File(targetDirectory, "common/css/positioning-" + branding + ".css"), new File(targetDirectory, "common/css/positioning.css"));
+        com.agilejava.docbkx.maven.FileUtils.copyFile(new File(targetDirectory, "common/main-" + branding + ".js"), new File(targetDirectory, "common/main.js"));
+    }
+
   public void preProcess() throws MojoExecutionException {
         super.preProcess();
 
@@ -4501,7 +4533,7 @@ public abstract class EpubMojo
     }
 
 
-    public void rasterize() throws RuntimeException{
+    public void rasterize(File imagedir) throws RuntimeException{
         try{
         // Create a JPEG transcoder
         PNGTranscoder t = new PNGTranscoder();
@@ -4510,12 +4542,21 @@ public abstract class EpubMojo
        // t.addTranscodingHint(PNGTranscoder.KEY_QUALITY,
          //                    new Float(.8));
 
+        File [] svgfiles = imagedir.listFiles(new FilenameFilter() {
+          @Override
+          public boolean accept(File dir, String name) {
+            return name.endsWith(".svg");
+          }
+       });
+
+        for (File svgimage : svgfiles){
+
         // Create the transcoder input.
-        String svgURI = new File("/Users/nare4013/epub/rackspace-template/rackspace-template/target/docbkx/images/cloud/cover.svg").toURI().toURL().toString();
+          String svgURI = svgimage.toURI().toURL().toString();
         TranscoderInput input = new TranscoderInput(svgURI);
 
         // Create the transcoder output.
-        OutputStream ostream = new FileOutputStream("/Users/nare4013/epub/rackspace-template/rackspace-template/target/docbkx/images/cloud/cover.png");
+          OutputStream ostream = new FileOutputStream(svgimage.toString().replace(".svg",".png"));
         TranscoderOutput output = new TranscoderOutput(ostream);
 
         // Save the image.
@@ -4525,8 +4566,9 @@ public abstract class EpubMojo
         ostream.flush();
         ostream.close();
         }
+        }
         catch(Exception e){
-            throw new RuntimeException("Could not able to rasterize the svg", e);
+            throw new RuntimeException("Could not able to rasterize the svgs", e);
         }
    
 }
