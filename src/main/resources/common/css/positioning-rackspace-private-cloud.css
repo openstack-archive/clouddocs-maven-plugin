@@ -295,6 +295,10 @@ tr th, tr th .internal, tr th .added, tr th .changed
     padding-left: 10px;
 }
 
+span.section, span.preface, span.chapter, span.book, span.appendix, span.glossary, span.part, span.set, span.reference{
+	padding-top: 0px;
+}
+
 #toolbar-inner {
     	width: 960px;
 	margin: 0 auto;
