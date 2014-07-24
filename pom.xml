@@ -605,6 +605,20 @@
               <version>2.9.1</version>
               <configuration>
                 <quiet>true</quiet>
+                <tags>
+                  <tag>
+                    <name>parameter</name>
+                    <placement>Xf</placement>
+                  </tag>
+                  <tag>
+                    <name>goal</name>
+                    <placement>Xt</placement>
+                  </tag>
+                  <tag>
+                    <name>configurator</name>
+                    <placement>Xt</placement>
+                  </tag>
+                </tags>
               </configuration>
             </plugin>
 
