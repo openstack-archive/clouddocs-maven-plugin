@@ -1171,6 +1171,7 @@ WARNING: No more than six steps are allowed in a tutorial.
         <xsl:when test="@language = 'java' or @language = 'JAVA'">java</xsl:when>
         <xsl:when test="@language = 'json' or @language = 'JSON'">json</xsl:when>
         <xsl:when test="@language = 'python' or @language = 'PYTHON' or @language = 'py' or @language = 'PY'">python</xsl:when>
+        <xsl:when test="@language = 'yaml' or @language = 'YAML' or @language = 'yml' or @language = 'YML'">yaml</xsl:when>
         <xsl:otherwise>
           <xsl:message>
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1295,6 +1296,7 @@ WARNING: No more than six steps are allowed in a tutorial.
         <xsl:when test="@language = 'java' or @language = 'JAVA'">java</xsl:when>
         <xsl:when test="@language = 'json' or @language = 'JSON'">json</xsl:when>
         <xsl:when test="@language = 'python' or @language = 'PYTHON' or @language = 'py' or @language = 'PY'">python</xsl:when>
+        <xsl:when test="@language = 'yaml' or @language = 'YAML' or @language = 'yml' or @language = 'YML'">yaml</xsl:when>
         <xsl:otherwise>
           <xsl:message>
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1420,6 +1422,7 @@ WARNING: No more than six steps are allowed in a tutorial.
         <xsl:when test="@language = 'java' or @language = 'JAVA'">java</xsl:when>
         <xsl:when test="@language = 'json' or @language = 'JSON'">json</xsl:when>
         <xsl:when test="@language = 'python' or @language = 'PYTHON' or @language = 'py' or @language = 'PY'">python</xsl:when>
+        <xsl:when test="@language = 'yaml' or @language = 'YAML' or @language = 'yml' or @language = 'YML'">yaml</xsl:when>
         <xsl:otherwise>
           <xsl:message>
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
