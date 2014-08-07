@@ -4,6 +4,22 @@
 	http://staging.openstack.org/themes/openstack/css/main.css
 */
 
+#fanaticguy{
+    text-transform: uppercase;
+    color: white;
+    line-height: 20px;
+    font-size: .9em;
+    font-weight: 600;
+    background: url("http://33b005aae5795219b553-1e1c5ac10380ee72a01b057764b93d72.r90.cf1.rackcdn.com/rs-logo.png") no-repeat left center;
+    background: url("http://33b005aae5795219b553-1e1c5ac10380ee72a01b057764b93d72.r90.cf1.rackcdn.com/rs-logo.svg") no-repeat left center;
+    background-size: 100px;
+    padding: 9px 10px 10px 97px;
+    height: 42px; 
+    position: relative;
+    top: 5px;
+    left: 10px;      
+}
+
 #rightColumn {
     float:left;
     position: relative;
