@@ -112,8 +112,8 @@
                     <span class="icon-bar"/>
                     <span class="icon-bar"/>
                   </button>
-                  <a class="navbar-brand"
-                    href="/">Rackspace ::
+                  <a class="navbar-brand" id="fanaticguy"
+                    href="https://developer.rackspace.com">::
                     Develop</a>
                 </div>
                 <div class="collapse navbar-collapse"
