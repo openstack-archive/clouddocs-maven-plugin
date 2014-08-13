@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+1: Andreas Jaeger <jaegerandi@gmail.com>
+Code-Review+2: Sam Harwell <sam@tunnelvisionlabs.com>
+Workflow+1: Sam Harwell <sam@tunnelvisionlabs.com>
+Submitted-by: Jenkins
+Submitted-at: Wed, 13 Aug 2014 14:21:19 +0000
+Reviewed-on: https://review.openstack.org/113804
+Project: stackforge/clouddocs-maven-plugin
+Branch: refs/heads/master
