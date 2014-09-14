@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+2: Anne Gentle <anne@openstack.org>
+Code-Review+2: Diane Fleming <dfleming@austin.rr.com>
+Workflow+1: Diane Fleming <dfleming@austin.rr.com>
+Submitted-by: Jenkins
+Submitted-at: Sun, 14 Sep 2014 01:41:55 +0000
+Reviewed-on: https://review.openstack.org/111219
+Project: stackforge/clouddocs-maven-plugin
+Branch: refs/heads/master
