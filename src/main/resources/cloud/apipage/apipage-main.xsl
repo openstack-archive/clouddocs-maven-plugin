@@ -1004,23 +1004,26 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
+      <xsl:variable name="statusCodes">
+        <xsl:call-template name="statusCodeList">
+          <xsl:with-param name="codes" select="$codes"/>
+          <xsl:with-param name="inError" select="true()"/>
+        </xsl:call-template>
+      </xsl:variable>
       <xsl:choose>
+        <xsl:when test="@rax:phrase">
+          <xsl:value-of select="@rax:phrase"/>
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="normalize-space($statusCodes)"/>
+          <xsl:text>)</xsl:text>
+        </xsl:when>
         <xsl:when test="wadl:representation/@element">
-          <xsl:variable name="statusCodes">
-            <xsl:call-template name="statusCodeList">
-              <xsl:with-param name="codes" select="$codes"/>
-              <xsl:with-param name="inError" select="true()"/>
-            </xsl:call-template>
-          </xsl:variable>
           <xsl:value-of
             select="substring-after((wadl:representation/@element)[1],':')"
           /> (<xsl:value-of select="normalize-space($statusCodes)"
           />)</xsl:when>
         <xsl:otherwise>
-          <xsl:call-template name="statusCodeList">
-            <xsl:with-param name="codes" select="$codes"/>
-            <xsl:with-param name="inError" select="true()"/>
-          </xsl:call-template>
+          <xsl:value-of select="$statusCodes"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
