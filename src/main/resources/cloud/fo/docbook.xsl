@@ -351,7 +351,7 @@ set       toc,title
 
     <xsl:choose>
       <xsl:when test="$element = 'toc' and self::d:book">i</xsl:when>
-      <xsl:when test="$element = 'preface'">1</xsl:when>
+      <xsl:when test="$element = 'preface'">i</xsl:when>
       <xsl:when test="$element = 'dedication'">1</xsl:when>
       <xsl:when test="$element = 'acknowledgements'">i</xsl:when>
       <xsl:when test="$element = 'colophon'">1</xsl:when>
