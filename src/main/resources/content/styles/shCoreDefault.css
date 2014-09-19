@@ -95,7 +95,7 @@
 .syntaxhighlighter .italic {
   font-style: italic !important;
 }
-.syntaxhighlighter .line {
+.syntaxhighlighter .line, .syntaxhighlighter code {
   white-space: pre !important;
 }
 .syntaxhighlighter table {
