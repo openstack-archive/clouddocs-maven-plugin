@@ -1,2 +1,4 @@
-2c6802522201d0091571720a39b3851e0cc805d5	Administrators
+# UUID                                  	Group Name
+#
+238e9f33453744139facac78a6eb17de63c46a00	openstack-doc-core
 c16a31c4e89eb64fba41952ce6773b85bd617314	clouddocs-maven-plugin-core
