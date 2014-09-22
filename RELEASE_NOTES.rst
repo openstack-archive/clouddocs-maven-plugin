@@ -1,6 +1,21 @@
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.1.3 (Sept. 22, 2014)
+============================================================
+- Features and updates
+
+   - Add the title of the service for each API call in API Reference pages
+   - Support YAML syntax highlighting
+
+-  Bug fixes
+
+   -  CSS fixes for Rackspace output
+   - Minor improvements for developers working on the plugin itself
+   - Updates to Rackspace-branded output
+   - Allow an error phrase to be listed with the response code for API deliverables
+   - Use roman page numbers for preface
+
 clouddocs-maven-plugin 2.1.2 (July 15, 2014)
 ============================================================
 -  Features and updates
