@@ -21,3 +21,4 @@ target
 nbactions.xml
 nbactions-*.xml
 sonatype-*.sh
+/.settings
