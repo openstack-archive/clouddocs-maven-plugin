@@ -46,6 +46,15 @@ function Verifie(ditaSearch_Form) {
 
         // reactive la fenetre de search (utile car cadres)
         document.ditaSearch_Form.textToSearch.focus();
+        
+        var highlightChecked=$('#searchCheckBox').is(':checked');
+        //the highlight button is checked
+        if(highlightChecked){
+        	//first remove the previous highlight
+        	searchUnhighlight();
+        	//Now highlight the new search term
+            toggleHighlight(highlightChecked);
+        }
     }
 }
 
