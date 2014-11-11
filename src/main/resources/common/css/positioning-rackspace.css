@@ -52,14 +52,14 @@ span.off     {  }
 #rax-leftnavigation {
     overflow: auto;
     position: absolute;
-    height: 96%;
-    top: 10px;
-    bottom: 0;
+    top: 0px;    
+    bottom: 0px;
     left: 10px;
     width: 280px;
-    border-right:1px solid #bbc4c5;
-    padding: 0px;
-    display: none;
+    border-right: 1px solid #bbc4c5;
+    padding-top: 13px;
+    display: block;
+    background-color:white;
 }
 
 #rax-treeDiv {
@@ -340,7 +340,6 @@ div#toolbar-left img {
 
 
 div.note *, div.caution *, div.important *, div.tip *, div.warning *, div.calloutlist * {
-    background: inherit !important;
     color: inherit !important;
     border: inherit !important;    
 }

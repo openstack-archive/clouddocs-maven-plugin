@@ -261,6 +261,18 @@
 	&lt;![endif]</xsl:text></xsl:comment>
               <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
               <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/treeview/jquery.treeview.css"/>
+              <script type="text/javascript">
+                  //The id for tree cookie
+                  var treeCookieId = "treeview-4973";
+                  var language = "en";
+                  var w = new Object();
+                  //Localization
+                  txt_filesfound = 'Results';
+                  txt_enter_at_least_1_char = "You must enter at least one character.";
+                  txt_browser_not_supported = "Your browser is not supported. Use of Mozilla Firefox is recommended.";
+                  txt_please_wait = "Please wait. Search in progress...";
+                  txt_results_for = "Results for: ";
+              </script>
               <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"><xsl:comment/></script>
               <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"><xsl:comment/></script>
               <script type="text/javascript" 
@@ -275,6 +287,7 @@
                   <xsl:comment> </xsl:comment>
               </script>
               <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.css"/>
+              <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}/css/searchindoc.css"/>
               <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.min.js">
                   <xsl:comment>jQuery plugin for glossary popups. </xsl:comment>
               </script>
@@ -290,8 +303,29 @@
                           </xsl:otherwise>	
                       </xsl:choose>  
                   </script>
+                  <script type="text/javascript" src="{$webhelp.common.dir}../content/search/htmlFileInfoList.js">
+                    <xsl:comment> </xsl:comment>
+                  </script>
+                  <script type="text/javascript" src="{$webhelp.common.dir}../content/search/nwSearchFnt.js">
+                    <xsl:comment> </xsl:comment>
+                  </script>
+                  <script type="text/javascript" src="{$webhelp.common.dir}../content/search/stemmers/en_stemmer.js">
+                    <xsl:comment> </xsl:comment>
+                  </script>
+                  <script type="text/javascript" src="{$webhelp.common.dir}../content/search/index-1.js">
+                    <xsl:comment> </xsl:comment>
+                  </script>
+                  <script type="text/javascript" src="{$webhelp.common.dir}../content/search/index-2.js">
+                    <xsl:comment> </xsl:comment>
+                  </script>
+                  <script type="text/javascript" src="{$webhelp.common.dir}../content/search/index-3.js">
+                    <xsl:comment> </xsl:comment>
+                  </script>
                   <script type="text/javascript" src="{$webhelp.common.dir}ga.js">
                       <xsl:comment></xsl:comment>
+                  </script>
+                  <script type="text/javascript" src="{$webhelp.common.dir}../content/search/htmlFileList.js">
+                    <xsl:comment> </xsl:comment>
                   </script>
               </xsl:if>
           </xsl:when>

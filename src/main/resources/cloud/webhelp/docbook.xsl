@@ -636,7 +636,12 @@ ERROR: Feedback email not set but internal comments are enabled.
                 
                 <xsl:choose>
                     <xsl:when test="$branding = 'rackspace' or $branding = 'rackspace-private-cloud'">
-                        <div id="rax-leftnavigation" style="padding-top:3px; background-color:white;">
+                        <div id="rax-leftnavigation">
+                          <div id="theTabs">
+	                          <div id="rax-tabslistid">
+	                            <span id="rax-contentsid" class="selectedUnderline"><i class="fa fa-list"><xsl:comment/></i> Contents</span>
+	                            <span id="rax-searchid"><i class="fa fa-search"><xsl:comment/></i> Search</span>
+	                          </div>
                             <div id="rax-treeDiv">
                                 <img src="{$webhelp.common.dir}images/loading.gif" alt="loading table of contents..."
                                     id="tocLoading" style="display:block;"/>
@@ -658,6 +663,21 @@ ERROR: Feedback email not set but internal comments are enabled.
                                     </ul>
                                 </div>
                             </div>
+                            <div id="rax-searchDiv" style="display:none;">
+                              <form id="searchFormid" onsubmit="Verifie(ditaSearch_Form);return false" name="ditaSearch_Form" class="searchForm">
+                                <div id="searchinput">
+                                  <input id="textToSearch" name="textToSearch" type="text" class="searchText"/> <xsl:text disable-output-escaping="yes"> <![CDATA[&nbsp;]]> </xsl:text> <input onclick="Verifie(ditaSearch_Form)" type="button" class="searchButton" value="Go" id="doSearch"/>
+                                </div>
+                              </form>
+                              <form id="highlightForm">
+                                <p>
+                                <input checked="yes" id="searchCheckBox" type="checkbox" name="highlighttext" value="true"/>Highlight Search Term
+                                </p>
+                                <p></p>
+                              </form> 
+                              <div id="searchResults"><p class="searchHighlight"></p></div>                                                                                        
+                            </div>
+                          </div>
                         </div>
                     </xsl:when>
                     <xsl:otherwise>
@@ -720,11 +740,7 @@ ERROR: Feedback email not set but internal comments are enabled.
                                                 </center>
                                             </fieldset>
                                         </form>
-                                    </div>
-                                    <div id="searchResults">
-                                        <center> </center>
-                                    </div>
-                                    <p class="searchHighlight"><a href="#" onclick="toggleHighlight()">Search Highlighter (On/Off)</a></p>
+                                    </div>                                   
                                 </div>
                             </xsl:if>
                             
@@ -926,7 +942,7 @@ ERROR: Feedback email not set but internal comments are enabled.
         </div>
         <ul id="{generate-id(.)}" class="treeview-black">
             <xsl:apply-templates/>
-        </ul>
+        </ul>        
     </xsl:template>
     
     <xsl:template match="d:itemizedlist[ancestor::d:itemizedlist[@role = 'paramList']]">

@@ -2,7 +2,36 @@
  * Miscellaneous js functions for WebHelp
  */
 
-$(document).ready(function() {  
+$(document).ready(function() {  	
+    $('#rax-contentsid').click(function(){
+    	showTocArea();
+    });
+
+    $('#rax-searchid').click(function(){
+    	showSearchArea();
+    	checkSearchCookie();
+    });
+
+	// When you click on a link to an anchor, scroll down
+	// 105 px to cope with the fact that the banner
+	// hides the top 95px or so of the page.
+	// This code deals with the problem when
+	// you click on a link within a page.
+	$('a[href*=#]').click(function() {
+		if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'')
+		    && location.hostname == this.hostname) {
+		    var $target = $(this.hash);
+		    $target = $target.length && $target
+			|| $('[name=' + this.hash.slice(1) +']');
+		if (!(this.hash == "#searchDiv" || this.hash == "#treeDiv" || this.hash == "") && $target.length) {
+			var targetOffset = $target.offset().top - 140;
+			$('html,body')
+			    .animate({scrollTop: targetOffset}, 200);
+			return false;
+		    }
+		}
+	    });
+
 
     //Generate the tree
      $("#ulTreeDiv").attr("style","");
@@ -23,6 +52,9 @@ $(document).ready(function() {
 	showHideToc("showing");
     }
 
+    //Check to see if we should display the search tab or the content tab
+    checkSearchCookie();
+
     syncToc(); //Synchronize the toc tree with the content pane, when loading the page.   
 
 
@@ -38,7 +70,96 @@ $(document).ready(function() {
         });
     });
 
+    //.searchButton is the css class applied to 'Go' button
+    $(function() {
+		$("button", ".searchButton").button();
+
+		$("button", ".searchButton").click(function() { return false; });
+	});
+
+    //'ui-tabs-1' is the cookie name which is used for the persistence of the tabs.(Content/Search tab)
+    if ($.cookie('ui-tabs-1') === '1') {    //search tab is visible
+        if ($.cookie('textToSearch') != undefined && $.cookie('textToSearch').length > 0) {
+            document.getElementById('textToSearch').value = $.cookie('textToSearch');
+            Effectuer_recherche($.cookie('textToSearch'));
+            searchHighlight($.cookie('textToSearch'));
+            $("#showHideHighlight").css("display","block");
+        }
+    }
+
+    // When you click on a link to an anchor, scroll down
+    // 140 px to cope with the fact that the banner
+    // hides the top 95px or so of the page.
+    // This code deals with the problem when
+    // you click on a link from another page.
+    var hash = window.location.hash;
+    if(hash){
+    	var offsetFuncExists=!!$(hash).offset();
+    	if(undefined!=offsetFuncExists && offsetFuncExists){
+	        var targetOffset = $(hash).offset().top - 140;
+	        $('html,body').animate({scrollTop: targetOffset}, 200);
+	        return false;
+    	}
+    }
+
+    $('#searchCheckBox:checkbox').change(function(){
+    	var isChecked=$('#searchCheckBox:checkbox').is(':checked');
+    	toggleHighlight(isChecked);
+    });
+
 });
+
+function highLightText(){
+	//We only want to do something if there is something in the input field
+	var textToSearch=$('#textToSearch').val();
+
+	searchHighlight(textToSearch);
+
+}
+
+function containsDisqusInclude(){
+   var retVal=false;
+   if($('#disqus_thread').length){
+           retVal=true;
+   }
+   return retVal;
+}
+
+//This function tries to make sure the left hand navigation/search pane, has the same height as the content pane
+function checkLeftHandNavigationHeightWithContentHeight(){
+	//First remove all style from the id="rax-leftnavigation'
+	var rhsHeight=$('#content').height();
+	var lhsHeight=$('#rax-leftnavigation').height();
+
+        if(containsDisqusInclude() && rhsHeight>lhsHeight){
+            //rhsHeight+=290;
+        }
+	if(rhsHeight!=lhsHeight){
+	    $('#rax-leftnavigation').removeAttr('style');
+	    var newLhsHeight='height:'+rhsHeight+"px;";
+	    $('#rax-leftnavigation').attr('style',newLhsHeight)
+	}
+}
+
+//Checks to see if the textToSearch cookie exists, if so populate the searc with the textToSearch results
+function checkSearchCookie(){
+    //Check to see if we should display the search tab or the content tab
+    var tab=readCookie('rax-tab-clicked');
+    //By default we show the content tab
+    if(tab==='content'||tab===null||tab===undefined){
+        showTocArea();
+    }
+    else{
+        showSearchArea();
+        var searchText=$.cookie('textToSearch');
+        if(null!==searchText && undefined!==searchText){
+            $('#textToSearch').val(searchText);
+            Effectuer_recherche(searchText);
+            searchHighlight(searchText);
+            $("#showHideHighlight").css("display","block");
+        }
+    }
+}
 
 /**
  * Synchronize with the tableOfContents 
@@ -138,6 +259,160 @@ function readCookie(name) {
 function eraseCookie(name) {
 	createCookie(name,"",-1);
 }
+
+/**
+ * Code for search highlighting
+ */
+var highlightOn = true;
+function searchHighlight(searchText) {
+    highlightOn = true;
+    if (searchText != undefined) {
+        var wList;
+        var sList = new Array();    //stem list
+        //Highlight the search terms
+        searchText = searchText.toLowerCase().replace(/<\//g, "_st_").replace(/\$_/g, "_di_").replace(/\.|%2C|%3B|%21|%3A|@|\/|\*/g, " ").replace(/(%20)+/g, " ").replace(/_st_/g, "</").replace(/_di_/g, "%24_")
+        searchText = searchText.replace(/  +/g, " ");
+        searchText = searchText.replace(/ $/, "").replace(/^ /, "");
+
+        wList = searchText.split(" ");
+
+        //Do stemmed highlighting
+        if(typeof stemmer != "undefined" ){
+            //Highlight the stems
+            for (var i = 0; i < wList.length; i++) {
+                var stemW = stemmer(wList[i]);
+                sList.push(stemW);
+            }
+        } else {
+            sList = wList;
+        }
+        highlightAll(sList); //Highlight the search input's all stems
+    }
+}
+
+function highlightAll(wList){
+    for(i=0;i<wList.length;++i){
+        var theSearch=wList[i];
+        $("#content").highlight(theSearch);//Highlight the search input
+    }
+}
+
+function searchUnhighlight(){
+    highlightOn = false;
+     //unhighlight the search input's all stems
+    $("#content").removeHighlight();
+}
+
+function toggleHighlight(isChecked){
+    if(!isChecked) {
+        searchUnhighlight();
+    } else {
+        searchHighlight($.cookie('textToSearch'));
+    }
+}
+
+function showTocArea(){
+    var searchArea=$($('#rax-searchDiv'));
+    searchArea.hide();
+
+    var searchId=$($('#searchid'));
+
+    var contentsAnchor=$('#rax-contentsid');
+    contentsAnchor.removeAttr('class');
+    contentsAnchor.attr('class','selectedUnderline');
+    contentsAnchor.removeAttr('style');
+    contentsAnchor.attr('style','color:black;');
+
+    var searchAnchor=$('#rax-searchid');
+    searchAnchor.removeAttr('class');
+    searchAnchor.removeAttr('style');
+    searchAnchor.attr('style','color:#AAAAAA;')
+
+    $('#rax-treeDiv').show();
+    eraseCookie("rax-tab-clicked");
+    createCookie("rax-tab-clicked","content",2);
+    syncToc();
+}
+
+function showSearchArea(){
+    var searchArea=$('#rax-searchDiv');
+    searchArea.show();
+
+    var searchId=$('#rax-searchid');
+    searchId.removeAttr('style');
+    searchId.attr('style','color:black;');
+
+    var contents=$('#rax-contentsid');
+    contents.removeAttr('style');
+    contents.attr('style','color:#AAAAAA;')
+
+    $('#rax-treeDiv').hide();
+
+    var contentsAnchor=$('#rax-contentsid');
+    contentsAnchor.removeAttr('class');
+
+    var searchAnchor=$('#rax-searchid');
+    searchAnchor.removeAttr('class');
+    searchAnchor.attr('class','selectedUnderline');
+
+    eraseCookie("rax-tab-clicked");
+    createCookie("rax-tab-clicked","search",2);
+}
+
+/*
+
+highlight v4
+
+Highlights arbitrary terms.
+
+<http://johannburkard.de/blog/programming/javascript/highlight-javascript-text-higlighting-jquery-plugin.html>
+
+MIT license.
+
+Johann Burkard
+<http://johannburkard.de>
+<mailto:jb@eaio.com>
+
+*/
+
+jQuery.fn.highlight = function(pat) {
+ function innerHighlight(node, pat) {
+  var skip = 0;
+  if (node.nodeType == 3) {
+   var pos = node.data.toUpperCase().indexOf(pat);
+   if (pos >= 0) {
+    var spannode = document.createElement('span');
+    spannode.className = 'highlight';
+    var middlebit = node.splitText(pos);
+    var endbit = middlebit.splitText(pat.length);
+    var middleclone = middlebit.cloneNode(true);
+    spannode.appendChild(middleclone);
+    middlebit.parentNode.replaceChild(spannode, middlebit);
+    skip = 1;
+   }
+  }
+  else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+   for (var i = 0; i < node.childNodes.length; ++i) {
+    i += innerHighlight(node.childNodes[i], pat);
+   }
+  }
+  return skip;
+ }
+ return this.length && pat && pat.length ? this.each(function() {
+  innerHighlight(this, pat.toUpperCase());
+ }) : this;
+};
+
+jQuery.fn.removeHighlight = function() {
+ return this.find("span.highlight").each(function() {
+  this.parentNode.firstChild.nodeName;
+  with (this.parentNode) {
+   replaceChild(this.firstChild, this);
+   normalize();
+  }
+ }).end();
+};
+
 
 /*
 CSS Browser Selector v0.4.0 (Nov 02, 2010)

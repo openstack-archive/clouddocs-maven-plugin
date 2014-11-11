@@ -1,0 +1,69 @@
+#thetabs{
+    position: relative;
+    zoom: 1;
+    font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 1.1em;
+
+}
+#rax-tabslistid{
+    bottom: 3px;
+    color: black;
+    position: relative;
+    padding-bottom: 25px;
+    display: block;
+    text-decoration: none;
+    font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+    font-size: 1.3em;
+}
+#rax-contentsid{
+    cursor:pointer;
+}
+#rax-searchid{
+    cursor:pointer;
+    position:relative;
+    left:30px;
+}
+.selectedUnderline{
+	border-bottom-color: #0DAFCC;
+	border-bottom-width: 3px;
+	border-bottom-style: solid;
+	padding-bottom: 5px;
+}
+.searchButton {
+    margin-left: 3px;
+    border: #0DAFCC solid 1pt;
+    background-color: #0DAFCC;
+    color: #FFFFFF;
+    font-weight: 100;
+    font-size: 10pt;
+}
+ul.searchresult{
+	list-style:none;
+}
+.searchresult li a:hover{
+    text-decoration:underline;
+}
+.searchresult li{
+    color: #0050A0;
+    margin-bottom: 10px;
+    position: relative;
+    right: 38px;
+}
+.searchExpression {
+    color: #0050A0;
+    background-color: #EBEFF8;
+    font-size: 10pt;
+}
+#theTabs{
+	position: relative;
+	top: 10px;
+}
+.searchText {
+    border: #CCCCCC solid 2pt;
+    width: 13em;
+    height: 1.4em;
+    font: 10pt Verdana, Geneva, sans-serif;
+}
+.highlight {
+    background-color: yellow;
+}
