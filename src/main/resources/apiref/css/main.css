@@ -87,6 +87,20 @@ dt:hover > a.headerlink {
     margin-top: 20px;
 }
 
+.operation.col-md-1 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+a.operation-anchor {
+  margin-right: 5px;
+  visibility: hidden;
+}
+
+.operation-grp:hover a.operation-anchor {
+  visibility: visible;
+}
+
 /*
  * Side navigation
  *
