@@ -742,9 +742,9 @@
 	  </xsl:choose>
 	</xsl:variable>
 
-	<pre class="programlisting brush: {$brush}; {$syntaxhighlighter.switches}">
+	<xsl:text>&#xA;</xsl:text><pre class="programlisting brush: {$brush}; {$syntaxhighlighter.switches}">
 	  <xsl:apply-templates/>
-	</pre>
+	</pre><xsl:text>&#xA;</xsl:text>
 
     </xsl:template>    
 
