@@ -1,6 +1,18 @@
 Release Notes
 =============
 
+clouddocs-maven-plugin 2.1.4 (April 6, 2015)
+============================================================
+- Features and updates
+
+   - Add link to each GET/PUT/POST/DELETE/PATCH "button"
+   - Adds Korean fonts for PDF output
+   
+- Bug fixes
+
+   - Fix SyntaxHighlighting issue caused by index entries (https://bugs.launchpad.net/openstack-manuals/+bug/1340211)
+   - Partial fixes for epub output
+
 clouddocs-maven-plugin 2.1.3 (Sept. 22, 2014)
 ============================================================
 - Features and updates
