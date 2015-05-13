@@ -3,14 +3,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.rackspace.cloud.api</groupId>
+    <groupId>org.openstack.docs</groupId>
     <artifactId>clouddocs-maven-plugin</artifactId>
 
-    <name>Cloud API Docs Plugin</name>
+    <name>OpenStack API Docs Plugin</name>
     <version>2.1.5-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
-    <url>https://github.com/rackerlabs/clouddocs-maven-plugin</url>
+    <url>https://github.com/stackforge/clouddocs-maven-plugin</url>
     <licenses>
       <license>
         <name>Apache License, Version 2.0</name>
@@ -453,7 +453,7 @@
 
                         <configuration>
                             <type>xhtml</type>
-                            <superClassName>com.rackspace.cloud.api.docs.XhtmlMojo</superClassName>
+                            <superClassName>org.openstack.docs.XhtmlMojo</superClassName>
                             <excludedProperties>${excluded.properties},root.filename,base.dir</excludedProperties>
                         </configuration>
                     </execution>
@@ -467,7 +467,7 @@
 
                         <configuration>
                             <type>html</type>
-                            <superClassName>com.rackspace.cloud.api.docs.ApiRefMojo</superClassName>
+                            <superClassName>org.openstack.docs.ApiRefMojo</superClassName>
                             <excludedProperties>${excluded.properties},root.filename,base.dir</excludedProperties>
                         </configuration>
                     </execution>
@@ -481,7 +481,7 @@
 
                         <configuration>
                             <type>fo</type>
-                            <superClassName>com.rackspace.cloud.api.docs.PDFMojo</superClassName>
+                            <superClassName>org.openstack.docs.PDFMojo</superClassName>
                             <className>DocbkxPdfMojo</className>
                             <pluginSuffix>pdf</pluginSuffix>
                             <excludedProperties>${excluded.properties}</excludedProperties>
@@ -498,7 +498,7 @@
                         <configuration>
                             <type>webhelp</type>
                             <stylesheetPath>webhelp/xsl/webhelp.xsl</stylesheetPath>
-                            <superClassName>com.rackspace.cloud.api.docs.WebHelpMojo</superClassName>
+                            <superClassName>org.openstack.docs.WebHelpMojo</superClassName>
                             <excludedProperties>
                                 ${excluded.properties},root.filename,base.dir,webhelp.base.dir,manifest.in.base.dir
                             </excludedProperties>
@@ -514,7 +514,7 @@
                         <configuration>
                             <type>eclipse</type>
                             <stylesheetPath>eclipse/eclipse.xsl</stylesheetPath>
-                            <superClassName>com.rackspace.cloud.api.docs.EclipseMojo</superClassName>
+                            <superClassName>org.openstack.docs.EclipseMojo</superClassName>
                             <excludedProperties>${excluded.properties},root.filename,base.dir,manifest.in.base.dir
                             </excludedProperties>
                             <useStandardOutput>false</useStandardOutput>
@@ -528,7 +528,7 @@
                         </goals>
                         <configuration>
                             <type>epub</type>
-                            <superClassName>com.rackspace.cloud.api.docs.EpubMojo</superClassName>
+                            <superClassName>org.openstack.docs.EpubMojo</superClassName>
                             <excludedProperties>
                                 ${excluded.properties},root.filename,base.dir,epub.oebps.dir,epub.metainf.dir,manifest.in.base.dir,epub.opf.filename
                             </excludedProperties>
