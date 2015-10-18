@@ -32,7 +32,7 @@ To test changes to clouddocs-maven-plugin on your local machine:
 
 #. Run this command to clone clouddocs-maven-plugin:
 
-        git clone git@github.com:stackforge/clouddocs-maven-plugin.git
+        git clone git@github.com:openstack/clouddocs-maven-plugin.git
 
 #. CD into the clouddocs-maven-plugin directory.
 
