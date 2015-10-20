@@ -1,0 +1,8 @@
+Verified+2: Jenkins
+Code-Review+2: Andreas Jaeger <jaegerandi@gmail.com>
+Workflow+1: Andreas Jaeger <jaegerandi@gmail.com>
+Submitted-by: Jenkins
+Submitted-at: Tue, 20 Oct 2015 05:32:22 +0000
+Reviewed-on: https://review.openstack.org/236708
+Project: openstack/clouddocs-maven-plugin
+Branch: refs/heads/master
