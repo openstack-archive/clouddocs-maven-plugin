@@ -7,19 +7,16 @@ and other OpenStack projects.
 
 Example output
 ==============
-Rackspace output: 
-
-- http://docs.rackspace.com/files/api/v1/cf-devguide/content/Overview-d1e70.html
 
 OpenStack output:
 
-- http://docs.openstack.org/user-guide/content/
+- http://docs.openstack.org/
 - http://api.openstack.org/api-ref.html
 
 OpenStack source files:
 
-- https://github.com/openstack/openstack-manuals/tree/master/doc/user-guide/src
-- https://github.com/openstack/api-site/tree/master/api-ref
+- https://git.openstack.org/cgit/openstack/openstack-manuals
+- https://git.openstack.org/cgit/openstack/api-site
 
 
 Test changes to clouddocs-maven-plugin
@@ -32,7 +29,7 @@ To test changes to clouddocs-maven-plugin on your local machine:
 
 #. Run this command to clone clouddocs-maven-plugin:
 
-        git clone git@github.com:openstack/clouddocs-maven-plugin.git
+        git clone https://git.openstack.org/openstack/clouddocs-maven-plugin
 
 #. CD into the clouddocs-maven-plugin directory.
 
@@ -47,7 +44,7 @@ To test changes to clouddocs-maven-plugin on your local machine:
 
 #. Run this command to clone the api-site:
 
-        git clone git@github.com:openstack/api-site.git
+        git clone https://git.openstack.org/openstack/api-site
 
 #. CD into the api-site directory.
 
