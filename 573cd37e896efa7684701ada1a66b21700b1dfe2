@@ -1,0 +1,9 @@
+Code-Review+2: Anne Gentle <annegentle@justwriteclick.com>
+Code-Review+2: Andreas Jaeger <jaegerandi@gmail.com>
+Workflow+1: Andreas Jaeger <jaegerandi@gmail.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 06 Jan 2016 20:27:26 +0000
+Reviewed-on: https://review.openstack.org/262297
+Project: openstack/clouddocs-maven-plugin
+Branch: refs/heads/master
