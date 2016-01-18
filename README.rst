@@ -1,3 +1,4 @@
+============
 Introduction
 ============
 
@@ -60,4 +61,4 @@ To test changes to clouddocs-maven-plugin on your local machine:
 How Tos
 =======
 - http://docs.rackspace.com/writers-guide
-- http://wiki.openstack.org/Documentation/HowTo#Tools_Overview
+- http://docs.openstack.org/contributor-guide/tools-and-content-overview.html
